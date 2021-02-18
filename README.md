@@ -1,6 +1,8 @@
-<<<<<<< HEAD
-# 320-F20-Track-III
-https://github.com/david-fisher/320-F20-Track-III
+# 320-S21-Track2
+
+https://github.com/david-fisher/320-S21-Track2/
+
+BELOW IS THE README FROM LAST SEMESTER'S TRACK III REPO
 
 Ethisim is a website that allows you to easily create and assign ethics
 simulations. Run them for a participation grade, or

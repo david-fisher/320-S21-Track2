@@ -1,0 +1,37 @@
+version: "3.7"
+
+services:
+  project:
+    restart: always
+    build:  
+      context: ./moral_kombat_backend/
+      dockerfile: Dockerfile
+    volumes: 
+      - .:/app/code/
+    ports:
+      - "8000:8000"
+    networks:
+      - db-net
+
+  frontend:
+    restart: always
+    command : npm start
+    container_name: front
+    build:
+      context: ./Ghost_in_the_Shell/client_folder_react_app/ethisim/
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    stdin_open: true
+    depends_on:
+      - project
+    networks:
+      - db-net
+
+
+networks:
+  db-net:
+    driver: bridge
+
+volumes:
+  postgres_data:

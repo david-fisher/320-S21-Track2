@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 320-F20-Track-III
 https://github.com/david-fisher/320-F20-Track-III
 
@@ -98,3 +99,6 @@ You can find the list of endpoints here at:
 https://docs.google.com/document/d/1QSiUe21Z_TgT5XZKyR0twevRM864_AswxzVdYLwqW1I/edit?usp=sharing
 
 To see REST Documentation run both the front-end and back-end and type http://localhost:8000
+=======
+# 320-S21-Track2
+>>>>>>> origin/main

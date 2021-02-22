@@ -1,8 +1,9 @@
 version: "3.7"
 
 services:
-  project:
+  backend:
     restart: always
+    command: bash -c "cd lead && python manage.py runserver 0.0.0.0:8000"
     build:  
       context: ./moral_kombat_backend/
       dockerfile: Dockerfile
@@ -13,7 +14,7 @@ services:
     networks:
       - db-net
 
-  frontend:
+  editor-frontend:
     restart: always
     command : npm start
     container_name: front
@@ -24,7 +25,7 @@ services:
       - "3000:3000"
     stdin_open: true
     depends_on:
-      - project
+      - backend
     networks:
       - db-net
 

@@ -4,35 +4,19 @@ services:
   backend:
     restart: always
     command: bash -c "cd lead && python manage.py runserver 0.0.0.0:8000"
-    build:  
-      context: ./moral_kombat_backend/
-      dockerfile: Dockerfile
-    volumes: 
-      - .:/app/code/
+    image: judgerussell/track2backend
     ports:
       - "8000:8000"
-    networks:
-      - db-net
 
-  editor-frontend:
+  frontend:
     restart: always
     command : npm start
-    container_name: front
-    build:
-      context: ./Ghost_in_the_Shell/client_folder_react_app/ethisim/
-      dockerfile: Dockerfile
+    image: judgerussell/track2frontend
     ports:
       - "3000:3000"
     stdin_open: true
     depends_on:
       - backend
-    networks:
-      - db-net
-
-
-networks:
-  db-net:
-    driver: bridge
 
 volumes:
   postgres_data:

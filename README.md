@@ -1,8 +1,7 @@
 # 320-S21-Track2
-
 https://github.com/david-fisher/320-S21-Track2/
 
-BELOW IS THE README FROM LAST SEMESTER'S TRACK III REPO
+BELOW IS THE README FROM LAST SEMESTER'S TRACK III REPO 
 
 Ethisim is a website that allows you to easily create and assign ethics
 simulations. Run them for a participation grade, or
@@ -101,6 +100,4 @@ You can find the list of endpoints here at:
 https://docs.google.com/document/d/1QSiUe21Z_TgT5XZKyR0twevRM864_AswxzVdYLwqW1I/edit?usp=sharing
 
 To see REST Documentation run both the front-end and back-end and type http://localhost:8000
-=======
-# 320-S21-Track2
->>>>>>> origin/main
+======

@@ -11,6 +11,8 @@ services:
       - .:/app/code/
     ports:
       - "8000:8000"
+    networks:
+      - default-net
 
   editor-frontend:
     restart: always
@@ -24,7 +26,11 @@ services:
     stdin_open: true
     depends_on:
       - backend
-
+    networks:
+      - default-net
+networks:
+  default-net:
+    driver: bridge
 
 volumes:
   postgres_data:

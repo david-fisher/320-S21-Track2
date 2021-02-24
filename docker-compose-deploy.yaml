@@ -3,20 +3,30 @@ version: "3.7"
 services:
   backend:
     restart: always
+    container_name: backend
     command: bash -c "cd lead && python manage.py runserver 0.0.0.0:8000"
     image: judgerussell/track2backend
     ports:
       - "8000:8000"
+    networks:
+      default-net
 
   frontend:
     restart: always
     command : npm start
+    container_name: frontend
     image: judgerussell/track2frontend
     ports:
       - "3000:3000"
     stdin_open: true
     depends_on:
       - backend
+    networks:
+      default-net
+
+networks:
+  default-net:
+    driver: bridge
 
 volumes:
   postgres_data:

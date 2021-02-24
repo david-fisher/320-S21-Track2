@@ -1,5 +1,6 @@
-version: "3.7"
-
+version: "3.8"
+# this is if you want to build from our docker repo
+# use the command: docker-compose -f docker-compose-deploy.yaml up
 services:
   backend:
     restart: always

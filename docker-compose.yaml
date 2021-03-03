@@ -28,6 +28,7 @@ services:
       - backend
     networks:
       - default-net
+      
 networks:
   default-net:
     driver: bridge

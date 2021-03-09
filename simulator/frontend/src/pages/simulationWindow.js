@@ -23,23 +23,33 @@ function SimulationWindow() {
   const [pages, setPages] = useState({
     introduction: { visited: true, completed: true, pageNumber: 0, html: (<Introduction />) },
     projectAssignment: { visited: false, completed: true, pageNumber: 1, html: (<ProjectAssignment />) },
-    initialReflection: { visited: false, completed: true, pageNumber: 2, html: (<Reflection
-      content_url="/scenarios/initialReflection" res_url="/scenarios/initialReflection/response" nextPageID="initialAction" prevPageID="projectAssignment" title="Reflect on Initial Information"/>) },
-    initialAction: { visited: false, completed: true, pageNumber: 3, html: (<Action
-      content_url="/scenarios/initialAction" nextPageID="gatheredInformation" prevPageID="initialReflection" title="Initial Action"/>) },
+    initialReflection: {
+      visited: false, completed: true, pageNumber: 2, html: (<Reflection
+        content_url="/scenarios/initialReflection" res_url="/scenarios/initialReflection/response" nextPageID="initialAction" prevPageID="projectAssignment" title="Reflect on Initial Information" />)
+    },
+    initialAction: {
+      visited: false, completed: true, pageNumber: 3, html: (<Action
+        content_url="/scenarios/initialAction" nextPageID="gatheredInformation" prevPageID="initialReflection" title="Initial Action" />)
+    },
     gatheredInformation: { visited: false, completed: false, pageNumber: 4, html: (<GatheredInformation />) },
     stakeholders: { visited: false, completed: true, pageNumber: 5, html: (<Stakeholders />) },
-    middleReflection: { visited: false, completed: true, pageNumber: 6, html: (<Reflection
-      content_url="/scenarios/middleReflection" res_url="/scenarios/middleReflection/response"
-      nextPageID="finalAction" prevPageID="stakeholders" title="Reflect on Stakeholder Information"/>) },
-    finalAction: { visited: false, completed: true, pageNumber: 7, html: (<Action
-      content_url="/scenarios/FinalAction" nextPageID="summary" prevPageID="middleReflection" title="Final Action"/>) },
+    middleReflection: {
+      visited: false, completed: true, pageNumber: 6, html: (<Reflection
+        content_url="/scenarios/middleReflection" res_url="/scenarios/middleReflection/response"
+        nextPageID="finalAction" prevPageID="stakeholders" title="Reflect on Stakeholder Information" />)
+    },
+    finalAction: {
+      visited: false, completed: true, pageNumber: 7, html: (<Action
+        content_url="/scenarios/FinalAction" nextPageID="summary" prevPageID="middleReflection" title="Final Action" />)
+    },
     summary: { visited: false, completed: false, pageNumber: 8, html: (<Summary />) },
     feedback: { visited: false, completed: true, pageNumber: 9, html: (<Feedback />) },
-    finalReflection: { visited: false, completed: true, pageNumber: 10, html: (<Reflection
-      content_url="/scenarios/finalReflection" res_url="/scenarios/finalReflection/response"
-      nextPageID="conclusion" prevPageID="feedback" title="Reflect on Final Information"/>) },
-    conclusion:  { visited: false, completed: false, pageNumber: 11, html: (<Conclusion />) }
+    finalReflection: {
+      visited: false, completed: true, pageNumber: 10, html: (<Reflection
+        content_url="/scenarios/finalReflection" res_url="/scenarios/finalReflection/response"
+        nextPageID="conclusion" prevPageID="feedback" title="Reflect on Final Information" />)
+    },
+    conclusion: { visited: false, completed: false, pageNumber: 11, html: (<Conclusion />) }
   });
 
 

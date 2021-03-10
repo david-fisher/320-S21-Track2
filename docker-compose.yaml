@@ -13,6 +13,7 @@ services:
       - "8000:8000"
     networks:
       - default-net
+    image: cs320track2/backend:latest
     depends_on: 
       - "database"
     command: ["./wait-for-it.sh", "db:5432", "--", "./start.sh"]
@@ -50,9 +51,8 @@ services:
       - backend
     networks:
       - default-net
-  
-
-
+    image: cs320track2/frontend:latest
+    
 networks:
   default-net:
     driver: bridge

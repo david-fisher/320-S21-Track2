@@ -109,6 +109,11 @@ function Introduction({ pages, setPages, activePage, setActivePage }) {
             <HTMLRenderer html={introText}/>
           </Box>
         </Grid>
+        <Grid item lg={12}>
+          <Box p={2}>
+            <iframe src="https://www.youtube.com/watch?v=xb8jTvSwJbw"></iframe>
+          </Box>
+        </Grid>
       </Grid>
     </div>
   );

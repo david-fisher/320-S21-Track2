@@ -63,9 +63,7 @@ const styles = (theme) => ({
     },
 });
 
-export default function Dashboard({
-    setScenario,
-}) {
+export default function Dashboard({setScenario}) {
     const classes = useStyles();
 
     const [openScenarios, setOpenScenarios] = useState(null);

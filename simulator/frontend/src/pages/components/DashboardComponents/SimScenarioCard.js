@@ -56,7 +56,7 @@ export default function SimScenarioCard({
     name,
     description,
     due_date,
-    setScenario,
+    onClick,
 }) {
 
     const classes = useStyles();
@@ -70,7 +70,7 @@ export default function SimScenarioCard({
             to={{
                 pathname: '/simulation',
             }}
-            onClick={() => setScenario(id)}
+            onClick={onClick(id)}
             className={classes.button}
             item
             fullWidth="true"

@@ -1,9 +1,3 @@
-DROP DATABASE IF EXISTS ethicisim;
-
-CREATE DATABASE ethicisim;
-
-\c ethicisim;
-
 CREATE TABLE "students" (
   "STUDENT" INTEGER PRIMARY KEY,
   "Name" VARCHAR
@@ -191,4 +185,92 @@ CREATE TABLE "student_times" (
   "END_TIME" DATE,
   PRIMARY KEY ("STUDENT", "COURSE", "SCENARIO", "VERSION", "DATE_TAKEN", "PAGE")
 );
+
+ALTER TABLE "students" ADD FOREIGN KEY ("STUDENT") REFERENCES "demographics" ("STUDENT");
+
+ALTER TABLE "professors_teach" ADD FOREIGN KEY ("PROFESSOR") REFERENCES "professors" ("PROFESSOR");
+
+ALTER TABLE "professors_teach" ADD FOREIGN KEY ("COURSE") REFERENCES "courses" ("COURSE");
+
+ALTER TABLE "students_in" ADD FOREIGN KEY ("STUDENT") REFERENCES "students" ("STUDENT");
+
+ALTER TABLE "students_in" ADD FOREIGN KEY ("COURSE") REFERENCES "courses" ("COURSE");
+
+ALTER TABLE "responses" ADD FOREIGN KEY ("STUDENT") REFERENCES "students" ("STUDENT");
+
+ALTER TABLE "responses" ADD FOREIGN KEY ("COURSE") REFERENCES "courses" ("COURSE");
+
+ALTER TABLE "responses" ADD FOREIGN KEY ("SCENARIO") REFERENCES "scenarios" ("SCENARIO");
+
+ALTER TABLE "responses" ADD FOREIGN KEY ("PAGE") REFERENCES "pages" ("PAGE");
+
+ALTER TABLE "reflections_taken" ADD FOREIGN KEY ("STUDENT") REFERENCES "responses" ("STUDENT");
+
+ALTER TABLE "reflections_taken" ADD FOREIGN KEY ("COURSE") REFERENCES "responses" ("COURSE");
+
+ALTER TABLE "reflections_taken" ADD FOREIGN KEY ("SCENARIO") REFERENCES "responses" ("SCENARIO");
+
+ALTER TABLE "reflections_taken" ADD FOREIGN KEY ("DATE_TAKEN") REFERENCES "responses" ("DATE_TAKEN");
+
+ALTER TABLE "conversations_had" ADD FOREIGN KEY ("STUDENT") REFERENCES "responses" ("STUDENT");
+
+ALTER TABLE "conversations_had" ADD FOREIGN KEY ("COURSE") REFERENCES "responses" ("COURSE");
+
+ALTER TABLE "conversations_had" ADD FOREIGN KEY ("SCENARIO") REFERENCES "responses" ("SCENARIO");
+
+ALTER TABLE "conversations_had" ADD FOREIGN KEY ("DATE_TAKEN") REFERENCES "responses" ("DATE_TAKEN");
+
+ALTER TABLE "conversations_had" ADD FOREIGN KEY ("STAKEHOLDER") REFERENCES "stakeholders" ("STAKEHOLDER");
+
+ALTER TABLE "professors" ADD FOREIGN KEY ("PROFESSOR") REFERENCES "scenarios" ("PROFESSOR");
+
+ALTER TABLE "stakeholders" ADD FOREIGN KEY ("SCENARIO") REFERENCES "scenarios" ("SCENARIO");
+
+ALTER TABLE "stakeholders" ADD FOREIGN KEY ("STAKEHOLDER") REFERENCES "coverage" ("STAKEHOLDER");
+
+ALTER TABLE "coverage" ADD FOREIGN KEY ("ISSUE") REFERENCES "issues" ("ISSUE");
+
+ALTER TABLE "pages" ADD FOREIGN KEY ("SCENARIO") REFERENCES "scenarios" ("SCENARIO");
+
+ALTER TABLE "pages" ADD FOREIGN KEY ("NEXT_PAGE") REFERENCES "pages" ("PAGE");
+
+ALTER TABLE "conversations" ADD FOREIGN KEY ("STAKEHOLDER") REFERENCES "stakeholders" ("STAKEHOLDER");
+
+ALTER TABLE "reflection_questions" ADD FOREIGN KEY ("PAGE") REFERENCES "pages" ("PAGE");
+
+ALTER TABLE "stakeholder_page" ADD FOREIGN KEY ("PAGE") REFERENCES "pages" ("PAGE");
+
+ALTER TABLE "stakeholder_page" ADD FOREIGN KEY ("STAKEHOLDER") REFERENCES "stakeholders" ("STAKEHOLDER");
+
+ALTER TABLE "generic_page" ADD FOREIGN KEY ("PAGE") REFERENCES "pages" ("PAGE");
+
+ALTER TABLE "action_page" ADD FOREIGN KEY ("PAGE") REFERENCES "pages" ("PAGE");
+
+ALTER TABLE "actions_taken" ADD FOREIGN KEY ("RESPONSE") REFERENCES "responses" ("RESPONSE");
+
+ALTER TABLE "actions_taken" ADD FOREIGN KEY ("ACTION_PAGE") REFERENCES "action_page" ("id");
+
+ALTER TABLE "scenarios_for" ADD FOREIGN KEY ("COURSE") REFERENCES "courses" ("COURSE");
+
+ALTER TABLE "scenarios_for" ADD FOREIGN KEY ("SCENARIO") REFERENCES "scenarios" ("SCENARIO");
+
+ALTER TABLE "scenarios_for" ADD FOREIGN KEY ("VERSION") REFERENCES "scenarios" ("VERSION");
+
+ALTER TABLE "issues" ADD FOREIGN KEY ("SCENARIO") REFERENCES "scenarios" ("SCENARIO");
+
+ALTER TABLE "issues" ADD FOREIGN KEY ("VERSION") REFERENCES "scenarios" ("VERSION");
+
+ALTER TABLE "students" ADD FOREIGN KEY ("STUDENT") REFERENCES "assigned_to" ("STUDENT");
+
+ALTER TABLE "scenarios" ADD FOREIGN KEY ("SCENARIO") REFERENCES "assigned_to" ("SCENARIO");
+
+ALTER TABLE "scenarios" ADD FOREIGN KEY ("VERSION") REFERENCES "assigned_to" ("VERSION");
+
+ALTER TABLE "students" ADD FOREIGN KEY ("STUDENT") REFERENCES "student_times" ("STUDENT");
+
+ALTER TABLE "scenarios" ADD FOREIGN KEY ("SCENARIO") REFERENCES "student_times" ("SCENARIO");
+
+ALTER TABLE "scenarios" ADD FOREIGN KEY ("VERSION") REFERENCES "student_times" ("VERSION");
+
+ALTER TABLE "pages" ADD FOREIGN KEY ("PAGE") REFERENCES "student_times" ("PAGE");
 

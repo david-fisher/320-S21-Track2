@@ -3,7 +3,7 @@ name: dockerhub-auto-push
 on:
   push:
     branches:
-      - 'main'
+      - 'CI-testing'
 
 jobs:
   docker:

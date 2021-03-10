@@ -1,0 +1,25 @@
+name: dockerhub-auto-push
+
+on:
+  push:
+    branches:
+      - 'CI-testing'
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v2
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - 
+        name: Build and push
+        uses: whoan/docker-build-with-cache-action@v5
+        with:
+          compose_file: docker-compose.yaml
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          push_git_tag: true

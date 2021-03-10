@@ -142,6 +142,4 @@ https://nodejs.org/en/download/
 # For testing: populating the database with dummy data
 1. in command prompt or terminal, run `psql -U [user] -f [full filepath to insert_example_data.sql]`. This file can currently be found in the `erd-implementation` branch in the `database` directory.
 
-
-this is judge changing the readme for a test
 >>>>>>> origin/main

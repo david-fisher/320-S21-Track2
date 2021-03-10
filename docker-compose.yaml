@@ -3,23 +3,44 @@ version: "3.8"
 services:
   backend:
     restart: always
-    command: bash -c "cd lead && python manage.py runserver 0.0.0.0:8000"
+    command: bash -c ""
     container_name: back
+    image: cs320track2/backend
     build:  
       context: ./moral_kombat_backend/
       dockerfile: Dockerfile
-    volumes: 
-      - .:/app/code/
     ports:
       - "8000:8000"
     networks:
       - default-net
     image: cs320track2/backend:latest
+    depends_on: 
+      - "database"
+    command: ["./wait-for-it.sh", "db:5432", "--", "./start.sh"]
+      
+  database:
+    restart: always
+    container_name: db
+    build:
+      context: ./database/
+      dockerfile: Dockerfile
+    image: cs320track2/database
+    environment:
+      POSTGRES_PASSWORD: "password"
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./database/postgres.conf:/etc/postgresql/postgresql.conf
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    command: postgres -c config_file=/etc/postgresql/postgresql.conf
+    networks:
+      - default-net
 
-  editor-frontend:
+  frontend:
     restart: always
     command : npm start
     container_name: front
+    image: cs320track2/frontend
     build:
       context: ./Ghost_in_the_Shell/client_folder_react_app/ethisim/
       dockerfile: Dockerfile
@@ -31,6 +52,7 @@ services:
     networks:
       - default-net
     image: cs320track2/frontend:latest
+    
 networks:
   default-net:
     driver: bridge

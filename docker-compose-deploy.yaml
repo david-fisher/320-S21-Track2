@@ -6,7 +6,7 @@ services:
     restart: always
     container_name: backend
     command: bash -c "cd lead && python manage.py runserver 0.0.0.0:8000"
-    image: judgerussell/track2backend
+    image: cs320track2/backend
     ports:
       - "8000:8000"
     networks:
@@ -16,7 +16,7 @@ services:
     restart: always
     command : npm start
     container_name: frontend
-    image: judgerussell/track2frontend
+    image: cs320track2/frontend
     ports:
       - "3000:3000"
     stdin_open: true
@@ -25,6 +25,24 @@ services:
     networks:
       - default-net
 
+  database:
+    restart: always
+    container_name: db
+    build:
+      context: ./database
+      dockerfile: Dockerfile
+    image: cs320track2/database
+    environment:
+      POSTGRES_PASSWORD: "password"
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./database/postgres.conf:/etc/postgresql/postgresql.conf
+      - ./database/data:/var/lib/postgresql/data
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    command: postgres -c config_file=/etc/postgresql/postgresql.conf
+    networks:
+      - default-net
 networks:
   default-net:
     driver: bridge

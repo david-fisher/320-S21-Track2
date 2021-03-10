@@ -23,7 +23,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       -
         name: Build 
-        run: docker-compose up 
+        run: docker-compose build 
       -
         name: Push
         run: docker-compose push

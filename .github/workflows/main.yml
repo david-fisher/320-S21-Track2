@@ -3,7 +3,7 @@ name: dockerhub-auto-push
 on:
   push:
     branches:
-      - 'CI-testing'
+      - 'mobydock'
 
 jobs:
   docker:
@@ -22,4 +22,3 @@ jobs:
           compose_file: docker-compose.yaml
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-          push_git_tag: true

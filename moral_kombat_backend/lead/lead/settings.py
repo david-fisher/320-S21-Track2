@@ -95,10 +95,10 @@ DATABASES = {
         # 'NAME': BASE_DIR / 'db.sqlite3',
 
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'cnehcbso',
-        'USER': 'cnehcbso',
-        'PASSWORD': 'qy2xdb_zEcAZFOmY7fvQT1SddHRUhbCI',
-        'HOST': 'raja.db.elephantsql.com',
+        'NAME': 'db',
+        'USER': 'postgres',
+        'PASSWORD': 'password',
+        'HOST': 'db',
         'PORT': '5432',
     }
 }

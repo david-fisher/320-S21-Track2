@@ -14,6 +14,7 @@ services:
       - "8000:8000"
     networks:
       - default-net
+    image: cs320track2/backend
 
   editor-frontend:
     restart: always
@@ -29,6 +30,7 @@ services:
       - backend
     networks:
       - default-net
+    image: cs320track2/frontend
 networks:
   default-net:
     driver: bridge

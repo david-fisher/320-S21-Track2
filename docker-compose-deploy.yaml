@@ -5,12 +5,14 @@ services:
   backend:
     restart: always
     container_name: backend
-    command: bash -c "cd lead && python manage.py runserver 0.0.0.0:8000"
     image: cs320track2/backend
     ports:
       - "8000:8000"
     networks:
       - default-net
+    depends_on: 
+      - "database"
+    command: ["./wait-for-it.sh", "db:5432", "--", "./start.sh"]
 
   frontend:
     restart: always
@@ -28,9 +30,6 @@ services:
   database:
     restart: always
     container_name: db
-    build:
-      context: ./database
-      dockerfile: Dockerfile
     image: cs320track2/database
     environment:
       POSTGRES_PASSWORD: "password"

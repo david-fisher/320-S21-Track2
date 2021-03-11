@@ -3,7 +3,6 @@ version: "3.8"
 services:
   backend:
     restart: always
-    command: bash -c ""
     container_name: back
     image: cs320track2/backend
     build:  

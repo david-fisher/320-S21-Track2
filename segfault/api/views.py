@@ -12,3 +12,23 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = Webuser.objects.all()
     serializer_class = UserSerializer
 
+class PartOfViewSet(viewsets.ModelViewSet):
+    queryset= PartOf.objects.all()
+    serializer_class = PartOfSerializer
+
+class CoursesViewSet(viewsets.ModelViewSet):
+    queryset = Course.objects.all()
+    serializer_class = CourseSerializer
+
+class DemographicViewSet(viewsets.ModelViewSet):
+    queryset = Demographic.objects.all()
+    serializer_class = DemographicSerializer
+class ResponsesViewSet(viewsets.ModelViewSet):
+    queryset = Response.objects.all()
+    serializer_class = CourseSerializer
+class IssuesViewSet(viewsets.ModelViewSet):
+    queryset = Issue.objects.all()
+    serializer_class = IssueSerializer
+class ConversationsViewSet(viewsets.ModelViewSet):
+    queryset = Conversation.objects.all()
+    serializer_class = ConversationSerializer

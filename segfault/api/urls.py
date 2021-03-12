@@ -6,6 +6,14 @@ from api import views
 router = routers.DefaultRouter()
 router.register(r'scenarios', views.ScenariosViewSet)
 router.register(r'users', views.UserViewSet)
+router.register(r'courses', views.CoursesViewSet)
+#TODO:this is bullshit just for demo 
+router.register(r'partof', views.PartOfViewSet)
+
+router.register(r'demographic', views.DemographicViewSet)
+router.register(r'issues', views.IssuesViewSet)
+router.register(r'conversations', views.ConversationsViewSet)
+router.register(r'responses', views.ResponsesViewSet)
 
 # The API URLs are now determined automatically by the router.
 urlpatterns = [

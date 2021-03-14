@@ -1,6 +1,7 @@
 CREATE TABLE "students" (
   "STUDENT" INTEGER PRIMARY KEY,
-  "Name" VARCHAR
+  "FNAME" VARCHAR,
+  "LNAME" VARCHAR
 );
 
 CREATE TABLE "demographics" (
@@ -14,7 +15,8 @@ CREATE TABLE "demographics" (
 
 CREATE TABLE "professors" (
   "PROFESSOR" INTEGER PRIMARY KEY,
-  "NAME" TEXT
+  "FNAME" VARCHAR,
+  "LNAME" VARCHAR
 );
 
 CREATE TABLE "courses" (
@@ -22,13 +24,20 @@ CREATE TABLE "courses" (
   "NAME" VARCHAR
 );
 
-CREATE TABLE "professors_teach" (
+CREATE TABLE "professors_to_courses" (
   "PROFESSOR" INTEGER,
   "COURSE" INTEGER,
   PRIMARY KEY ("PROFESSOR", "COURSE")
 );
 
-CREATE TABLE "students_in" (
+CREATE TABLE "professors_to_scenario" (
+  "PROFESSOR" INTEGER,
+  "SCENARIO" INTEGER,
+  "PERMISSION" INTEGER,
+  PRIMARY KEY ("PROFESSOR", "SCENARIO")
+);
+
+CREATE TABLE "students_to_course" (
   "STUDENT" INTEGER,
   "COURSE" INTEGER,
   PRIMARY KEY ("STUDENT", "COURSE")
@@ -124,7 +133,7 @@ CREATE TABLE "reflection_questions" (
   PRIMARY KEY ("id", "PAGE", "REFLECTION_QUESTION")
 );
 
-CREATE TABLE "stakeholder_page" (
+CREATE TABLE "stakeholder_to_page" (
   "PAGE" INTEGER,
   "STAKEHOLDER" INTEGER,
   PRIMARY KEY ("PAGE", "STAKEHOLDER")
@@ -145,7 +154,7 @@ CREATE TABLE "action_page" (
   PRIMARY KEY ("id", "PAGE", "CHOICE")
 );
 
-CREATE TABLE "actions_taken" (
+CREATE TABLE "response_to_action_page" (
   "RESPONSE" INTEGER,
   "ACTION_PAGE" INTEGER
 );
@@ -166,13 +175,6 @@ CREATE TABLE "issues" (
   PRIMARY KEY ("ISSUE", "SCENARIO", "VERSION")
 );
 
-CREATE TABLE "assigned_to" (
-  "STUDENT" INTEGER,
-  "SCENARIO" INTEGER,
-  "VERSION" INTEGER,
-  PRIMARY KEY ("STUDENT", "SCENARIO", "VERSION")
-);
-
 CREATE TABLE "student_times" (
   "STUDENT" INTEGER,
   "COURSE" INTEGER,
@@ -185,7 +187,7 @@ CREATE TABLE "student_times" (
   PRIMARY KEY ("STUDENT", "COURSE", "SCENARIO", "VERSION", "DATE_TAKEN", "PAGE")
 );
 
-CREATE TABLE "course_scenario" (
+CREATE TABLE "courses_to_scenario" (
   "COURSE" INTEGER,
   "SCENARIO" INTEGER,
   "PERMISSION" INTEGER,
@@ -194,13 +196,17 @@ CREATE TABLE "course_scenario" (
 
 ALTER TABLE "students" ADD FOREIGN KEY ("STUDENT") REFERENCES "demographics" ("STUDENT");
 
-ALTER TABLE "professors_teach" ADD FOREIGN KEY ("PROFESSOR") REFERENCES "professors" ("PROFESSOR");
+ALTER TABLE "professors_to_courses" ADD FOREIGN KEY ("PROFESSOR") REFERENCES "professors" ("PROFESSOR");
 
-ALTER TABLE "professors_teach" ADD FOREIGN KEY ("COURSE") REFERENCES "courses" ("COURSE");
+ALTER TABLE "professors_to_courses" ADD FOREIGN KEY ("COURSE") REFERENCES "courses" ("COURSE");
 
-ALTER TABLE "students_in" ADD FOREIGN KEY ("STUDENT") REFERENCES "students" ("STUDENT");
+ALTER TABLE "professors_to_scenario" ADD FOREIGN KEY ("PROFESSOR") REFERENCES "professors" ("PROFESSOR");
 
-ALTER TABLE "students_in" ADD FOREIGN KEY ("COURSE") REFERENCES "courses" ("COURSE");
+ALTER TABLE "professors_to_scenario" ADD FOREIGN KEY ("SCENARIO") REFERENCES "scenarios" ("SCENARIO");
+
+ALTER TABLE "students_to_course" ADD FOREIGN KEY ("STUDENT") REFERENCES "students" ("STUDENT");
+
+ALTER TABLE "students_to_course" ADD FOREIGN KEY ("COURSE") REFERENCES "courses" ("COURSE");
 
 ALTER TABLE "responses" ADD FOREIGN KEY ("STUDENT") REFERENCES "students" ("STUDENT");
 
@@ -242,17 +248,17 @@ ALTER TABLE "conversations" ADD FOREIGN KEY ("STAKEHOLDER") REFERENCES "stakehol
 
 ALTER TABLE "reflection_questions" ADD FOREIGN KEY ("PAGE") REFERENCES "pages" ("PAGE");
 
-ALTER TABLE "stakeholder_page" ADD FOREIGN KEY ("PAGE") REFERENCES "pages" ("PAGE");
+ALTER TABLE "stakeholder_to_page" ADD FOREIGN KEY ("PAGE") REFERENCES "pages" ("PAGE");
 
-ALTER TABLE "stakeholder_page" ADD FOREIGN KEY ("STAKEHOLDER") REFERENCES "stakeholders" ("STAKEHOLDER");
+ALTER TABLE "stakeholder_to_page" ADD FOREIGN KEY ("STAKEHOLDER") REFERENCES "stakeholders" ("STAKEHOLDER");
 
 ALTER TABLE "generic_page" ADD FOREIGN KEY ("PAGE") REFERENCES "pages" ("PAGE");
 
 ALTER TABLE "action_page" ADD FOREIGN KEY ("PAGE") REFERENCES "pages" ("PAGE");
 
-ALTER TABLE "actions_taken" ADD FOREIGN KEY ("RESPONSE") REFERENCES "responses" ("RESPONSE");
+ALTER TABLE "response_to_action_page" ADD FOREIGN KEY ("RESPONSE") REFERENCES "responses" ("RESPONSE");
 
-ALTER TABLE "actions_taken" ADD FOREIGN KEY ("ACTION_PAGE") REFERENCES "action_page" ("id");
+ALTER TABLE "response_to_action_page" ADD FOREIGN KEY ("ACTION_PAGE") REFERENCES "action_page" ("id");
 
 ALTER TABLE "scenarios_for" ADD FOREIGN KEY ("COURSE") REFERENCES "courses" ("COURSE");
 
@@ -264,12 +270,6 @@ ALTER TABLE "issues" ADD FOREIGN KEY ("SCENARIO") REFERENCES "scenarios" ("SCENA
 
 ALTER TABLE "issues" ADD FOREIGN KEY ("VERSION") REFERENCES "scenarios" ("VERSION");
 
-ALTER TABLE "students" ADD FOREIGN KEY ("STUDENT") REFERENCES "assigned_to" ("STUDENT");
-
-ALTER TABLE "scenarios" ADD FOREIGN KEY ("SCENARIO") REFERENCES "assigned_to" ("SCENARIO");
-
-ALTER TABLE "scenarios" ADD FOREIGN KEY ("VERSION") REFERENCES "assigned_to" ("VERSION");
-
 ALTER TABLE "students" ADD FOREIGN KEY ("STUDENT") REFERENCES "student_times" ("STUDENT");
 
 ALTER TABLE "scenarios" ADD FOREIGN KEY ("SCENARIO") REFERENCES "student_times" ("SCENARIO");
@@ -278,7 +278,9 @@ ALTER TABLE "scenarios" ADD FOREIGN KEY ("VERSION") REFERENCES "student_times" (
 
 ALTER TABLE "pages" ADD FOREIGN KEY ("PAGE") REFERENCES "student_times" ("PAGE");
 
-ALTER TABLE "professors_teach" ADD FOREIGN KEY ("COURSE") REFERENCES "course_scenario" ("COURSE");
+ALTER TABLE "professors_to_courses" ADD FOREIGN KEY ("COURSE") REFERENCES "courses_to_scenario" ("COURSE");
 
-ALTER TABLE "scenarios" ADD FOREIGN KEY ("SCENARIO") REFERENCES "course_scenario" ("SCENARIO");
+ALTER TABLE "scenarios" ADD FOREIGN KEY ("SCENARIO") REFERENCES "courses_to_scenario" ("SCENARIO");
+
+ALTER TABLE "student_times" ADD FOREIGN KEY ("DATE_TAKEN") REFERENCES "action_page" ("CHOICE");
 

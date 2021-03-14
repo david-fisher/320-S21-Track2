@@ -8,14 +8,6 @@ class ScenariosViewSet(viewsets.ModelViewSet):
     queryset= Scenario.objects.all()
     serializer_class = ScenarioSerializer
 
-class UserViewSet(viewsets.ModelViewSet):
-    queryset = Webuser.objects.all()
-    serializer_class = UserSerializer
-
-class PartOfViewSet(viewsets.ModelViewSet):
-    queryset= PartOf.objects.all()
-    serializer_class = PartOfSerializer
-
 class CoursesViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer

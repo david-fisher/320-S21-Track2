@@ -9,23 +9,15 @@ class ScenarioSerializer(serializers.ModelSerializer):
     
     
 #TODO: Need to disable for all non-admin after depolying(security)
-class UserSerializer(serializers.ModelSerializer):    
+class StudentSerializer(serializers.ModelSerializer):    
     class Meta:
-        model = Webuser
-        fields = ['url','id','username']
+        model = Student
+        fields = ['first_name','last_name']
     
 class CourseSerializer(serializers.ModelSerializer):    
     class Meta:
         model = Course
-        fields = ['name','fullName','semester','students','scenarios','id']
-
-class PartOfSerializer(serializers.ModelSerializer):
-    course_name = serializers.ReadOnlyField(source= 'course.name')
-    scenario_name =  serializers.ReadOnlyField(source= 'scenario.name')
-    
-    class Meta:
-        model = PartOf
-        fields = ['scenario','course','course_name','scenario_name']
+        fields = ['name','students','id']
 
 
 class ConversationSerializer(serializers.ModelSerializer):    

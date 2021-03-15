@@ -68,7 +68,7 @@ This is Track III's repository containing code for both the front-end and back-e
 
 
 #### How to run server on MAC:
-1. Go to moral_kombat_backend directory
+1. Go to backend directory
 2. pipenv shell
 3. cd lead
 4. python3 manage.py runserver

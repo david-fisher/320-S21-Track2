@@ -6,7 +6,7 @@ services:
     command: bash -c "cd lead && python manage.py runserver 0.0.0.0:8000"
     container_name: back
     build:  
-      context: ./moral_kombat_backend/
+      context: ./backend/
       dockerfile: Dockerfile
     volumes: 
       - .:/app/code/

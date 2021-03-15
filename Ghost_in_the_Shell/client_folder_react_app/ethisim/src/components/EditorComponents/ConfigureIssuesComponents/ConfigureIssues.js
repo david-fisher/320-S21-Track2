@@ -7,6 +7,8 @@ import LoadingSpinner from '../../LoadingSpinner';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import ErrorIcon from '@material-ui/icons/Error';
 import PropTypes from 'prop-types';
+import IssueMatrix from './IssueCoverageMatrix';
+import MaterialTable from 'material-table';
 
 //Need scenarioID
 const endpointGET = '/api/issues/?SCENARIO=';
@@ -55,9 +57,16 @@ export default function ConfigureIssues({ scenario_ID }) {
         loading: true,
         error: null,
     });
+    const [stakeHolders, setStakeHolders] = useState([]);
+    const [issueCoverageMatrix, setIssueCoverageMatrix] = useState({
+        data: null,
+        loading: true,
+        error: null,
+    });
 
     let getData = () => {
         get(setIssueEntryFieldList, endpointGET + scenario_ID);
+        get(setIssueCoverageMatrix, endpointGET + scenario_ID);
     };
 
     useEffect(getData, []);
@@ -82,7 +91,15 @@ export default function ConfigureIssues({ scenario_ID }) {
         );
     }
 
-    return (
+    /* <EntryFields
+            issueEntryFieldList={
+                issueEntryFieldList !== null ? issueEntryFieldList : []
+            }
+            setIssueEntryFieldList={setIssueEntryFieldList}
+            scenarioID={scenario_ID}
+    />*/
+
+    /*return (
         <div className={classes.issue}>
             <Typography align="center" variant="h2">
                 Configure Ethical Issues
@@ -92,12 +109,37 @@ export default function ConfigureIssues({ scenario_ID }) {
                     <RefreshIcon className={classes.iconRefreshSmall} />
                 </Button>
             </div>
+            <MaterialTable>
+                issueCoverageMatrix = {issueCoverageMatrix}
+                setIssueCoverageMatrix = {setissueCoverageMatrix}
+            </MaterialTable>
+        </div>
+    );*/
+
+    return (
+        <div className={classes.issue}>
+            <Typography align="center" variant="h2">
+                Configure Ethical Issues
+            </Typography>
+
+            <div className={classes.spacing}>
+                <Button variant="contained" color="primary" onClick={getData}>
+                    <RefreshIcon className={classes.iconRefreshSmall} />
+                </Button>
+            </div>
+
             <EntryFields
                 issueEntryFieldList={
                     issueEntryFieldList !== null ? issueEntryFieldList : []
                 }
                 setIssueEntryFieldList={setIssueEntryFieldList}
                 scenarioID={scenario_ID}
+            />
+
+            <IssueMatrix /*this might need to be edited, sends scenario id to IssueCoverageMatrix*/
+                stakeHolders={stakeHolders}
+                setStakeHolders={setStakeHolders}
+                scenario={scenario_ID}
             />
         </div>
     );

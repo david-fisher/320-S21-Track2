@@ -39,3 +39,54 @@ class IssueSerializer(serializers.ModelSerializer):
     class Meta:
         model = Issue
         fields = '__all__'
+
+
+class PagesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = pages
+        fields = '__all__'
+
+class Stakeholder_pageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = stakeholder_page
+        fields = '__all__'
+
+class Reflection_questionsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = reflection_questions
+        fields = '__all__'
+
+class Action_pageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = action_page
+        fields = '__all__'
+
+class Generic_pageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = generic_page
+        fields = '__all__'
+
+#page types serializer
+class Pages_reflectionSerializer(serializers.ModelSerializer):
+    reflection_question = Reflection_questionsSerializer()
+    class Meta:
+        model = pages
+        fields = '__all__'
+
+class Pages_actionSerializer(serializers.ModelSerializer):
+    action_page = Action_pageSerializer()
+    class Meta:
+        model = pages
+        fields = '__all__'
+
+class Pages_genericSerializer(serializers.ModelSerializer):
+    generic_page = Generic_pageSerializer()
+    class Meta:
+        model = pages
+        fields = '__all__'
+
+class Pages_stakeholderSerializer(serializers.ModelSerializer):
+    stakeholder_page = Stakeholder_pageSerializer()
+    class Meta:
+        model = pages
+        fields = '__all__'

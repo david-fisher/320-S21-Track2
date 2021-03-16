@@ -104,3 +104,58 @@ class Conversation(models.Model):
 class Stakeholder(models.Model):
     class Meta:
         db_table = 'STAKEHOLDERS'
+
+class pages(models.Model):
+    class Meta:
+        unique_together = ['PAGE', 'SCENARIO', 'VERSION']
+        db_table = 'pages'
+    PAGE = models.AutoField(primary_key = True, editable=False)
+    PAGE_CHOICES = (
+        ('I', 'INTRO'),
+        ('G', 'GENERIC'),
+        ('R', 'REFLECTION'),
+        ('S', 'STAKEHOLDER'),
+        ('A', 'ACTION'),
+    )
+    PAGE_TYPE = models.CharField(max_length = 2, choices = PAGE_CHOICES)
+    PAGE_TITLE = models.CharField(max_length = 1000)
+    SCENARIO = models.ForeignKey('scenarios', on_delete = models.CASCADE)
+    VERSION = models.IntegerField(default=1, editable=False)
+    BODY = models.TextField()
+    NEXT_PAGE = models.IntegerField(null=True)
+    X_COORDINATE = models.IntegerField()
+    Y_COORDINATE = models.IntegerField()
+
+class reflection_questions(models.Model):
+    class Meta:
+        unique_together = ['PAGE', 'REFLECTION_QUESTION']
+        db_table = 'reflection_questions'
+    PAGE = models.ForeignKey('pages', on_delete = models.CASCADE)
+    REFLECTION_QUESTION = models.TextField()
+    id = models.AutoField(primary_key = True, editable = False)
+
+    
+class generic_page(models.Model):
+    class Meta:
+        unique_together = ['PAGE', 'BODY']
+        db_table = 'generic_page'
+    PAGE = models.ForeignKey('pages', on_delete = models.CASCADE)
+    BODY = models.TextField()
+    id = models.AutoField(primary_key = True, editable = False)
+
+class stakeholder_page(models.Model):
+    class Meta:
+        unique_together = ['PAGE', 'STAKEHOLDER']
+        db_table = 'stakeholder_page'
+    PAGE = models.ForeignKey('pages', on_delete = models.CASCADE)
+    STAKEHOLDER = models.ForeignKey('stakeholders', on_delete = models.CASCADE)
+
+
+class action_page(models.Model):
+    class Meta:
+        unique_together = ['PAGE','CHOICE']
+        db_table = 'action_page'
+    PAGE = models.ForeignKey('pages',on_delete = models.CASCADE)
+    CHOICE = models.TextField()
+    RESULT_PAGE = models.IntegerField(null=True)
+    id = models.AutoField(primary_key = True, editable = False)

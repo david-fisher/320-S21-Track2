@@ -60,7 +60,7 @@ This is Track III's repository containing code for both the front-end and back-e
 1. Install python3
 2. sudo pip3 install pipenv (do it globally)
 3. clone https://github.com/david-fisher/320-F20-Track-III.git
-4. Navigate to moral_kombat_backend folder
+4. Navigate to backend folder
 5. pipenv shell
 6. pipenv install -r requirements.txt
 7. cd lead
@@ -76,7 +76,7 @@ This is Track III's repository containing code for both the front-end and back-e
 ### On WINDOWS
 1. https://www.python.org/downloads/ (Checkmark all optional features, add Python to environment variables)
 2. clone https://github.com/david-fisher/320-F20-Track-III.git
-3. Navigate to moral_kombat_backend folder
+3. Navigate to backend folder
 4. Open Terminal (IF RUN INTO ERRORS INSERT py -m before each command)
 5. pip install -r requirements.txt
 6. cd lead
@@ -84,8 +84,8 @@ This is Track III's repository containing code for both the front-end and back-e
 8. Might need to download https://www.enterprisedb.com/downloads/postgres-postgresql-downloads
 
 #### How to run server on Windows:
-1. Go to moral_kombat_backend directory
-2. cd moral_kombat_backend
+1. Go to backend directory
+2. cd backend
 3. cd lead
 4. py -m manage.py runserver
 

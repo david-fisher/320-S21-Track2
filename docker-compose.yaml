@@ -10,7 +10,8 @@ services:
     build:  
       context: ./moral_kombat_backend/
       dockerfile: Dockerfile
-    cache_from: cs320track2/backend:latest
+    cache_from: 
+      - cs320track2/backend:latest
     ports:
       - "8000:8000"
     networks:
@@ -29,7 +30,8 @@ services:
     build:
       context: ./database/
       dockerfile: Dockerfile
-    cache_from: cs320track2/database:latest
+    cache_from: 
+      - cs320track2/database:latest
     image: cs320track2/database:latest
     ports:
       - "5432:5432"
@@ -46,7 +48,8 @@ services:
     container_name: front
     environment:
       BUILDKIT_INLINE_CACHE: 1
-    cache_from: cs320track2/frontend:latest
+    cache_from: 
+      - cs320track2/frontend:latest
     image: cs320track2/frontend
     build:
       context: ./Ghost_in_the_Shell/client_folder_react_app/ethisim/

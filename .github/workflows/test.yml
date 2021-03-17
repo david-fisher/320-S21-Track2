@@ -20,6 +20,13 @@ jobs:
         name: Build & run
         run: docker-compose up -d
 
+      - 
+        name: Run frontend test
+        run: docker exec front npm test
+
+      - 
+        name: Run backend test
+        run: docker exec back python manage.py test
       -
         name: shut down 
         run: docker-compose down

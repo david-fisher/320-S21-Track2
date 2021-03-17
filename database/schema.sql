@@ -4,12 +4,13 @@ CREATE DATABASE db;
 
 \c db;
 
-CREATE TABLE "tables_students" (
+CREATE TABLE "students" (
   "STUDENT" INTEGER PRIMARY KEY,
-  "Name" VARCHAR
+  "FNAME" VARCHAR,
+  "LNAME" VARCHAR
 );
 
-CREATE TABLE "tables_demographics" (
+CREATE TABLE "demographics" (
   "STUDENT" INTEGER PRIMARY KEY,
   "AGE" INTEGER,
   "GRADE" VARCHAR,
@@ -18,29 +19,37 @@ CREATE TABLE "tables_demographics" (
   "MAJOR" VARCHAR
 );
 
-CREATE TABLE "tables_professors" (
-  "PROFESSOR_id" INTEGER PRIMARY KEY,
-  "NAME" TEXT
+CREATE TABLE "professors" (
+  "PROFESSOR" INTEGER PRIMARY KEY,
+  "FNAME" VARCHAR,
+  "LNAME" VARCHAR
 );
 
-CREATE TABLE "tables_courses" (
+CREATE TABLE "courses" (
   "COURSE" INTEGER PRIMARY KEY,
   "NAME" VARCHAR
 );
 
-CREATE TABLE "tables_professors_teach" (
-  "PROFESSOR_id" INTEGER,
+CREATE TABLE "professors_to_courses" (
+  "PROFESSOR" INTEGER,
   "COURSE" INTEGER,
-  PRIMARY KEY ("PROFESSOR_id", "COURSE")
+  PRIMARY KEY ("PROFESSOR", "COURSE")
 );
 
-CREATE TABLE "tables_students_in" (
+CREATE TABLE "professors_to_scenario" (
+  "PROFESSOR" INTEGER,
+  "SCENARIO" INTEGER,
+  "PERMISSION" INTEGER,
+  PRIMARY KEY ("PROFESSOR", "SCENARIO")
+);
+
+CREATE TABLE "students_to_course" (
   "STUDENT" INTEGER,
   "COURSE" INTEGER,
   PRIMARY KEY ("STUDENT", "COURSE")
 );
 
-CREATE TABLE "tables_responses" (
+CREATE TABLE "responses" (
   "RESPONSE" INTEGER,
   "STUDENT" INTEGER,
   "SCENARIO" INTEGER,
@@ -52,7 +61,7 @@ CREATE TABLE "tables_responses" (
   PRIMARY KEY ("RESPONSE", "STUDENT", "SCENARIO", "VERSION", "PAGE", "COURSE", "DATE_TAKEN")
 );
 
-CREATE TABLE "tables_reflections_taken" (
+CREATE TABLE "reflections_taken" (
   "REFLECTIONS" TEXT,
   "STUDENT" INTEGER,
   "COURSE" INTEGER,
@@ -63,7 +72,7 @@ CREATE TABLE "tables_reflections_taken" (
   PRIMARY KEY ("REFLECTIONS", "STUDENT", "COURSE", "SCENARIO", "VERSION", "DATE_TAKEN")
 );
 
-CREATE TABLE "tables_conversations_had" (
+CREATE TABLE "conversations_had" (
   "STUDENT" INTEGER,
   "COURSE" INTEGER,
   "SCENARIO" INTEGER,
@@ -74,19 +83,19 @@ CREATE TABLE "tables_conversations_had" (
   "CONVERSATION" INTEGER
 );
 
-CREATE TABLE "tables_scenarios" (
+CREATE TABLE "scenarios" (
   "SCENARIO" INTEGER,
   "VERSION" INTEGER,
-  "PROFESSOR_id" INTEGER,
   "NAME" VARCHAR,
   "PUBLIC" BOOLEAN,
   "NUM_CONVERSATION" INTEGER,
   "IS_FINISHED" BOOLEAN,
   "DATE_CREATED" DATE,
+  "SCENARIO_HASH" INT UNIQUE,
   PRIMARY KEY ("SCENARIO", "VERSION")
 );
 
-CREATE TABLE "tables_stakeholders" (
+CREATE TABLE "stakeholders" (
   "STAKEHOLDER" INTEGER PRIMARY KEY,
   "SCENARIO" INTEGER,
   "VERSION" INTEGER,
@@ -96,14 +105,14 @@ CREATE TABLE "tables_stakeholders" (
   "INTRODUCTION" TEXT
 );
 
-CREATE TABLE "tables_coverage" (
+CREATE TABLE "coverage" (
   "STAKEHOLDER" INTEGER,
   "ISSUE" INTEGER,
   "COVERAGE_SCORE" DECIMAL,
   PRIMARY KEY ("STAKEHOLDER", "ISSUE")
 );
 
-CREATE TABLE "tables_pages" (
+CREATE TABLE "pages" (
   "PAGE" INTEGER,
   "PAGE_TYPE" VARCHAR,
   "PAGE_TITLE" TEXT,
@@ -116,7 +125,7 @@ CREATE TABLE "tables_pages" (
   PRIMARY KEY ("PAGE", "SCENARIO", "VERSION")
 );
 
-CREATE TABLE "tables_conversations" (
+CREATE TABLE "conversations" (
   "CONVERSATION" INTEGER,
   "STAKEHOLDER" INTEGER,
   "QUESTION" TEXT,
@@ -124,27 +133,27 @@ CREATE TABLE "tables_conversations" (
   PRIMARY KEY ("CONVERSATION", "STAKEHOLDER")
 );
 
-CREATE TABLE "tables_reflection_questions" (
+CREATE TABLE "reflection_questions" (
   "id" INTEGER,
   "PAGE" INTEGER,
   "REFLECTION_QUESTION" TEXT,
   PRIMARY KEY ("id", "PAGE", "REFLECTION_QUESTION")
 );
 
-CREATE TABLE "tables_stakeholder_page" (
+CREATE TABLE "stakeholder_to_page" (
   "PAGE" INTEGER,
   "STAKEHOLDER" INTEGER,
   PRIMARY KEY ("PAGE", "STAKEHOLDER")
 );
 
-CREATE TABLE "tables_generic_page" (
+CREATE TABLE "generic_page" (
   "id" INTEGER,
   "PAGE" INTEGER,
   "BODY" TEXT,
   PRIMARY KEY ("id", "PAGE", "BODY")
 );
 
-CREATE TABLE "tables_action_page" (
+CREATE TABLE "action_page" (
   "id" INTEGER,
   "PAGE" INTEGER,
   "CHOICE" TEXT,
@@ -152,131 +161,124 @@ CREATE TABLE "tables_action_page" (
   PRIMARY KEY ("id", "PAGE", "CHOICE")
 );
 
-CREATE TABLE "tables_actions_taken" (
+CREATE TABLE "response_to_action_page" (
   "RESPONSE" INTEGER,
   "ACTION_PAGE" INTEGER
 );
 
-CREATE TABLE "tables_scenarios_for" (
-  "SCENARIO" INTEGER,
-  "VERSION" INTEGER,
+CREATE TABLE "scenarios_for" (
+  "SCENARIO_HASH" INTEGER,
   "COURSE" INTEGER,
-  PRIMARY KEY ("SCENARIO", "VERSION", "COURSE")
+  PRIMARY KEY ("SCENARIO_HASH", "COURSE")
 );
 
-CREATE TABLE "tables_issues" (
+CREATE TABLE "issues" (
   "ISSUE" INTEGER,
-  "SCENARIO" INTEGER,
-  "VERSION" INTEGER,
+  "SCENARIO_HASH" INTEGER,
   "NAME" TEXT,
   "IMPORTANCE_SCORE" INTEGER,
-  PRIMARY KEY ("ISSUE", "SCENARIO", "VERSION")
+  PRIMARY KEY ("ISSUE", "SCENARIO_HASH")
 );
 
-CREATE TABLE "tables_assigned_to" (
-  "STUDENT" INTEGER,
-  "SCENARIO" INTEGER,
-  "VERSION" INTEGER,
-  PRIMARY KEY ("STUDENT", "SCENARIO", "VERSION")
-);
-
-CREATE TABLE "tables_student_times" (
+CREATE TABLE "student_times" (
   "STUDENT" INTEGER,
   "COURSE" INTEGER,
-  "SCENARIO" INTEGER,
-  "VERSION" INTEGER,
+  "SCENARIO_HASH" INTEGER,
   "DATE_TAKEN" DATE,
   "PAGE" INTEGER,
   "START_TIME" DATE,
   "END_TIME" DATE,
-  PRIMARY KEY ("STUDENT", "COURSE", "SCENARIO", "VERSION", "DATE_TAKEN", "PAGE")
+  PRIMARY KEY ("STUDENT", "COURSE", "SCENARIO_HASH", "DATE_TAKEN", "PAGE")
 );
 
-ALTER TABLE "tables_students" ADD FOREIGN KEY ("STUDENT") REFERENCES "tables_demographics" ("STUDENT");
+CREATE TABLE "courses_to_scenario" (
+  "COURSE" INTEGER,
+  "SCENARIO" INTEGER,
+  "PERMISSION" INTEGER,
+  PRIMARY KEY ("COURSE", "SCENARIO")
+);
 
-ALTER TABLE "tables_professors_teach" ADD FOREIGN KEY ("PROFESSOR_id") REFERENCES "tables_professors" ("PROFESSOR_id");
+ALTER TABLE "students" ADD FOREIGN KEY ("STUDENT") REFERENCES "demographics" ("STUDENT");
 
-ALTER TABLE "tables_professors_teach" ADD FOREIGN KEY ("COURSE") REFERENCES "tables_courses" ("COURSE");
+ALTER TABLE "professors_to_courses" ADD FOREIGN KEY ("PROFESSOR") REFERENCES "professors" ("PROFESSOR");
 
-ALTER TABLE "tables_students_in" ADD FOREIGN KEY ("STUDENT") REFERENCES "tables_students" ("STUDENT");
+ALTER TABLE "professors_to_courses" ADD FOREIGN KEY ("COURSE") REFERENCES "courses" ("COURSE");
 
-ALTER TABLE "tables_students_in" ADD FOREIGN KEY ("COURSE") REFERENCES "tables_courses" ("COURSE");
+ALTER TABLE "professors_to_scenario" ADD FOREIGN KEY ("PROFESSOR") REFERENCES "professors" ("PROFESSOR");
 
-ALTER TABLE "tables_responses" ADD FOREIGN KEY ("STUDENT") REFERENCES "tables_students" ("STUDENT");
+ALTER TABLE "professors_to_scenario" ADD FOREIGN KEY ("SCENARIO") REFERENCES "scenarios" ("SCENARIO");
 
-ALTER TABLE "tables_responses" ADD FOREIGN KEY ("COURSE") REFERENCES "tables_courses" ("COURSE");
+ALTER TABLE "students_to_course" ADD FOREIGN KEY ("STUDENT") REFERENCES "students" ("STUDENT");
 
-ALTER TABLE "tables_responses" ADD FOREIGN KEY ("SCENARIO") REFERENCES "tables_scenarios" ("SCENARIO");
+ALTER TABLE "students_to_course" ADD FOREIGN KEY ("COURSE") REFERENCES "courses" ("COURSE");
 
-ALTER TABLE "tables_responses" ADD FOREIGN KEY ("PAGE") REFERENCES "tables_pages" ("PAGE");
+ALTER TABLE "responses" ADD FOREIGN KEY ("STUDENT") REFERENCES "students" ("STUDENT");
 
-ALTER TABLE "tables_reflections_taken" ADD FOREIGN KEY ("STUDENT") REFERENCES "tables_responses" ("STUDENT");
+ALTER TABLE "responses" ADD FOREIGN KEY ("COURSE") REFERENCES "courses" ("COURSE");
 
-ALTER TABLE "tables_reflections_taken" ADD FOREIGN KEY ("COURSE") REFERENCES "tables_responses" ("COURSE");
+ALTER TABLE "responses" ADD FOREIGN KEY ("SCENARIO") REFERENCES "scenarios" ("SCENARIO");
 
-ALTER TABLE "tables_reflections_taken" ADD FOREIGN KEY ("SCENARIO") REFERENCES "tables_responses" ("SCENARIO");
+ALTER TABLE "responses" ADD FOREIGN KEY ("PAGE") REFERENCES "pages" ("PAGE");
 
-ALTER TABLE "tables_reflections_taken" ADD FOREIGN KEY ("DATE_TAKEN") REFERENCES "tables_responses" ("DATE_TAKEN");
+ALTER TABLE "reflections_taken" ADD FOREIGN KEY ("STUDENT") REFERENCES "responses" ("STUDENT");
 
-ALTER TABLE "tables_conversations_had" ADD FOREIGN KEY ("STUDENT") REFERENCES "tables_responses" ("STUDENT");
+ALTER TABLE "reflections_taken" ADD FOREIGN KEY ("COURSE") REFERENCES "responses" ("COURSE");
 
-ALTER TABLE "tables_conversations_had" ADD FOREIGN KEY ("COURSE") REFERENCES "tables_responses" ("COURSE");
+ALTER TABLE "reflections_taken" ADD FOREIGN KEY ("SCENARIO") REFERENCES "responses" ("SCENARIO");
 
-ALTER TABLE "tables_conversations_had" ADD FOREIGN KEY ("SCENARIO") REFERENCES "tables_responses" ("SCENARIO");
+ALTER TABLE "reflections_taken" ADD FOREIGN KEY ("DATE_TAKEN") REFERENCES "responses" ("DATE_TAKEN");
 
-ALTER TABLE "tables_conversations_had" ADD FOREIGN KEY ("DATE_TAKEN") REFERENCES "tables_responses" ("DATE_TAKEN");
+ALTER TABLE "conversations_had" ADD FOREIGN KEY ("STUDENT") REFERENCES "responses" ("STUDENT");
 
-ALTER TABLE "tables_conversations_had" ADD FOREIGN KEY ("STAKEHOLDER") REFERENCES "tables_stakeholders" ("STAKEHOLDER");
+ALTER TABLE "conversations_had" ADD FOREIGN KEY ("COURSE") REFERENCES "responses" ("COURSE");
 
-ALTER TABLE "tables_professors" ADD FOREIGN KEY ("PROFESSOR_id") REFERENCES "tables_scenarios" ("PROFESSOR_id");
+ALTER TABLE "conversations_had" ADD FOREIGN KEY ("SCENARIO") REFERENCES "responses" ("SCENARIO");
 
-ALTER TABLE "tables_stakeholders" ADD FOREIGN KEY ("SCENARIO") REFERENCES "tables_scenarios" ("SCENARIO");
+ALTER TABLE "conversations_had" ADD FOREIGN KEY ("DATE_TAKEN") REFERENCES "responses" ("DATE_TAKEN");
 
-ALTER TABLE "tables_stakeholders" ADD FOREIGN KEY ("STAKEHOLDER") REFERENCES "tables_coverage" ("STAKEHOLDER");
+ALTER TABLE "conversations_had" ADD FOREIGN KEY ("STAKEHOLDER") REFERENCES "stakeholders" ("STAKEHOLDER");
 
-ALTER TABLE "tables_coverage" ADD FOREIGN KEY ("ISSUE") REFERENCES "tables_issues" ("ISSUE");
+ALTER TABLE "stakeholders" ADD FOREIGN KEY ("SCENARIO") REFERENCES "scenarios" ("SCENARIO");
 
-ALTER TABLE "tables_pages" ADD FOREIGN KEY ("SCENARIO") REFERENCES "tables_scenarios" ("SCENARIO");
+ALTER TABLE "stakeholders" ADD FOREIGN KEY ("STAKEHOLDER") REFERENCES "coverage" ("STAKEHOLDER");
 
-ALTER TABLE "tables_pages" ADD FOREIGN KEY ("NEXT_PAGE") REFERENCES "tables_pages" ("PAGE");
+ALTER TABLE "coverage" ADD FOREIGN KEY ("ISSUE") REFERENCES "issues" ("ISSUE");
 
-ALTER TABLE "tables_conversations" ADD FOREIGN KEY ("STAKEHOLDER") REFERENCES "tables_stakeholders" ("STAKEHOLDER");
+ALTER TABLE "pages" ADD FOREIGN KEY ("SCENARIO") REFERENCES "scenarios" ("SCENARIO");
 
-ALTER TABLE "tables_reflection_questions" ADD FOREIGN KEY ("PAGE") REFERENCES "tables_pages" ("PAGE");
+ALTER TABLE "pages" ADD FOREIGN KEY ("NEXT_PAGE") REFERENCES "pages" ("PAGE");
 
-ALTER TABLE "tables_stakeholder_page" ADD FOREIGN KEY ("PAGE") REFERENCES "tables_pages" ("PAGE");
+ALTER TABLE "conversations" ADD FOREIGN KEY ("STAKEHOLDER") REFERENCES "stakeholders" ("STAKEHOLDER");
 
-ALTER TABLE "tables_stakeholder_page" ADD FOREIGN KEY ("STAKEHOLDER") REFERENCES "tables_stakeholders" ("STAKEHOLDER");
+ALTER TABLE "reflection_questions" ADD FOREIGN KEY ("PAGE") REFERENCES "pages" ("PAGE");
 
-ALTER TABLE "tables_generic_page" ADD FOREIGN KEY ("PAGE") REFERENCES "tables_pages" ("PAGE");
+ALTER TABLE "stakeholder_to_page" ADD FOREIGN KEY ("PAGE") REFERENCES "pages" ("PAGE");
 
-ALTER TABLE "tables_action_page" ADD FOREIGN KEY ("PAGE") REFERENCES "tables_pages" ("PAGE");
+ALTER TABLE "stakeholder_to_page" ADD FOREIGN KEY ("STAKEHOLDER") REFERENCES "stakeholders" ("STAKEHOLDER");
 
-ALTER TABLE "tables_actions_taken" ADD FOREIGN KEY ("RESPONSE") REFERENCES "tables_responses" ("RESPONSE");
+ALTER TABLE "generic_page" ADD FOREIGN KEY ("PAGE") REFERENCES "pages" ("PAGE");
 
-ALTER TABLE "tables_actions_taken" ADD FOREIGN KEY ("ACTION_PAGE") REFERENCES "tables_action_page" ("id");
+ALTER TABLE "action_page" ADD FOREIGN KEY ("PAGE") REFERENCES "pages" ("PAGE");
 
-ALTER TABLE "tables_scenarios_for" ADD FOREIGN KEY ("COURSE") REFERENCES "tables_courses" ("COURSE");
+ALTER TABLE "response_to_action_page" ADD FOREIGN KEY ("RESPONSE") REFERENCES "responses" ("RESPONSE");
 
-ALTER TABLE "tables_scenarios_for" ADD FOREIGN KEY ("SCENARIO") REFERENCES "tables_scenarios" ("SCENARIO");
+ALTER TABLE "response_to_action_page" ADD FOREIGN KEY ("ACTION_PAGE") REFERENCES "action_page" ("id");
 
-ALTER TABLE "tables_scenarios_for" ADD FOREIGN KEY ("VERSION") REFERENCES "tables_scenarios" ("VERSION");
+ALTER TABLE "scenarios_for" ADD FOREIGN KEY ("COURSE") REFERENCES "courses" ("COURSE");
 
-ALTER TABLE "tables_issues" ADD FOREIGN KEY ("SCENARIO") REFERENCES "tables_scenarios" ("SCENARIO");
+ALTER TABLE "scenarios_for" ADD FOREIGN KEY ("SCENARIO_HASH") REFERENCES "scenarios" ("SCENARIO_HASH");
 
-ALTER TABLE "tables_issues" ADD FOREIGN KEY ("VERSION") REFERENCES "tables_scenarios" ("VERSION");
+ALTER TABLE "issues" ADD FOREIGN KEY ("SCENARIO_HASH") REFERENCES "scenarios" ("SCENARIO_HASH");
 
-ALTER TABLE "tables_students" ADD FOREIGN KEY ("STUDENT") REFERENCES "tables_assigned_to" ("STUDENT");
+ALTER TABLE "students" ADD FOREIGN KEY ("STUDENT") REFERENCES "student_times" ("STUDENT");
 
-ALTER TABLE "tables_scenarios" ADD FOREIGN KEY ("SCENARIO") REFERENCES "tables_assigned_to" ("SCENARIO");
+ALTER TABLE "scenarios" ADD FOREIGN KEY ("SCENARIO_HASH") REFERENCES "student_times" ("SCENARIO_HASH");
 
-ALTER TABLE "tables_scenarios" ADD FOREIGN KEY ("VERSION") REFERENCES "tables_assigned_to" ("VERSION");
+ALTER TABLE "pages" ADD FOREIGN KEY ("PAGE") REFERENCES "student_times" ("PAGE");
 
-ALTER TABLE "tables_students" ADD FOREIGN KEY ("STUDENT") REFERENCES "tables_student_times" ("STUDENT");
+ALTER TABLE "professors_to_courses" ADD FOREIGN KEY ("COURSE") REFERENCES "courses_to_scenario" ("COURSE");
 
-ALTER TABLE "tables_scenarios" ADD FOREIGN KEY ("SCENARIO") REFERENCES "tables_student_times" ("SCENARIO");
+ALTER TABLE "scenarios" ADD FOREIGN KEY ("SCENARIO") REFERENCES "courses_to_scenario" ("SCENARIO");
 
-ALTER TABLE "tables_scenarios" ADD FOREIGN KEY ("VERSION") REFERENCES "tables_student_times" ("VERSION");
-
-ALTER TABLE "tables_pages" ADD FOREIGN KEY ("PAGE") REFERENCES "tables_student_times" ("PAGE");
+ALTER TABLE "student_times" ADD FOREIGN KEY ("DATE_TAKEN") REFERENCES "action_page" ("CHOICE");
 

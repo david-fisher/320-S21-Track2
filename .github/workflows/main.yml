@@ -22,8 +22,29 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       -
-        name: Build 
-        run: docker-compose build 
+        name: Build and push frontend
+        uses: docker/build-push-action@v2
+        with:
+          context: ./Ghost_in_the_Shell/client_folder_react_app/ethisim/
+          push: true
+          tags: cs320track2/frontend:latest
+          cache-from: type=registry,ref=cs320track2/frontend:latest
+          cache-to: type=inline
       -
-        name: Push
-        run: docker-compose push
+        name: Build and push backend
+        uses: docker/build-push-action@v2
+        with:
+          context: ./moral_kombat_backend/
+          push: true
+          tags: cs320track2/backend:latest
+          cache-from: type=registry,ref=cs320track2/backend:latest
+          cache-to: type=inline
+      -
+        name: Build and push database
+        uses: docker/build-push-action@v2
+        with:
+          context: ./database/
+          push: true
+          tags: cs320track2/database:latest
+          cache-from: type=registry,ref=cs320track2/database:latest
+          cache-to: type=inline

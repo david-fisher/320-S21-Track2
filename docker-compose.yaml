@@ -5,18 +5,16 @@ services:
     restart: always
     container_name: back
     image: cs320track2/backend
-    build:  
+    build:
       context: ./moral_kombat_backend/
       dockerfile: Dockerfile
-    ports:
-      - "8000:8000"
     networks:
       - default-net
     image: cs320track2/backend:latest
-    depends_on: 
+    depends_on:
       - "database"
     command: ["./wait-for-it.sh", "db:5432", "--", "./start.sh"]
-      
+
   database:
     restart: always
     container_name: db
@@ -24,10 +22,6 @@ services:
       context: ./database/
       dockerfile: Dockerfile
     image: cs320track2/database
-    environment:
-      POSTGRES_PASSWORD: "password"
-    ports:
-      - "5432:5432"
     volumes:
       - ./database/postgres.conf:/etc/postgresql/postgresql.conf
       - ./database/schema.sql:/docker-entrypoint-initdb.d/schema.sql
@@ -43,15 +37,13 @@ services:
     build:
       context: ./Ghost_in_the_Shell/client_folder_react_app/ethisim/
       dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
     stdin_open: true
     depends_on:
       - backend
     networks:
       - default-net
     image: cs320track2/frontend:latest
-    
+
 networks:
   default-net:
     driver: bridge

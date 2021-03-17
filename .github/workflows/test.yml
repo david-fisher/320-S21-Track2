@@ -22,11 +22,11 @@ jobs:
 
       - 
         name: Run frontend test
-        run: docker exec front npm test
+        run: docker exec front npm test -d
 
       - 
         name: Run backend test
-        run: docker exec back python manage.py test
+        run: docker exec back python manage.py test -d
       -
         name: shut down 
         run: docker-compose down

@@ -44,6 +44,7 @@ services:
     container_name: front
     environment:
       BUILDKIT_INLINE_CACHE: 1
+      CI: "true"
     image: cs320track2/frontend
     build:
       context: ./Ghost_in_the_Shell/client_folder_react_app/ethisim/
@@ -55,8 +56,6 @@ services:
       - backend
     networks:
       - default-net
-    image: cs320track2/frontend:latest
-
 
 networks:
   default-net:

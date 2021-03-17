@@ -12,12 +12,13 @@ import axios from 'axios';
 import HTMLRenderer from './components/htmlRenderer';
 import { ScenariosContext } from "../Nav";
 import { GatheredInfoContext } from './simulationWindow';
-import VideoPlayer from './components/Sim_videoPlayer'
+import VideoPlayer from './components/Sim_videoPlayer';
+import NextButton from "./components/NextButton"
 
 const TextTypography = withStyles({
   root: {
     color: "#373a3c",
-    whiteSpace: "pre-line",
+    whiteSpace: "pre-line", 
   },
 })(Typography);
 
@@ -95,14 +96,7 @@ function Introduction({ pages, setPages, activePage, setActivePage }) {
           {/*  <Button>Back</Button>*/}
         </Grid>
         <Grid item style={{ marginRight: "0rem", marginTop: "-3rem" }}>
-          <Button
-            variant="contained"
-            disableElevation
-            color="primary"
-            onClick={goToProjectAssignment}
-          >
-            Next
-          </Button>
+          <NextButton title="Project Assignment" onClick={goToProjectAssignment}></NextButton>
         </Grid>
       </Grid>
       <Grid container spacing={2}>

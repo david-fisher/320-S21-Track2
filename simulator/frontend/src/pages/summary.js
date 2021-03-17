@@ -4,6 +4,8 @@ import { withStyles, Typography, Box, Grid, Button } from "@material-ui/core";
 import { BASE_URL, STUDENT_ID, SCENARIO_ID } from "../constants/config";
 import axios from 'axios'
 import ScrollableTabsButtonAuto from "./components/tabs"
+import NextButton from "./components/NextButton"
+import BackButton from "./components/BackButton"
 
 const TextTypography = withStyles({
   root: {
@@ -45,10 +47,10 @@ function Summary({pages, setPages, activePage, setActivePage}) {
       </Grid>
       <Grid container direction="row" justify="space-between">
         <Grid item style={{ marginRight: "0rem", marginTop: "-3rem" }}>
-          <Button variant="contained" disableElevation onClick={goToFinalAction}>Back</Button>
+          <BackButton title="Final Action" onClick={goToFinalAction}></BackButton>
         </Grid>
         <Grid item style={{ marginRight: "0rem", marginTop: "-3rem" }}>
-          <Button variant="contained" disableElevation color="primary" onClick={goToFeedback}>Next</Button>
+          <NextButton title="Feedback" onClick={goToFeedback}></NextButton>
         </Grid>
       </Grid>
       <Grid container spacing={2}>

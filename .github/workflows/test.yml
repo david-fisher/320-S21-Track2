@@ -26,7 +26,7 @@ jobs:
 
       - 
         name: Run backend test
-        run: docker exec back python manage.py test -d
+        run: docker exec back python lead/manage.py test -d
       -
         name: shut down 
         run: docker-compose down

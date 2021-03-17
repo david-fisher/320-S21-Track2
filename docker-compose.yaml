@@ -4,10 +4,13 @@ services:
   backend:
     restart: always
     container_name: back
+    environment:
+      BUILDKIT_INLINE_CACHE: 1
     image: cs320track2/backend
     build:  
       context: ./moral_kombat_backend/
       dockerfile: Dockerfile
+    cache-from: cs320track2/backend:latest
     ports:
       - "8000:8000"
     networks:
@@ -20,12 +23,14 @@ services:
   database:
     restart: always
     container_name: db
+    environment:
+      POSTGRES_PASSWORD: "password"
+      BUILDKIT_INLINE_CACHE: 1
     build:
       context: ./database/
       dockerfile: Dockerfile
-    image: cs320track2/database
-    environment:
-      POSTGRES_PASSWORD: "password"
+    cache-from: cs320track2/database:latest
+    image: cs320track2/database:latest
     ports:
       - "5432:5432"
     volumes:
@@ -39,6 +44,9 @@ services:
     restart: always
     command : npm start
     container_name: front
+    environment:
+      BUILDKIT_INLINE_CACHE: 1
+    cache-from: cs320track2/frontend:latest
     image: cs320track2/frontend
     build:
       context: ./Ghost_in_the_Shell/client_folder_react_app/ethisim/
@@ -51,6 +59,9 @@ services:
     networks:
       - default-net
     image: cs320track2/frontend:latest
+
+  apache:
+
     
 networks:
   default-net:

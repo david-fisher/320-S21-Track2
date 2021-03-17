@@ -1,0 +1,25 @@
+name: test-app
+
+on:
+  push:
+    branches:
+      - 'mobydock'
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v2
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      -
+        name: Build & run
+        run: docker-compose up 
+
+      -
+        name: shut down 
+        run: docker-compose down

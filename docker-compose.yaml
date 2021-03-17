@@ -12,6 +12,7 @@ services:
       dockerfile: Dockerfile
       cache_from: 
         - cs320track2/backend:latest
+    command: bash -c "cd lead && python manage.py check --tag database && python manage.py runserver 0.0.0.0:8000"
     ports:
       - "8000:8000"
     networks:
@@ -19,7 +20,6 @@ services:
     image: cs320track2/backend:latest
     depends_on: 
       - "database"
-    command: ["./wait-for-it.sh", "db:5432", "--", "./start.sh"]
       
   database:
     restart: always

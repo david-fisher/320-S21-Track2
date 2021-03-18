@@ -6,6 +6,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import {Box, Button} from "@material-ui/core";
+import SubmitButton from "./SubmitButton"
 
 import { BASE_URL, STUDENT_ID, SCENARIO_ID } from "../../constants/config";
 import axios from 'axios';
@@ -23,6 +24,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ErrorRadios(props) 
 {
+  let nextPageTitle = "";
   let   content_url = props.content_url;
   const classes = useStyles();
   const [value, setValue] = React.useState('');
@@ -92,6 +94,18 @@ export default function ErrorRadios(props)
     });
   }, [scenarios])
 
+  function getNextPageTitle(props) {
+    switch (props.nextPageName) {
+      case "gatheredInformation": nextPageTitle = "Gathered Information";
+      break;
+      case "summary": nextPageTitle = "Summary";
+      break;
+      default:
+        break;
+    }
+  }
+  getNextPageTitle(props);
+
   return (
     <form onSubmit={handleSubmit}>
       <FormControl component="fieldset" error={error} className={classes.formControl}>
@@ -103,9 +117,7 @@ export default function ErrorRadios(props)
         </RadioGroup>
         <FormHelperText>{helperText}</FormHelperText>
         <Box width={100}>
-          <Button type="submit" variant="outlined" color="primary" className={classes.button}>
-            Submit
-          </Button>
+          <SubmitButton title={nextPageTitle}></SubmitButton>
         </Box>
       </FormControl>
     </form>

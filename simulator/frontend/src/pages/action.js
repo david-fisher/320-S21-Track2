@@ -6,6 +6,7 @@ import axios from 'axios';
 import { ScenariosContext } from "../Nav";
 import HTMLRenderer from "./components/htmlRenderer";
 import BackButton from "./components/BackButton"
+import SubmitButton from "./components/SubmitButton"
 
 // const useStyles = makeStyles((theme) => ({
 //   root: {
@@ -34,7 +35,7 @@ function Action({ pages, setPages, activePage, setActivePage, content_url, nextP
     }
   }
 
-  let prevPageTitle;
+  let prevPageTitle = "";
   const [actionQuestion, setActionQuestion, setActionChoices] = React.useState('');
   const [questionID, setQuestionID] = React.useState('');
   const [scenarios, setScenarios] = React.useContext(ScenariosContext);
@@ -92,7 +93,6 @@ function Action({ pages, setPages, activePage, setActivePage, content_url, nextP
         break;
     }
   }
-
   getPrevPageTitle(prevPageID);
 
   return (

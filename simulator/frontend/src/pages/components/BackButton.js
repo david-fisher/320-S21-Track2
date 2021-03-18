@@ -1,14 +1,15 @@
 import Tooltip from '@material-ui/core/Tooltip';
 import React from 'react';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
-import {Button} from '@material-ui/core';
+import {Button, Typography} from '@material-ui/core';
 
 const useStylesBootstrap = makeStyles((theme) => ({
     arrow: {
-      color: "#881c1c", 
+      color: "#e0e0e0", 
     },
     tooltip: {
-      backgroundColor: "#881c1c",
+      backgroundColor: "#e0e0e0",
+      color: "#212121",
     },
   }));
   

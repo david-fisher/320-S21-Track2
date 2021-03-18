@@ -23,12 +23,12 @@ jobs:
         run: docker-compose up -d
       - 
         name: Run frontend test
-        - id: frontend
+        id: frontend
         run: set-output name=result && docker exec front npm test -d
 
       - 
         name: Run backend test
-        - id: backend
+        id: backend
         run: docker exec back python lead/manage.py test -d
       -
         name: shut down 

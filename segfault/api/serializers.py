@@ -4,7 +4,7 @@ from api.models import *
 #TODO: Need to disable for all non-admin after depolying(security)
 class ScenarioSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Scenario
+        model = Scenarios
         fields = ['id','name','date_created','course']
     
     
@@ -22,7 +22,7 @@ class CourseSerializer(serializers.ModelSerializer):
 
 class ConversationSerializer(serializers.ModelSerializer):    
     class Meta:
-        model = Conversation
+        model = Conversations
         fields = '__all__'
 
 class DemographicSerializer(serializers.ModelSerializer):    
@@ -37,7 +37,7 @@ class ResponseSerializer(serializers.ModelSerializer):
 
 class IssueSerializer(serializers.ModelSerializer):    
     class Meta:
-        model = Issue
+        model = Issues
         fields = '__all__'
 
 
@@ -110,3 +110,18 @@ class StudentTimesSerializer(serializers.ModelSerializer):
     class Meta:
         model = student_times
         fields = '__all__'
+class CoverageSerializer(serializers.ModelSerializer):    
+    class Meta:
+        model = Coverage
+        fields = '__all__'
+
+class StakeholderSerializer(serializers.ModelSerializer):    
+    class Meta:
+        model = Stakeholders
+        fields = '__all__'
+
+class ScenariosForSerializer(serializers.ModelSerializer):    
+    class Meta:
+        model = Scenarios_for
+        fields = '__all__'
+

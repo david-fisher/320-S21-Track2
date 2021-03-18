@@ -24,6 +24,9 @@ router.register(r'conversations_had', views.ConversationsHadViewSet)
 router.register(r'student_times', views.StudentTimesViewSet)
 
 
+router.register(r'scenarios_for', views.Scenarios_forViewSet)
+router.register(r'coverage', views.CoverageViewSet)
+router.register(r'stakeholders', views.StakeholdersViewSet)
 # The API URLs are now determined automatically by the router.
 urlpatterns = [
     path('', include(router.urls)),

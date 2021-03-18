@@ -1,14 +1,7 @@
 name: test-app
 
 on:
-  push:
-    branches:
-      - main
-      - mobydock
   pull_request:
-    branches:
-      - main
-      - mobydock
 
 jobs:
   test:
@@ -39,49 +32,3 @@ jobs:
       -
         name: shut down 
         run: docker-compose down
-
-  push:
-    runs-on: ubuntu-latest
-    needs: test
-
-    if: ${{ needs.test.outputs.frontend_output == 0 && needs.test.outputs.backend_output == 0 }} 
-    steps:
-      -
-        name: Checkout
-        uses: actions/checkout@v2
-      -
-        name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
-      - 
-        name: Login to DockerHub
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-      -
-        name: Build and push frontend
-        uses: docker/build-push-action@v2
-        with:
-          context: ./Ghost_in_the_Shell/client_folder_react_app/ethisim/
-          push: true
-          tags: cs320track2/frontend:latest
-          cache-from: type=registry,ref=cs320track2/frontend:latest
-          cache-to: type=inline
-      -
-        name: Build and push backend
-        uses: docker/build-push-action@v2
-        with:
-          context: ./moral_kombat_backend/
-          push: true
-          tags: cs320track2/backend:latest
-          cache-from: type=registry,ref=cs320track2/backend:latest
-          cache-to: type=inline
-      -
-        name: Build and push database
-        uses: docker/build-push-action@v2
-        with:
-          context: ./database/
-          push: true
-          tags: cs320track2/database:latest
-          cache-from: type=registry,ref=cs320track2/database:latest
-          cache-to: type=inline

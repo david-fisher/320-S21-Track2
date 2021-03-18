@@ -1,7 +1,7 @@
 name: test-app
 
 on:
-  push:
+  pull-request:
     branches:
       - 'mobydock'
       - 'main'

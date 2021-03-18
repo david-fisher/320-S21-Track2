@@ -60,21 +60,33 @@ class Demographic(models.Model):
 
 
 class Scenario(models.Model):
+    
+    SCENARIO = models.AutoField(primary_key = True, editable=False)
+    VERSION = models.IntegerField(default=1, editable=False)
     name = models.CharField(max_length=50, null=False)
-    status = models.TextChoices('status', 'Draft Published Closed')
-    public = models.BooleanField(default=False)
+    public = models.BooleanField(default=False)    
+    NUM_CONVERSATION = models.IntegerField(default = 0)
+    IS_FINISHED = models.BooleanField(default = False)
     date_created = models.DateField(auto_now_add=True)
-    due_date = models.DateField(auto_now_add=True)
-    description = models.CharField(max_length=300)
-    additional_data = models.CharField(max_length=300)
-
 
     class Meta:
         db_table = 'SCENARIOS'
         ordering = ['date_created','name']
 
+class Scenarios_for(models.Model):
+    #not sure about unique together
+   
+    SCENARIO = models.ForeignKey('Scenario', on_delete = models.CASCADE, related_name='scenarios_for1')
+    COURSE = models.ForeignKey('courses', on_delete = models.CASCADE, related_name='scenarios_for2')
+    VERSION = models.IntegerField(default=1, editable=False)
+
+    class Meta:
+        #not sure about this
+        unique_together = (('SCENARIO'), ('COURSE'))
+        db_table = 'SCENARIO_FOR'
+
 class Response(models.Model):
-    scenario = models.ForeignKey('scenario', on_delete = models.CASCADE)
+    scenario = models.ForeignKey('Scenario', on_delete = models.CASCADE)
     #TODO: verify pages is in scenario
 
     # commented because of pages are not implemented
@@ -84,23 +96,47 @@ class Response(models.Model):
     choice = models.CharField(max_length = 300)
     class Meta:
         db_table = 'RESPONSES'
-        ordering = ['scenario']
+        ordering = ['Scenarios']
 
-class Issue(models.Model):
-    scenario = models.ForeignKey('scenario', on_delete = models.CASCADE)
+class Issues(models.Model):
+    ISSUE = models.AutoField(default = None, primary_key = True, editable = False)
+    scenario = models.ForeignKey('Scenario', on_delete = models.CASCADE)
+    VERSION = models.IntegerField(default=1, editable=False)
     name = models.CharField(max_length = 100)
     importance_score = models.FloatField(validators = [MinValueValidator(0.0)])
     class Meta:
        db_table = 'ISSUES'
-       ordering = ['scenario']
+       ordering = ['Scenario']
 
-class Conversation(models.Model):
+class Conversations(models.Model):
+    CONVERSATION = models.AutoField(primary_key = True, editable = False)
+    STAKEHOLDER = models.ForeignKey('Stakeholders', on_delete = models.CASCADE, related_name="conversations_had6")
     question = models.CharField(max_length = 100)
     response = models.TextField(max_length = 100)
     class Meta:
         db_table = 'CONVERSATIONS'
 
 
-class Stakeholder(models.Model):
+class Stakeholders(models.Model):
+    STAKEHOLDER = models.AutoField(primary_key = True, editable = False)
+    SCENARIO = models.ForeignKey('Scenario', to_field = 'SCENARIO', on_delete = models.CASCADE, related_name="stakeholders2", default = 1)
+    VERSION = models.IntegerField(default=1, editable=False)
+    NAME = models.CharField(max_length = 1000, default = "default")
+    DESCRIPTION = models.TextField(default = "default")
+    JOB = models.TextField(default = "default")
+    INTRODUCTION = models.TextField(default = 'default')
+
     class Meta:
         db_table = 'STAKEHOLDERS'
+
+
+class Coverage(models.Model):
+
+    
+    STAKEHOLDER = models.ForeignKey('Stakeholders', on_delete = models.CASCADE, related_name = "coverage2", default = None)
+    ISSUE = models.ForeignKey('Issues', on_delete = models.CASCADE, related_name = "coverage1", default = None)
+    COVERAGE_SCORE = models.FloatField(validators = [MinValueValidator(0.0)])
+
+    class Meta:
+        unique_together = (('STAKEHOLDER'),('ISSUE'))
+        db_table = 'CONVERSATIONS'  

@@ -29,7 +29,7 @@ class ScenariosViewSet(viewsets.ModelViewSet):
 
 class ResponsesViewSet(viewsets.ModelViewSet):
     queryset = Response.objects.all()
-    serializer_class = CourseSerializer
+    serializer_class = ResponseSerializer
 
 class IssuesViewSet(viewsets.ModelViewSet):
     queryset = Issues.objects.all()
@@ -105,4 +105,4 @@ class Scenarios_forViewSet(viewsets.ModelViewSet):
 
 class StakeholdersViewSet(viewsets.ModelViewSet):
     queryset= Stakeholders.objects.all()
-    serializer_class = ScenarioSerializer
+    serializer_class = StakeholderSerializer

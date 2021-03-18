@@ -116,7 +116,6 @@ class Scenario(models.Model):
 
 
 class Scenarios_for(models.Model):
-    # not sure about unique together
 
     SCENARIO = models.ForeignKey('Scenario', on_delete=models.CASCADE,)
     COURSE = models.ForeignKey('course', on_delete=models.CASCADE)
@@ -144,10 +143,10 @@ class Response(models.Model):
         ordering = ['scenario', 'page', 'student']
 
 
-class Issues(models.Model):
-    ISSUE = models.AutoField(default=None, primary_key=True, editable=False)
+class Issue(models.Model):
+    issue = models.AutoField(default=None, primary_key=True, editable=False)
     scenario = models.ForeignKey('Scenario', on_delete=models.CASCADE)
-    VERSION = models.IntegerField(default=1, editable=False)
+    version = models.IntegerField(default=1, editable=False)
     name = models.CharField(max_length=100)
     importance_score = models.FloatField(validators=[MinValueValidator(0.0)])
 
@@ -169,10 +168,10 @@ class Conversations(models.Model):
 class Stakeholders(models.Model):
     STAKEHOLDER = models.AutoField(primary_key=True, editable=False)
     SCENARIO = models.ForeignKey('Scenario',
-                                 on_delete=models.CASCADE, default=1)
+                                 on_delete=models.CASCADE, null=False)
     VERSION = models.IntegerField(default=1, editable=False)
-    NAME = models.CharField(max_length=1000, default="default")
-    DESCRIPTION = models.TextField(default="default")
+    NAME = models.CharField(max_length=1000,  null=False)
+    DESCRIPTION = models.TextField(default="")
     JOB = models.TextField(default="default")
     INTRODUCTION = models.TextField(default='default')
 

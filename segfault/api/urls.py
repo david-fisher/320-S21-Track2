@@ -5,8 +5,11 @@ from api import views
 # Create a router and register our viewsets with it.
 router = routers.DefaultRouter()
 router.register(r'scenarios', views.ScenariosViewSet)   
-router.register(r'courses', views.CoursesViewSet)
+router.register(r'courses', views.CourseViewSet)
+router.register(r'professors', views.ProfessorViewSet)
+router.register(r'students', views.StudentViewSet)
 router.register(r'demographic', views.DemographicViewSet)
+
 router.register(r'issues', views.IssuesViewSet)
 router.register(r'conversations', views.ConversationsViewSet)
 router.register(r'responses', views.ResponsesViewSet)

@@ -1,31 +1,43 @@
 from django.shortcuts import render
 from rest_framework import viewsets
+from rest_framework import generics
 from api.models import *
 from api.serializers import *
 
 # Create your views here.
-class ScenariosViewSet(viewsets.ModelViewSet):
-    queryset= Scenario.objects.all()
-    serializer_class = ScenarioSerializer
 
-class CoursesViewSet(viewsets.ModelViewSet):
+
+class CourseViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
+
+class ProfessorViewSet(viewsets.ModelViewSet):
+    queryset = Professor.objects.all()
+    serializer_class = ProfessorSerializer
+
+class StudentViewSet(viewsets.ModelViewSet):
+    queryset = Student.objects.all()
+    serializer_class = StudentSerializer
 
 class DemographicViewSet(viewsets.ModelViewSet):
     queryset = Demographic.objects.all()
     serializer_class = DemographicSerializer
+
+class ScenariosViewSet(viewsets.ModelViewSet):
+    queryset= Scenario.objects.all()
+    serializer_class = ScenarioSerializer
+
 class ResponsesViewSet(viewsets.ModelViewSet):
     queryset = Response.objects.all()
     serializer_class = CourseSerializer
+
 class IssuesViewSet(viewsets.ModelViewSet):
     queryset = Issues.objects.all()
     serializer_class = IssueSerializer
+
 class ConversationsViewSet(viewsets.ModelViewSet):
     queryset = Conversations.objects.all()
     serializer_class = ConversationSerializer
-
-
 
 class PagesViewSet(viewsets.ModelViewSet):
     queryset = pages.objects.all()
@@ -40,7 +52,7 @@ class Reflection_QuestionsViewSet(viewsets.ModelViewSet):
     serializer_class = Reflection_questionsSerializer
 
     
-class generic_pageViewSet(viewsets.ModelViewSet):
+class Generic_pageViewSet(viewsets.ModelViewSet):
     queryset = generic_page.objects.all()
     serializer_class = Generic_pageSerializer
     

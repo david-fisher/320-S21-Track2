@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - 'mobydock'
+      - 'main'
 
 jobs:
   test:

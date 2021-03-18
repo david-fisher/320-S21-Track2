@@ -143,7 +143,7 @@ class Response(models.Model):
         ordering = ['scenario', 'page', 'student']
 
 
-class Issue(models.Model):
+class Issues(models.Model):
     issue = models.AutoField(default=None, primary_key=True, editable=False)
     scenario = models.ForeignKey('Scenario', on_delete=models.CASCADE)
     version = models.IntegerField(default=1, editable=False)

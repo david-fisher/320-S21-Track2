@@ -125,11 +125,20 @@ export default function IssueMatrix({ scenario }) {
 
     const [didGetSHs, setDidGetSHs] = useState(false); //stores status of whether stakeholders have been received
     const [stakeHolders, setStakeHolders] = useState([]); //stores stakeholders
+    const [didGetIssues, setDidGetIssues] = useState(false);
+    const [issues, setIssues] = useState([]);
+
+    const [didSetData, setDidSetData] = useState(false);
+    const [cols, setColumns] = useState([]); //stores stakeholders
+    const [rows, setRows] = useState([]);
+
     const [isLoading, setLoading] = useState(false); //stores status of whether something is loading
     var axios = require('axios'); //backend
 
     const [successBannerMessage, setSuccessBannerMessage] = useState(''); //success banner
     const [successBannerFade, setSuccessBannerFade] = useState(false);
+
+    var issuePromises = [];
 
     useEffect(() => {
         //sets behaviour of success banner
@@ -152,6 +161,27 @@ export default function IssueMatrix({ scenario }) {
         return () => clearTimeout(timeout);
     }, [errorBannerFade]);
 
+    const [currentTime, setCurrentTime] = useState(getCurrentTimeInt());
+    //gets the current time in hms and converts it to an int
+    function getCurrentTimeInt() {
+        let d = Date();
+        var h = d.substring(16, 18);
+        var m = d.substring(19, 21);
+        var s = d.substring(22, 24);
+        return 60 * (60 * h + m) + s;
+    }
+
+    function checkTime(setTime, t) {
+        var ret = false;
+        //current time difference is at least 1 second, but that SHOULD be ample time for
+        //the database to get back to the frontend
+        if (getCurrentTimeInt() - t !== 0) {
+            ret = true;
+        }
+        setTime(getCurrentTimeInt());
+        return ret;
+    }
+
     function getExistingStakeHolders() {
         setLoading(true); //starts loading icon
 
@@ -168,6 +198,7 @@ export default function IssueMatrix({ scenario }) {
         axios(config) //backend call to get data in response
             .then(function (response) {
                 setStakeHolders(response.data);
+                setLoading(false);
             })
             .catch(function (error) {
                 setErrorBannerMessage(
@@ -175,8 +206,78 @@ export default function IssueMatrix({ scenario }) {
                 );
                 setErrorBannerFade(true);
             });
+    }
 
-        setLoading(false);
+    function getIssues() {
+        stakeHolders.forEach((stakeHolder) => {
+            setLoading(true);
+            var data = JSON.stringify({});
+
+            var config = {
+                method: 'get',
+                url:
+                    baseURL +
+                    '/coverages?stakeholder_id=' +
+                    stakeHolder.STAKEHOLDER,
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                data: data,
+            };
+            issuePromises.push(
+                axios(config)
+                    .then(function (response) {
+                        setIssues(issues.concat(response.data.ISSUES));
+                        setLoading(false);
+                        setDidGetIssues(true);
+                    })
+                    .catch(function (error) {
+                        setErrorBannerMessage(
+                            'Failed to get the issue(s) for this stakeholder! Please try again.'
+                        );
+                        setErrorBannerFade(true);
+                    })
+            );
+        });
+    }
+
+    function setColData() {
+        let cols = [
+            { title: 'Name', field: 'NAME' },
+            { title: 'Description', field: 'DESCRIPTION' },
+        ];
+        issues.forEach((issue) => {
+            let insertBoolean = true;
+            for (let i = 0; i < cols.length; i++) {
+                if (cols[i].title === 'Issue' + issue.NAME) {
+                    insertBoolean = false;
+                }
+            }
+            if (insertBoolean) {
+                cols.push({
+                    title: 'Issue' + issue.NAME,
+                    field: 'Issue' + issue.NAME.toUpperCase(),
+                });
+            }
+        });
+        setColumns(cols);
+    }
+
+    function setRowData() {
+        let data = stakeHolders.map((stakeHolder) => {
+            let row = {
+                NAME: stakeHolder.NAME,
+                DESCRIPTION: stakeHolder.JOB,
+            };
+            issues.forEach((curIssue) => {
+                if (curIssue.STAKEHOLDER == stakeHolder.STAKEHOLDER) {
+                    row['Issue' + curIssue.NAME.toUpperCase()] =
+                        curIssue.COVERAGE_SCORE;
+                }
+            });
+            return row;
+        });
+        setRows(data);
     }
 
     if (isLoading) {
@@ -187,6 +288,24 @@ export default function IssueMatrix({ scenario }) {
         //if stakeholders have alreasdy been loaded, don't do it again
         setDidGetSHs(true);
         getExistingStakeHolders();
+    } /*else if(!didGetIssues){
+        fillIssues();
+        setDidGetIssues(true);
+        setColData();
+        setRowData();
+    } else{
+        
+    }*/
+
+    if (stakeHolders.length > 0 && !didGetIssues) {
+        getIssues();
+    }
+    let cnt = 0;
+    if (issues.length > 0 && didGetIssues && !didSetData) {
+        setDidSetData(true);
+        setColData();
+
+        Promise.all(issuePromises).then(setRowData());
     }
 
     return (
@@ -208,16 +327,8 @@ export default function IssueMatrix({ scenario }) {
                         });
                     },
                 }}
-                columns={[
-                    { title: 'Name', field: 'NAME' },
-                    { title: 'Description', field: 'DESCRIPTION' },
-                ]}
-                data={stakeHolders.map((
-                    stakeHolder /*populates the NAME and DESCRIPTION field with stakeholder data*/
-                ) => ({
-                    NAME: stakeHolder.NAME,
-                    DESCRIPTION: stakeHolder.DESCRIPTION,
-                }))}
+                columns={cols}
+                data={rows}
             />
         </Container>
     );

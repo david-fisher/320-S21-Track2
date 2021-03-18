@@ -1,10 +1,14 @@
 name: test-app
 
 on:
+  push:
+    branches:
+      - main
+      - mobydock
   pull_request:
     branches:
-      - 'mobydock'
-      - 'main'
+      - main
+      - mobydock
 
 jobs:
   test:

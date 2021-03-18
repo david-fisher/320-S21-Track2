@@ -20,7 +20,7 @@ Select create new SP and follow the steps using the domain of your app. *For loc
 
 For this project we are using Ubuntu as our server OS. 
 
-Enter these into your terminal in order. 
+Enter these into your terminal in order:
 
 ```bash
 sudo apt-get update
@@ -34,11 +34,11 @@ sudo apt-get install libapache2-mod-shib2
 
 ## Create/apply a ssl cert
 
-Now we need to create or apply a SSL cert for the application domain on your shibboleth SP.
+Now we need to create or apply a SSL cert for the application domain on your Shibboleth SP.
 
-For a localhost project we are creating a self signed certificate. 
+For a localhost project, we are creating a self signed certificate. 
 
-Run these commands.
+Run these commands:
 
 ```bash
 sudo a2enmod ssl
@@ -46,7 +46,6 @@ sudo a2enmod ssl
 sudo a2ensite default-ssl.conf
 
 sudo mkdir /etc/apache2/ssl && sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/apache2/ssl/apache.key -out /etc/apache2/ssl/apache.crt
-
 ```
 
 You will go through a SSL configuration process. Make sure, when asked the common name, you use the same domain name.
@@ -97,7 +96,7 @@ https://idp.shibboleth.com/Shibboleth.sso/Status
 ``` 
 in your browser and should see something like this.
 
-![](shibboleth_status.png)
+![Shibboleth status](shibboleth_status.png)
 
 If there are any errors, or it doesn't feel right. You can see the logs at 
 
@@ -110,4 +109,4 @@ https://[server ip]/Shibboleth.sso/Login
 
 And enjoy the beauty
 
-![](login.png)
+![Successful login](login.png)

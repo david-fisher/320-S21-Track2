@@ -8,7 +8,8 @@ on:
 jobs:
   test:
     outputs:
-      frontend_output: ${{ steps.frontend.output.result}}
+      frontend_output: ${{ steps.frontend.output.result }}
+      backend_output: ${{ steps.backend.output.result }}
     runs-on: ubuntu-latest
     steps:
       -
@@ -38,7 +39,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: test
 
-    if: ${{ needs.test.outputs.result == 1 }}
+    if: ${{ needs.test.outputs.frontend_output == 0 && ${{ needs.test.outputs.backend_output == 0 }}}} 
     steps:
       -
         name: Checkout

@@ -7,7 +7,7 @@ services:
     volumes:
       - ./moral_kombat_backend:/app/api
     environment:
-      CHOKIDAR_USEPOLLING: "false" 
+      CHOKIDAR_USEPOLLING: "true" 
   database:
     ports:
       - "5432:5432"
@@ -15,7 +15,7 @@ services:
       POSTGRES_PASSWORD: "password"
   frontend:
     environment:
-      CHOKIDAR_USEPOLLING: "false"
+      CHOKIDAR_USEPOLLING: "true"
     ports:
       - "3000:3000"
     volumes:

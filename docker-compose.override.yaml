@@ -1,5 +1,7 @@
 version: "3.8"
 
+# change CHOKIDAR_USEPOLLING: to true to use hot reload
+
 services:
   backend:
     ports:
@@ -7,7 +9,7 @@ services:
     volumes:
       - ./moral_kombat_backend:/app/api
     environment:
-      CHOKIDAR_USEPOLLING: "true"
+      CHOKIDAR_USEPOLLING: "false" 
   database:
     ports:
       - "5432:5432"
@@ -15,7 +17,7 @@ services:
       POSTGRES_PASSWORD: "password"
   frontend:
     environment:
-      CHOKIDAR_USEPOLLING: "true"
+      CHOKIDAR_USEPOLLING: "false"
     ports:
       - "3000:3000"
     volumes:

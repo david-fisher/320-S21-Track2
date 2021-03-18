@@ -17,6 +17,13 @@ router.register(r'reflection_questions', views.Reflection_QuestionsViewSet)
 router.register(r'generic_page', views.Generic_pageViewSet)
 router.register(r'action_page', views.Action_pageViewSet)
 
+# response, reflections_taken, response_to_action_page, conversations_had, student_times
+router.register(r'reflections_taken', views.ReflectionsTakenViewSet)
+router.register(r'response_to_action_page', views.ResponseToActionPageViewSet)
+router.register(r'conversations_had', views.ConversationsHadViewSet)
+router.register(r'student_times', views.StudentTimesViewSet)
+
+
 # The API URLs are now determined automatically by the router.
 urlpatterns = [
     path('', include(router.urls)),

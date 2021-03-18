@@ -66,3 +66,20 @@ class Page_StakeholderViewSet(generics.CreateAPIView):
     
 
 
+# response, reflections taken, response_to_action_page, conversations had, student times
+
+class ReflectionsTakenViewSet(viewsets.ModelViewSet):
+    queryset = reflections_taken.objects.all()
+    serializer_class = ReflectionsTakenSerializer
+
+class ResponseToActionPageViewSet(viewsets.ModelViewSet):
+    queryset = response_to_action_page.objects.all()
+    serializer_class = ResponseToActionPageSerializer
+
+class ConversationsHadViewSet(viewsets.ModelViewSet):
+    queryset = conversations_had.objects.all()
+    serializer_class = ConversationsHadSerializer
+
+class StudentTimesViewSet(viewsets.ModelViewSet):
+    queryset = student_times.objects.all()
+    serializer_class = StudentTimesSerializer

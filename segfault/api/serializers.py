@@ -89,4 +89,24 @@ class Pages_stakeholderSerializer(serializers.ModelSerializer):
     stakeholder_page = Stakeholder_pageSerializer()
     class Meta:
         model = pages
+# response, reflections taken, response_to_action_page, conversations had, student times
+
+class ReflectionsTakenSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = reflections_taken
+        fields = '__all__'
+
+class ResponseToActionPageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = response_to_action_page
+        fields = '__all__'
+
+class ConversationsHadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = conversations_had
+        fields = '__all__'
+
+class StudentTimesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = student_times
         fields = '__all__'

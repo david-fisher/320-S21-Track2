@@ -13,7 +13,7 @@ import HTMLRenderer from './components/htmlRenderer';
 import { ScenariosContext } from "../Nav";
 import { GatheredInfoContext } from './simulationWindow';
 import VideoPlayer from './components/Sim_videoPlayer';
-import NextButton from "./components/NextButton"
+import NextButton from "./components/Buttons/NextButton"
 
 const TextTypography = withStyles({
   root: {

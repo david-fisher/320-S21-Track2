@@ -5,8 +5,8 @@ import { BASE_URL, STUDENT_ID, SCENARIO_ID } from "../constants/config";
 import axios from 'axios';
 import { ScenariosContext } from "../Nav";
 import HTMLRenderer from "./components/htmlRenderer";
-import BackButton from "./components/BackButton"
-import SubmitButton from "./components/SubmitButton"
+import BackButton from "./components/Buttons/BackButton"
+import SubmitButton from "./components/Buttons/SubmitButton"
 
 // const useStyles = makeStyles((theme) => ({
 //   root: {

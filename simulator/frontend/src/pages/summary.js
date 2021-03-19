@@ -4,8 +4,8 @@ import { withStyles, Typography, Box, Grid, Button } from "@material-ui/core";
 import { BASE_URL, STUDENT_ID, SCENARIO_ID } from "../constants/config";
 import axios from 'axios'
 import ScrollableTabsButtonAuto from "./components/tabs"
-import NextButton from "./components/NextButton"
-import BackButton from "./components/BackButton"
+import NextButton from "./components/Buttons/NextButton"
+import BackButton from "./components/Buttons/BackButton"
 
 const TextTypography = withStyles({
   root: {

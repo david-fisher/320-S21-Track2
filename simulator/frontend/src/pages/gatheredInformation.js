@@ -1,7 +1,7 @@
 import React from "react";
 import { withStyles, Typography, Box, Button, Grid } from "@material-ui/core";
-import BackButton from "./components/BackButton"
-import NextButton from "./components/NextButton"
+import BackButton from "./components/Buttons/BackButton"
+import NextButton from "./components/Buttons/NextButton"
 
 const TextTypography = withStyles({
   root: {

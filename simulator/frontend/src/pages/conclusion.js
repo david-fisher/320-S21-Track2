@@ -5,7 +5,7 @@ import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { BASE_URL, STUDENT_ID, SCENARIO_ID } from "../constants/config";
 import { ScenariosContext } from "../Nav";
-import BackButton from "./components/BackButton"
+import BackButton from "./components/Buttons/BackButton"
 
 
 const TextTypography = withStyles({

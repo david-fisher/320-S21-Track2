@@ -7,8 +7,8 @@ import { BASE_URL, STUDENT_ID, SCENARIO_ID } from "../constants/config";
 import axios from 'axios';
 import Conversation from './conversation';
 import { ScenariosContext } from "../Nav";
-import NextButton from "./components/NextButton";
-import BackButton from "./components/BackButton";
+import NextButton from "./components/Buttons/NextButton";
+import BackButton from "./components/Buttons/BackButton";
 
 const TextTypography = withStyles({
   root: {

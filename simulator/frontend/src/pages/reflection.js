@@ -11,7 +11,7 @@ import {
 import { BASE_URL, STUDENT_ID, SCENARIO_ID }from "../constants/config";
 import axios from 'axios';
 import { ScenariosContext } from "../Nav";
-import BackButton from "./components/BackButton"
+import BackButton from "./components/Buttons/BackButton"
 
 const TextTypography = withStyles({
   root: {

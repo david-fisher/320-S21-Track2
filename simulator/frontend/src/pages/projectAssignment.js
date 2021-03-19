@@ -11,8 +11,8 @@ import {
 } from "@material-ui/core";
 import HTMLRenderer from './components/htmlRenderer';
 import { ScenariosContext } from "../Nav";
-import NextButton from "./components/NextButton"
-import BackButton from "./components/BackButton"
+import NextButton from "./components/Buttons/NextButton"
+import BackButton from "./components/Buttons/BackButton"
 
 
 const TextTypography = withStyles({

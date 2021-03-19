@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Box, Grid, Typography , withStyles, Button, FormHelperText } from '@material-ui/core';
 import HTMLRenderer from "./htmlRenderer";
-import SubmitButton from "./SubmitButton"
+import SubmitButton from "./Buttons/SubmitButton"
 
 const alignMiddle = {
   position: 'fixed',

@@ -2,8 +2,8 @@ import React from "react";
 import { withStyles,Typography, Box, Grid, Button} from "@material-ui/core";
 import Radar from "./chart/chart";
 import ScrollableTabsButtonAuto from "./components/feedback_tabs";
-import NextButton from "./components/NextButton"
-import BackButton from "./components/BackButton"
+import NextButton from "./components/Buttons/NextButton"
+import BackButton from "./components/Buttons/BackButton"
 
 const TextTypography = withStyles({
   root: {

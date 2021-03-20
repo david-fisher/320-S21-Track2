@@ -46,7 +46,7 @@ class Course(models.Model):
     professors = models.ManyToManyField(
         Professor, related_name='courses', through='Professor_to_Course')
     scenarios = models.ManyToManyField(
-        Scenario, related_name='courses',  through='Scenario_to_Course')
+        'Scenario', related_name='courses',  through='Scenario_to_Course')
 
     class Meta:
         db_table = 'COURSES'

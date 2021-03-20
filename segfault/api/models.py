@@ -45,10 +45,11 @@ class Course(models.Model):
         Student, related_name='courses', through='Student_to_Course')
     professors = models.ManyToManyField(
         Professor, related_name='courses', through='Professor_to_Course')
+    scenarios = models.ManyToManyField(
+        Scenario, related_name='courses',  through='Scenario_to_Course')
 
     class Meta:
         db_table = 'COURSES'
-        ordering = ['name']
 
 
 class Student_to_Course(models.Model):
@@ -102,8 +103,8 @@ class Demographic(models.Model):
 
 class Scenario(models.Model):
 
-    SCENARIO = models.AutoField(primary_key=True, editable=False)
-    VERSION = models.IntegerField(default=1, editable=False)
+    scenario = models.AutoField(primary_key=True, editable=False)
+    version = models.IntegerField(default=1, editable=False)
     name = models.CharField(max_length=50, null=False)
     public = models.BooleanField(default=False)
     NUM_CONVERSATION = models.IntegerField(default=0)
@@ -115,15 +116,13 @@ class Scenario(models.Model):
         ordering = ['date_created', 'name']
 
 
-class Scenarios_for(models.Model):
+class Scenario_to_Course(models.Model):
 
-    SCENARIO = models.ForeignKey('Scenario', on_delete=models.CASCADE,)
-    COURSE = models.ForeignKey('course', on_delete=models.CASCADE)
-    VERSION = models.IntegerField(default=1, editable=False)
+    scenario = models.ForeignKey('Scenario', on_delete=models.CASCADE,)
+    course = models.ForeignKey('course', on_delete=models.CASCADE)
 
     class Meta:
-        # not sure about this
-        unique_together = (('SCENARIO'), ('COURSE'))
+        unique_together = ('scenario', 'course')
         db_table = 'SCENARIO_FOR'
 
 
@@ -143,7 +142,7 @@ class Response(models.Model):
         ordering = ['scenario', 'page', 'student']
 
 
-class Issues(models.Model):
+class Issue(models.Model):
     issue = models.AutoField(default=None, primary_key=True, editable=False)
     scenario = models.ForeignKey('Scenario', on_delete=models.CASCADE)
     version = models.IntegerField(default=1, editable=False)
@@ -155,8 +154,8 @@ class Issues(models.Model):
 
 
 class Conversations(models.Model):
-    CONVERSATION = models.AutoField(primary_key=True, editable=False)
-    STAKEHOLDER = models.ForeignKey(
+    conversation = models.AutoField(primary_key=True, editable=False)
+    stakeholder = models.ForeignKey(
         'Stakeholders', on_delete=models.CASCADE)
     question = models.CharField(max_length=100)
     response = models.TextField(max_length=100)
@@ -166,14 +165,14 @@ class Conversations(models.Model):
 
 
 class Stakeholders(models.Model):
-    STAKEHOLDER = models.AutoField(primary_key=True, editable=False)
-    SCENARIO = models.ForeignKey('Scenario',
+    stakeholder = models.AutoField(primary_key=True, editable=False)
+    scenario = models.ForeignKey('Scenario',
                                  on_delete=models.CASCADE, null=False)
-    VERSION = models.IntegerField(default=1, editable=False)
-    NAME = models.CharField(max_length=1000,  null=False)
-    DESCRIPTION = models.TextField(default="")
-    JOB = models.TextField(default="default")
-    INTRODUCTION = models.TextField(default='default')
+    version = models.IntegerField(default=1, editable=False)
+    name = models.CharField(max_length=1000,  null=False)
+    description = models.TextField(default="")
+    job = models.TextField(default="default")
+    introduction = models.TextField(default='default')
 
     class Meta:
         db_table = 'STAKEHOLDERS'
@@ -216,7 +215,8 @@ class generic_page(models.Model):
         db_table = 'generic_page'
     PAGE = models.ForeignKey('pages', on_delete=models.CASCADE)
     BODY = models.TextField()
-    id = models.AutoField(primary_key=True, editable=False)
+    #this is a duplicated implementaiton of the default model
+    #id = models.AutoField(primary_key=True, editable=False)
 
 
 class stakeholder_page(models.Model):
@@ -234,10 +234,8 @@ class action_page(models.Model):
     PAGE = models.ForeignKey('pages', on_delete=models.CASCADE)
     CHOICE = models.TextField()
     RESULT_PAGE = models.IntegerField(null=True)
-    id = models.AutoField(primary_key=True, editable=False)
-
-# response, reflections taken, response_to_action_page, conversations had, student times
-
+    #this is a duplicated implementaiton of the default model
+    #id = models.AutoField(primary_key=True, editable=False)
 
 class reflections_taken(models.Model):
     REFLECTIONS = models.TextField(max_length=100)
@@ -293,9 +291,9 @@ class student_times(models.Model):
 class Coverage(models.Model):
 
     STAKEHOLDER = models.ForeignKey(
-        'Stakeholders', on_delete=models.CASCADE, related_name="coverage2", default=None)
+        'Stakeholders', on_delete=models.CASCADE,  default=None)
     ISSUE = models.ForeignKey(
-        'Issues', on_delete=models.CASCADE, related_name="coverage1", default=None)
+        'Issue', on_delete=models.CASCADE, default=None)
     COVERAGE_SCORE = models.FloatField(validators=[MinValueValidator(0.0)])
 
     class Meta:

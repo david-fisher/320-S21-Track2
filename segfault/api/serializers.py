@@ -29,11 +29,11 @@ class ProfessorSerializer(serializers.ModelSerializer):
 
 
 class DemographicSerializer(serializers.ModelSerializer):
-    student_info = StudentSerializer(source='student')
+    student_info = StudentSerializer(source='student',read_only=True)
 
     class Meta:
         model = Demographic
-        exclude = ('student',)
+        fields = '__all__'
         depth = 3
 
 
@@ -57,7 +57,7 @@ class ResponseSerializer(serializers.ModelSerializer):
 
 class IssueSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Issues
+        model = Issue
         fields = '__all__'
 
 
@@ -160,8 +160,3 @@ class StakeholderSerializer(serializers.ModelSerializer):
         model = Stakeholders
         fields = '__all__'
 
-
-class ScenariosForSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Scenarios_for
-        fields = '__all__'

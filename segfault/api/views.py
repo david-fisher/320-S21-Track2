@@ -31,8 +31,8 @@ class ResponsesViewSet(viewsets.ModelViewSet):
     queryset = Response.objects.all()
     serializer_class = ResponseSerializer
 
-class IssuesViewSet(viewsets.ModelViewSet):
-    queryset = Issues.objects.all()
+class IssueViewSet(viewsets.ModelViewSet):
+    queryset = Issue.objects.all()
     serializer_class = IssueSerializer
 
 class ConversationsViewSet(viewsets.ModelViewSet):
@@ -99,9 +99,6 @@ class CoverageViewSet(viewsets.ModelViewSet):
     queryset = Coverage.objects.all()
     serializer_class = ConversationSerializer
 
-class Scenarios_forViewSet(viewsets.ModelViewSet):
-    queryset= Scenarios_for.objects.all()
-    serializer_class = ScenarioSerializer
 
 class StakeholdersViewSet(viewsets.ModelViewSet):
     queryset= Stakeholders.objects.all()

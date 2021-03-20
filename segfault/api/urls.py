@@ -8,9 +8,9 @@ router.register(r'scenarios', views.ScenariosViewSet)
 router.register(r'courses', views.CourseViewSet)
 router.register(r'professors', views.ProfessorViewSet)
 router.register(r'students', views.StudentViewSet)
-router.register(r'demographic', views.DemographicViewSet)
+router.register(r'demographics', views.DemographicViewSet)
 
-router.register(r'issues', views.IssuesViewSet)
+router.register(r'issues', views.IssueViewSet)
 router.register(r'conversations', views.ConversationsViewSet)
 router.register(r'responses', views.ResponsesViewSet)
 
@@ -26,8 +26,6 @@ router.register(r'response_to_action_page', views.ResponseToActionPageViewSet)
 router.register(r'conversations_had', views.ConversationsHadViewSet)
 router.register(r'student_times', views.StudentTimesViewSet)
 
-
-router.register(r'scenarios_for', views.Scenarios_forViewSet)
 router.register(r'coverage', views.CoverageViewSet)
 router.register(r'stakeholders', views.StakeholdersViewSet)
 # The API URLs are now determined automatically by the router.

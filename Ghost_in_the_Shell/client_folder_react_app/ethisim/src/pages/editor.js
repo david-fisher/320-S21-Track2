@@ -225,7 +225,7 @@ export default function Editor(props) {
                 is_finished: logistics_and_pages.IS_FINISHED,
                 public_scenario: logistics_and_pages.PUBLIC,
                 num_convos: logistics_and_pages.NUM_CONVERSATION,
-                professors: [logistics_and_pages.PROFESSOR],
+                editors: [logistics_and_pages.EDITOR],
                 courses: logistics_and_pages.COURSES,
             };
 

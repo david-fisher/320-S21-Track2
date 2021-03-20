@@ -37,9 +37,9 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name='professors',
+            name='editors',
             fields=[
-                ('PROFESSOR', models.IntegerField(primary_key=True, serialize=False)),
+                ('EDITOR', models.IntegerField(primary_key=True, serialize=False)),
                 ('NAME', models.CharField(max_length=1000)),
             ],
         ),
@@ -53,7 +53,7 @@ class Migration(migrations.Migration):
                 ('NUM_CONVERSATION', models.IntegerField(default=0)),
                 ('IS_FINISHED', models.BooleanField(default=False)),
                 ('DATE_CREATED', models.DateField(auto_now_add=True)),
-                ('PROFESSOR', models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, related_name='scenario_creator2', to='tables.professors')),
+                ('EDITOR', models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, related_name='scenario_creator2', to='tables.editors')),
             ],
             options={
                 'unique_together': {('SCENARIO', 'VERSION')},
@@ -244,14 +244,14 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
-            name='professors_teach',
+            name='editors_teach',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('COURSE', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='professors_teach2', to='tables.courses')),
-                ('PROFESSOR', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='professors_teach1', to='tables.professors')),
+                ('COURSE', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='editors_teach2', to='tables.courses')),
+                ('EDITOR', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='editors_teach1', to='tables.editors')),
             ],
             options={
-                'unique_together': {('PROFESSOR', 'COURSE')},
+                'unique_together': {('EDITOR', 'COURSE')},
             },
         ),
         migrations.CreateModel(

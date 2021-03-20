@@ -15,7 +15,7 @@ from django.http.response import JsonResponse
 from rest_framework.decorators import action
 from rest_framework.decorators import api_view
 from rest_framework import mixins
-# DemographicsSerializer, StudentSerializer, ProfessorSerializer, ScenariosSerializer, allScenariosSerializer, Stakeholder_pageSerializer, StakeholdersSerializer, ConversationsSerializer
+# DemographicsSerializer, StudentSerializer, EditorSerializer, ScenariosSerializer, allScenariosSerializer, Stakeholder_pageSerializer, StakeholdersSerializer, ConversationsSerializer
 
 
 
@@ -109,12 +109,12 @@ class StudentsViewSet(viewsets.ModelViewSet):
     ]
     serializer_class = StudentSerializer
 
-class ProfessorsViewSet(viewsets.ModelViewSet):
-    queryset = professors.objects.all()
+class EditorsViewSet(viewsets.ModelViewSet):
+    queryset = editors.objects.all()
     permission_classes = [
         permissions.AllowAny
     ]
-    serializer_class = ProfessorSerializer
+    serializer_class = EditorSerializer
 
 
 class ScenariosViewSet(viewsets.ModelViewSet):
@@ -199,12 +199,12 @@ class ResponsesViewSet(viewsets.ModelViewSet):
     permission_classe = [permissions.AllowAny]
     serializer_class = ResponsesSerializer
 
-#this allows for filerting scenarios by professor_id
+#this allows for filerting scenarios by editor_id
 class allScenariosViewSet(generics.ListAPIView):
     serializer_class = allScenariosSerializer
     queryset = scenarios.objects.all()
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['PROFESSOR', 'IS_FINISHED']
+    filterset_fields = ['EDITOR', 'IS_FINISHED']
     
 # Scenarios_for ViewSet
 class Scenarios_forViewSet(viewsets.ModelViewSet):
@@ -222,13 +222,13 @@ class generic_pageViewSet(viewsets.ModelViewSet):
     ]
     serializer_class = Generic_pageSerializer
 
-# Professors_teach ViewSet
-class Professors_teachViewSet(viewsets.ModelViewSet):
-    queryset = professors_teach.objects.all()
+# Editors_teach ViewSet
+class Editors_teachViewSet(viewsets.ModelViewSet):
+    queryset = editors_teach.objects.all()
     permissions_class = [
         permissions.AllowAny
     ]
-    serializer_class = Professors_teachSerializer
+    serializer_class = Editors_teachSerializer
 
 class IssuesViewSet(viewsets.ModelViewSet):
     queryset = Issues.objects.all()
@@ -253,10 +253,10 @@ class logistics_page(APIView):
 
     def get(self, request, *args, **kwargs):
         
-        #take professor_id as input from URL by adding ?professor_id=<the id #> to the end of the url.
+        #take editor_id as input from URL by adding ?editor_id=<the id #> to the end of the url.
         SCENARIO = self.request.query_params.get('scenario_id')
         #TODO check that id != none
-        #get all scenarios belonging to this professor
+        #get all scenarios belonging to this editor
         scenario = scenarios.objects.get(SCENARIO = SCENARIO)
         scenario_dict = ScenariosSerializer(scenario).data
         #loop through scenarios and append required information (course, page info)
@@ -300,7 +300,7 @@ class logistics_page(APIView):
         "IS_FINISHED": false,
         "PUBLIC": false,
         "NUM_CONVERSATION": 5,
-        "PROFESSOR": 12345678,
+        "EDITOR": 12345678,
         "COURSES": 
         [
             {
@@ -343,15 +343,15 @@ class logistics_page(APIView):
         scenario_dict['COURSES'] = request.data['COURSES']
         return Response(scenario_dict)
 
-#returns list of scenarios for given professor along with list of associated courses
+#returns list of scenarios for given editor along with list of associated courses
 class dashboard_page(APIView):
     def get(self, request, *args, **kwargs):
         
-        #take professor_id as input from URL by adding ?professor_id=<the id #> to the end of the url.
-        PROFESSOR = self.request.query_params.get('professor_id')
+        #take editor_id as input from URL by adding ?editor_id=<the id #> to the end of the url.
+        EDITOR = self.request.query_params.get('editor_id')
         #TODO check that id != none
-        #get all scenarios belonging to this professor
-        scenario_query = scenarios.objects.filter(PROFESSOR = PROFESSOR).values()
+        #get all scenarios belonging to this editor
+        scenario_query = scenarios.objects.filter(EDITOR = EDITOR).values()
         #loop through scenarios and append required information (course, page info)
         logistics = []
         for scenario in scenario_query:
@@ -378,7 +378,7 @@ class dashboard_page(APIView):
         "IS_FINISHED": false,
         "PUBLIC": false,
         "NUM_CONVERSATION": 5,
-        "PROFESSOR": 12345678,
+        "EDITOR": 12345678,
         "COURSES":[
             {"COURSE": 1},
             {"COURSE": 2},

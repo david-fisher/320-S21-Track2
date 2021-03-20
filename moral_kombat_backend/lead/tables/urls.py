@@ -5,12 +5,12 @@ from django.conf import settings
 from .views import *
 from django.conf.urls import url
 
-# DemographicsViewSet, allScenariosViewSet, StudentsViewSet, ProfessorsViewSet, ScenariosViewSet, Choices_forViewSet, Stakeholder_pageViewSet, ConversationsViewSet, Stakeholder_inViewSet, StakeholdersViewSet
+# DemographicsViewSet, allScenariosViewSet, StudentsViewSet, EditorsViewSet, ScenariosViewSet, Choices_forViewSet, Stakeholder_pageViewSet, ConversationsViewSet, Stakeholder_inViewSet, StakeholdersViewSet
 
 router = routers.DefaultRouter()
 router.register('api/demographics', DemographicsViewSet, 'demographics')
 router.register('api/students', StudentsViewSet, 'students')
-router.register('api/professors', ProfessorsViewSet, 'professors')
+router.register('api/editors', EditorsViewSet, 'editors')
 router.register('api/scenarios', ScenariosViewSet, 'scenarios')
 router.register('api/pages', PagesViewSet, 'pages')
 router.register('api/stakeholder_page', Stakeholder_pageViewSet, 'stakeholder_page')
@@ -24,7 +24,7 @@ router.register('api/courses', CoursesViewSet, 'courses')
 router.register('api/responses', ResponsesViewSet, 'responses')
 router.register('api/scenarios_for', Scenarios_forViewSet, 'scenarios_for')
 router.register('api/generic_page', generic_pageViewSet, 'generic_page')
-router.register('api/professors_teach', Professors_teachViewSet, 'professors_teach')
+router.register('api/editors_teach', Editors_teachViewSet, 'editors_teach')
 router.register('api/single_scenario', SingleScenarioViewSet, 'single_scenario')
 router.register('api/issues', IssuesViewSet, 'issues')
 router.register('api/action_page', Action_pageViewSet, 'action_page')

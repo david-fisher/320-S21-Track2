@@ -1,6 +1,6 @@
 from rest_framework import viewsets, permissions
 from tables.models import *
-from .serializer import DemographicsSerializer, StudentSerializer, ProfessorSerializer, ScenariosSerializer, Choices_forSerializer, Stakeholder_pageSerializer, StakeholdersSerializer, ConversationsSerializer, Stakeholder_inSerializer
+from .serializer import DemographicsSerializer, StudentSerializer, EditorSerializer, ScenariosSerializer, Choices_forSerializer, Stakeholder_pageSerializer, StakeholdersSerializer, ConversationsSerializer, Stakeholder_inSerializer
 
 class DemographicsViewSet(viewsets.ModelViewSet):
     queryset = demographics.objects.all()
@@ -16,12 +16,12 @@ class StudentsViewSet(viewsets.ModelViewSet):
     ]
     serializer_class = StudentSerializer
 
-class ProfessorsViewSet(viewsets.ModelViewSet):
-    queryset = professors.objects.all()
+class EditorsViewSet(viewsets.ModelViewSet):
+    queryset = editors.objects.all()
     permission_classes = [
         permissions.AllowAny
     ]
-    serializer_class = ProfessorSerializer
+    serializer_class = EditorsSerializer
 
 
 class ScenariosViewSet(viewsets.ModelViewSet):

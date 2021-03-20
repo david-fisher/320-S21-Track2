@@ -58,7 +58,7 @@ function DialogTitle(props) {
     const { onClose } = props;
     return (
         <MuiDialogTitle disableTypography className={classes.root}>
-            <Typography variant="h6">Share with Professor</Typography>
+            <Typography variant="h6">Share with Editor</Typography>
             {onClose ? (
                 <IconButton
                     aria-label="close"

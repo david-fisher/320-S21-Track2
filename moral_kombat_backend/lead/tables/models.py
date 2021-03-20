@@ -8,8 +8,8 @@ class scenarios(models.Model):
     class Meta:
         unique_together = (('SCENARIO'), ('VERSION'))
     SCENARIO = models.AutoField(primary_key = True, editable=False)
-    #TODO remove professors
-    PROFESSOR = models.ForeignKey('professors', to_field = 'PROFESSOR', on_delete =models.CASCADE, related_name="scenario_creator2", default = 1)
+    #TODO remove editors
+    EDITOR = models.ForeignKey('editors', to_field = 'EDITOR', on_delete =models.CASCADE, related_name="scenario_creator2", default = 1)
     VERSION = models.IntegerField(default=1, editable=False)
     NAME = models.CharField(max_length = 1000)
     PUBLIC = models.BooleanField(default = False)
@@ -190,16 +190,16 @@ class students_in(models.Model):
     STUDENT = models.ForeignKey('students', on_delete = models.CASCADE, related_name="students_in1")
     COURSE = models.ForeignKey(courses, to_field = 'COURSE', on_delete = models.CASCADE, related_name="students_in2")
 
-class professors_teach(models.Model):
+class editors_teach(models.Model):
     class Meta:
-        unique_together = (('PROFESSOR'), ('COURSE'))    
-    PROFESSOR = models.ForeignKey('professors', to_field = 'PROFESSOR', on_delete = models.CASCADE, related_name="professors_teach1")
-    COURSE = models.ForeignKey(courses, to_field = 'COURSE', on_delete = models.CASCADE, related_name="professors_teach2")
+        unique_together = (('EDITOR'), ('COURSE'))    
+    EDITOR = models.ForeignKey('editors', to_field = 'EDITOR', on_delete = models.CASCADE, related_name="editors_teach1")
+    COURSE = models.ForeignKey(courses, to_field = 'COURSE', on_delete = models.CASCADE, related_name="editors_teach2")
 
-class professors(models.Model):
+class editors(models.Model):
     # class Meta:
-    #     unique_together = (('PROFESSOR_ID'), ('NAME'))
-    PROFESSOR = models.IntegerField(primary_key = True)
+    #     unique_together = (('EDITOR_ID'), ('NAME'))
+    EDITOR = models.IntegerField(primary_key = True)
     NAME = models.CharField(max_length = 1000)
 
 
@@ -250,4 +250,4 @@ class student_times(models.Model):
 
 """class scenario_creator(models.Model):
     SCENARIO = models.ForeignKey('scenarios', on_delete = models.CASCADE, related_name="scenario_creator1")
-    PROFESSOR = models.ForeignKey('professors', to_field = 'PROFESSOR', on_delete =models.CASCADE, related_name="scenario_creator2", default = 1)"""
+    EDITOR = models.ForeignKey('editors', to_field = 'EDITOR', on_delete =models.CASCADE, related_name="scenario_creator2", default = 1)"""

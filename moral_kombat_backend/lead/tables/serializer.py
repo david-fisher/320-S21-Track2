@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import *
-# demographics, students, professors, scenarios, stakeholder_page, stakeholders, conversations
+# demographics, students, editors, scenarios, stakeholder_page, stakeholders, conversations
 
 class DemographicsSerializer(serializers.ModelSerializer):
     class Meta:
@@ -13,16 +13,16 @@ class StudentSerializer(serializers.ModelSerializer):
         model = students
         fields = ('STUDENT', 'NAME')
 
-class ProfessorSerializer(serializers.ModelSerializer):
+class EditorSerializer(serializers.ModelSerializer):
     class Meta:
-        model = professors
-        fields = ('PROFESSOR', 'NAME')
+        model = editors
+        fields = ('EDITOR', 'NAME')
 
 
 class ScenariosSerializer(serializers.ModelSerializer):
     class Meta:
         model = scenarios
-        fields = ('SCENARIO', 'VERSION', 'NAME', 'IS_FINISHED', 'PUBLIC', 'NUM_CONVERSATION', 'PROFESSOR')
+        fields = ('SCENARIO', 'VERSION', 'NAME', 'IS_FINISHED', 'PUBLIC', 'NUM_CONVERSATION', 'EDITOR')
 
 class PagesSerializer(serializers.ModelSerializer):
     class Meta:
@@ -84,7 +84,7 @@ class ResponsesSerializer(serializers.ModelSerializer):
 class allScenariosSerializer(serializers.ModelSerializer):
     class Meta:
         model = scenarios
-        fields = ('SCENARIO', 'NAME', 'IS_FINISHED', 'PROFESSOR')
+        fields = ('SCENARIO', 'NAME', 'IS_FINISHED', 'EDITOR')
 
 class Scenarios_forSerializer(serializers.ModelSerializer):
     class Meta:
@@ -96,10 +96,10 @@ class Generic_pageSerializer(serializers.ModelSerializer):
         model = generic_page
         fields = ('PAGE', 'BODY')
 
-class Professors_teachSerializer(serializers.ModelSerializer):
+class Editors_teachSerializer(serializers.ModelSerializer):
     class Meta:
-        model = professors_teach
-        fields = ('PROFESSOR', 'COURSE')
+        model = editors_teach
+        fields = ('EDITOR', 'COURSE')
 
 class IssuesSerializer(serializers.ModelSerializer):
     class Meta:

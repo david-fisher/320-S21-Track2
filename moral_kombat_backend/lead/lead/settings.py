@@ -9,10 +9,22 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
-
+import os
 from pathlib import Path
 from corsheaders.defaults import default_headers
 
+try:  
+   DB_USER = os.environ["DB_USER"]
+   DB_NAME = os.environ["DB_NAME"]
+   DB_HOST = os.environ["DB_HOST"]
+   DB_PASS = os.environ["DB_PASS"]
+   DB_PORT = os.environ["DB_PORT"]
+except KeyError: 
+   DB_USER = "cnehcbso"
+   DB_NAME = "cnehcbso"
+   DB_HOST = "raja.db.elephantsql.com"
+   DB_PASS = "qy2xdb_zEcAZFOmY7fvQT1SddHRUhbCI"
+   DB_PORT = "5432"
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -94,11 +106,11 @@ DATABASES = {
         # 'ENGINE': 'django.db.backends.sqlite3',
         # 'NAME': BASE_DIR / 'db.sqlite3',
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'cnehcbso',
-        'USER': 'cnehcbso',
-        'PASSWORD': 'qy2xdb_zEcAZFOmY7fvQT1SddHRUhbCI',
-        'HOST': 'raja.db.elephantsql.com',
-        'PORT': '5432',
+        'NAME': DB_NAME,
+        'USER': DB_USER,
+        'PASSWORD': DB_PASS,
+        'HOST': DB_HOST,
+        'PORT': DB_PORT,
 
         # docker db info:
         # 'ENGINE': 'django.db.backends.postgresql_psycopg2',

@@ -7,14 +7,29 @@ services:
       - "8000:8000"
     volumes:
       - ./moral_kombat_backend:/app/api
+    build:
+      context: ./moral_kombat_backend/
+      dockerfile: Dockerfile
+      cache_from:
+        - cs320track2/backend:latest
   database:
     ports:
       - "5432:5432"
     environment:
       POSTGRES_PASSWORD: "password"
+    build:
+      context: ./database/
+      dockerfile: Dockerfile
+      cache_from:
+        - cs320track2/database:latest
   frontend:
     ports:
       - "3000:3000"
     volumes:
       - ./Ghost_in_the_Shell/client_folder_react_app/ethisim:/app/frontend
       - /app/frontend/node_modules
+    build:
+      context: ./Ghost_in_the_Shell/client_folder_react_app/ethisim/
+      dockerfile: Dockerfile
+      cache_from:
+      - cs320track2/frontend:latest

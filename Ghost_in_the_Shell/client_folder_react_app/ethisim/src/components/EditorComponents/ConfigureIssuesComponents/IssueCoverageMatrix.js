@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import {
     Container,
@@ -126,7 +126,9 @@ export default function IssueMatrix({ scenario }) {
     const [didGetSHs, setDidGetSHs] = useState(false); //stores status of whether stakeholders have been received
     const [stakeHolders, setStakeHolders] = useState([]); //stores stakeholders
     const [didGetIssues, setDidGetIssues] = useState(false);
-    const [issues, setIssues] = useState([]);
+    //const [issues, setIssues] = useState([]);
+    const issues = useRef(null);
+    //let issues = [];
 
     const [didSetData, setDidSetData] = useState(false);
     const [cols, setColumns] = useState([]); //stores stakeholders
@@ -138,7 +140,15 @@ export default function IssueMatrix({ scenario }) {
     const [successBannerMessage, setSuccessBannerMessage] = useState(''); //success banner
     const [successBannerFade, setSuccessBannerFade] = useState(false);
 
-    var issuePromises = [];
+    //const [issuePromises, setPromises] = useState([])
+    const issuePromises = useRef(null);
+
+    useEffect(() => {
+        issuePromises.current = [];
+        issues.current = [];
+    }, []);
+
+    //let issuePromises = [];
 
     useEffect(() => {
         //sets behaviour of success banner
@@ -207,7 +217,6 @@ export default function IssueMatrix({ scenario }) {
                 setErrorBannerFade(true);
             });
     }
-
     function getIssues() {
         stakeHolders.forEach((stakeHolder) => {
             setLoading(true);
@@ -224,12 +233,13 @@ export default function IssueMatrix({ scenario }) {
                 },
                 data: data,
             };
-            issuePromises.push(
+            issuePromises.current.push(
                 axios(config)
                     .then(function (response) {
-                        setIssues(issues.concat(response.data.ISSUES));
+                        issues.current = issues.current.concat(
+                            response.data.ISSUES
+                        );
                         setLoading(false);
-                        setDidGetIssues(true);
                     })
                     .catch(function (error) {
                         setErrorBannerMessage(
@@ -246,7 +256,7 @@ export default function IssueMatrix({ scenario }) {
             { title: 'Name', field: 'NAME' },
             { title: 'Description', field: 'DESCRIPTION' },
         ];
-        issues.forEach((issue) => {
+        issues.current.forEach((issue) => {
             let insertBoolean = true;
             for (let i = 0; i < cols.length; i++) {
                 if (cols[i].title === 'Issue' + issue.NAME) {
@@ -269,7 +279,7 @@ export default function IssueMatrix({ scenario }) {
                 NAME: stakeHolder.NAME,
                 DESCRIPTION: stakeHolder.JOB,
             };
-            issues.forEach((curIssue) => {
+            issues.current.forEach((curIssue) => {
                 if (curIssue.STAKEHOLDER == stakeHolder.STAKEHOLDER) {
                     row['Issue' + curIssue.NAME.toUpperCase()] =
                         curIssue.COVERAGE_SCORE;
@@ -306,6 +316,18 @@ export default function IssueMatrix({ scenario }) {
         setColData();
 
         Promise.all(issuePromises).then(setRowData());
+    }
+
+    if (stakeHolders.length > 0 && !didGetIssues) {
+        setDidGetIssues(true);
+        getIssues();
+    }
+    if (didGetIssues && !didSetData) {
+        setDidSetData(true);
+        Promise.all(issuePromises.current).then(() => {
+            setColData();
+            setRowData();
+        });
     }
 
     return (

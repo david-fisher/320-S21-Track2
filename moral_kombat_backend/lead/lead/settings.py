@@ -9,16 +9,18 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
-import os
+from os import environ
 from pathlib import Path
 from corsheaders.defaults import default_headers
 
+# Copy database info from envrionment variables
+# used by docker containers to set database info 
 try:  
-   DB_USER = os.environ["DB_USER"]
-   DB_NAME = os.environ["DB_NAME"]
-   DB_HOST = os.environ["DB_HOST"]
-   DB_PASS = os.environ["DB_PASS"]
-   DB_PORT = os.environ["DB_PORT"]
+   DB_USER = environ["DB_USER"]
+   DB_NAME = environ["DB_NAME"]
+   DB_HOST = environ["DB_HOST"]
+   DB_PASS = environ["DB_PASS"]
+   DB_PORT = environ["DB_PORT"]
 except KeyError: 
    DB_USER = "cnehcbso"
    DB_NAME = "cnehcbso"

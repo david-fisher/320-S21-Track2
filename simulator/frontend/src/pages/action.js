@@ -106,7 +106,7 @@ function Action({ pages, setPages, activePage, setActivePage, content_url, nextP
       </Grid>
       <Grid container direction="row" justify="space-between">
         <Grid item style={{ marginRight: "0rem", marginTop: "-3rem" }}>
-          <BackButton title={prevPageTitle}>
+          <BackButton title={prevPageTitle} onClick={() => goToPage(prevPageID)}>
           </BackButton>
         </Grid>
         <Grid item style={{ marginRight: "0rem", marginTop: "-3rem" }}>

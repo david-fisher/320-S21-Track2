@@ -33,3 +33,11 @@ services:
       dockerfile: Dockerfile
       cache_from:
       - cs320track2/frontend:latest
+  shibboleth:
+    ports: 
+      - "80:80"
+    build:
+      context: ./shib/
+      dockerfile: Dockerfile
+      cache_from:
+      - cs320track2/shibboleth:latest

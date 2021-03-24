@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import PropTypes from 'prop-types'
-import AudioPlayer from './AudioPlayer'
+
 import {
     withStyles,
     Typography,
@@ -12,33 +12,29 @@ import {
 import HTMLRenderer from './htmlRenderer'
 
 const useStyles = makeStyles((theme) => ({
-    ytBox: {
+    mediaBox: {
         margin: 'auto',
-        width: '100%',
-        height: '130%',
+        width: 595,
+        height: 350,
     },
-    full: {
-        margin: 'auto',
-        width: '100%',
-        height: '100%',
-    }
+
 }));
 
 MultiMedia.defaulProps = {
     name: '',
     description: '',
-    height: 300, 
-    type: '',
-}
+};
 
 MultiMedia.propTypes = {
     source: PropTypes.string.isRequired,
     name: PropTypes.string,
     description: PropTypes.string,
+    height: PropTypes.number,
+    type: PropTypes.string.isRequired,
 }
 
 
-export default function MultiMedia({source, name, description, height, type}) {
+export default function MultiMedia({source, name, description, type}) {
     const [showContent, setShowContent] = useState(false);
     const classes = useStyles();
     return (
@@ -55,36 +51,38 @@ export default function MultiMedia({source, name, description, height, type}) {
             </Box>
             {
                 showContent && 
-                <Box height={height}>
+                <Box mt={3} mb={3} >
                     <Grid container spacing={2} direction="row" justify="space-between" alignItems="stretch">
-                        <Grid item xs={5}>
+                        <Grid item xs={7}>
                             {
                                 (type === 'link' &&
                                 <iframe 
                                     src={source}
-                                    frameborder='0'
+                                    frameBorder='0'
+                                    className={classes.mediaBox}
                                     allow='autoplay; encrypted-media'
                                     allowfullscreen='true'
                                     title={name}
-                                    className={classes.ytBox}
                                 />)
                                 ||
                                 (type === 'video' &&
-                                <video className={classes.full} controls >
+                                <video className={classes.mediaBox} controls >
                                     <source src={source} type="video/mp4"/>
                                 </video>
                                 )
                                 ||
                                 (type === 'image' &&
-                                <img src={source} className={classes.full}/>
+                                <img src={source} className={classes.mediaBox}/>
                                 )
                                 ||
                                 (type === 'audio' &&
-                                        <AudioPlayer source={source} />
+                                <audio width={595} controls>
+                                    <source src={source} type="audio/mpeg"/>
+                                </audio>
                                 )
                             }
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={4}>
                                 <Typography variant="h6">
                                     {name}
                                 </Typography>
@@ -92,7 +90,8 @@ export default function MultiMedia({source, name, description, height, type}) {
                         </Grid>
                     </Grid>
                 </Box>
-            }  
+            }
         </div>
     );
 }
+

@@ -116,10 +116,10 @@ function Introduction({ pages, setPages, activePage, setActivePage }) {
             <HTMLRenderer html={introText}/>
           </Box>
           {/* could change the parameter to just scenario in the future to be more dynamic */}
-          <MMedia source={media} name="Brain Pop Ethics" description="Example video from link." height={300} type='link' /> 
-          <MMedia source={video} name="Cool Sky Video" description="Example local MP4 type video." height={300} type='video' />
-          <MMedia source={image} name="UMass picture" description="Example image of our beautiful campus." height={300} type='image' />
-          <MMedia source={audio} name="Random music" description="Example MP3 file randomly found online." height={200} type='audio' />
+          <MMedia source={media} name="Brain Pop Ethics" description="Example video from link." type='link' /> 
+          <MMedia source={video} name="Cool Sky Video" description="Example local MP4 type video." type='video' />
+          <MMedia source={image} name="UMass picture" description="Example image of our beautiful campus." type='image' />
+          <MMedia source={audio} name="Random music" description="Example MP3 file randomly found online." type='audio' />
         </Grid>
       </Grid>
     </div>

@@ -5,7 +5,7 @@ from api.models import *
 class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
-        fields = ('course', 'name', 'students', 'professors',)
+        fields = ('course', 'name', 'students', 'professors','scenarios')
 
 # TODO: Need to disable for all non-admin after depolying(security)
 
@@ -63,7 +63,7 @@ class IssueSerializer(serializers.ModelSerializer):
 
 class PagesSerializer(serializers.ModelSerializer):
     class Meta:
-        model = pages
+        model = Pages
         fields = '__all__'
 
 
@@ -97,7 +97,7 @@ class Pages_reflectionSerializer(serializers.ModelSerializer):
     reflection_question = Reflection_questionsSerializer()
 
     class Meta:
-        model = pages
+        model = Pages
         fields = '__all__'
 
 
@@ -105,7 +105,7 @@ class Pages_actionSerializer(serializers.ModelSerializer):
     action_page = Action_pageSerializer()
 
     class Meta:
-        model = pages
+        model = Pages
         fields = '__all__'
 
 
@@ -113,7 +113,7 @@ class Pages_genericSerializer(serializers.ModelSerializer):
     generic_page = Generic_pageSerializer()
 
     class Meta:
-        model = pages
+        model = Pages
         fields = '__all__'
 
 
@@ -121,7 +121,7 @@ class Pages_stakeholderSerializer(serializers.ModelSerializer):
     stakeholder_page = Stakeholder_pageSerializer()
 
     class Meta:
-        model = pages
+        model = Pages
 # response, reflections taken, response_to_action_page, conversations had, student times
 
 

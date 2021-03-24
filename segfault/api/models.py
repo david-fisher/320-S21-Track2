@@ -178,10 +178,7 @@ class Stakeholders(models.Model):
         db_table = 'STAKEHOLDERS'
 
 
-class pages(models.Model):
-    class Meta:
-        unique_together = ['PAGE', 'SCENARIO', 'VERSION']
-        db_table = 'pages'
+class Pages(models.Model):
     PAGE = models.AutoField(primary_key=True, editable=False)
     PAGE_CHOICES = (
         ('I', 'INTRO'),
@@ -199,24 +196,28 @@ class pages(models.Model):
     X_COORDINATE = models.IntegerField()
     Y_COORDINATE = models.IntegerField()
 
+    class Meta:
+        unique_together = ['PAGE', 'SCENARIO', 'VERSION']
+        db_table = 'pages'
 
 class reflection_questions(models.Model):
+    PAGE = models.ForeignKey('pages', on_delete=models.CASCADE)
+    REFLECTION_QUESTION = models.TextField()
     class Meta:
         unique_together = ['PAGE', 'REFLECTION_QUESTION']
         db_table = 'reflection_questions'
-    PAGE = models.ForeignKey('pages', on_delete=models.CASCADE)
-    REFLECTION_QUESTION = models.TextField()
-    id = models.AutoField(primary_key=True, editable=False)
 
 
 class generic_page(models.Model):
-    class Meta:
-        unique_together = ['PAGE', 'BODY']
-        db_table = 'generic_page'
+    
     PAGE = models.ForeignKey('pages', on_delete=models.CASCADE)
     BODY = models.TextField()
     #this is a duplicated implementaiton of the default model
     #id = models.AutoField(primary_key=True, editable=False)
+    
+    class Meta:
+        unique_together = ['PAGE', 'BODY']
+        db_table = 'generic_page'
 
 
 class stakeholder_page(models.Model):

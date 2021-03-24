@@ -122,7 +122,6 @@ class Pages_stakeholderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = pages
-# response, reflections taken, response_to_action_page, conversations had, student times
 
 
 class ReflectionsTakenSerializer(serializers.ModelSerializer):

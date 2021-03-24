@@ -20,6 +20,12 @@ services:
     environment:
       PRODUCTION: "true"
 
+  shibboleth:
+    ports:
+      - "80:80"
+    environment:
+      PRODUCTION: "true"
+
 networks:
   default-net:
     driver: bridge

@@ -3,6 +3,9 @@ from rest_framework import viewsets
 from rest_framework import generics
 from api.models import *
 from api.serializers import *
+from rest_framework.views import APIView
+from rest_framework import status
+import rest_framework
 
 # Create your views here.
 
@@ -103,3 +106,22 @@ class CoverageViewSet(viewsets.ModelViewSet):
 class StakeholdersViewSet(viewsets.ModelViewSet):
     queryset= Stakeholders.objects.all()
     serializer_class = StakeholderSerializer
+
+
+class get_scenario(APIView):
+    def get(self, request, *args, **kwargs):
+        
+        # take scenario_id as input from URL by adding ?scenario_id=<the id #> to the end of the url.
+        scenario_id = self.request.query_params.get('scenario_id')
+        if(scenario_id != None):
+            return rest_framework.response.Response({"type": str(type(request))},status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            scenario = Scenario.objects.get(scenario = scenario_id)
+            if(scenario == None):
+                return Response({'status': 'details'}, status=status.HTTP_404_NOT_FOUND)
+            data = ScenarioSerializer(scenario).data
+            
+            return rest_framework.response.Response(data, status = status.HTTP_200_OK)
+        except Scenario.DoesNotExist:
+            return rest_framework.response.Response({'status': 'No scenario found for this scenario id'}, status=status.HTTP_404_NOT_FOUND)

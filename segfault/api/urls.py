@@ -31,4 +31,5 @@ router.register(r'stakeholders', views.StakeholdersViewSet)
 # The API URLs are now determined automatically by the router.
 urlpatterns = [
     path('', include(router.urls)),
+    path('scenario', views.get_scenario.as_view())
 ]

@@ -20,7 +20,6 @@ router.register(r'reflection_questions', views.Reflection_QuestionsViewSet)
 router.register(r'generic_page', views.Generic_pageViewSet)
 router.register(r'action_page', views.Action_pageViewSet)
 
-# response, reflections_taken, response_to_action_page, conversations_had, student_times
 router.register(r'reflections_taken', views.ReflectionsTakenViewSet)
 router.register(r'response_to_action_page', views.ResponseToActionPageViewSet)
 router.register(r'conversations_had', views.ConversationsHadViewSet)
@@ -35,4 +34,5 @@ router.register(r'stakeholders', views.StakeholdersViewSet)
 urlpatterns = [
     path('', include(router.urls)),
     path('DashBoard/',views.DashBoard.as_view()),
+    path('get_scenario', views.Get_scenario.as_view())
 ]

@@ -4,6 +4,9 @@ from rest_framework import views, viewsets, generics, status
 import rest_framework.response
 from api.models import *
 from api.serializers import *
+from rest_framework.views import APIView
+from rest_framework import status
+import rest_framework
 
 # Create your views here.
 
@@ -91,10 +94,7 @@ class Page_genericViewSet(generics.CreateAPIView):
 class Page_StakeholderViewSet(generics.CreateAPIView):
     model = Pages
     serializer_class = Pages_stakeholderSerializer
-
-
-# response, reflections taken, response_to_action_page, conversations had, student times
-
+    
 class ReflectionsTakenViewSet(viewsets.ModelViewSet):
     queryset = reflections_taken.objects.all()
     serializer_class = ReflectionsTakenSerializer
@@ -149,3 +149,22 @@ class DashBoard(views.APIView):
         else: 
             
             return rest_framework.response.Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+class Get_scenario(APIView):
+    def get(self, request, *args, **kwargs):
+        
+        # take scenario_id as input from URL by adding ?scenario_id=<the id #> to the end of the url.
+        scenario_id = self.request.query_params.get('scenario_id')
+        if(scenario_id == None):
+            return rest_framework.response.Response(status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            scenario = Scenario.objects.get(scenario = scenario_id)
+            if(scenario == None):
+                return Response({'status': 'details'}, status=status.HTTP_404_NOT_FOUND)
+            data = ScenarioSerializer(scenario).data
+            
+            return rest_framework.response.Response(data, status = status.HTTP_200_OK)
+        except Scenario.DoesNotExist:
+            return rest_framework.response.Response({'status': 'No scenario found for this scenario id'}, status=status.HTTP_404_NOT_FOUND)

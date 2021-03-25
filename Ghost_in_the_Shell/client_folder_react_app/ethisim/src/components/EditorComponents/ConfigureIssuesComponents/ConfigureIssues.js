@@ -80,7 +80,6 @@ export default function ConfigureIssues({ scenario_ID }) {
         loading: true,
         error: null,
     });
-    const [stakeHolders, setStakeHolders] = useState([]);
     const [issueCoverageMatrix, setIssueCoverageMatrix] = useState({
         data: null,
         loading: true,
@@ -159,7 +158,7 @@ export default function ConfigureIssues({ scenario_ID }) {
                 setIssueEntryFieldList={setIssueEntryFieldList}
                 scenarioID={scenario_ID}
             />
-            
+
             <Button
                 className={classes.button}
                 id="button"
@@ -170,7 +169,7 @@ export default function ConfigureIssues({ scenario_ID }) {
                 {' '}
                 Add Stakeholders
             </Button>
-        
+
             <Dialog
                 open={open}
                 onClose={handleClose}
@@ -232,8 +231,6 @@ export default function ConfigureIssues({ scenario_ID }) {
             </Dialog>
 
             <IssueMatrix /*this might need to be edited, sends scenario id to IssueCoverageMatrix*/
-                stakeHolders={stakeHolders}
-                setStakeHolders={setStakeHolders}
                 scenario={scenario_ID}
             />
         </div>

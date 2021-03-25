@@ -112,8 +112,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 IssueMatrix.propTypes = {
-    stakeHolders: PropTypes.any,
-    setStakeHolders: PropTypes.any,
+    /*stakeHolders: PropTypes.any,
+    //setStakeHolders: PropTypes.any,*/
     scenario: PropTypes.number,
 };
 
@@ -125,7 +125,8 @@ export default function IssueMatrix({ scenario }) {
     const classes = useStyles();
 
     const [didGetSHs, setDidGetSHs] = useState(false); //stores status of whether stakeholders have been received
-    const [stakeHolders, setStakeHolders] = useState([]); //stores stakeholders
+    //const [stakeHolders, setStakeHolders] = useState([]); //stores stakeholders
+    const stakeHolders = useRef(null);
     const [didGetIssues, setDidGetIssues] = useState(false);
     //const [issues, setIssues] = useState([]);
     const issues = useRef(null);
@@ -145,6 +146,7 @@ export default function IssueMatrix({ scenario }) {
     const issuePromises = useRef(null);
 
     useEffect(() => {
+        stakeHolders.current = [];
         issuePromises.current = [];
         issues.current = [];
     }, []);
@@ -208,7 +210,9 @@ export default function IssueMatrix({ scenario }) {
 
         axios(config) //backend call to get data in response
             .then(function (response) {
-                setStakeHolders(response.data);
+                stakeHolders.current = stakeHolders.current.concat(
+                    response.data
+                );
                 setLoading(false);
             })
             .catch(function (error) {
@@ -219,7 +223,7 @@ export default function IssueMatrix({ scenario }) {
             });
     }
     function getIssues() {
-        stakeHolders.forEach((stakeHolder) => {
+        stakeHolders.current.forEach((stakeHolder) => {
             setLoading(true);
             var data = JSON.stringify({});
 
@@ -253,6 +257,8 @@ export default function IssueMatrix({ scenario }) {
     }
 
     function setColData() {
+        setLoading(true);
+
         let cols = [
             { title: 'Name', field: 'NAME' },
             { title: 'Description', field: 'DESCRIPTION' },
@@ -272,11 +278,14 @@ export default function IssueMatrix({ scenario }) {
             }
         });
         setColumns(cols);
+        setLoading(false);
     }
 
     function setRowData() {
-        let sums = { NAME: 'Sum', DESCRIPTION: 'Sum of Issues' };
-        let data = stakeHolders.map((stakeHolder) => {
+        setLoading(true);
+
+        let sums = { NAME: '', DESCRIPTION: 'Running Issue Sums' };
+        let data = stakeHolders.current.map((stakeHolder) => {
             let row = {
                 NAME: stakeHolder.NAME,
                 DESCRIPTION: stakeHolder.JOB,
@@ -299,6 +308,7 @@ export default function IssueMatrix({ scenario }) {
         });
         data.push(sums);
         setRows(data);
+        setLoading(false);
     }
 
     if (isLoading) {
@@ -307,8 +317,8 @@ export default function IssueMatrix({ scenario }) {
 
     if (!didGetSHs) {
         //if stakeholders have alreasdy been loaded, don't do it again
-        setDidGetSHs(true);
         getExistingStakeHolders();
+        setDidGetSHs(true);
     } /*else if(!didGetIssues){
         fillIssues();
         setDidGetIssues(true);
@@ -317,12 +327,13 @@ export default function IssueMatrix({ scenario }) {
     } else{
         
     }*/
-    if (stakeHolders.length > 0 && !didGetIssues) {
-        setDidGetIssues(true);
+    if (didGetSHs && !didGetIssues) {
         getIssues();
+        setDidGetIssues(true);
     }
     if (didGetIssues && !didSetData) {
         setDidSetData(true);
+
         Promise.all(issuePromises.current).then(() => {
             setColData();
             setRowData();

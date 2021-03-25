@@ -234,4 +234,26 @@ class get_pages(APIView):
                 return rest_framework.response.Response(status=status.HTTP_400_BAD_REQUEST)
 
         return rest_framework.response.Response(page_list, status=status.HTTP_200_OK)
+
+class get_Issues(APIView):
+
+    #retrieves issues for a scenario_id
+    def get(self, request, format = None):
+        scenario_id = self.request.query_params.get('scenario_id')
+        # serializer = IssueSerializer(scenario_id, many=True)
+        # return rest_framework.response.Response(serializer.data) 
+        if(scenario_id == None):
+            return rest_framework.response.Response(status=status.HTTP_400_BAD_REQUEST) 
+        try:
+            issues_list = []
+            AllIssues = Issue.objects.filter(scenario = scenario_id)
+
+            for issue in AllIssues:
+                issue_data = IssueSerializer(issue).data
+                issues_list.append(issue_data)
+            # serializer = IssueSerializer(issues_list, many=True)
+            return rest_framework.response.Response(issues_list)
+        except Scenario.DoesNotExist:
+            return rest_framework.response.Response(status=status.HTTP_404_NOT_FOUND)
+
     

@@ -36,4 +36,5 @@ urlpatterns = [
     path('dashboard/',views.DashBoard.as_view()),
     path('get_scenario/', views.Get_scenario.as_view()),
     path('get_pages/',views.get_pages.as_view()),
+    path('get_issues/',views.get_Issues.as_view()),
 ]

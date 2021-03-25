@@ -117,7 +117,7 @@ class StudentTimesViewSet(viewsets.ModelViewSet):
 
 class CoverageViewSet(viewsets.ModelViewSet):
     queryset = Coverage.objects.all()
-    serializer_class = ConversationSerializer
+    serializer_class = CoverageSerializer
 
 
 class StakeholdersViewSet(viewsets.ModelViewSet):

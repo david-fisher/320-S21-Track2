@@ -178,59 +178,60 @@ class get_pages(APIView):
         
         try:
             scenario = Scenario.objects.get(scenario = scenario_id)
-        except scenario.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+        except Scenario.DoesNotExist:
+            return rest_framework.response.Response(status=status.HTTP_404_NOT_FOUND)
 
         page_list = []
-        page_id_list = Pages.object.get(scenario= scenario_id).page()
+        page_id_list = Pages.objects.filter(SCENARIO = scenario_id)
 
-        for page_id in page_id_list:
+        for page in page_id_list:
             page_data = PagesSerializer(page).data
+            page_id = page.PAGE
         
             page_type = page.PAGE_TYPE
             # Check page.PAGE_TYPE = 'REFLECTION'
             if (page_type == 'R'):
-                reflection_query = reflection_questions.objects.filter(PAGE = PAGE_ID).values()
+                reflection_query = reflection_questions.objects.filter(PAGE = page_id).values()
                 page_data.update(
                     {
                         "REFLECTION_QUESTIONS": reflection_query
                     }
                 )
-                page_list.extend(page_data)
+                page_list.append(page_data)
 
             # Check page.PAGE_TYPE = 'ACTION'
-            if (page_type == 'A'):
-                action_query = action_page.objects.filter(PAGE = PAGE_ID).values()
+            elif (page_type == 'A'):
+                action_query = action_page.objects.filter(PAGE = page_id).values()
                 page_data.update(
                     {
                         "CHOICES": action_query
                     }
                 )                
-                page_list.extend(page_data)
+                page_list.append(page_data)
         
             # Check page.PAGE_TYPE = 'GENERIC'
-            if (page_type == 'G' or page_type == 'I'):
-                generic_query = generic_page.objects.filter(PAGE = PAGE_ID).values()
+            elif (page_type == 'G' or page_type == 'I'):
+                generic_query = generic_page.objects.filter(PAGE = page_id).values()
                 page_data.update(
                     {
                         "BODIES":generic_query
                     }
                 )
-                page_list.extend(page_data)
+                page_list.append(page_data)
         
             # Check page.PAGE_TYPE = 'STAKEHOLDER'
-            if (page_type == 'S'):
-                stakeholder_query = stakeholder_page.objects.filter(PAGE = PAGE_ID).values()
+            elif (page_type == 'S'):
+                stakeholder_query = stakeholder_page.objects.filter(PAGE = page_id).values()
                 page_data.update(
                     {
                         "STAKEHOLDERS": stakeholder_query
                     }
                 )
-                page_list.extend(page_data)
+                page_list.append(page_data)
         
             # Neither of these pages, something went wrong or missing implementation
             else:
-                return Response(status=status.HTTP_400_BAD_REQUEST)
+                return rest_framework.response.Response(status=status.HTTP_400_BAD_REQUEST)
 
-        return Response(page_list, status=status.HTTP_200_OK)
+        return rest_framework.response.Response(page_list, status=status.HTTP_200_OK)
     

@@ -4,7 +4,6 @@ import { Container, Box, Typography, Grid, Divider } from '@material-ui/core';
 import SimScenarioCard from './components/DashboardComponents/SimScenarioCard';
 import Copyright from './components/Copyright';
 import get from '../universalHTTPRequests/get';
-import DashboardNavBar from './components/DashboardComponents/DashboardNavbar';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -64,6 +63,7 @@ const styles = (theme) => ({
 });
 
 export default function Dashboard({setScenario}) {
+
     const classes = useStyles();
 
     const [openScenarios, setOpenScenarios] = useState(null);
@@ -95,8 +95,6 @@ export default function Dashboard({setScenario}) {
             ));
 
             setOpenScenarios(openScenariosCards);
-
-            console.log(scenarios);
         }
 
         function onFailure() {
@@ -110,7 +108,6 @@ export default function Dashboard({setScenario}) {
 
     return (
         <div>
-            <DashboardNavBar />
             <Container
                 className={classes.container}
                 component="main"

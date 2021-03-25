@@ -4,6 +4,7 @@ import { Button, Grid } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import GenericDeleteWarning from '../DeleteWarnings/GenericDeleteWarning';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import Checkbox from '@material-ui/core/Checkbox';
 
 const useStyles = makeStyles((theme) => ({
     pageButton: {
@@ -24,7 +25,10 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         alignItems: 'center',
     },
+
 }));
+
+
 
 NavSideBarNode.propTypes = {
     onClick: PropTypes.any.isRequired,
@@ -53,11 +57,28 @@ export default function NavSideBarNode(props) {
         setOpen(true);
     };
 
+    //for checkboxes
+    const [checked, setChecked] = React.useState(true);
+    const handleChange = (event) => {
+        setChecked(event.target.checked);
+      };
+    
+    
+
     function pageType(title) {
-        if (id === -1 || id === -2 || id === -3 || id === -4 || isIntroPage) {
+        if (id === -1 || id === -2 || id === -3 || id === -4 || isIntroPage) { //logistics to introduction pages
             return (
+                
                 <Grid container direction="row" justify="flex-start">
-                    <Grid item xs={10}>
+                    <Grid item xs={2} >
+                        <Checkbox
+                            checked={checked}
+                            onChange={handleChange}
+                            color = "primary"
+                            inputProps={{ 'aria-label': 'primary checkbox' }}
+                        />
+                    </Grid>
+                    <Grid item xs={8}>
                         <Button
                             className={classes.pageButton}
                             variant="contained"
@@ -69,10 +90,18 @@ export default function NavSideBarNode(props) {
                     </Grid>
                 </Grid>
             );
-        } else {
+        } else { //additional created pages
             return (
-                <Grid container direction="row" justify="flex-start">
-                    <Grid item xs={10}>
+                <Grid container direction="row" justify="flex-start"> 
+                    <Grid item xs={2}>
+                        <Checkbox
+                            checked={checked}
+                            onChange={handleChange}
+                            color = "primary"
+                            inputProps={{ 'aria-label': 'primary checkbox' }}
+                        />
+                    </Grid>
+                    <Grid item xs={8}>
                         <Button
                             className={classes.pageButton}
                             variant="contained"

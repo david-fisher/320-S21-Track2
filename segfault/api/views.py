@@ -234,4 +234,36 @@ class get_pages(APIView):
                 return rest_framework.response.Response(status=status.HTTP_400_BAD_REQUEST)
 
         return rest_framework.response.Response(page_list, status=status.HTTP_200_OK)
-    
+
+class get_stakeholders(APIView):
+    def get(self, request):
+        scenario_id = self.request.query_params.get('scenario_id')
+        try:
+            scenario = Scenario.objects.get(scenario = scenario_id)
+        except Scenario.DoesNotExist:
+            return rest_framework.response.Response(status=status.HTTP_404_NOT_FOUND)
+        
+        stakeholders_list = []
+        stakeholders_id_list = Stakeholders.objects.filter(scenario = scenario_id)
+
+        for stakeholder in stakeholders_id_list:
+            convos = Conversations.objects.filter(stakeholder = stakeholder.stakeholder)
+            stake_data = StakeholderSerializer(stakeholder).data
+            
+            convoLst = []
+            for c in convos:
+                convoLst.append(
+                    {
+                        "CONVERSATION": c.conversation,
+                        "QUESTION": c.question,
+                        "RESPONSE": c.response 
+                    }
+                )
+            
+            stake_data.update(
+                {
+                    "CONVERSATIONS": convoLst
+                }
+            )
+            stakeholders_list.append(stake_data)
+        return rest_framework.response.Response(stakeholders_list, status=status.HTTP_200_OK)

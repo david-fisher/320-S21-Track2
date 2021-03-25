@@ -82,9 +82,9 @@ WSGI_APPLICATION = 'segfault.wsgi.application'
 
 DATABASES = {
     'default': { 'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'backend',
+        'NAME': 'segfaulters',
         'USER':'postgres',
-        'PASSWORD':'Aa12345678',
+        'PASSWORD':'notmyrealpassword',
         'HOST':'localhost',
         'PORT':'5432'
     }

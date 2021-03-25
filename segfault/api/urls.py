@@ -26,7 +26,7 @@ router.register(r'conversations_had', views.ConversationsHadViewSet)
 router.register(r'student_times', views.StudentTimesViewSet)
 
 router.register(r'coverage', views.CoverageViewSet)
-router.register(r'stakeholders', views.StakeholdersViewSet)
+router.register(r'stakeholdersViewSet', views.StakeholdersViewSet)
 
 #TODO: register apiviews to api_root view(there are only viewsets now)
 
@@ -36,4 +36,5 @@ urlpatterns = [
     path('dashboard/',views.DashBoard.as_view()),
     path('get_scenario/', views.Get_scenario.as_view()),
     path('get_pages/',views.get_pages.as_view()),
+    path('get_stakeholders/',views.get_stakeholders.as_view())
 ]

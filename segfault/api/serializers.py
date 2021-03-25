@@ -5,7 +5,7 @@ from api.models import *
 class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
-        fields = ('course', 'name', 'students', 'professors','scenarios')
+        fields = '__all__'
 
 # TODO: Need to disable for all non-admin after depolying(security)
 
@@ -67,27 +67,27 @@ class PagesSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class Stakeholder_pageSerializer(serializers.ModelSerializer):
+class Stakeholder_to_pageSerializer(serializers.ModelSerializer):
     class Meta:
-        model = stakeholder_page
+        model = Stakeholder_to_page
         fields = '__all__'
 
 
 class Reflection_questionsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = reflection_questions
+        model = Reflection_questions
         fields = '__all__'
 
 
 class Action_pageSerializer(serializers.ModelSerializer):
     class Meta:
-        model = action_page
+        model = Action_page
         fields = '__all__'
 
 
 class Generic_pageSerializer(serializers.ModelSerializer):
     class Meta:
-        model = generic_page
+        model = Generic_page
         fields = '__all__'
 
 # page types serializer
@@ -118,7 +118,7 @@ class Pages_genericSerializer(serializers.ModelSerializer):
 
 
 class Pages_stakeholderSerializer(serializers.ModelSerializer):
-    stakeholder_page = Stakeholder_pageSerializer()
+    stakeholder_page = Stakeholder_to_pageSerializer()
 
     class Meta:
         model = Pages
@@ -126,25 +126,25 @@ class Pages_stakeholderSerializer(serializers.ModelSerializer):
 
 class ReflectionsTakenSerializer(serializers.ModelSerializer):
     class Meta:
-        model = reflections_taken
+        model = Reflections_taken
         fields = '__all__'
 
 
 class ResponseToActionPageSerializer(serializers.ModelSerializer):
     class Meta:
-        model = response_to_action_page
+        model = Response_to_action_page
         fields = '__all__'
 
 
-class ConversationsHadSerializer(serializers.ModelSerializer):
+class Responses_to_conversationsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = conversations_had
+        model = Responses_to_conversations
         fields = '__all__'
 
 
 class StudentTimesSerializer(serializers.ModelSerializer):
     class Meta:
-        model = student_times
+        model = Student_times
         fields = '__all__'
 
 
@@ -159,3 +159,7 @@ class StakeholderSerializer(serializers.ModelSerializer):
         model = Stakeholders
         fields = '__all__'
 
+class Student_page_progressSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Student_page_progress
+        fields = '__all__'

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Box, Grid, Typography , withStyles, Button, FormHelperText } from '@material-ui/core';
 import HTMLRenderer from "./htmlRenderer";
+import SubmitButton from "./Buttons/SubmitButton"
 
 const alignMiddle = {
   position: 'fixed',
@@ -42,7 +43,11 @@ function getQuestions(questionArr, responses, setResponses, previouslyResponded)
   return arr;
 }
 
+
+
 export default function StateTextFields(props) {
+
+  let nextPageTitle = "";
 
   const previouslyResponded = Object.keys(props.prevResponses).length > 0;
 
@@ -75,6 +80,21 @@ export default function StateTextFields(props) {
       setHelperText('Please provide a response.');
     }
   };
+
+  function getNextPageTitle(props) {
+    switch (props.nextPageName) {
+      case "initialAction": nextPageTitle = "Initial Action";
+      break;
+      case "finalAction": nextPageTitle = "Final Action";
+      break;
+      case "conclusion": nextPageTitle = "Conclusion";
+      break;
+      case "home": nextPageTitle = "Dashboard";
+      default:
+        break;
+    }
+  }
+  getNextPageTitle(props);
   
   return (
     <form onSubmit={handleSubmit}>
@@ -92,9 +112,7 @@ export default function StateTextFields(props) {
         </Grid>
         <Grid item lg={12}>
         <FormHelperText>{helperText}</FormHelperText>
-          <Button type="submit" variant="outlined" color="primary">
-            Submit
-          </Button>
+          <SubmitButton title={nextPageTitle}></SubmitButton>
         </Grid>
       </Grid>
     </form>

@@ -5,6 +5,8 @@ import { BASE_URL, STUDENT_ID, SCENARIO_ID } from "../constants/config";
 import axios from 'axios';
 import { ScenariosContext } from "../Nav";
 import HTMLRenderer from "./components/htmlRenderer";
+import BackButton from "./components/Buttons/BackButton"
+import SubmitButton from "./components/Buttons/SubmitButton"
 
 // const useStyles = makeStyles((theme) => ({
 //   root: {
@@ -33,6 +35,7 @@ function Action({ pages, setPages, activePage, setActivePage, content_url, nextP
     }
   }
 
+  let prevPageTitle = "";
   const [actionQuestion, setActionQuestion, setActionChoices] = React.useState('');
   const [questionID, setQuestionID] = React.useState('');
   const [scenarios, setScenarios] = React.useContext(ScenariosContext);
@@ -80,6 +83,18 @@ function Action({ pages, setPages, activePage, setActivePage, content_url, nextP
     });
   }
 
+  function getPrevPageTitle(prevPageID) {
+    switch (prevPageID) {
+      case "initialReflection": prevPageTitle = "Initial Reflection";
+      break;
+      case "middleReflection": prevPageTitle = "Middle Reflection";
+      break;
+      default:
+        break;
+    }
+  }
+  getPrevPageTitle(prevPageID);
+
   return (
     <div>
       <Grid container direction="row" justify="center" alignItems="center">
@@ -91,7 +106,8 @@ function Action({ pages, setPages, activePage, setActivePage, content_url, nextP
       </Grid>
       <Grid container direction="row" justify="space-between">
         <Grid item style={{ marginRight: "0rem", marginTop: "-3rem" }}>
-          <Button variant="contained" disableElevation onClick={() => goToPage(prevPageID)}>Back</Button>
+          <BackButton title={prevPageTitle} onClick={() => goToPage(prevPageID)}>
+          </BackButton>
         </Grid>
         <Grid item style={{ marginRight: "0rem", marginTop: "-3rem" }}>
           {/*<Button variant="contained" disableElevation color="primary" onClick={() => goToPage(nextPageID)} >Next</Button>*/}

@@ -17,8 +17,9 @@ import {
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Link, Redirect } from "react-router-dom";
 import SimulationWindow from "./pages/simulationWindow";
+// import SimulationWindow from "./pages/newSimWindow";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -102,11 +103,6 @@ function Nav() {
                     Summary
                     </Button>
                   </Link> */}
-                  <Link className={classes.link} to="/simulation">
-                    <Button className={classes.title} color="inherit">
-                      Simulation Window
-                    </Button>
-                  </Link>
                   {/* <Link className={classes.link} to="/chartTest">
                     <Button className={classes.title} color="inherit">
                       Chart
@@ -119,22 +115,17 @@ function Nav() {
 
           {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
-          <Switch>
-            <Route path="/" exact>
-              <Home />
-            </Route>
-            <Route path="/summary" exact>
-              <Summary />
-            </Route>
-            <Route path="/simulation" exact>
-              <ScenariosContext.Provider value={scenariosState}>
-                <SimulationWindow />
-              </ScenariosContext.Provider>
-            </Route>
-            <Route path="/chartTest" exact>
-              <RadarTest />
-            </Route>
-          </Switch>
+            <Switch>
+                  <Route exact path="/" component={Dashboard} />
+                  <Route path="/summary" component={Summary} />
+                  <ScenariosContext.Provider value={scenariosState}>
+                    <Route path="/simulation/:sid([0-9]+)">
+                      <SimulationWindow />
+                    </Route> 
+                  </ScenariosContext.Provider>
+                  <Route path="/chartTest" exact component={RadarTest} />
+
+            </Switch>
           </ThemeProvider>
         </div>
       </Router>

@@ -47,6 +47,7 @@ const tableIcons = {
         <ChevronRight {...props} ref={ref} />
     )),
     Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
+    Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
     Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
     FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
     LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref} />),
@@ -274,6 +275,7 @@ export default function IssueMatrix({ scenario }) {
     }
 
     function setRowData() {
+        let sums = { NAME: 'Sum', DESCRIPTION: 'Sum of Issues' };
         let data = stakeHolders.map((stakeHolder) => {
             let row = {
                 NAME: stakeHolder.NAME,
@@ -283,10 +285,19 @@ export default function IssueMatrix({ scenario }) {
                 if (curIssue.STAKEHOLDER == stakeHolder.STAKEHOLDER) {
                     row['Issue' + curIssue.NAME.toUpperCase()] =
                         curIssue.COVERAGE_SCORE;
+                    if (
+                        sums['Issue' + curIssue.NAME.toUpperCase()] ===
+                        undefined
+                    ) {
+                        sums['Issue' + curIssue.NAME.toUpperCase()] = 0;
+                    }
+                    sums['Issue' + curIssue.NAME.toUpperCase()] +=
+                        curIssue.COVERAGE_SCORE;
                 }
             });
             return row;
         });
+        data.push(sums);
         setRows(data);
     }
 
@@ -306,18 +317,6 @@ export default function IssueMatrix({ scenario }) {
     } else{
         
     }*/
-
-    if (stakeHolders.length > 0 && !didGetIssues) {
-        getIssues();
-    }
-    let cnt = 0;
-    if (issues.length > 0 && didGetIssues && !didSetData) {
-        setDidSetData(true);
-        setColData();
-
-        Promise.all(issuePromises).then(setRowData());
-    }
-
     if (stakeHolders.length > 0 && !didGetIssues) {
         setDidGetIssues(true);
         getIssues();
@@ -335,6 +334,9 @@ export default function IssueMatrix({ scenario }) {
             <MaterialTable /*table*/
                 icons={tableIcons} /*all the icons*/
                 title={'Issue Coverage Matrix'}
+                options={{
+                    exportButton: true,
+                }}
                 cellEditable={{
                     /*sets the cells to be editable*/ cellStyle: {},
                     onCellEditApproved: (

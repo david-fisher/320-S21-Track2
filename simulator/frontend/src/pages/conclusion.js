@@ -5,6 +5,7 @@ import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { BASE_URL, STUDENT_ID, SCENARIO_ID } from "../constants/config";
 import { ScenariosContext } from "../Nav";
+import BackButton from "./components/Buttons/BackButton"
 
 
 const TextTypography = withStyles({
@@ -63,7 +64,7 @@ function Conclusion({pages, setPages, activePage, setActivePage}) {
       </Grid>
       <Grid container direction="row" justify="space-between">
         <Grid item style={{ marginRight: "0rem", marginTop: "-3rem" }}>
-          <Button variant="contained" disableElevation onClick={goToFinalReflection}>Back</Button>
+          <BackButton title="Final Reflection" onClick={goToFinalReflection}></BackButton>
         </Grid>
         <Grid item style={{ marginRight: "0rem", marginTop: "-3rem" }}>
           {/*<Button variant="outlined">Next</Button>*/}

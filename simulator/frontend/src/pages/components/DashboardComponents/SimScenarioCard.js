@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 import { Typography, Grid, Card, CardContent, Button } from '@material-ui/core';
 import PropTypes from 'prop-types';
+import Tooltip from '@material-ui/core/Tooltip';
 
 const useStyles = makeStyles((theme) => ({
     scenarioContainer: {
@@ -29,6 +30,12 @@ const useStyles = makeStyles((theme) => ({
         width: '100%',
         textTransform: 'unset',
     },
+    arrow: {
+        color: "#881c1c", 
+      },
+      tooltip: {
+        backgroundColor: "#881c1c",
+      },
 }));
 
 const styles = (theme) => ({
@@ -63,18 +70,20 @@ export default function SimScenarioCard({
 
     const startButton = (
         <Link to={`/simulation/${id}`}>
-            <Button
-                className={classes.buttonText}
-                variant="contained"
-                color="primary"
-                className={classes.button}
-                item
-                fullWidth="true"
-            >
-                <Typography variant="subtitle1" noWrap>
-                    Start
-                </Typography>
-            </Button>
+            <Tooltip title="Let's Begin!" arrow placement="bottom" classes={classes}>
+                <Button
+                    className={classes.buttonText}
+                    variant="contained"
+                    color="primary"
+                    className={classes.button}
+                    item
+                    fullWidth="true"
+                >
+                    <Typography variant="subtitle1" noWrap>
+                        Start
+                    </Typography>
+                </Button>
+            </Tooltip>
         </Link>
     )
 

@@ -5,8 +5,7 @@ import { BASE_URL, STUDENT_ID, SCENARIO_ID } from "../constants/config";
 import axios from 'axios';
 import { ScenariosContext } from "../Nav";
 import HTMLRenderer from "./components/htmlRenderer";
-import BackButton from "./components/Buttons/BackButton"
-import SubmitButton from "./components/Buttons/SubmitButton"
+import SpecialButton from "./components/SpecialButton"
 
 // const useStyles = makeStyles((theme) => ({
 //   root: {
@@ -106,8 +105,8 @@ function Action({ pages, setPages, activePage, setActivePage, content_url, nextP
       </Grid>
       <Grid container direction="row" justify="space-between">
         <Grid item style={{ marginRight: "0rem", marginTop: "-3rem" }}>
-          <BackButton title={prevPageTitle} onClick={() => goToPage(prevPageID)}>
-          </BackButton>
+          <SpecialButton type="back" title={prevPageTitle} onClick={() => goToPage(prevPageID)}>
+          </SpecialButton>
         </Grid>
         <Grid item style={{ marginRight: "0rem", marginTop: "-3rem" }}>
           {/*<Button variant="contained" disableElevation color="primary" onClick={() => goToPage(nextPageID)} >Next</Button>*/}

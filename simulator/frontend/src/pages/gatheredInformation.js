@@ -1,7 +1,6 @@
 import React from "react";
 import { withStyles, Typography, Box, Button, Grid } from "@material-ui/core";
-import BackButton from "./components/Buttons/BackButton"
-import NextButton from "./components/Buttons/NextButton"
+import SpecialButton from "./components/SpecialButton"
 
 const TextTypography = withStyles({
   root: {
@@ -47,10 +46,10 @@ function GatheredInformation({pages, setPages, activePage, setActivePage}) {
       </Grid>
       <Grid container direction="row" justify="space-between">
         <Grid item style={{ marginRight: "0rem", marginTop: "-3rem" }}>
-          <BackButton title="Initial Action" onClick={goToInitialAction}></BackButton> 
+          <SpecialButton type="back" title="Initial Action" onClick={goToInitialAction}></SpecialButton> 
         </Grid>
         <Grid item style={{ marginRight: "0rem", marginTop: "-3rem" }}>
-        <NextButton title="Stakeholders" onClick={goToStakeholders}></NextButton>
+        <SpecialButton type="next" color="primary" title="Stakeholders" onClick={goToStakeholders}></SpecialButton> 
         </Grid>
       </Grid>
       <Grid container spacing={2}>

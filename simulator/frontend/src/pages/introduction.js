@@ -13,7 +13,7 @@ import HTMLRenderer from './components/htmlRenderer';
 import { ScenariosContext } from "../Nav";
 import { GatheredInfoContext } from './simulationWindow';
 import VideoPlayer from './components/Sim_videoPlayer';
-import NextButton from "./components/Buttons/NextButton"
+import SpecialButton from "./components/SpecialButton"
 
 const TextTypography = withStyles({
   root: {
@@ -96,7 +96,7 @@ function Introduction({ pages, setPages, activePage, setActivePage }) {
           {/*  <Button>Back</Button>*/}
         </Grid>
         <Grid item style={{ marginRight: "0rem", marginTop: "-3rem" }}>
-          <NextButton title="Project Assignment" onClick={goToProjectAssignment}></NextButton>
+          <SpecialButton type="next" color="primary" title="Project Assignment" onClick={goToProjectAssignment}></SpecialButton>
         </Grid>
       </Grid>
       <Grid container spacing={2}>

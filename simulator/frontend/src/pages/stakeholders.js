@@ -7,8 +7,7 @@ import { BASE_URL, STUDENT_ID, SCENARIO_ID } from "../constants/config";
 import axios from 'axios';
 import Conversation from './conversation';
 import { ScenariosContext } from "../Nav";
-import NextButton from "./components/Buttons/NextButton";
-import BackButton from "./components/Buttons/BackButton";
+import SpecialButton from "./components/SpecialButton";
 
 const TextTypography = withStyles({
   root: {
@@ -275,10 +274,10 @@ function Stakeholders({ pages, setPages, activePage, setActivePage }) {
         </Grid>
         <Grid container direction="row" justify="space-between">
           <Grid item style={{ marginRight: "0rem", marginTop: "-3rem" }}>
-            <BackButton title="Gathered Information" onClick={goToGatheredInformation}></BackButton>
+            <SpecialButton type="back" title="Gathered Information" onClick={goToGatheredInformation}></SpecialButton>
           </Grid>
           <Grid item style={{ marginRight: "0rem", marginTop: "-3rem" }}>
-          <NextButton title="Middle Reflection" onClick={goToMiddleReflection}></NextButton>
+          <SpecialButton type="next" color="primary" title="Middle Reflection" onClick={goToMiddleReflection}></SpecialButton>
           </Grid>
         </Grid>
         <Grid container spacing={2}>

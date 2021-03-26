@@ -6,7 +6,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import {Box, Button} from "@material-ui/core";
-import SubmitButton from "./Buttons/SubmitButton"
+import SpecialButton from "./SpecialButton"
 
 import { BASE_URL, STUDENT_ID, SCENARIO_ID } from "../../constants/config";
 import axios from 'axios';
@@ -117,7 +117,7 @@ export default function ErrorRadios(props)
         </RadioGroup>
         <FormHelperText>{helperText}</FormHelperText>
         <Box width={100}>
-          <SubmitButton title={nextPageTitle}></SubmitButton>
+          <SpecialButton type="submit" color="primary" title={nextPageTitle}></SpecialButton>
         </Box>
       </FormControl>
     </form>

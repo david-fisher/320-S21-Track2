@@ -11,7 +11,7 @@ import {
 import { BASE_URL, STUDENT_ID, SCENARIO_ID }from "../constants/config";
 import axios from 'axios';
 import { ScenariosContext } from "../Nav";
-import BackButton from "./components/Buttons/BackButton"
+import SpecialButton from "./components/SpecialButton"
 
 const TextTypography = withStyles({
   root: {
@@ -129,7 +129,7 @@ function Reflection({ pages, setPages, activePage, setActivePage,
       </Grid>
       <Grid container direction="row" justify="space-between">
         <Grid item style={{ marginRight: "0rem", marginTop: "-3rem" }}>
-          <BackButton title={prevPageTitle} onClick={() => goToPage(prevPageID)}></BackButton>
+          <SpecialButton type="back" title={prevPageTitle} onClick={() => goToPage(prevPageID)}></SpecialButton>
         </Grid>
         {/* <Grid item style={{ marginRight: "0rem", marginTop: "-3rem" }}>
         </Grid> */}

@@ -56,23 +56,23 @@ class PagesViewSet(viewsets.ModelViewSet):
     serializer_class = PagesSerializer
 
 
-class Stakeholder_pageViewSet(viewsets.ModelViewSet):
-    queryset = stakeholder_page.objects.all()
-    serializer_class = Stakeholder_pageSerializer
+class Stakeholder_to_pageViewSet(viewsets.ModelViewSet):
+    queryset = Stakeholder_to_page.objects.all()
+    serializer_class = Stakeholder_to_pageSerializer
 
 
 class Reflection_QuestionsViewSet(viewsets.ModelViewSet):
-    queryset = reflection_questions.objects.all()
+    queryset = Reflection_questions.objects.all()
     serializer_class = Reflection_questionsSerializer
 
 
 class Generic_pageViewSet(viewsets.ModelViewSet):
-    queryset = generic_page.objects.all()
+    queryset = Generic_page.objects.all()
     serializer_class = Generic_pageSerializer
 
 
 class Action_pageViewSet(viewsets.ModelViewSet):
-    queryset = action_page.objects.all()
+    queryset = Action_page.objects.all()
     serializer_class = Action_pageSerializer
 
 
@@ -96,22 +96,25 @@ class Page_StakeholderViewSet(generics.CreateAPIView):
     serializer_class = Pages_stakeholderSerializer
     
 class ReflectionsTakenViewSet(viewsets.ModelViewSet):
-    queryset = reflections_taken.objects.all()
+    queryset = Reflections_taken.objects.all()
     serializer_class = ReflectionsTakenSerializer
 
 
 class ResponseToActionPageViewSet(viewsets.ModelViewSet):
-    queryset = response_to_action_page.objects.all()
+    queryset = Response_to_action_page.objects.all()
     serializer_class = ResponseToActionPageSerializer
 
 
-class ConversationsHadViewSet(viewsets.ModelViewSet):
-    queryset = conversations_had.objects.all()
-    serializer_class = ConversationsHadSerializer
+class Responses_to_conversationsViewSet(viewsets.ModelViewSet):
+    queryset = Responses_to_conversations.objects.all()
+    serializer_class = Responses_to_conversationsSerializer
 
+class Student_page_progressViewSet(viewsets.ModelViewSet):
+    queryset = Student_page_progress.objects.all()
+    serializer_class = Student_page_progressSerializer
 
 class StudentTimesViewSet(viewsets.ModelViewSet):
-    queryset = student_times.objects.all()
+    queryset = Student_times.objects.all()
     serializer_class = StudentTimesSerializer
 
 
@@ -160,7 +163,7 @@ class Get_scenario(APIView):
             return rest_framework.response.Response(status=status.HTTP_400_BAD_REQUEST)
         
         try:
-            scenario = Scenario.objects.get(scenario = scenario_id)
+            scenario = Scenario.objects.get(scenario_id = scenario_id)
             if(scenario == None):
                 return Response({'status': 'details'}, status=status.HTTP_404_NOT_FOUND)
             data = ScenarioSerializer(scenario).data
@@ -170,19 +173,20 @@ class Get_scenario(APIView):
             return rest_framework.response.Response({'status': 'No scenario found for this scenario id'}, status=status.HTTP_404_NOT_FOUND)
 
 
+        
 
 class get_pages(APIView):
     def get(self, request, *args, **kwargs):
 
-        scenario_id = self.request.query_params.get('scenario_id')
+        scenario = self.request.query_params.get('scenario_id')
         
         try:
-            scenario = Scenario.objects.get(scenario = scenario_id)
+            scenario = Scenario.objects.get(scenario_id = scenario)
         except Scenario.DoesNotExist:
             return rest_framework.response.Response(status=status.HTTP_404_NOT_FOUND)
 
         page_list = []
-        page_id_list = Pages.objects.filter(SCENARIO = scenario_id)
+        page_id_list = Pages.objects.filter(SCENARIO_ID = scenario)
 
         for page in page_id_list:
             page_data = PagesSerializer(page).data
@@ -191,7 +195,7 @@ class get_pages(APIView):
             page_type = page.PAGE_TYPE
             # Check page.PAGE_TYPE = 'REFLECTION'
             if (page_type == 'R'):
-                reflection_query = reflection_questions.objects.filter(PAGE = page_id).values()
+                reflection_query = Reflection_questions.objects.filter(PAGE = page_id).values()
                 page_data.update(
                     {
                         "REFLECTION_QUESTIONS": reflection_query
@@ -201,7 +205,7 @@ class get_pages(APIView):
 
             # Check page.PAGE_TYPE = 'ACTION'
             elif (page_type == 'A'):
-                action_query = action_page.objects.filter(PAGE = page_id).values()
+                action_query = Action_page.objects.filter(PAGE = page_id).values()
                 page_data.update(
                     {
                         "CHOICES": action_query
@@ -211,7 +215,7 @@ class get_pages(APIView):
         
             # Check page.PAGE_TYPE = 'GENERIC'
             elif (page_type == 'G' or page_type == 'I'):
-                generic_query = generic_page.objects.filter(PAGE = page_id).values()
+                generic_query = Generic_page.objects.filter(PAGE = page_id).values()
                 page_data.update(
                     {
                         "BODIES":generic_query
@@ -221,7 +225,7 @@ class get_pages(APIView):
         
             # Check page.PAGE_TYPE = 'STAKEHOLDER'
             elif (page_type == 'S'):
-                stakeholder_query = stakeholder_page.objects.filter(PAGE = page_id).values()
+                stakeholder_query = Stakeholder_to_page.objects.filter(PAGE = page_id).values()
                 page_data.update(
                     {
                         "STAKEHOLDERS": stakeholder_query
@@ -232,7 +236,6 @@ class get_pages(APIView):
             # Neither of these pages, something went wrong or missing implementation
             else:
                 return rest_framework.response.Response(status=status.HTTP_400_BAD_REQUEST)
-
         return rest_framework.response.Response(page_list, status=status.HTTP_200_OK)
 
 class get_stakeholders(APIView):
@@ -289,4 +292,3 @@ class get_Issues(APIView):
         except Scenario.DoesNotExist:
             return rest_framework.response.Response(status=status.HTTP_404_NOT_FOUND)
 
-    

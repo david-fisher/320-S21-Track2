@@ -186,49 +186,49 @@ class get_pages(APIView):
             return rest_framework.response.Response(status=status.HTTP_404_NOT_FOUND)
 
         page_list = []
-        page_id_list = Pages.objects.filter(SCENARIO_ID = scenario)
+        page_id_list = Pages.objects.filter(scenario_id = scenario)
 
         for page in page_id_list:
             page_data = PagesSerializer(page).data
-            page_id = page.PAGE
+            page_id = page.page
         
-            page_type = page.PAGE_TYPE
+            page_type = page.page_type
             # Check page.PAGE_TYPE = 'REFLECTION'
             if (page_type == 'R'):
-                reflection_query = Reflection_questions.objects.filter(PAGE = page_id).values()
+                reflection_query = Reflection_questions.objects.filter(page = page_id).values()
                 page_data.update(
                     {
-                        "REFLECTION_QUESTIONS": reflection_query
+                        "body": reflection_query
                     }
                 )
                 page_list.append(page_data)
 
             # Check page.PAGE_TYPE = 'ACTION'
             elif (page_type == 'A'):
-                action_query = Action_page.objects.filter(PAGE = page_id).values()
+                action_query = Action_page.objects.filter(page = page_id).values()
                 page_data.update(
                     {
-                        "CHOICES": action_query
+                        "body": action_query
                     }
                 )                
                 page_list.append(page_data)
         
             # Check page.PAGE_TYPE = 'GENERIC'
             elif (page_type == 'G' or page_type == 'I'):
-                generic_query = Generic_page.objects.filter(PAGE = page_id).values()
+                generic_query = Generic_page.objects.filter(page = page_id).values()
                 page_data.update(
                     {
-                        "BODIES":generic_query
+                        "body":generic_query
                     }
                 )
                 page_list.append(page_data)
         
             # Check page.PAGE_TYPE = 'STAKEHOLDER'
             elif (page_type == 'S'):
-                stakeholder_query = Stakeholder_to_page.objects.filter(PAGE = page_id).values()
+                stakeholder_query = Stakeholder_to_page.objects.filter(page = page_id).values()
                 page_data.update(
                     {
-                        "STAKEHOLDERS": stakeholder_query
+                        "body": stakeholder_query
                     }
                 )
                 page_list.append(page_data)
@@ -240,14 +240,14 @@ class get_pages(APIView):
 
 class get_stakeholders(APIView):
     def get(self, request):
-        scenario_id = self.request.query_params.get('scenario_id')
+        scenario_id1 = self.request.query_params.get('scenario_id')
         try:
-            scenario = Scenario.objects.get(scenario = scenario_id)
+            scenario = Scenario.objects.get(scenario_id = scenario_id1)
         except Scenario.DoesNotExist:
             return rest_framework.response.Response(status=status.HTTP_404_NOT_FOUND)
         
         stakeholders_list = []
-        stakeholders_id_list = Stakeholders.objects.filter(scenario = scenario_id)
+        stakeholders_id_list = Stakeholders.objects.filter(scenario_id = scenario_id1)
 
         for stakeholder in stakeholders_id_list:
             convos = Conversations.objects.filter(stakeholder = stakeholder.stakeholder)
@@ -275,14 +275,18 @@ class get_Issues(APIView):
 
     #retrieves issues for a scenario_id
     def get(self, request, format = None):
-        scenario_id = self.request.query_params.get('scenario_id')
+        scenario_id1 = self.request.query_params.get('scenario_id')
+        try:
+            scenario = Scenario.objects.get(scenario_id = scenario_id1)
+        except Scenario.DoesNotExist:
+            return rest_framework.response.Response(status=status.HTTP_404_NOT_FOUND)
         # serializer = IssueSerializer(scenario_id, many=True)
         # return rest_framework.response.Response(serializer.data) 
-        if(scenario_id == None):
+        if(scenario_id1 == None):
             return rest_framework.response.Response(status=status.HTTP_400_BAD_REQUEST) 
         try:
             issues_list = []
-            AllIssues = Issue.objects.filter(scenario = scenario_id)
+            AllIssues = Issue.objects.filter(scenario_id = scenario_id1)
 
             for issue in AllIssues:
                 issue_data = IssueSerializer(issue).data

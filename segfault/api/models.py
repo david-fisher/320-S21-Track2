@@ -204,7 +204,7 @@ class Stakeholders(models.Model):
 
     class Meta:
         db_table = 'STAKEHOLDERS'
-        
+
 
 class Conversations(models.Model):
     conversation = models.AutoField(primary_key=True, editable=False)
@@ -277,12 +277,12 @@ class Response_to_action_page(models.Model):
 
 
 class Responses_to_conversations(models.Model):
-    RESPONSE = models.ForeignKey(
+    response = models.ForeignKey(
         Response, on_delete = models.CASCADE)
-    STAKEHOLDER = models.ForeignKey(
+    stakeholder = models.ForeignKey(
         Stakeholders, on_delete=models.CASCADE)
-    SCORE = models.DecimalField(max_digits=5, decimal_places=2)
-    CONVERSATION = models.ForeignKey(
+    score = models.DecimalField(max_digits=5, decimal_places=2)
+    conversation = models.ForeignKey(
         Conversations, on_delete=models.CASCADE)
 
     class Meta:

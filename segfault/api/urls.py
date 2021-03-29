@@ -27,7 +27,7 @@ router.register(r'student_times', views.StudentTimesViewSet)
 router.register(r'student_page_progress',views.Student_page_progressViewSet)
 
 router.register(r'coverage', views.CoverageViewSet)
-router.register(r'stakeholdersViewSet', views.StakeholdersViewSet)
+router.register(r'stakeholders', views.StakeholdersViewSet)
 
 #TODO: register apiviews to api_root view(there are only viewsets now)
 

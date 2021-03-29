@@ -26,3 +26,10 @@ hs_err_pid*
 __pycache__
 *.py[cod]
 *$py.class
+.vscode
+segfault/api/__pycache__
+segfault/segfault/__pycache__
+segfault/api/migrations
+segfault/segfault/migrations 
+segfault/segfault/settings.py
+segfault/runserver.bat

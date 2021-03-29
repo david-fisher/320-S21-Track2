@@ -200,8 +200,8 @@ class Stakeholders(models.Model):
     introduction = models.TextField(default='default')
 
     class Meta:
-        db_table = 'stakeholders'
-        
+        db_table = 'STAKEHOLDERS'
+
 
 class Conversations(models.Model):
     conversation = models.AutoField(primary_key=True, editable=False)
@@ -319,7 +319,7 @@ class Student_page_progress(models.Model):
         Student, on_delete=models.CASCADE, default = None)
     page = models.ForeignKey(
         Pages, on_delete = models.CASCADE, default = None)
-    sompleted = models.BooleanField(default = False);
+    sompleted = models.BooleanField(default = False)
 
     class Meta:
         unique_together = ('student',"page")

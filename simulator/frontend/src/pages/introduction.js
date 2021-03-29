@@ -12,7 +12,6 @@ import axios from 'axios';
 import HTMLRenderer from './components/htmlRenderer';
 import { ScenariosContext } from "../Nav";
 import { GatheredInfoContext } from './simulationWindow';
-import VideoPlayer from './components/Sim_videoPlayer';
 import SpecialButton from "./components/SpecialButton"
 
 const TextTypography = withStyles({
@@ -105,7 +104,6 @@ function Introduction({ pages, setPages, activePage, setActivePage }) {
             <HTMLRenderer html={introText}/>
           </Box>
           {/* could change the parameter to just scenario in the future to be more dynamic */}
-          <VideoPlayer vid_url="https://www.youtube.com/embed/zPsoFhUDLuU" name="Brain Pop Ethics" description="Example Ethics Video from BrainPop for demo purpose."/> 
         </Grid>
       </Grid>
     </div>

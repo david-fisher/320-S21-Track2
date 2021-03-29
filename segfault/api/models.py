@@ -19,8 +19,8 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 class Scenario(models.Model):
 
     scenario_id = models.AutoField(primary_key=True, editable=False)
-    scenario = models.IntegerField(default=1, editable=False)
-    version = models.IntegerField(default=1, editable=False)
+    scenario = models.IntegerField(default=1, editable=True)
+    version = models.IntegerField(default=1, editable=True)
     name = models.CharField(max_length=50, null=False)
     public = models.BooleanField(default=False)
     NUM_CONVERSATION = models.IntegerField(default=0)

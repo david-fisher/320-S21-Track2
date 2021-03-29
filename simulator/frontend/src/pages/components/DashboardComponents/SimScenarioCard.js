@@ -54,16 +54,11 @@ const styles = (theme) => ({
 SimScenarioCard.propTypes = {
     id: PropTypes.number,
     name: PropTypes.string,
-    description: PropTypes.string,
-    due_date: PropTypes.string,
-    onClick: PropTypes.func
 }
 
 export default function SimScenarioCard({
     id,
     name,
-    description,
-    due_date,
 }) {
 
     const classes = useStyles();
@@ -87,24 +82,12 @@ export default function SimScenarioCard({
         </Link>
     )
 
-    const due = new Date(due_date).toString();
-
     return (
         <Grid key={id} item xs="auto">
             <Card>
                 <CardContent className={classes.scenarioContainer}>
                     <Typography variant="h5" display="block" noWrap>
                         {name}
-                    </Typography>
-                    <Typography variant="h6" display="block" noWrap>
-                        {description}
-                    </Typography>
-                    <Typography
-                        variant="subtitle1"
-                        color="textSecondary"
-                        display="block"
-                    >
-                        Due: {due}
                     </Typography>
                     <nav>
                         {startButton}

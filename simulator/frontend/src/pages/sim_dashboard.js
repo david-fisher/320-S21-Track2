@@ -67,44 +67,42 @@ export default function Dashboard({setScenario}) {
     const classes = useStyles();
 
     const [openScenarios, setOpenScenarios] = useState(null);
-    const [fetchScenariosResponse, setFetchScenariosResponse] = useState({
-        data: null,
-        loading: false,
-        error: null,
-    });
-
-    const [errorBannerMessage, setErrorBannerMessage] = useState('');
-    const [errorBannerFade, setErrorBannerFade] = useState(false);
 
     const [shouldFetch, setShouldFetch] = useState(0);
 
-    let getScenarios = () => {
-        console.log("Getting Scenarios")
-        function onSuccess(res) {
-            const scenarios = res.data.slice();
+    // get all scenarios assigned to student with id parameter
+    async function getScenarioData() {
+
+        const response = await fetch('http://localhost:8000/api/scenarios/?student_id=1', {
+            "method": "GET",
+            "credentials": "include"
+        });
+        
+        const scenarios = await response.json();
+
+        return scenarios;
+    }
+
+    // Retrieves all scenarios and creates their cards to be displayed into the dashboard
+    useEffect(() => {
+        getScenarioData().then(scenariosData => {
+            const scenarios = scenariosData.results.slice();
+
+            console.log(scenarios);
             
             let openScenariosCards = scenarios.map((scenario) => (
                 <SimScenarioCard
-                    key={scenario.id}
-                    id={scenario.id}
+                    key={scenario.scenario_id}
+                    id={scenario.scenario_id}
                     name={scenario.name}
-                    description={scenario.description}
-                    due_date={scenario.due_date}
                     onClick={setScenario}
                 />
             ));
 
             setOpenScenarios(openScenariosCards);
-        }
+        })
 
-        function onFailure() {
-            //setErrorBannerMessage('Failed to get scenarios! Please try again.');
-            //setErrorBannerFade(true);
-        }
-        get(setFetchScenariosResponse, endpointGet, onFailure, onSuccess);
-    };
-
-    useEffect(getScenarios, [shouldFetch])
+    }, [shouldFetch]);
 
     return (
         <div>
@@ -124,6 +122,18 @@ export default function Dashboard({setScenario}) {
                     alignItems="stretch"
                 >
                     {openScenarios}
+                </Grid>
+                <div className={classes.border}>
+                    <Typography variant="h3">Completed Scenarios</Typography>
+                </div>
+                <Grid
+                    container
+                    spacing={2}
+                    direction="row"
+                    justify="flex-start"
+                    alignItems="stretch"
+                >
+                    {}
                 </Grid>
                 <Box className={classes.copyright}>
                     <Copyright />

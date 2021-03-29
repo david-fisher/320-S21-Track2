@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Introduction({ pages, setPages, activePage, setActivePage }) {
+function Introduction({ pages, setPages, activePage, setActivePage, content }) {
   
   const [gatheredInfo, setGatheredInfo] = React.useContext(GatheredInfoContext);
 
@@ -108,7 +108,7 @@ function Introduction({ pages, setPages, activePage, setActivePage }) {
       <Grid container spacing={2}>
         <Grid item lg={12}>
           <Box p={2} className={classes.textBox}>
-            <HTMLRenderer html={introText}/>
+            {content}
           </Box>
           {/* could change the parameter to just scenario in the future to be more dynamic */}
           <MMedia source={media} name="Brain Pop Ethics" description="Example video from link." type='link' /> 

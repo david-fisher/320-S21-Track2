@@ -187,8 +187,29 @@ class get_pages(APIView):
 
         page_list = []
         page_id_list = Pages.objects.filter(scenario_id = scenario)
+        
+        sorted_list = []
+        for page1 in page_id_list:
+            has_parent = False
+            for page2 in page_id_list:
+                if page2.next_page != None and page2.next_page == page1.page:
+                    has_parent = True
+                    break;
+            if not has_parent:
+                sorted_list.append(page1)
 
-        for page in page_id_list:
+        for page1 in sorted_list:
+            if page1.next_page == None:
+                continue
+            for page2 in page_id_list:
+                if page1.next_page == page2.page:
+                    sorted_list.append(page2)
+                    
+        for page1 in page_id_list:
+            if page1 not in sorted_list:
+                sorted_list.append(page1)
+
+        for page in sorted_list:
             page_data = PagesSerializer(page).data
             page_id = page.page
         
@@ -232,7 +253,6 @@ class get_pages(APIView):
                     }
                 )
                 page_list.append(page_data)
-        
             # Neither of these pages, something went wrong or missing implementation
             else:
                 return rest_framework.response.Response(status=status.HTTP_400_BAD_REQUEST)

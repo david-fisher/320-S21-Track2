@@ -14,6 +14,7 @@ import Feedback from "./feedback.js";
 import { ScenariosContext } from "../Nav.js";
 import axios from "axios";
 import {BASE_URL, STUDENT_ID, DEV_MODE, SCENARIO_ID} from "../constants/config";
+import { useParams } from 'react-router-dom';
 
 export const GatheredInfoContext = createContext();
 
@@ -55,6 +56,7 @@ function SimulationWindow() {
 
   const infoIdsState = useState([]);
   const [scenarios, setScenarios] = useContext(ScenariosContext);
+  const { sid } = useParams();
 
   // Asynchronously initialize infoIdsState and scenarios
   useEffect(() => {
@@ -82,7 +84,7 @@ function SimulationWindow() {
         setScenarios(prev => {
           return {
             scenarioList: response.data,
-            currentScenarioID: response.data[0].id
+            currentScenarioID: sid//response.data[0].id
           }
         });
       }).catch(err => {

@@ -56,6 +56,7 @@ SimScenarioCard.propTypes = {
     name: PropTypes.string,
     description: PropTypes.string,
     due_date: PropTypes.string,
+    onClick: PropTypes.func
 }
 
 export default function SimScenarioCard({
@@ -63,31 +64,27 @@ export default function SimScenarioCard({
     name,
     description,
     due_date,
-    onClick,
 }) {
 
     const classes = useStyles();
 
     const startButton = (
-        <Tooltip title="Let's Begin!" arrow placement="bottom" classes={classes}>
-        <Button
-            className={classes.buttonText}
-            variant="contained"
-            color="primary"
-            component={Link}
-            to={{
-                pathname: '/simulation',
-            }}
-            onClick={onClick(id)}
-            className={classes.button}
-            item
-            fullWidth="true"
-        >
-            <Typography variant="subtitle1" noWrap>
-                Start
-            </Typography>
-        </Button>
-        </Tooltip>
+        <Link to={`/simulation/${id}`}>
+            <Tooltip title="Let's Begin!" arrow placement="bottom" classes={classes}>
+                <Button
+                    className={classes.buttonText}
+                    variant="contained"
+                    color="primary"
+                    className={classes.button}
+                    item
+                    fullWidth="true"
+                >
+                    <Typography variant="subtitle1" noWrap>
+                        Start
+                    </Typography>
+                </Button>
+            </Tooltip>
+        </Link>
     )
 
     const due = new Date(due_date).toString();
@@ -109,7 +106,9 @@ export default function SimScenarioCard({
                     >
                         Due: {due}
                     </Typography>
-                    {startButton}
+                    <nav>
+                        {startButton}
+                    </nav>
                 </CardContent>
             </Card>
         </Grid>

@@ -12,7 +12,13 @@ import axios from 'axios';
 import HTMLRenderer from './components/htmlRenderer';
 import { ScenariosContext } from "../Nav";
 import { GatheredInfoContext } from './simulationWindow';
+button_tooltip
 import SpecialButton from "./components/SpecialButton"
+import MMedia from './components/MultiMedia'
+import video from './video1.mp4'
+import image from './umass.jpeg'
+import audio from './z.mp3'
+doge
 
 const TextTypography = withStyles({
   root: {
@@ -54,6 +60,7 @@ function Introduction({ pages, setPages, activePage, setActivePage }) {
 
   const [showVid, setShowVid] = React.useState(false);
   const [introText, setIntroText] = React.useState('');
+  const [media, setMedia] = React.useState('')
   const [scenarios, setScenarios] = React.useContext(ScenariosContext);
   const classes = useStyles();
 
@@ -68,6 +75,7 @@ function Introduction({ pages, setPages, activePage, setActivePage }) {
       }
     }).then(response => {
       setIntroText(text => response.data[0].body_text);
+      setMedia(url => response.data[0].media_url)
     }).catch((err)=>{
       console.log("err",err);
       //alert(err);
@@ -104,6 +112,12 @@ function Introduction({ pages, setPages, activePage, setActivePage }) {
             <HTMLRenderer html={introText}/>
           </Box>
           {/* could change the parameter to just scenario in the future to be more dynamic */}
+button_tooltip
+          <MMedia source={media} name="Brain Pop Ethics" description="Example video from link." type='link' /> 
+          <MMedia source={video} name="Cool Sky Video" description="Example local MP4 type video." type='video' />
+          <MMedia source={image} name="UMass picture" description="Example image of our beautiful campus." type='image' />
+          <MMedia source={audio} name="Random music" description="Example MP3 file randomly found online." type='audio' />
+doge
         </Grid>
       </Grid>
     </div>

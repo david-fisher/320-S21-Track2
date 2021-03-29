@@ -96,7 +96,7 @@ function Introduction({ pages, setPages, activePage, setActivePage }) {
           {/*  <Button>Back</Button>*/}
         </Grid>
         <Grid item style={{ marginRight: "0rem", marginTop: "-3rem" }}>
-          <SpecialButton type="next" color="primary" title="Project Assignment" onClick={goToProjectAssignment}></SpecialButton>
+          <SpecialButton type="next" title="Project Assignment" onClick={goToProjectAssignment}></SpecialButton>
         </Grid>
       </Grid>
       <Grid container spacing={2}>

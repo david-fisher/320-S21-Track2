@@ -49,7 +49,7 @@ function GatheredInformation({pages, setPages, activePage, setActivePage}) {
           <SpecialButton type="back" title="Initial Action" onClick={goToInitialAction}></SpecialButton> 
         </Grid>
         <Grid item style={{ marginRight: "0rem", marginTop: "-3rem" }}>
-        <SpecialButton type="next" color="primary" title="Stakeholders" onClick={goToStakeholders}></SpecialButton> 
+        <SpecialButton type="next" title="Stakeholders" onClick={goToStakeholders}></SpecialButton> 
         </Grid>
       </Grid>
       <Grid container spacing={2}>

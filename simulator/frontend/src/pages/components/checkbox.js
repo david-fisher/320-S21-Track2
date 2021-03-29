@@ -117,7 +117,7 @@ export default function ErrorRadios(props)
         </RadioGroup>
         <FormHelperText>{helperText}</FormHelperText>
         <Box width={100}>
-          <SpecialButton type="submit" color="primary" title={nextPageTitle}></SpecialButton>
+          <SpecialButton type="submit" title={nextPageTitle}></SpecialButton>
         </Box>
       </FormControl>
     </form>

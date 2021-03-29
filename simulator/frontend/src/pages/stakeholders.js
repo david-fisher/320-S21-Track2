@@ -277,7 +277,7 @@ function Stakeholders({ pages, setPages, activePage, setActivePage }) {
             <SpecialButton type="back" title="Gathered Information" onClick={goToGatheredInformation}></SpecialButton>
           </Grid>
           <Grid item style={{ marginRight: "0rem", marginTop: "-3rem" }}>
-          <SpecialButton type="next" color="primary" title="Middle Reflection" onClick={goToMiddleReflection}></SpecialButton>
+          <SpecialButton type="next" title="Middle Reflection" onClick={goToMiddleReflection}></SpecialButton>
           </Grid>
         </Grid>
         <Grid container spacing={2}>

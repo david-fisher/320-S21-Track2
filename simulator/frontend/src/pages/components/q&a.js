@@ -112,7 +112,7 @@ export default function StateTextFields(props) {
         </Grid>
         <Grid item lg={12}>
         <FormHelperText>{helperText}</FormHelperText>
-          <SpecialButton type="submit" color="primary" variant="outlined" title={nextPageTitle}></SpecialButton>
+          <SpecialButton type="submit" variant="outlined" title={nextPageTitle}></SpecialButton>
         </Grid>
       </Grid>
     </form>

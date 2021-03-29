@@ -49,7 +49,7 @@ function Feedback({pages, setPages, activePage, setActivePage}) {
           <SpecialButton type="back" title="Summary" onClick={goToSummary}></SpecialButton>
         </Grid>
         <Grid item style={{ marginRight: "0rem", marginTop: "-3rem" }}>
-          <SpecialButton type="next" color="primary" title="Final Reflection" onClick={goToFinalReflection}></SpecialButton>
+          <SpecialButton type="next" title="Final Reflection" onClick={goToFinalReflection}></SpecialButton>
         </Grid>
       </Grid>
       <Grid container spacing={2}>

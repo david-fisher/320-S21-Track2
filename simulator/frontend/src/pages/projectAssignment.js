@@ -135,7 +135,7 @@ function ProjectAssignment({ pages, setPages, activePage, setActivePage }) {
           <SpecialButton type="back" title="Introduction" onClick={goToIntroduction}></SpecialButton>
         </Grid>
         <Grid item style={{ marginRight: "0rem", marginTop: "-3rem" }}>
-          <SpecialButton type="next" color="primary" title="Initial Reflection" onClick={goToInitialReflection}></SpecialButton>
+          <SpecialButton type="next" title="Initial Reflection" onClick={goToInitialReflection}></SpecialButton>
         </Grid>
       </Grid>
       <Grid container spacing={2}>

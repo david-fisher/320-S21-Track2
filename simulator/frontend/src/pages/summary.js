@@ -49,7 +49,7 @@ function Summary({pages, setPages, activePage, setActivePage}) {
           <SpecialButton type="back" title="Final Action" onClick={goToFinalAction}></SpecialButton>
         </Grid>
         <Grid item style={{ marginRight: "0rem", marginTop: "-3rem" }}>
-          <SpecialButton type="next" color="primary" title="Feedback" onClick={goToFeedback}></SpecialButton>
+          <SpecialButton type="next" title="Feedback" onClick={goToFeedback}></SpecialButton>
         </Grid>
       </Grid>
       <Grid container spacing={2}>

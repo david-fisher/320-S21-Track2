@@ -31,11 +31,11 @@ const useStylesBootstrapBack = makeStyles((theme) => ({
     let buttonVariant = "contained";
     let buttonColor = "primary";
     
-    if (props.type == "back"){
+    if (props.type === "back"){
       useClasses = backClasses; 
       buttonColor = "#e0e0e0";
     }
-    else if (props.type == "submit"){
+    else if (props.type === "submit"){
       tooltipPosition = "bottom";
       buttonVariant = "outlined";
     }

@@ -57,7 +57,7 @@ services:
     stdin_open: true
     networks:
       - default-net
-
+    command: bash -c "./etc/shibboleth/shib_start.sh"
 
 networks:
   default-net:

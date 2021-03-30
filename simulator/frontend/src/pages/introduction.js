@@ -12,12 +12,12 @@ import axios from 'axios';
 import HTMLRenderer from './components/htmlRenderer';
 import { ScenariosContext } from "../Nav";
 import { GatheredInfoContext } from './simulationWindow';
-
+import SpecialButton from "./components/SpecialButton"
 import MMedia from './components/MultiMedia'
 import video from './video1.mp4'
 import image from './umass.jpeg'
 import audio from './z.mp3'
-import NextButton from "./components/Buttons/NextButton"
+
 
 const TextTypography = withStyles({
   root: {
@@ -102,7 +102,7 @@ function Introduction({ pages, setPages, activePage, setActivePage }) {
           {/*  <Button>Back</Button>*/}
         </Grid>
         <Grid item style={{ marginRight: "0rem", marginTop: "-3rem" }}>
-          <NextButton title="Project Assignment" onClick={goToProjectAssignment}></NextButton>
+          <SpecialButton type="next" title="Project Assignment" onClick={goToProjectAssignment}></SpecialButton>
         </Grid>
       </Grid>
       <Grid container spacing={2}>

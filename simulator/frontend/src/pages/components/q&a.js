@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Box, Grid, Typography , withStyles, Button, FormHelperText } from '@material-ui/core';
 import HTMLRenderer from "./htmlRenderer";
-import SubmitButton from "./Buttons/SubmitButton"
+import SpecialButton from "./SpecialButton"
 
 const alignMiddle = {
   position: 'fixed',
@@ -112,7 +112,7 @@ export default function StateTextFields(props) {
         </Grid>
         <Grid item lg={12}>
         <FormHelperText>{helperText}</FormHelperText>
-          <SubmitButton title={nextPageTitle}></SubmitButton>
+          <SpecialButton type="submit" variant="outlined" title={nextPageTitle}></SpecialButton>
         </Grid>
       </Grid>
     </form>

@@ -200,7 +200,7 @@ class Stakeholders(models.Model):
     introduction = models.TextField(default='default')
 
     class Meta:
-        db_table = 'STAKEHOLDERS'
+        db_table = 'stakeholders'
 
 
 class Conversations(models.Model):
@@ -249,7 +249,7 @@ class Action_page(models.Model):
     page = models.ForeignKey(
         Pages, on_delete=models.CASCADE)
     choice = models.TextField()
-    redult_page = models.IntegerField(null=True)
+    result_page = models.IntegerField(null=True)
 
 class Reflections_taken(models.Model):
     reflections = models.TextField(max_length=100)
@@ -314,12 +314,13 @@ class Coverage(models.Model):
         unique_together = (('stakeholder'), ('issue'))
         db_table = 'coverage'
 
+
 class Student_page_progress(models.Model):
     student = models.ForeignKey(
         Student, on_delete=models.CASCADE, default = None)
     page = models.ForeignKey(
         Pages, on_delete = models.CASCADE, default = None)
-    sompleted = models.BooleanField(default = False)
+    completed = models.BooleanField(default = False)
 
     class Meta:
         unique_together = ('student',"page")

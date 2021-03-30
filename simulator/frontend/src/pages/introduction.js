@@ -12,13 +12,12 @@ import axios from 'axios';
 import HTMLRenderer from './components/htmlRenderer';
 import { ScenariosContext } from "../Nav";
 import { GatheredInfoContext } from './simulationWindow';
-button_tooltip
 import SpecialButton from "./components/SpecialButton"
 import MMedia from './components/MultiMedia'
 import video from './video1.mp4'
 import image from './umass.jpeg'
 import audio from './z.mp3'
-doge
+
 
 const TextTypography = withStyles({
   root: {
@@ -112,12 +111,10 @@ function Introduction({ pages, setPages, activePage, setActivePage }) {
             <HTMLRenderer html={introText}/>
           </Box>
           {/* could change the parameter to just scenario in the future to be more dynamic */}
-button_tooltip
           <MMedia source={media} name="Brain Pop Ethics" description="Example video from link." type='link' /> 
           <MMedia source={video} name="Cool Sky Video" description="Example local MP4 type video." type='video' />
           <MMedia source={image} name="UMass picture" description="Example image of our beautiful campus." type='image' />
           <MMedia source={audio} name="Random music" description="Example MP3 file randomly found online." type='audio' />
-doge
         </Grid>
       </Grid>
     </div>

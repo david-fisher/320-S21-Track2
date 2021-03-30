@@ -163,3 +163,13 @@ class Student_page_progressSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student_page_progress
         fields = '__all__'
+
+class StudentToCourseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Student_to_Course
+        fields = '__all__'
+
+class ScenarioToCourseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Scenario_to_Course
+        fields = '__all__'

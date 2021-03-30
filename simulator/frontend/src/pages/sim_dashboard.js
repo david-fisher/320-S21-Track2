@@ -75,7 +75,6 @@ export default function Dashboard({setScenario}) {
 
         const response = await fetch('http://localhost:8000/api/scenarios/?student_id=1', {
             "method": "GET",
-            "credentials": "include"
         });
         
         const scenarios = await response.json();

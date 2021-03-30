@@ -11,6 +11,8 @@ services:
       DB_HOST: "raja.db.elephantsql.com"
       DB_PASS: "qy2xdb_zEcAZFOmY7fvQT1SddHRUhbCI"
       DB_PORT: "5432"
+      ORIGIN_HOST: "localhost"
+      ORIGIN_PORT: "3000"
     image: cs320track2/backend
     command: bash -c "cd lead && python manage.py check --tag database && python manage.py runserver 0.0.0.0:8000"
     networks:
@@ -40,6 +42,7 @@ services:
     environment:
       BUILDKIT_INLINE_CACHE: 1
       CI: "true"
+      REACT_APP_ENDPOINT_URL: "http://localhost:8000"
     image: cs320track2/frontend
     stdin_open: true
     depends_on:

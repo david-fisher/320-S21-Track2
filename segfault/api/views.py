@@ -280,8 +280,24 @@ class get_stakeholders(APIView):
 
         for stakeholder in stakeholders_id_list:
             convos = Conversations.objects.filter(stakeholder = stakeholder.stakeholder)
+            cov = Coverage.objects.filter(stakeholder = stakeholder.stakeholder)
             stake_data = StakeholderSerializer(stakeholder).data
             
+            covLst = []
+            for c in cov:
+                covLst.append(
+                    {
+                        "ISSUE": c.issue.issue,
+                        "COVERAGE_SCORE": c.coverage_score
+                    }
+                )
+
+            stake_data.update(
+                {
+                    "MATRIX": covLst
+                }
+            )
+
             convoLst = []
             for c in convos:
                 convoLst.append(

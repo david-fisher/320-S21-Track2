@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Container, Box, Typography, Grid, Divider } from '@material-ui/core';
 import SimScenarioCard from './components/DashboardComponents/SimScenarioCard';
 import Copyright from './components/Copyright';
-import get from '../universalHTTPRequests/get';
+import { BASE_URL, STUDENT_ID } from '../constants/config';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -43,12 +43,6 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-//TODO when Shibboleth gets implemented
-const endpointGet = '/scenarios/';
-const endpointGetCourses = '/api/courses/';
-const endpointPost = '/dashboard';
-const endpointDelete = '/api/scenarios/';
-
 const styles = (theme) => ({
     root: {
         margin: 1,
@@ -73,7 +67,7 @@ export default function Dashboard({setScenario}) {
     // get all scenarios assigned to student with id parameter
     async function getScenarioData() {
 
-        const response = await fetch('http://localhost:8000/api/scenarios/?student_id=1', {
+        const response = await fetch(`${BASE_URL}/scenarios/?student_id=${STUDENT_ID}`, {
             "method": "GET",
         });
         

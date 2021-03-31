@@ -4,44 +4,29 @@ import Reflection from './reflection';
 import Action from './action';
 import Stakeholders from './stakeholders'
 
-export default class Page {
-    constructor(visited, completed, pageNumber, type, nextPageNumber=1, title, content) {
-        const pageTypes = {
-            "A": (
-                <Action 
-                    nextPageID={nextPageNumber}
-                    prevPageID={pageNumber - 1}
-                    content={content}        
-                />),
-            "G": (
-                <Introduction 
-                    nextPageNumber={nextPageNumber}
-                    prevPageNumber={pageNumber - 1}
-                    content={content}
-                />),
-            "I": (
-                <Introduction 
-                    nextPageNumber={nextPageNumber}
-                    content={content}
-                />),
-            "R": (
-                <Reflection 
-                    nextPageID={nextPageNumber}
-                    prevPageID={pageNumber - 1}
-                    content={content}
-                />),
-            "S": (
-                <Stakeholders 
-                    nextPageID={nextPageNumber}
-                    prevPageID={pageNumber - 1}
-                    content={content}
-                />)
-        }
+function Page(props) {
 
-        this.visited = visited;
-        this.completed = completed;
-        this.pageNumber = pageNumber;
-        this.title = title;
-        this.html = (pageTypes[type]);
-    }
+    console.log(props)
+
+    const pageTypes = {
+        "G": (
+            <Introduction 
+                {...props}
+            />),
+        "I": (
+            <Introduction 
+                {...props}
+            />),
+    };
+
+    const { state, setState } = React.useState({
+        visited: props.visited,
+        completed: props.completed,
+        pageNumber: props.pageNumber,
+    })
+
+    return (pageTypes[props.type]);
 }
+
+export default Page;
+

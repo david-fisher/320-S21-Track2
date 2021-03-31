@@ -63,6 +63,7 @@ export default function SimScenarioCard({
 
     const classes = useStyles();
 
+    // to={http://localhost:8000/simulation/:sid}, where sid is the scenario id
     const startButton = (
         <Link to={`/simulation/${id}`}>
             <Tooltip title="Let's Begin!" arrow placement="bottom" classes={classes}>

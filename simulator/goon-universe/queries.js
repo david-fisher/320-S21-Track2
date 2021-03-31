@@ -63,7 +63,7 @@ function getScenarios(studentID, callback){
 
 
 function getPlainPage(scenarioID, order, callback){
-    let thisQuery= 'select pages.body_text, pages.media_url from pages where pages.order = ' + order + 'and scenario_id = $1'
+    let thisQuery= 'select pages.body_text from pages where pages.order = ' + order + 'and scenario_id = $1'
     pool.query(thisQuery, [scenarioID], (error,results) => {
         if (error) {
             throw error

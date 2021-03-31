@@ -41,25 +41,41 @@ const useStyles = makeStyles((theme) => ({
   disabled: {},
 }));
 
+
+// gets steps to be shown in stepper...returns array of buttons
 function getSteps(pages, navigatePageFunc) {
   let stepArr = [];
   let keys = Object.keys(pages);
+  let values = Object.values(pages);
 
-  for (let i = 0; i < keys.length; i++) {
-    let buttonName = keys[i].charAt(0);
-    for (let j = 1; j < keys[i].length - 1; j++) {
-      if (keys[i].charAt(j) == keys[i].charAt(j).toUpperCase()) {
-        buttonName += " ";
-      }
-      buttonName += keys[i].charAt(j);
-    }
-    buttonName += keys[i].charAt(keys[i].length - 1);
-    if (pages[keys[i]].visited === false) {
+  values.forEach((page) => {
+    let buttonName = page.title;
+    if(page.visited === false)
       stepArr.push(<Button disabled>{buttonName}</Button>);
-    } else {
-      stepArr.push(<Button style={{ color: "#881c1c" }} onClick={() => navigatePageFunc(keys[i])} >{buttonName}</Button>);
-    }
-  }
+    else
+      stepArr.push(
+      <Button
+        style={{color: "#881c1c"}}
+        onClick={() => navigatePageFunc(page)}  
+      >
+        {buttonName}
+      </Button>)
+  })
+  // for (let i = 0; i < keys.length; i++) {
+  //   let buttonName = keys[i].charAt(0);
+  //   for (let j = 1; j < keys[i].length - 1; j++) {
+  //     if (keys[i].charAt(j) == keys[i].charAt(j).toUpperCase()) {
+  //       buttonName += " ";
+  //     }
+  //     buttonName += keys[i].charAt(j);
+  //   }
+  //   buttonName += keys[i].charAt(keys[i].length - 1);
+  //   if (pages[keys[i]].visited === false) {
+  //     stepArr.push(<Button disabled>{buttonName}</Button>);
+  //   } else {
+  //     stepArr.push(<Button style={{ color: "#881c1c" }} onClick={() => navigatePageFunc(keys[i])} >{buttonName}</Button>);
+  //   }
+  // }
   return stepArr;
 }
 
@@ -80,18 +96,22 @@ export default function VerticalLinearStepper(props) {
   //<Stepper activePage={activePage} pages={pages} />
   const classes = useStyles();
   // eslint-disable-next-line
-  const [activeStep, setActiveStep] = React.useState(props.pages[props.activePage].pageNumber);
+  const [activeStep, setActiveStep] = React.useState(props.activePage);
   
+  function navigatePage(pageName) {
 
-  function navigatePage(pageName){
     if(props.pages[pageName].completed){
+
       if (!props.pages[pageName].visited) {
+
         props.setPages(prevPages => {
           let copy = {...prevPages};
           copy[pageName].visited = true;
           return copy;
         });
+
       }
+
       props.setActivePage(pageName)
     }
   }

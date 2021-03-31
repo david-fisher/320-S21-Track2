@@ -33,3 +33,4 @@ segfault/api/migrations
 segfault/segfault/migrations 
 segfault/segfault/settings.py
 segfault/runserver.bat
+simulator/goon-universe/queries.js

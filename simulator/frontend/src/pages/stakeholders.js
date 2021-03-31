@@ -7,6 +7,7 @@ import { BASE_URL, STUDENT_ID, SCENARIO_ID } from "../constants/config";
 import axios from 'axios';
 import Conversation from './conversation';
 import { ScenariosContext } from "../Nav";
+import Tooltip from '@material-ui/core/Tooltip';
 
 const TextTypography = withStyles({
   root: {
@@ -36,6 +37,15 @@ function Stakeholders({ pages, setPages, activePage, setActivePage }) {
   const [scenarios, setScenarios] = React.useContext(ScenariosContext);
   const [conversationLimit, setConversationLimit] = React.useState(0);
   const [stakeholdersDisabled, setStakeholdersDisabled] = React.useState({});
+  const LightTooltip = withStyles((theme) => ({
+    tooltip: {
+      backgroundColor: theme.palette.common.white,
+      color: 'rgba(0, 0, 0, 0.87)',
+      boxShadow: theme.shadows[1],
+      fontSize: 11,
+      maxWidth: 500,
+    },
+  }))(Tooltip);
   const cardStyles = makeStyles({
     root: {
       width: 275,
@@ -153,6 +163,7 @@ function Stakeholders({ pages, setPages, activePage, setActivePage }) {
     }
     return (
       <>
+        <LightTooltip title={<React.Fragment>{description}</React.Fragment>}>
         <Button disabled={stakeholdersDisabled[id]} style={{textTransform: 'none'}} onClick={() => toggleModal(id, true)}>
           <Card className={cardClass}>
             <CardContent>
@@ -168,6 +179,7 @@ function Stakeholders({ pages, setPages, activePage, setActivePage }) {
             </CardContent>
           </Card>
         </Button>
+        </LightTooltip>
         <Dialog
           open={modalOpenToggles[id]}
           onClose={() => toggleModal(id, false)}

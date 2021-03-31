@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Typography, Button } from '@material-ui/core';
+import { Typography, Button, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import EntryFields from './IssueEntryFieldList';
 import get from '../../../universalHTTPRequests/get';
@@ -9,6 +9,8 @@ import ErrorIcon from '@material-ui/icons/Error';
 import PropTypes from 'prop-types';
 import IssueMatrix from './IssueCoverageMatrix';
 import MaterialTable from 'material-table';
+import HelpIcon from '@material-ui/icons/Help';
+import GenericInfoButton from '../../InfoButtons/GenericInfoButton';
 
 //Need scenarioID
 const endpointGET = '/api/issues/?SCENARIO=';
@@ -63,6 +65,12 @@ export default function ConfigureIssues({ scenario_ID }) {
         loading: true,
         error: null,
     });
+
+    //for info button
+    const [open, setOpen] = React.useState(false);
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
 
     let getData = () => {
         get(setIssueEntryFieldList, endpointGET + scenario_ID);
@@ -121,7 +129,16 @@ export default function ConfigureIssues({ scenario_ID }) {
             <Typography align="center" variant="h2">
                 Configure Ethical Issues
             </Typography>
-
+            <Grid container justify="flex-end">
+                <Button color="primary" onClick={handleClickOpen}>
+                    <HelpIcon />
+                </Button>
+                <GenericInfoButton
+                    description={`on this page`}
+                    open={open}
+                    setOpen={setOpen}
+                />
+            </Grid>
             <div className={classes.spacing}>
                 <Button variant="contained" color="primary" onClick={getData}>
                     <RefreshIcon className={classes.iconRefreshSmall} />

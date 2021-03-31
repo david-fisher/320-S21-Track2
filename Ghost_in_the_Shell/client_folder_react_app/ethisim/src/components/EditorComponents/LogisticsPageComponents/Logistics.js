@@ -20,15 +20,8 @@ import Tags from './DropDown';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import PropTypes from 'prop-types';
-
-
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import HelpIcon from '@material-ui/icons/Help';
-
+import GenericInfoButton from '../../InfoButtons/GenericInfoButton';
 
 const useStyles = makeStyles((theme) => ({
     textfields: {
@@ -192,9 +185,6 @@ export default function Logistics({ scenario_ID }) {
     const [open, setOpen] = React.useState(false);
     const handleClickOpen = () => {
         setOpen(true);
-    };
-    const handleClose = () => {
-        setOpen(false);
     };
 
     //For Banners
@@ -495,37 +485,26 @@ export default function Logistics({ scenario_ID }) {
                 <Typography align="center" variant="h2">
                     Logistics
                 </Typography>
-                <Grid item xs={12}
+                <Grid
+                    item
+                    xs={12}
                     style={{
-                        textAlign:'right' 
+                        textAlign: 'right',
                     }}
                 >
                     <Button color="primary" onClick={handleClickOpen}>
-                        <HelpIcon/>
+                        <HelpIcon />
                     </Button>
-                    <Dialog
-                        open={open}
-                        onClose={handleClose}
-                        aria-labelledby="alert-dialog-title"
-                        aria-describedby="alert-dialog-description"
-                    >
-                    <DialogTitle id="alert-dialog-title">{"Need Help?"}</DialogTitle>
-                    <DialogContent>
-                        <DialogContentText id="alert-dialog-description">
-                            In the top left of the screen you will see an icon composed of three horizontal lines,
+                    <GenericInfoButton
+                        description={`In the top left of the screen you will see an icon composed of three horizontal lines,
                             this is menu button for the editor. This menu is accessable from all pages. The page you are on is the Logistics Page. 
                             Please give the simulation a title. Then assign courses to this scenario with the respective 
                             dropdown. Assign a max number of conversations. Checking the Public box will make your scenario visible to others. Checking
-                            the Is Finished Box will put your scenario in the Finished section of the Dashboard. Don't forget to save before leaving the page!
-                        </DialogContentText>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleClose} color="primary">
-                        Done
-                        </Button>
-                        </DialogActions>
-                    </Dialog>
-            </Grid>
+                            the Is Finished Box will put your scenario in the Finished section of the Dashboard. Don't forget to save before leaving the page!`}
+                        open={open}
+                        setOpen={setOpen}
+                    />
+                </Grid>
                 <form
                     className={classes.textfields}
                     noValidate

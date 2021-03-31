@@ -25,10 +25,7 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         alignItems: 'center',
     },
-
 }));
-
-
 
 NavSideBarNode.propTypes = {
     onClick: PropTypes.any.isRequired,
@@ -61,20 +58,18 @@ export default function NavSideBarNode(props) {
     const [checked, setChecked] = React.useState(true);
     const handleChange = (event) => {
         setChecked(event.target.checked);
-      };
-    
-    
+    };
 
     function pageType(title) {
-        if (id === -1 || id === -2 || id === -3 || id === -4 || isIntroPage) { //logistics to introduction pages
+        if (id === -1 || id === -2 || id === -3 || id === -4 || isIntroPage) {
+            //logistics to introduction pages
             return (
-                
                 <Grid container direction="row" justify="flex-start">
-                    <Grid item xs={2} >
+                    <Grid item xs={2}>
                         <Checkbox
                             checked={checked}
                             onChange={handleChange}
-                            color = "primary"
+                            color="primary"
                             inputProps={{ 'aria-label': 'primary checkbox' }}
                         />
                     </Grid>
@@ -90,14 +85,15 @@ export default function NavSideBarNode(props) {
                     </Grid>
                 </Grid>
             );
-        } else { //additional created pages
+        } else {
+            //additional created pages
             return (
-                <Grid container direction="row" justify="flex-start"> 
+                <Grid container direction="row" justify="flex-start">
                     <Grid item xs={2}>
                         <Checkbox
                             checked={checked}
                             onChange={handleChange}
-                            color = "primary"
+                            color="primary"
                             inputProps={{ 'aria-label': 'primary checkbox' }}
                         />
                     </Grid>

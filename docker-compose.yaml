@@ -13,6 +13,7 @@ services:
       DB_PORT: "5432"
       ORIGIN_HOST: "localhost"
       ORIGIN_PORT: "3000"
+      DJ_SK: "@!6b5hzk8m7y+gdyeq$$8&@g!c%0m+8hhaquat0=ml80biwz)kg"
     image: cs320track2/backend
     command: bash -c "cd lead && python manage.py check --tag database && python manage.py runserver 0.0.0.0:8000"
     networks:

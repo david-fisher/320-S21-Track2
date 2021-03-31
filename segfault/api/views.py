@@ -127,6 +127,16 @@ class StakeholdersViewSet(viewsets.ModelViewSet):
     queryset = Stakeholders.objects.all()
     serializer_class = StakeholderSerializer
 
+
+class StudentToCourseViewSet(viewsets.ModelViewSet):
+    queryset = Student_to_Course.objects.all()
+    serializer_class = StudentToCourseSerializer
+
+class ScenarioToCourseViewSet(viewsets.ModelViewSet):
+    queryset = Scenario_to_Course.objects.all()
+    serializer_class = ScenarioToCourseSerializer
+
+
 # TODO: Some viewsets are not necessary, remove after implementaion of some endpoints
 
 
@@ -173,8 +183,6 @@ class Get_scenario(APIView):
             return rest_framework.response.Response({'status': 'No scenario found for this scenario id'}, status=status.HTTP_404_NOT_FOUND)
 
 
-        
-
 class get_pages(APIView):
     def get(self, request, *args, **kwargs):
 
@@ -187,8 +195,29 @@ class get_pages(APIView):
 
         page_list = []
         page_id_list = Pages.objects.filter(scenario_id = scenario)
+        
+        sorted_list = []
+        for page1 in page_id_list:
+            has_parent = False
+            for page2 in page_id_list:
+                if page2.next_page != None and page2.next_page == page1.page:
+                    has_parent = True
+                    break;
+            if not has_parent:
+                sorted_list.append(page1)
 
-        for page in page_id_list:
+        for page1 in sorted_list:
+            if page1.next_page == None:
+                continue
+            for page2 in page_id_list:
+                if page1.next_page == page2.page:
+                    sorted_list.append(page2)
+                    
+        for page1 in page_id_list:
+            if page1 not in sorted_list:
+                sorted_list.append(page1)
+
+        for page in sorted_list:
             page_data = PagesSerializer(page).data
             page_id = page.page
         
@@ -232,11 +261,11 @@ class get_pages(APIView):
                     }
                 )
                 page_list.append(page_data)
-        
             # Neither of these pages, something went wrong or missing implementation
             else:
                 return rest_framework.response.Response(status=status.HTTP_400_BAD_REQUEST)
         return rest_framework.response.Response(page_list, status=status.HTTP_200_OK)
+
 
 class get_stakeholders(APIView):
     def get(self, request):
@@ -251,8 +280,24 @@ class get_stakeholders(APIView):
 
         for stakeholder in stakeholders_id_list:
             convos = Conversations.objects.filter(stakeholder = stakeholder.stakeholder)
+            cov = Coverage.objects.filter(stakeholder = stakeholder.stakeholder)
             stake_data = StakeholderSerializer(stakeholder).data
             
+            covLst = []
+            for c in cov:
+                covLst.append(
+                    {
+                        "ISSUE": c.issue.issue,
+                        "COVERAGE_SCORE": c.coverage_score
+                    }
+                )
+
+            stake_data.update(
+                {
+                    "MATRIX": covLst
+                }
+            )
+
             convoLst = []
             for c in convos:
                 convoLst.append(
@@ -271,8 +316,8 @@ class get_stakeholders(APIView):
             stakeholders_list.append(stake_data)
         return rest_framework.response.Response(stakeholders_list, status=status.HTTP_200_OK)
 
-class get_Issues(APIView):
 
+class get_Issues(APIView):
     #retrieves issues for a scenario_id
     def get(self, request, format = None):
         scenario_id1 = self.request.query_params.get('scenario_id')
@@ -296,3 +341,59 @@ class get_Issues(APIView):
         except Scenario.DoesNotExist:
             return rest_framework.response.Response(status=status.HTTP_404_NOT_FOUND)
 
+
+class response_to_conversations(APIView):
+    #put a student conversation into the database
+    def put(self, request,  *args, **kwargs):
+        # takes in all of the required information from the JSON passed in
+        scenario_id = request.data.get('scenario_id')
+        student_id = request.data.get('student_id')
+        conversation_id = request.data.get('conversation_id')
+        score = request.data.get('score')
+        course_id = request.data.get('course_id')
+        page_id = request.data.get('page_id')
+
+        # extra check for if the given JSON has the required fields
+        if(scenario_id is None or student_id is None or conversation_id is None or score is None or course_id is None or page_id is None):
+            return rest_framework.response.Response({'detail':"Missing one or more parameters"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            conversation = Conversations.objects.get(conversation = conversation_id)
+            stakeholder = conversation.stakeholder.stakeholder
+
+            # formats the response entry to match the model
+            response = {
+                "student": student_id,
+                "scenario": scenario_id,
+                "page": page_id,
+                "course": course_id,
+                "choice": str(conversation_id)
+            }
+
+            # deserialize the response entry, and check if the response entry is valid
+            responseSerializer = ResponseSerializer(data = response)
+            if not responseSerializer.is_valid():
+                return rest_framework.response.Response(responseSerializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+            # saves the response to the database
+            responseSerializer.save()
+            
+            # formats the entries of response_to_conv to match the model
+            response_to_conv = {
+                "response": responseSerializer.data['response_id'],
+                "stakeholder": stakeholder,
+                "score": score,
+                "conversation": conversation_id
+            }
+
+            # deserialize the entry and check if the entry is valid
+            responseToConvSerializer = Responses_to_conversationsSerializer(data = response_to_conv)
+            if not responseToConvSerializer.is_valid():
+                return rest_framework.response.Response(responseToConvSerializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            
+            # saves the response_to_conversation entry
+            responseToConvSerializer.save()
+            return rest_framework.response.Response({'detail':str(responseToConvSerializer)}, status=status.HTTP_200_OK)
+        except Conversations.DoesNotExist:
+            return rest_framework.response.Response({'detail': "conversation_id not found"}, status=status.HTTP_404_NOT_FOUND)
+        # Only need exception check for Conversations.DoesNotExist, all other bad inputs are handled by the serializer.valid()

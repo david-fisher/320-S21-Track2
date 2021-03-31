@@ -77,17 +77,28 @@ CREATE TABLE student_times (
   FOREIGN KEY (COURSE) REFERENCES courses (COURSE)
 );
 
+CREATE TABLE pages_to_scenario (
+  page_id INTEGER,
+  scenario_id INTEGER,
+  page_version INTEGER,
+  scenario_version INTEGER,
+  PRIMARY KEY (page_id, scenario_id, page_version, scenario_version),
+  FOREIGN KEY (page_id, page_version) REFERENCES pages (PAGE, VERSION),
+  FOREIGN KEY (scenario_id, scenario_version) REFERENCES scenarios (SCENARIO, VERSION)
+);
+
 CREATE TABLE pages (
   PAGE INTEGER,
   PAGE_TYPE TEXT,
   PAGE_TITLE TEXT,
   SCENARIO INTEGER,
+  VERSION INTEGER,
   BODY TEXT,
   NEXT_PAGE INTEGER,
   X_COORDINATE INTEGER,
   Y_COORDINATE INTEGER,
   COMPLETED BOOLEAN,
-  PRIMARY KEY (PAGE),
+  PRIMARY KEY (PAGE, VERSION),
   FOREIGN KEY (SCENARIO) REFERENCES scenarios (SCENARIO_ID),
   FOREIGN KEY (NEXT_PAGE) REFERENCES pages (PAGE)
 );
@@ -97,6 +108,7 @@ CREATE TABLE responses (
   RESPONSE INTEGER,
   STUDENT INTEGER,
   SCENARIO INTEGER,
+  VERSION INTEGER,
   PAGE INTEGER,
   COURSE INTEGER,
   DATE_TAKEN DATE,
@@ -112,6 +124,7 @@ CREATE TABLE responses (
 CREATE TABLE stakeholders (
   STAKEHOLDER INTEGER PRIMARY KEY,
   SCENARIO INTEGER,
+  VERSION INTEGER,
   NAME TEXT,
   DESCRIPTION TEXT,
   JOB TEXT,
@@ -167,8 +180,19 @@ CREATE TABLE reflection_questions (
   id INTEGER,
   PAGE INTEGER,
   REFLECTION_QUESTION TEXT,
+  VERSION INTEGER,
   PRIMARY KEY (id, PAGE, REFLECTION_QUESTION),
   FOREIGN KEY (PAGE) REFERENCES pages (PAGE)
+);
+
+CREATE TABLE reflection_question_to_page (
+  reflection_question_id INTEGER,
+  page_id INTEGER,
+  reflection_question_version INTEGER,
+  page_version INTEGER,
+  PRIMARY KEY (reflection_question_id, page_id, reflection_question_version, page_version),
+  FOREIGN KEY (reflection_question_id, reflection_question_version) REFERENCES reflection_questions (id, reflection_question),
+  FOREIGN KEY (page_id, page_version) REFERENCES pages (PAGE, VERSION)
 );
 
 CREATE TABLE stakeholder_to_page (
@@ -183,7 +207,8 @@ CREATE TABLE generic_page (
   id INTEGER,
   PAGE INTEGER,
   BODY TEXT,
-  PRIMARY KEY (id, PAGE, BODY),
+  VERSION INTEGER,
+  PRIMARY KEY (id, PAGE, BODY, VERSION),
   FOREIGN KEY (PAGE) REFERENCES pages (PAGE)
 );
 
@@ -192,7 +217,8 @@ CREATE TABLE action_page (
   PAGE INTEGER,
   CHOICE TEXT,
   RESULT_PAGE INTEGER,
-  PRIMARY KEY (id, PAGE, CHOICE),
+  VERSION INTEGER,
+  PRIMARY KEY (id, PAGE, CHOICE, VERSION),
   FOREIGN KEY (PAGE) REFERENCES pages (PAGE)
 );
 
@@ -205,6 +231,7 @@ CREATE TABLE response_to_action_page (
 
 CREATE TABLE scenarios_for (
   SCENARIO_ID INTEGER,
+  VERSION INTEGER,
   COURSE INTEGER,
   PRIMARY KEY (SCENARIO_ID, COURSE),
   FOREIGN KEY (COURSE) REFERENCES courses (COURSE),

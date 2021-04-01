@@ -21,19 +21,25 @@ from rest_framework import mixins
 
 
 # Stakeholders ViewSet
+# class StakeholdersViewSet(viewsets.ModelViewSet):
+#     def get_queryset(self):
+#         queryset = stakeholders.objects.all()
+#         return queryset
+#     queryset = stakeholders.objects.all()
+#     permissions_classes = [
+#         permissions.AllowAny
+#     ]
+#     serializer_class = StakeholdersSerializer
+#     filter_backends = [DjangoFilterBackend]
+#     filterset_fields = ['SCENARIO']
+#     lookup_field = "STAKEHOLDER"
+
 class StakeholdersViewSet(viewsets.ModelViewSet):
-    def get_queryset(self):
-        queryset = stakeholders.objects.all()
-        return queryset
     queryset = stakeholders.objects.all()
     permissions_classes = [
         permissions.AllowAny
     ]
     serializer_class = StakeholdersSerializer
-    filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['SCENARIO']
-    lookup_field = "STAKEHOLDER"
-
 
 # Conversations ViewSet
 class ConversationsViewSet(viewsets.ModelViewSet):
@@ -42,8 +48,15 @@ class ConversationsViewSet(viewsets.ModelViewSet):
         permissions.AllowAny
     ]
     serializer_class = ConversationsSerializer
-    filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['STAKEHOLDER', 'QUESTION']
+    # filter_backends = [DjangoFilterBackend]
+    # filterset_fields = ['STAKEHOLDER', 'QUESTION']
+
+class Responses_to_ConversationsViewSet(viewsets.ModelViewSet):
+    queryset = responses_to_conversations.objects.all()
+    permissions_classes = [
+        permissions.AllowAny
+    ]
+    serializer_class = Responses_to_ConversationsSerializer
 
 
 class multi_conv(APIView):
@@ -90,8 +103,8 @@ class CoverageViewSet(viewsets.ModelViewSet):
     queryset = coverage.objects.all()
     permission_classe = [permissions.AllowAny]
     serializer_class = coverageSerializer
-    filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['STAKEHOLDER']
+    # filter_backends = [DjangoFilterBackend]
+    # filterset_fields = ['STAKEHOLDER']
 
     
 
@@ -108,6 +121,13 @@ class StudentsViewSet(viewsets.ModelViewSet):
         permissions.AllowAny
     ]
     serializer_class = StudentSerializer
+
+class PagesToScenarioViewSet(viewsets.ModelViewSet):
+    queryset = pages_to_scenario.objects.all()
+    permission_classes = [
+        permissions.AllowAny
+    ]
+    serializer_class = PagesToScenarioSerializer
 
 class ProfessorsViewSet(viewsets.ModelViewSet):
     queryset = professors.objects.all()
@@ -153,11 +173,11 @@ class PagesViewSet(viewsets.ModelViewSet):
 
 # Stakeholder_page Viewset
 class Stakeholder_pageViewSet(viewsets.ModelViewSet):
-    queryset = stakeholder_page.objects.all()
+    queryset = stakeholder_to_page.objects.all()
     permissions_classes = [
         permissions.AllowAny
     ]
-    serializer_class = Stakeholder_pageSerializer
+    serializer_class = Stakeholder_to_pageSerializer
 
 
 class Reflection_QuestionsViewSet(viewsets.ModelViewSet):
@@ -167,6 +187,12 @@ class Reflection_QuestionsViewSet(viewsets.ModelViewSet):
     ]
     serializer_class = Reflection_questionsSerializer
 
+class Reflection_Question_to_pageViewSet(viewsets.ModelViewSet):
+    queryset = reflection_question_to_page.objects.all()
+    permissions_classes = [
+        permissions.AllowAny
+    ]
+    serializer_class = Reflection_questions_to_pageSerializer
 
 class ReflectionsTakenViewSet(viewsets.ModelViewSet):
     queryset = reflections_taken.objects.all()
@@ -221,6 +247,13 @@ class Scenarios_forViewSet(viewsets.ModelViewSet):
     ]
     serializer_class = Scenarios_forSerializer
 
+class courses_to_scenarioViewset(viewsets.ModelViewSet):
+    queryset = courses_to_scenario.objects.all()
+    permissions_class = [
+        permissions.AllowAny
+    ]
+    serializer_class = Courses_to_ScenarioSerializer
+
 # generic_page ViewSet
 class generic_pageViewSet(viewsets.ModelViewSet):
     queryset = generic_page.objects.all()
@@ -243,8 +276,8 @@ class IssuesViewSet(viewsets.ModelViewSet):
         permissions.AllowAny
     ]
     serializer_class = IssuesSerializer
-    filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['SCENARIO', "NAME"]
+    # filter_backends = [DjangoFilterBackend]
+    # filterset_fields = ['SCENARIO', "NAME"]
 
 
 class Action_pageViewSet(viewsets.ModelViewSet):
@@ -253,6 +286,13 @@ class Action_pageViewSet(viewsets.ModelViewSet):
         permissions.AllowAny
     ]
     serializer_class = Action_pageSerializer
+
+class response_to_action_pageViewSet(viewsets.ModelViewSet):
+    queryset = response_to_action_page.objects.all()
+    permission_classes = [
+        permissions.AllowAny
+    ]
+    serializer_class = Response_to_action_pageSerializer
 
 #for getting/editing scenarios in dashboard
 class logistics_page(APIView):

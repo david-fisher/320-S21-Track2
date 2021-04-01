@@ -370,7 +370,16 @@ class get_Issues(APIView):
 class response_to_conversations(APIView):
     # put a student conversation into the database
     def put(self, request,  *args, **kwargs):
-        # takes in all of the required information from the JSON passed in
+        # takes in a JSON of the format:
+        # {
+        #     "scenario_id": 1,
+        #     "student_id": 1,
+        #     "conversation_id": 1,
+        #     "score": 1,
+        #     "course_id": 1,
+        #     "page_id": 1
+        # }
+
         scenario_id = request.data.get('scenario_id')
         student_id = request.data.get('student_id')
         conversation_id = request.data.get('conversation_id')
@@ -420,7 +429,7 @@ class response_to_conversations(APIView):
 
             # saves the response_to_conversation entry
             responseToConvSerializer.save()
-            return DRF_response({'detail': str(responseToConvSerializer)}, status=status.HTTP_200_OK)
+            return DRF_response(responseToConvSerializer.data, status=status.HTTP_200_OK)
         except Conversations.DoesNotExist:
             return DRF_response({'detail': "conversation_id not found"}, status=status.HTTP_404_NOT_FOUND)
         # Only need exception check for Conversations.DoesNotExist, all other bad inputs are handled by the serializer.valid()

@@ -81,10 +81,10 @@ export default function ConfigureIssues({ scenario_ID }) {
     });
 
     //for info button
-    const [open, setOpen] = React.useState(false);
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
+    //const [open, setOpen] = React.useState(false);
+    //const handleClickOpen = () => {
+    //    setOpen(true);
+    //};
 
     let getData = () => {
         get(setIssueEntryFieldList, endpointGET + scenario_ID);

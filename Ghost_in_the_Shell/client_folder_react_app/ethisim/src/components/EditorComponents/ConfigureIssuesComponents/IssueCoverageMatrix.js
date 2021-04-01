@@ -127,13 +127,11 @@ export default function IssueMatrix({ scenario }) {
     const [didGetSHs, setDidGetSHs] = useState(false); //stores status of whether stakeholders have been received
     const [stakeHolders, setStakeHolders] = useState([]); //stores stakeholders
     const [didGetIssues, setDidGetIssues] = useState(false);
-    //const [issues, setIssues] = useState([]);
-    const issues = useRef(null);
-    //let issues = [];
 
     const [didSetData, setDidSetData] = useState(false);
     const [cols, setColumns] = useState([]); //stores stakeholders
     const [rows, setRows] = useState([]);
+    const [issueSums, setSums] = useState([]);
 
     const [isLoading, setLoading] = useState(false); //stores status of whether something is loading
     var axios = require('axios'); //backend
@@ -141,13 +139,15 @@ export default function IssueMatrix({ scenario }) {
     const [successBannerMessage, setSuccessBannerMessage] = useState(''); //success banner
     const [successBannerFade, setSuccessBannerFade] = useState(false);
 
-    //const [issuePromises, setPromises] = useState([])
-    const issuePromises = useRef(null);
+    useEffect(() => {
+        stakeHolders.current = [];
+    }, []);
 
     useEffect(() => {
-        issuePromises.current = [];
-        issues.current = [];
-    }, []);
+        if (didGetIssues && didSetData) {
+            onStakeHolderIssueChange();
+        }
+    }, [rows]);
 
     //let issuePromises = [];
 
@@ -172,34 +172,13 @@ export default function IssueMatrix({ scenario }) {
         return () => clearTimeout(timeout);
     }, [errorBannerFade]);
 
-    const [currentTime, setCurrentTime] = useState(getCurrentTimeInt());
-    //gets the current time in hms and converts it to an int
-    function getCurrentTimeInt() {
-        let d = Date();
-        var h = d.substring(16, 18);
-        var m = d.substring(19, 21);
-        var s = d.substring(22, 24);
-        return 60 * (60 * h + m) + s;
-    }
-
-    function checkTime(setTime, t) {
-        var ret = false;
-        //current time difference is at least 1 second, but that SHOULD be ample time for
-        //the database to get back to the frontend
-        if (getCurrentTimeInt() - t !== 0) {
-            ret = true;
-        }
-        setTime(getCurrentTimeInt());
-        return ret;
-    }
-
     function getExistingStakeHolders() {
         setLoading(true); //starts loading icon
 
         var data = { SCENARIO: { scenario } };
         var config = {
             method: 'get',
-            url: baseURL + '/api/stakeholders/?SCENARIO=' + scenario,
+            url: baseURL + '/stakeholder?scenario_id=' + scenario,
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -218,38 +197,63 @@ export default function IssueMatrix({ scenario }) {
                 setErrorBannerFade(true);
             });
     }
-    function getIssues() {
-        stakeHolders.forEach((stakeHolder) => {
-            setLoading(true);
-            var data = JSON.stringify({});
+
+    function saveStakeHolders() {
+        setLoading(true);
+
+        var issues = [];
+        var changedStakeHolder;
+        for (let i = 0; i < stakeHolders.current.length; i++) {
+            let curStakeHolder = stakeHolders.current[i];
+            let curRow = rows[i];
+
+            curStakeHolder.ISSUES.forEach((issue) => {
+                if (
+                    curRow['Issue' + issue.NAME.toUpperCase()] !==
+                    issue.COVERAGE_SCORE
+                ) {
+                    issue.COVERAGE_SCORE =
+                        curRow['Issue' + issue.NAME.toUpperCase()];
+                    changedStakeHolder = curStakeHolder;
+                    issues.push({
+                        COVERAGE_SCORE: issue.COVERAGE_SCORE,
+                        ISSUE: issue.ISSUE,
+                        STAKEHOLDER: issue.STAKEHOLDER,
+                    });
+                }
+            });
+        }
+
+        if (changedStakeHolder !== undefined) {
+            var data = [...issues];
 
             var config = {
-                method: 'get',
+                method: 'put',
                 url:
                     baseURL +
-                    '/coverages?stakeholder_id=' +
-                    stakeHolder.STAKEHOLDER,
+                    '/multi_coverage?STAKEHOLDER=' +
+                    changedStakeHolder.STAKEHOLDER,
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 data: data,
             };
-            issuePromises.current.push(
-                axios(config)
-                    .then(function (response) {
-                        issues.current = issues.current.concat(
-                            response.data.ISSUES
-                        );
-                        setLoading(false);
-                    })
-                    .catch(function (error) {
-                        setErrorBannerMessage(
-                            'Failed to get the issue(s) for this stakeholder! Please try again.'
-                        );
-                        setErrorBannerFade(true);
-                    })
-            );
-        });
+
+            axios(config)
+                .then(function (response) {
+                    setSuccessBannerMessage(
+                        'Successfully saved the issues for this stakeholder!'
+                    );
+                    setSuccessBannerFade(true);
+                })
+                .catch(function (error) {
+                    setErrorBannerMessage(
+                        'Failed to save the issues for this stakeholder! Please try again.'
+                    );
+                    setErrorBannerFade(true);
+                });
+        }
+        setLoading(false);
     }
 
     function setColData() {
@@ -257,7 +261,7 @@ export default function IssueMatrix({ scenario }) {
             { title: 'Name', field: 'NAME' },
             { title: 'Description', field: 'DESCRIPTION' },
         ];
-        issues.current.forEach((issue) => {
+        stakeHolders.current[0].ISSUES.forEach((issue) => {
             let insertBoolean = true;
             for (let i = 0; i < cols.length; i++) {
                 if (cols[i].title === 'Issue' + issue.NAME) {
@@ -268,36 +272,49 @@ export default function IssueMatrix({ scenario }) {
                 cols.push({
                     title: 'Issue' + issue.NAME,
                     field: 'Issue' + issue.NAME.toUpperCase(),
+                    type: 'numeric',
                 });
             }
         });
         setColumns(cols);
     }
+    function onStakeHolderIssueChange() {
+        let sums = { NAME: '', DESCRIPTION: 'Running Issue Sums' };
+        for (let j = 0; j < stakeHolders.current.length; j++) {
+            let stakeHolder = stakeHolders.current[j];
+            for (let i = 0; i < stakeHolder.ISSUES.length; i++) {
+                let curIssue = stakeHolder.ISSUES[i];
+                if (sums['Issue' + curIssue.NAME.toUpperCase()] === undefined) {
+                    sums['Issue' + curIssue.NAME.toUpperCase()] = 0;
+                }
+                sums['Issue' + curIssue.NAME.toUpperCase()] +=
+                    rows[j]['Issue' + curIssue.NAME.toUpperCase()];
+            }
+        }
+        setSums(sums);
+        saveStakeHolders();
+    }
 
     function setRowData() {
-        let sums = { NAME: 'Sum', DESCRIPTION: 'Sum of Issues' };
-        let data = stakeHolders.map((stakeHolder) => {
+        setLoading(true);
+        let sums = { NAME: '', DESCRIPTION: 'Running Issue Sums' };
+        let data = stakeHolders.current.map((stakeHolder) => {
             let row = {
                 NAME: stakeHolder.NAME,
                 DESCRIPTION: stakeHolder.JOB,
             };
-            issues.current.forEach((curIssue) => {
-                if (curIssue.STAKEHOLDER == stakeHolder.STAKEHOLDER) {
-                    row['Issue' + curIssue.NAME.toUpperCase()] =
-                        curIssue.COVERAGE_SCORE;
-                    if (
-                        sums['Issue' + curIssue.NAME.toUpperCase()] ===
-                        undefined
-                    ) {
-                        sums['Issue' + curIssue.NAME.toUpperCase()] = 0;
-                    }
-                    sums['Issue' + curIssue.NAME.toUpperCase()] +=
-                        curIssue.COVERAGE_SCORE;
+            stakeHolder.ISSUES.forEach((curIssue) => {
+                row['Issue' + curIssue.NAME.toUpperCase()] =
+                    curIssue.COVERAGE_SCORE;
+                if (sums['Issue' + curIssue.NAME.toUpperCase()] === undefined) {
+                    sums['Issue' + curIssue.NAME.toUpperCase()] = 0;
                 }
+                sums['Issue' + curIssue.NAME.toUpperCase()] +=
+                    curIssue.COVERAGE_SCORE;
             });
             return row;
         });
-        data.push(sums);
+        setSums(sums);
         setRows(data);
     }
 
@@ -308,25 +325,15 @@ export default function IssueMatrix({ scenario }) {
     if (!didGetSHs) {
         //if stakeholders have alreasdy been loaded, don't do it again
         setDidGetSHs(true);
-        getExistingStakeHolders();
-    } /*else if(!didGetIssues){
-        fillIssues();
-        setDidGetIssues(true);
-        setColData();
-        setRowData();
-    } else{
-        
-    }*/
-    if (stakeHolders.length > 0 && !didGetIssues) {
+    }
+    if (didGetSHs && !didGetIssues) {
         setDidGetIssues(true);
         getIssues();
     }
     if (didGetIssues && !didSetData) {
         setDidSetData(true);
-        Promise.all(issuePromises.current).then(() => {
-            setColData();
-            setRowData();
-        });
+        setColData();
+        setRowData();
     }
 
     return (
@@ -337,22 +344,43 @@ export default function IssueMatrix({ scenario }) {
                 options={{
                     exportButton: true,
                 }}
-                cellEditable={{
-                    /*sets the cells to be editable*/ cellStyle: {},
-                    onCellEditApproved: (
-                        newValue,
-                        oldValue,
-                        rowData,
-                        columnDef
-                    ) => {
-                        return new Promise((resolve, reject) => {
-                            console.log('newValue: ' + newValue);
-                            setTimeout(resolve, 4000);
-                        });
-                    },
+                editable={{
+                    isEditHidden: (rowData) =>
+                        rowData.DESCRIPTION === 'Running Issue Sums',
+                    isDeleteHidden: (rowData) =>
+                        rowData.DESCRIPTION === 'Running Issue Sums',
+                    onRowAdd: (newData) =>
+                        new Promise((resolve, reject) => {
+                            setTimeout(() => {
+                                setRows([...rows, newData]);
+
+                                resolve();
+                            }, 1000);
+                        }),
+                    onRowUpdate: (newData, oldData) =>
+                        new Promise((resolve, reject) => {
+                            setTimeout(() => {
+                                const dataUpdate = [...rows];
+                                const index = oldData.tableData.id;
+                                dataUpdate[index] = newData;
+                                setRows([...dataUpdate]);
+                                resolve();
+                            }, 1000);
+                        }),
+                    onRowDelete: (oldData) =>
+                        new Promise((resolve, reject) => {
+                            setTimeout(() => {
+                                /*const dataDelete = [...data];
+                                const index = oldData.tableData.id;
+                                dataDelete.splice(index, 1);
+                                setData([...dataDelete]);*/
+
+                                resolve();
+                            }, 1000);
+                        }),
                 }}
                 columns={cols}
-                data={rows}
+                data={rows.concat(issueSums)}
             />
         </Container>
     );

@@ -152,9 +152,11 @@ export default function IssueMatrix({ scenario }) {
     useEffect(() => {
         if (didGetSHs) {
             setTimeout(() => {
-                setDidSetData(true);
-                setColData();
-                setRowData();
+                if (stakeHolders.current.length > 0) {
+                    setDidSetData(true);
+                    setColData();
+                    setRowData();
+                }
             }, 750);
         }
     }, [stakeHolders]);

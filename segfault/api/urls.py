@@ -39,5 +39,5 @@ urlpatterns = [
     path('get_pages/',views.get_pages.as_view()),
     path('get_stakeholders/',views.get_stakeholders.as_view()),
     path('get_issues/',views.get_Issues.as_view()),
-    path('conversations_had/', views.response_to_conversations.as_view())
+    path('conversations_had/', views.response_to_conversations.as_view()) #for "response_to_conversations" endpoint
 ]

@@ -343,6 +343,47 @@ class get_Issues(APIView):
 
 
 class response_to_conversations(APIView):
+    def get(self, request):
+        
+        scenario_id = self.request.query_params.get('scenario_id')
+        page_id  = self.request.query_params.get('page_id')
+        student_id = self.request.query_params.get('student_id')
+        
+        try:
+            scenario = Scenario.objects.get(scenario_id = scenario_id)
+            page = Pages.objects.get(page = page_id)
+            student = Student.objects.get(student = student_id)
+        except Scenario.DoesNotExist:
+            return rest_framework.response.Response(status=status.HTTP_404_NOT_FOUND)
+        except Pages.DoesNotExist:
+            return rest_framework.response.Response(status=status.HTTP_404_NOT_FOUND) 
+        except Student.DoesNotExist:
+            return rest_framework.response.Response(status=status.HTTP_404_NOT_FOUND)
+        
+        response_id_lst = Response.objects.filter(student_id = student_id, page = page_id, scenario = scenario_id)
+    
+        resp_to_convo_final_lst = []
+        for response in response_id_lst:
+            resp_json = ResponseSerializer(response).data
+            resp_to_convos_obj_lst = Responses_to_conversations.objects.filter(response_id = response.response_id)
+            for j in resp_to_convos_obj_lst:
+                convos = Conversations.objects.filter(conversation = j.conversation.conversation)
+                convo_lst = []
+                for i in convos:
+                    convo_json = ConversationSerializer(i).data
+                    convo_lst.append(convo_json)
+
+                resp_to_convo_json = Responses_to_conversationsSerializer(j).data
+                resp_to_convo_json.update(
+                    {
+                        "response": resp_json,
+                        "conversation": convo_lst
+                    }
+                )
+                resp_to_convo_final_lst.append(resp_to_convo_json)
+        return rest_framework.response.Response(resp_to_convo_final_lst, status=status.HTTP_200_OK)
+
+
     #put a student conversation into the database
     def put(self, request,  *args, **kwargs):
         # takes in all of the required information from the JSON passed in

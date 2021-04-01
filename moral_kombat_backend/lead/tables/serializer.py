@@ -81,10 +81,10 @@ class ReflectionsTakenSerializer(serializers.ModelSerializer):
         fields = ('REFLECTIONS', 'RESPONSE_ID')
 
 
-class ConversationsHadSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = conversations_had
-        fields = '__all__'
+# class ConversationsHadSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = conversations_had
+#         fields = '__all__'
 
 
 class StudentsToCourseSerializer(serializers.ModelSerializer):
@@ -202,7 +202,7 @@ class coverageSerializer(serializers.ModelSerializer):
         fields = ('STAKEHOLDER', 'ISSUE', 'COVERAGE_SCORE')
 
 
-class Actions_takenSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = actions_taken
-        fields = '__all__'
+# class Actions_takenSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = actions_taken
+#         fields = '__all__'

@@ -49,7 +49,7 @@ function getSteps(pages, navigatePageFunc) {
   let values = Object.values(pages);
 
   values.forEach((page) => {
-    let buttonName = page.title;
+    let buttonName = page.props.title;
     if(page.visited === false)
       stepArr.push(<Button disabled>{buttonName}</Button>);
     else
@@ -61,32 +61,17 @@ function getSteps(pages, navigatePageFunc) {
         {buttonName}
       </Button>)
   })
-  // for (let i = 0; i < keys.length; i++) {
-  //   let buttonName = keys[i].charAt(0);
-  //   for (let j = 1; j < keys[i].length - 1; j++) {
-  //     if (keys[i].charAt(j) == keys[i].charAt(j).toUpperCase()) {
-  //       buttonName += " ";
-  //     }
-  //     buttonName += keys[i].charAt(j);
-  //   }
-  //   buttonName += keys[i].charAt(keys[i].length - 1);
-  //   if (pages[keys[i]].visited === false) {
-  //     stepArr.push(<Button disabled>{buttonName}</Button>);
-  //   } else {
-  //     stepArr.push(<Button style={{ color: "#881c1c" }} onClick={() => navigatePageFunc(keys[i])} >{buttonName}</Button>);
-  //   }
-  // }
   return stepArr;
 }
 
 function getStepContent(step) {
   switch (step) {
     case 0:
-      return ``;
+      return "";
     case 1:
       return "";
     case 2:
-      return ``;
+      return "";
     default:
       return "";
   }
@@ -98,25 +83,23 @@ export default function VerticalLinearStepper(props) {
   // eslint-disable-next-line
   const [activeStep, setActiveStep] = React.useState(props.activePage);
   
-  function navigatePage(pageName) {
-
-    if(props.pages[pageName].completed){
-
-      if (!props.pages[pageName].visited) {
-
+  function navigatePage(page) {
+    if(page.props.completed){
+      if (!page.props.visited) {
         props.setPages(prevPages => {
+          console.log("Prevpages" + prevPages)
           let copy = {...prevPages};
-          copy[pageName].visited = true;
+          copy[page].visited = true;
           return copy;
         });
-
       }
-
-      props.setActivePage(pageName)
-    }
+      console.log("Props" + props);
+      props.setActivePage(page)
+    }   
   }
 
   const steps = getSteps(props.pages, navigatePage);
+  steps.map((label, index) => (console.log("here " + index, label)));
   return (
     <div className={classes.root}>
       <Box mt={3} ml={1}>

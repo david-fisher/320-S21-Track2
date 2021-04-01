@@ -54,26 +54,12 @@ export default function NavSideBarNode(props) {
         setOpen(true);
     };
 
-    //for checkboxes
-    const [checked, setChecked] = React.useState(true);
-    const handleChange = (event) => {
-        setChecked(event.target.checked);
-    };
-
     function pageType(title) {
         if (id === -1 || id === -2 || id === -3 || id === -4 || isIntroPage) {
             //logistics to introduction pages
             return (
                 <Grid container direction="row" justify="flex-start">
-                    <Grid item xs={2}>
-                        <Checkbox
-                            checked={checked}
-                            onChange={handleChange}
-                            color="primary"
-                            inputProps={{ 'aria-label': 'primary checkbox' }}
-                        />
-                    </Grid>
-                    <Grid item xs={8}>
+                    <Grid item xs={10}>
                         <Button
                             className={classes.pageButton}
                             variant="contained"
@@ -89,15 +75,7 @@ export default function NavSideBarNode(props) {
             //additional created pages
             return (
                 <Grid container direction="row" justify="flex-start">
-                    <Grid item xs={2}>
-                        <Checkbox
-                            checked={checked}
-                            onChange={handleChange}
-                            color="primary"
-                            inputProps={{ 'aria-label': 'primary checkbox' }}
-                        />
-                    </Grid>
-                    <Grid item xs={8}>
+                    <Grid item xs={10}>
                         <Button
                             className={classes.pageButton}
                             variant="contained"

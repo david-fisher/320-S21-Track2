@@ -153,15 +153,15 @@ class actions_taken(models.Model):
     ACTION_PAGE = models.ForeignKey('action_page', on_delete = models.CASCADE, related_name="actions_taken2")
 
 
-class conversations_had(models.Model):
-    STUDENT = models.ForeignKey('students', on_delete = models.CASCADE, related_name="conversations_had1")
-    COURSE = models.ForeignKey('responses', on_delete = models.CASCADE, related_name="conversations_had2")
-    SCENARIO = models.ForeignKey('scenarios', on_delete = models.CASCADE, related_name="conversations_had3")
-    VERSION = models.IntegerField(default=1, editable=False)
-    DATE_TAKEN = models.ForeignKey('responses', on_delete = models.CASCADE, related_name="conversations_had5")
-    STAKEHOLDER = models.ForeignKey('stakeholders', on_delete = models.CASCADE, related_name="conversations_had6")
-    SCORE = models.IntegerField()
-    CONVERSATION = models.ForeignKey('conversations', on_delete = models.CASCADE, related_name="conversations_had7")
+# class conversations_had(models.Model):
+#     STUDENT = models.ForeignKey('students', on_delete = models.CASCADE, related_name="conversations_had1")
+#     COURSE = models.ForeignKey('responses', on_delete = models.CASCADE, related_name="conversations_had2")
+#     SCENARIO = models.ForeignKey('scenarios', on_delete = models.CASCADE, related_name="conversations_had3")
+#     VERSION = models.IntegerField(default=1, editable=False)
+#     DATE_TAKEN = models.ForeignKey('responses', on_delete = models.CASCADE, related_name="conversations_had5")
+#     STAKEHOLDER = models.ForeignKey('stakeholders', on_delete = models.CASCADE, related_name="conversations_had6")
+#     SCORE = models.IntegerField()
+#     CONVERSATION = models.ForeignKey('conversations', on_delete = models.CASCADE, related_name="conversations_had7")
 
 
 
@@ -275,12 +275,12 @@ class response_to_action_page(models.Model):
     RESPONSE_ID = models.ForeignKey('responses', to_field = 'RESPONSE_ID', on_delete = models.CASCADE, related_name = 'action_page1')
     ACTION_PAGE = models.ForeignKey('action_page', to_field = 'id', on_delete = models.CASCADE, related_name = 'action_page1')
 
-class assigned_to(models.Model):
-    class Meta:
-        unique_together = (('STUDENT'),('SCENARIO'),('VERSION'))
-    STUDENT = models.ForeignKey('students', on_delete = models.CASCADE, related_name="assigned_to1")
-    SCENARIO = models.ForeignKey('scenarios', on_delete = models.CASCADE, related_name="assigned_to2")
-    VERSION = models.IntegerField(default=1, editable=False)
+# class assigned_to(models.Model):
+#     class Meta:
+#         unique_together = (('STUDENT'),('SCENARIO'),('VERSION'))
+#     STUDENT = models.ForeignKey('students', on_delete = models.CASCADE, related_name="assigned_to1")
+#     SCENARIO = models.ForeignKey('scenarios', on_delete = models.CASCADE, related_name="assigned_to2")
+#     VERSION = models.IntegerField(default=1, editable=False)
 
 class student_times(models.Model):
     class Meta:

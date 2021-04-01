@@ -517,7 +517,8 @@ export default function FlowDiagram({ scenario_ID }) {
                     <HelpIcon />
                 </Button>
                 <GenericInfoButton
-                    description={`on this page`}
+                    description={`Here you can order the pages the student will go through in the simulation. Click and drag your cursor to move around the diagram box.
+                    Click and drag from one box to another and an arrow will appear, effectively connecting each page. It's advised to start with the introduction page.`}
                     open={open}
                     setOpen={setOpen}
                 />

@@ -485,22 +485,18 @@ export default function Logistics({ scenario_ID }) {
                 <Typography align="center" variant="h2">
                     Logistics
                 </Typography>
-                <Grid
-                    item
-                    xs={12}
-                    style={{
-                        textAlign: 'right',
-                    }}
-                >
+                <Grid container justify="flex-end">
                     <Button color="primary" onClick={handleClickOpen}>
                         <HelpIcon />
                     </Button>
                     <GenericInfoButton
-                        description={`In the top left of the screen you will see an icon composed of three horizontal lines,
-                            this is menu button for the editor. This menu is accessable from all pages. The page you are on is the Logistics Page. 
-                            Please give the simulation a title. Then assign courses to this scenario with the respective 
-                            dropdown. Assign a max number of conversations. Checking the Public box will make your scenario visible to others. Checking
-                            the Is Finished Box will put your scenario in the Finished section of the Dashboard. Don't forget to save before leaving the page!`}
+                        description={`If it's your first time using Ethism, you'll see in the top left an icon of three horizontal lines.
+                    This is the menu and is accessable from all pages.
+                    The page you're on is the Logistics page handles some organizational pieces of your ethical scenario. 
+                    Here, you can edit the name of your scenario, the courses associated with this scenario, etc.
+                    By default the max number of selected conversations in zero. However, you may enter the maximum number of stakeholders you would like to permit students to speak with.
+                    This will be explained more in depth later. The Public checkbox allows your scenario to be viewed publicly by all that have access to Ethism. The
+                    Is Finished checkbox puts your scenario in the Finished section, ready for student distribution.`}
                         open={open}
                         setOpen={setOpen}
                     />

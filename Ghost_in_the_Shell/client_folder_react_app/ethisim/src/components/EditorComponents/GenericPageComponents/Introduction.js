@@ -210,7 +210,9 @@ export default function Introduction(props) {
                     <HelpIcon />
                 </Button>
                 <GenericInfoButton
-                    description={`on this page`}
+                    description={`Give the student an introduction to the ethical scenario. What is the problem? Think about both the positive and negative potential consequences of the technology, 
+                    as well as the stakeholders who are promoting the technology and the stakeholders who will be most directly impacted.
+                    `}
                     open={open}
                     setOpen={setOpen}
                 />

@@ -134,7 +134,7 @@ export default function ConfigureIssues({ scenario_ID }) {
                     <HelpIcon />
                 </Button>
                 <GenericInfoButton
-                    description={`on this page`}
+                    description={`This page is currently under maintenance.`}
                     open={open}
                     setOpen={setOpen}
                 />

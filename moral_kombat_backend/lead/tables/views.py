@@ -116,6 +116,13 @@ class ProfessorsViewSet(viewsets.ModelViewSet):
     ]
     serializer_class = ProfessorSerializer
 
+class StudentTimesViewSet(viewsets.ModelViewSet):
+    queryset = student_times.objects.all()
+    permission_classes = [
+        permissions.AllowAny
+    ]
+    serializer_class = StudentTimesSerializer
+
 
 class ScenariosViewSet(viewsets.ModelViewSet):
     queryset = scenarios.objects.all()
@@ -124,10 +131,10 @@ class ScenariosViewSet(viewsets.ModelViewSet):
     ]
     serializer_class = ScenariosSerializer
 
-    def delete(self, request, pk, format=None):
-        snippet = self.get_object(pk)
-        snippet.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+    # def delete(self, request, pk, format=None):
+    #     snippet = self.get_object(pk)
+    #     snippet.delete()
+    #     return Response(status=status.HTTP_204_NO_CONTENT)
 
 class SingleScenarioViewSet(viewsets.ModelViewSet):
     def get(self, request):

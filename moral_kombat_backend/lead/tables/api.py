@@ -23,6 +23,12 @@ class ProfessorsViewSet(viewsets.ModelViewSet):
     ]
     serializer_class = ProfessorSerializer
 
+class StudentTimesViewSet(viewsets.ModelViewSet):
+    queryset = student_times.objects.all()
+    permission_classes = [
+        permissions.AllowAny
+    ]
+    serializer_class = StudentTimesSerializer
 
 class ScenariosViewSet(viewsets.ModelViewSet):
     queryset = scenarios.objects.all()

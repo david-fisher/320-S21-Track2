@@ -7,15 +7,18 @@ from django.core.validators import MinValueValidator
 class scenarios(models.Model):
     class Meta:
         unique_together = (('SCENARIO'), ('VERSION'))
-    SCENARIO = models.AutoField(primary_key = True, editable=False)
+    SCENARIO = models.IntegerField(editable=True)
     #TODO remove professors
     PROFESSOR = models.ForeignKey('professors', to_field = 'PROFESSOR', on_delete =models.CASCADE, related_name="scenario_creator2", default = 1)
-    VERSION = models.IntegerField(default=1, editable=False)
+    VERSION = models.IntegerField(default=1, editable=True)
     NAME = models.CharField(max_length = 1000)
     PUBLIC = models.BooleanField(default = False)
     NUM_CONVERSATION = models.IntegerField(default = 0)
     IS_FINISHED = models.BooleanField(default = False)
     DATE_CREATED = models.DateField(auto_now_add=True)
+
+    SCENARIO_ID = IntegerField(primary_key = True, editable=True)
+
     # models.OneToOneField('pages', on_delete = models.CASCADE, related_name = "scenarios1", default = 1)
     # def __str__(self):
     #     return "%s the scenario" % self.name
@@ -56,7 +59,15 @@ class generic_page(models.Model):
         unique_together = (('PAGE'), ('BODY'))
     PAGE = models.ForeignKey('pages', on_delete = models.CASCADE, related_name="generic_page1")
     BODY = models.TextField()
-
+    
+#TODO
+# class pages_to_scenario(models.Model):
+#     class Meta:
+#         unique_together = (('PAGE'), ('BODY'))
+#     page_id = IntegerField()
+#     scenario_id INTEGER,
+#     page_version INTEGER,
+#     scenario_version INTEGER,
 
 class stakeholder_page(models.Model):
     class Meta:
@@ -159,21 +170,13 @@ class scenarios_for(models.Model):
 
 class students(models.Model):
     STUDENT = models.IntegerField(primary_key = True)
-    NAME = models.CharField(max_length = 100)
+    FNAME = models.CharField(max_length = 100)
+    LNAME = models.CharField(max_length = 100)
 
 class demographics(models.Model):
-    STUDENT = models.OneToOneField('students', on_delete = models.CASCADE, related_name = "demographics", primary_key = True)
+    STUDENT = models.ForeignKey('students',to_field = 'STUDENT', on_delete = models.CASCADE, related_name = "demographics", primary_key = True)
     AGE = models.SmallIntegerField()
-    GRADE_CHOICES = (
-    ('FR', 'FRESHMAN'),
-    ('SO', 'SOPHOMORE'),
-    ('JK', 'JUNIOR'),
-    ('SE', 'SENIOR'),
-    ('SS', 'SUPER_SENIOR'),
-    ('GR', 'GRADUATE'),
-    ('OT', 'OTHER')
-    )
-    GRADE = models.CharField(max_length = 2, choices = GRADE_CHOICES)
+    GRADE = models.IntegerField()
     GENDER_CHOICES = (
         ('M', 'MALE'),
         ('F', 'FEMALE'),
@@ -184,23 +187,31 @@ class demographics(models.Model):
     MAJOR = models.CharField(max_length = 100)
 
 
-class students_in(models.Model):
+class students_to_course(models.Model):
     class Meta:
         unique_together = (('STUDENT'), ('COURSE'))
-    STUDENT = models.ForeignKey('students', on_delete = models.CASCADE, related_name="students_in1")
-    COURSE = models.ForeignKey(courses, to_field = 'COURSE', on_delete = models.CASCADE, related_name="students_in2")
+    STUDENT = models.ForeignKey('students', to_field = 'STUDENT', on_delete = models.CASCADE, related_name="students_to_course1", primary_key= True)
+    COURSE = models.ForeignKey('courses', to_field = 'COURSE', on_delete = models.CASCADE, related_name="students_to_couse2")
 
-class professors_teach(models.Model):
-    class Meta:
-        unique_together = (('PROFESSOR'), ('COURSE'))    
-    PROFESSOR = models.ForeignKey('professors', to_field = 'PROFESSOR', on_delete = models.CASCADE, related_name="professors_teach1")
-    COURSE = models.ForeignKey(courses, to_field = 'COURSE', on_delete = models.CASCADE, related_name="professors_teach2")
+class professors_to_courses(models.Model):
+     class Meta:
+         unique_together = (('PROFESSOR'), ('COURSE'))    
+    PROFESSOR = models.ForeignKey('professors', to_field = 'PROFESSOR', on_delete = models.CASCADE, related_name="professors_to_courses1", primary_key= True)
+    COURSE = models.ForeignKey('courses', to_field = 'COURSE', on_delete = models.CASCADE, related_name="professors_to_courses2")
 
 class professors(models.Model):
     # class Meta:
-    #     unique_together = (('PROFESSOR_ID'), ('NAME'))
+    #    unique_together = (('PROFESSOR_ID'), ('NAME'))
     PROFESSOR = models.IntegerField(primary_key = True)
-    NAME = models.CharField(max_length = 1000)
+    FNAME = models.CharField(max_length = 1000)
+    LNAME = models.CharField(max_length = 1000)
+
+class professors_to_scenario(models.Model):
+    class Meta:
+        unique_together = (('PROFESSOR'), ('SCENARIO'))
+    PROFESSOR = models.ForeignKey('professors', to_field = 'PROFESSOR', on_delete = models.CASCADE, related_name="professors_to_scenario1", primary_key= True)
+    SCENARIO = models.ForeignKey('scenarios', to_field = 'SCENARIO_ID', on_delete = models.CASCADE, related_name="professors_to_scenario2")
+    PERMISSION = models.IntegerField()
 
 
 class Issues(models.Model):
@@ -237,13 +248,13 @@ class assigned_to(models.Model):
 
 class student_times(models.Model):
     class Meta:
-        unique_together = (('STUDENT'),('SCENARIO'),('VERSION'),('COURSE'),('DATE_TAKEN'),('PAGE'))
-    STUDENT = models.ForeignKey('students', on_delete = models.CASCADE, related_name="student_times1")
-    SCENARIO = models.ForeignKey('scenarios', on_delete = models.CASCADE, related_name="student_times2")
-    VERSION = models.IntegerField(default=1, editable=False)
-    COURSE = models.ForeignKey('courses',on_delete = models.CASCADE,related_name = "student_times4")
+        unique_together = (('STUDENT'),('SCENARIO_ID'),('COURSE'),('DATE_TAKEN'),('PAGE'))
+    STUDENT = models.ForeignKey('students', to_field= 'STUDENT', on_delete = models.CASCADE, related_name="student_times1")
+    SCENARIO_ID = models.ForeignKey('scenarios', to_field= 'SCENARIO_ID', on_delete = models.CASCADE, related_name="student_times2")
+    
+    COURSE = models.ForeignKey('courses', to_field = 'COURSE', on_delete = models.CASCADE,related_name = "student_times3")
     DATE_TAKEN = models.DateField(auto_now_add=True)
-    PAGE = models.ForeignKey('pages',on_delete = models.CASCADE,related_name = "student_times5")
+    PAGE = IntegerField()
     START_TIME = models.DateField(null = True)
     END_TIME = models.DateField(null = True)
 

@@ -11,18 +11,23 @@ class DemographicsSerializer(serializers.ModelSerializer):
 class StudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = students
-        fields = ('STUDENT', 'NAME')
+        fields = ('STUDENT', 'FNAME', 'LNAME')
+
+class StudentTimesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = student_times
+        fields = ('STUDENT', 'SCENARIO_ID', 'COURSE', 'DATE_TAKEN', 'PAGE', 'END_TIME', 'START_TIME')
 
 class ProfessorSerializer(serializers.ModelSerializer):
     class Meta:
         model = professors
-        fields = ('PROFESSOR', 'NAME')
+        fields = ('PROFESSOR', 'FNAME', 'LNAME')
 
 
 class ScenariosSerializer(serializers.ModelSerializer):
     class Meta:
         model = scenarios
-        fields = ('SCENARIO', 'VERSION', 'NAME', 'IS_FINISHED', 'PUBLIC', 'NUM_CONVERSATION', 'PROFESSOR')
+        fields = ('SCENARIO', 'VERSION', 'NAME', 'IS_FINISHED', 'PUBLIC', 'NUM_CONVERSATION', 'PROFESSOR', 'SCENARIO_ID')
 
 class PagesSerializer(serializers.ModelSerializer):
     class Meta:
@@ -56,16 +61,15 @@ class ReflectionsTakenSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-
 class ConversationsHadSerializer(serializers.ModelSerializer):
     class Meta:
         model = conversations_had
         fields = '__all__'
 
 
-class StudentsInSerializer(serializers.ModelSerializer):
+class StudentsToCourseSerializer(serializers.ModelSerializer):
     class Meta:
-        model = students_in
+        model = students_to_course
         fields = ('STUDENT', 'COURSE')
 
 
@@ -96,10 +100,15 @@ class Generic_pageSerializer(serializers.ModelSerializer):
         model = generic_page
         fields = ('PAGE', 'BODY')
 
-class Professors_teachSerializer(serializers.ModelSerializer):
+class Professors_to_coursesSerializer(serializers.ModelSerializer):
     class Meta:
-        model = professors_teach
+        model = professors_to_courses
         fields = ('PROFESSOR', 'COURSE')
+    
+class Professors_to_scenarioSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = professors_to_scenario
+        fields = ('PROFESSOR', 'COURSE', 'PERMISSION')
 
 class IssuesSerializer(serializers.ModelSerializer):
     class Meta:

@@ -35,6 +35,17 @@ class StakeholdersViewSet(viewsets.ModelViewSet):
     lookup_field = "STAKEHOLDER"
 
 
+#Todo ViewSet
+class TodoViewSet(viewsets.ModelViewSet):
+    queryset = todo.objects.all()
+    permissions_classes = [
+        permissions.AllowAny
+    ]
+    serializer_class = ToDoSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['SCENARIO']
+
+
 # Conversations ViewSet
 class ConversationsViewSet(viewsets.ModelViewSet):
     queryset = conversations.objects.all()

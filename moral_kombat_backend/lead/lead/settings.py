@@ -119,12 +119,20 @@ DATABASES = {
     'default': {
         # 'ENGINE': 'django.db.backends.sqlite3',
         # 'NAME': BASE_DIR / 'db.sqlite3',
+        # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        # 'NAME': DB_NAME,
+        # 'USER': DB_USER,
+        # 'PASSWORD': DB_PASS,
+        # 'HOST': DB_HOST,
+        # 'PORT': DB_PORT,
+
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': DB_NAME,
-        'USER': DB_USER,
-        'PASSWORD': DB_PASS,
-        'HOST': DB_HOST,
-        'PORT': DB_PORT,
+         'NAME': 'mxqmburd',
+         'USER': 'mxqmburd',
+         'PASSWORD': '1rjSflxxn-TFKYAok79dgzHWGj9rTg3-',
+         'HOST': 'queenie.db.elephantsql.com',
+         'PORT': '5432',
+
     }
 }
 

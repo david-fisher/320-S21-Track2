@@ -8,6 +8,12 @@ class DemographicsSerializer(serializers.ModelSerializer):
         fields = ('STUDENT', 'AGE', 'GRADE', 'GENDER', 'RACE', 'MAJOR')
 
 
+class ToDoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = todo
+        fields = ('SCENARIO', 'TODO')
+
+
 class StudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = students

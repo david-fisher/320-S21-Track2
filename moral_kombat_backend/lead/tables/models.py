@@ -21,6 +21,13 @@ class scenarios(models.Model):
     #     return "%s the scenario" % self.name
 
 
+class todo(models.Model):
+    # class Meta:
+    #     unique_together = (('SCENARIO'), ('TODO'))
+    SCENARIO = models.ForeignKey('scenarios', on_delete = models.CASCADE)
+    TODO = models.TextField()
+
+
 class pages(models.Model):
     class Meta:
         unique_together = (('PAGE'), ('SCENARIO'))

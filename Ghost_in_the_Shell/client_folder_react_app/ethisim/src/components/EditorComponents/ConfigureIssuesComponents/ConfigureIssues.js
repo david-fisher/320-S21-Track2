@@ -1,5 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Typography, Button, Grid } from '@material-ui/core';
+import {
+    Typography,
+    Button,
+    Grid,
+    TextField,
+    MenuItem,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogContentText,
+    DialogActions,
+} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import EntryFields from './IssueEntryFieldList';
 import get from '../../../universalHTTPRequests/get';
@@ -11,6 +22,9 @@ import IssueMatrix from './IssueCoverageMatrix';
 import MaterialTable from 'material-table';
 import HelpIcon from '@material-ui/icons/Help';
 import GenericInfoButton from '../../InfoButtons/GenericInfoButton';
+import addStakeHolder from '../ConversationEditorComponents/StakeHoldersComponent/stakeHolders';
+//import saveStakeHolder from '../ConversationEditorComponents/StakeHoldersComponent/stakeHolders';
+//import saveStakeHolders from 'ethisim/src/components/EditorComponents/ConversationEditorComponents/StakeHoldersComponent/stakeHolders.js'
 
 //Need scenarioID
 const endpointGET = '/api/issues/?SCENARIO=';

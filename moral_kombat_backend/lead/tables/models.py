@@ -148,9 +148,9 @@ class responses_to_conversations(models.Model):
     SCORE = models.FloatField(validators = [MinValueValidator(0.0)])
     CONVERSATION = ('conversations', to_field= 'CONVERSATION', on_delete = models.CASCADE, related_name="responsesTC3")
 
-class actions_taken(models.Model):
-    RESPONSE = models.ForeignKey('responses', on_delete = models.CASCADE, related_name="actions_taken1")
-    ACTION_PAGE = models.ForeignKey('action_page', on_delete = models.CASCADE, related_name="actions_taken2")
+# class actions_taken(models.Model):
+#     RESPONSE = models.ForeignKey('responses', on_delete = models.CASCADE, related_name="actions_taken1")
+#     ACTION_PAGE = models.ForeignKey('action_page', on_delete = models.CASCADE, related_name="actions_taken2")
 
 
 # class conversations_had(models.Model):

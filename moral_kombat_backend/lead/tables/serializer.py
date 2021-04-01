@@ -189,7 +189,7 @@ class Pages_genericSerializer(serializers.ModelSerializer):
 
 
 class Pages_stakeholderSerializer(serializers.ModelSerializer):
-    stakeholder_page = Stakeholder_pageSerializer()
+    stakeholder_page = Stakeholder_to_pageSerializer()
 
     class Meta:
         model = pages

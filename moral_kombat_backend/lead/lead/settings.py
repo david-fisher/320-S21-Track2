@@ -94,11 +94,19 @@ DATABASES = {
         # 'ENGINE': 'django.db.backends.sqlite3',
         # 'NAME': BASE_DIR / 'db.sqlite3',
 
+        # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        # 'NAME': 'cnehcbso',
+        # 'USER': 'cnehcbso',
+        # 'PASSWORD': 'qy2xdb_zEcAZFOmY7fvQT1SddHRUhbCI',
+        # 'HOST': 'raja.db.elephantsql.com',
+        # 'PORT': '5432',
+
+
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'cnehcbso',
-        'USER': 'cnehcbso',
-        'PASSWORD': 'qy2xdb_zEcAZFOmY7fvQT1SddHRUhbCI',
-        'HOST': 'raja.db.elephantsql.com',
+        'NAME': 'hkjdggmf',
+        'USER': 'hkjdggmf',
+        'PASSWORD': 'Siw8DtLM7Zg5FaP6lQbj9vyvuQ9C2ghB',
+        'HOST': 'queenie.db.elephantsql.com',
         'PORT': '5432',
     }
 }

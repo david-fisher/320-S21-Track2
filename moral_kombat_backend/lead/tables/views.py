@@ -201,24 +201,24 @@ class ReflectionsTakenViewSet(viewsets.ModelViewSet):
     ]
     serializer_class = ReflectionsTakenSerializer
 
-class ActionsTakenViewSet(viewsets.ModelViewSet):
-    queryset = actions_taken.objects.all()
-    permission_class = [
-        permissions.AllowAny
-    ]
-    serializer_class = Actions_takenSerializer
-class ConversationsHadViewSet(viewsets.ModelViewSet):
-    queryset = conversations_had.objects.all()
-    permission_class = [
-        permissions.AllowAny
-    ]
-    serializer_class = ConversationsHadSerializer
+# class ActionsTakenViewSet(viewsets.ModelViewSet):
+#     queryset = actions_taken.objects.all()
+#     permission_class = [
+#         permissions.AllowAny
+#     ]
+#     serializer_class = Actions_takenSerializer
+# class ConversationsHadViewSet(viewsets.ModelViewSet):
+#     queryset = conversations_had.objects.all()
+#     permission_class = [
+#         permissions.AllowAny
+#     ]
+#     serializer_class = ConversationsHadSerializer
 
 
-class StudentsInViewSet(viewsets.ModelViewSet):
-    queryset = students_in.objects.all()
-    permission_class = [permissions.AllowAny]
-    serializer_class = StudentsInSerializer
+# class StudentsInViewSet(viewsets.ModelViewSet):
+#     queryset = students_in.objects.all()
+#     permission_class = [permissions.AllowAny]
+#     serializer_class = StudentsInSerializer
 
 
 class CoursesViewSet(viewsets.ModelViewSet):
@@ -263,12 +263,12 @@ class generic_pageViewSet(viewsets.ModelViewSet):
     serializer_class = Generic_pageSerializer
 
 # Professors_teach ViewSet
-class Professors_teachViewSet(viewsets.ModelViewSet):
-    queryset = professors_teach.objects.all()
-    permissions_class = [
-        permissions.AllowAny
-    ]
-    serializer_class = Professors_teachSerializer
+# class Professors_teachViewSet(viewsets.ModelViewSet):
+#     queryset = professors_teach.objects.all()
+#     permissions_class = [
+#         permissions.AllowAny
+#     ]
+#     serializer_class = Professors_teachSerializer
 
 class IssuesViewSet(viewsets.ModelViewSet):
     queryset = Issues.objects.all()

@@ -87,10 +87,10 @@ export default function ConfigureIssues({ scenario_ID }) {
     });
 
     //for info button
-    //const [open, setOpen] = React.useState(false);
-    //const handleClickOpen = () => {
-    //    setOpen(true);
-    //};
+    const [openHelp, setOpenHelp] = React.useState(false);
+    const handleClickOpenHelp = () => {
+        setOpenHelp(true);
+    };
 
     let getData = () => {
         get(setIssueEntryFieldList, endpointGET + scenario_ID);
@@ -151,13 +151,13 @@ export default function ConfigureIssues({ scenario_ID }) {
                 Configure Ethical Issues
             </Typography>
             <Grid container justify="flex-end">
-                <Button color="primary" onClick={handleClickOpen}>
+                <Button color="primary" onClick={handleClickOpenHelp}>
                     <HelpIcon />
                 </Button>
                 <GenericInfoButton
                     description={`This page is currently under maintenance.`}
-                    open={open}
-                    setOpen={setOpen}
+                    open={openHelp}
+                    setOpen={setOpenHelp}
                 />
             </Grid>
             <div className={classes.spacing}>

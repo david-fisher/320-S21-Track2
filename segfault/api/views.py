@@ -424,3 +424,27 @@ class response_to_conversations(APIView):
         except Conversations.DoesNotExist:
             return DRF_response({'detail': "conversation_id not found"}, status=status.HTTP_404_NOT_FOUND)
         # Only need exception check for Conversations.DoesNotExist, all other bad inputs are handled by the serializer.valid()
+
+class reflection(APIView):
+    #retrieve a reflection for a particular response from the database
+    def get(self, request, *args, **kwargs):
+        page_id = self.request.query_params.get('page_id') 
+        student_id = self.request.query_params.get('student_id')
+        scenario_id = self.request.query_params.get('scenario_id')
+
+
+        # extra check for if the given JSON has the required fields
+        if(scenario_id is None or page_id is None or student_id is None ):
+            return DRF_response({'detail': "Missing one or more parameters"}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            response = Response.objects.get(page= page_id, student = student_id, scenario = scenario_id)
+        except Response.DoesNotExist:
+            return DRF_response(status=status.HTTP_404_NOT_FOUND)
+        
+        try:
+            ref = Reflections_taken.objects.filter(response = response.response_id).first()
+            reflection_data = ReflectionsTakenSerializer(ref).data
+            return DRF_response(reflection_data)
+        except Scenario.DoesNotExist:
+            return DRF_response(status=status.HTTP_404_NOT_FOUND)

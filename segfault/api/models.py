@@ -15,7 +15,8 @@ from django.core.validators import MinValueValidator, MaxValueValidator
     class Meta:
         db_table = 'users'
  """
- 
+
+
 class Scenario(models.Model):
 
     scenario_id = models.AutoField(primary_key=True, editable=False)
@@ -30,7 +31,7 @@ class Scenario(models.Model):
     class Meta:
         db_table = 'scenario'
         ordering = ['date_created', 'name']
-        unique_together = ('scenario','version')
+        unique_together = ('scenario', 'version')
 
 
 class Student(models.Model):
@@ -54,12 +55,13 @@ class Professor(models.Model):
     class Meta:
         db_table = 'professors'
 
+
 class Professors_to_scenario(models.Model):
     professor = models.ForeignKey(
-        Professor, on_delete = models.CASCADE)
+        Professor, on_delete=models.CASCADE)
     scenario = models.ForeignKey(
         Scenario, on_delete=models.CASCADE,)
-    permission = models.IntegerField(default = 1)
+    permission = models.IntegerField(default=1)
 
 
 class Course(models.Model):
@@ -126,7 +128,6 @@ class Demographic(models.Model):
         db_table = 'demographics'
 
 
-
 class Scenario_to_Course(models.Model):
 
     scenario = models.ForeignKey(
@@ -138,7 +139,7 @@ class Scenario_to_Course(models.Model):
         unique_together = ('scenario', 'course')
         db_table = 'scenario_for'
 
-        
+
 class Pages(models.Model):
     page = models.AutoField(primary_key=True, editable=False)
     page_choices = (
@@ -158,6 +159,7 @@ class Pages(models.Model):
     class Meta:
         db_table = 'pages'
 
+
 class Response(models.Model):
     response_id = models.AutoField(primary_key=True, editable=False)
     student = models.ForeignKey(
@@ -176,7 +178,7 @@ class Response(models.Model):
     class Meta:
         db_table = 'responses'
         ordering = ['scenario', 'page', 'student']
-        unique_together = ('scenario','page','student','course')
+        unique_together = ('scenario', 'page', 'student', 'course')
 
 
 class Issue(models.Model):
@@ -189,7 +191,7 @@ class Issue(models.Model):
     class Meta:
         db_table = 'issues'
 
-        
+
 class Stakeholders(models.Model):
     stakeholder = models.AutoField(primary_key=True, editable=False)
     scenario = models.ForeignKey(
@@ -218,16 +220,17 @@ class Reflection_questions(models.Model):
     page = models.ForeignKey(
         Pages, on_delete=models.CASCADE)
     reflection_question = models.TextField()
+
     class Meta:
         db_table = 'reflection_questions'
 
 
 class Generic_page(models.Model):
-    
+
     page = models.ForeignKey(
         Pages, on_delete=models.CASCADE)
     body = models.TextField()
-    
+
     class Meta:
         db_table = 'generic_page'
 
@@ -251,10 +254,11 @@ class Action_page(models.Model):
     choice = models.TextField()
     result_page = models.IntegerField(null=True)
 
+
 class Reflections_taken(models.Model):
     reflections = models.TextField(max_length=100)
     response = models.ForeignKey(
-        Response, on_delete = models.CASCADE)
+        Response, on_delete=models.CASCADE)
 
     class Meta:
         db_table = 'reflections_taken'
@@ -273,7 +277,7 @@ class Response_to_action_page(models.Model):
 
 class Responses_to_conversations(models.Model):
     response = models.ForeignKey(
-        Response, on_delete = models.CASCADE)
+        Response, on_delete=models.CASCADE)
     stakeholder = models.ForeignKey(
         Stakeholders, on_delete=models.CASCADE)
     score = models.DecimalField(max_digits=5, decimal_places=2)
@@ -294,7 +298,7 @@ class Student_times(models.Model):
     date_taken = models.DateField(auto_now_add=True)
     page = models.ForeignKey(
         Pages, on_delete=models.CASCADE)
-    start_time = models.DateField(auto_now_add = True)
+    start_time = models.DateField(auto_now_add=True)
     end_time = models.DateField(null=True)
 
     class Meta:
@@ -317,10 +321,10 @@ class Coverage(models.Model):
 
 class Student_page_progress(models.Model):
     student = models.ForeignKey(
-        Student, on_delete=models.CASCADE, default = None)
+        Student, on_delete=models.CASCADE, default=None)
     page = models.ForeignKey(
-        Pages, on_delete = models.CASCADE, default = None)
-    completed = models.BooleanField(default = False)
+        Pages, on_delete=models.CASCADE, default=None)
+    completed = models.BooleanField(default=False)
 
     class Meta:
-        unique_together = ('student',"page")
+        unique_together = ('student', "page")

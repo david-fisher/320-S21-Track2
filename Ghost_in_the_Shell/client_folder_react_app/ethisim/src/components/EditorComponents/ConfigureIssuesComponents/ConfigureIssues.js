@@ -86,6 +86,12 @@ export default function ConfigureIssues({ scenario_ID }) {
         error: null,
     });
 
+    //for info button
+    //const [open, setOpen] = React.useState(false);
+    //const handleClickOpen = () => {
+    //    setOpen(true);
+    //};
+
     let getData = () => {
         get(setIssueEntryFieldList, endpointGET + scenario_ID);
         get(setIssueCoverageMatrix, endpointGET + scenario_ID);
@@ -144,7 +150,16 @@ export default function ConfigureIssues({ scenario_ID }) {
             <Typography align="center" variant="h2">
                 Configure Ethical Issues
             </Typography>
-
+            <Grid container justify="flex-end">
+                <Button color="primary" onClick={handleClickOpen}>
+                    <HelpIcon />
+                </Button>
+                <GenericInfoButton
+                    description={`This page is currently under maintenance.`}
+                    open={open}
+                    setOpen={setOpen}
+                />
+            </Grid>
             <div className={classes.spacing}>
                 <Button variant="contained" color="primary" onClick={getData}>
                     <RefreshIcon className={classes.iconRefreshSmall} />

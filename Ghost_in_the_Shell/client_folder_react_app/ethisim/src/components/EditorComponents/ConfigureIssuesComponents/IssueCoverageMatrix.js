@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import {
     Container,
@@ -47,6 +47,7 @@ const tableIcons = {
         <ChevronRight {...props} ref={ref} />
     )),
     Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
+    Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
     Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
     FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
     LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref} />),
@@ -124,12 +125,43 @@ export default function IssueMatrix({ scenario }) {
     const classes = useStyles();
 
     const [didGetSHs, setDidGetSHs] = useState(false); //stores status of whether stakeholders have been received
-    const [stakeHolders, setStakeHolders] = useState([]); //stores stakeholders
+    const stakeHolders = useRef(null);
+    const [cols, setColumns] = useState([]);
+    const [rows, setRows] = useState([]);
+    const [issueSums, setSums] = useState([]);
+
+    const [didGetIssues, setDidGetIssues] = useState(false);
+    const [didSetData, setDidSetData] = useState(false);
+
     const [isLoading, setLoading] = useState(false); //stores status of whether something is loading
     var axios = require('axios'); //backend
 
     const [successBannerMessage, setSuccessBannerMessage] = useState(''); //success banner
     const [successBannerFade, setSuccessBannerFade] = useState(false);
+
+    useEffect(() => {
+        stakeHolders.current = [];
+    }, []);
+
+    useEffect(() => {
+        if (didGetSHs && didSetData) {
+            onStakeHolderIssueChange();
+        }
+    }, [rows]);
+
+    useEffect(() => {
+        if (didGetSHs) {
+            setTimeout(() => {
+                if (stakeHolders.current.length > 0) {
+                    setDidSetData(true);
+                    setColData();
+                    setRowData();
+                }
+            }, 2000);
+        }
+    }, [stakeHolders]);
+
+    //let issuePromises = [];
 
     useEffect(() => {
         //sets behaviour of success banner
@@ -153,12 +185,12 @@ export default function IssueMatrix({ scenario }) {
     }, [errorBannerFade]);
 
     function getExistingStakeHolders() {
-        setLoading(true); //starts loading icon
+        //setLoading(true); //starts loading icon
 
         var data = { SCENARIO: { scenario } };
         var config = {
             method: 'get',
-            url: baseURL + '/api/stakeholders/?SCENARIO=' + scenario,
+            url: baseURL + '/stakeholder?scenario_id=' + scenario,
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -167,7 +199,9 @@ export default function IssueMatrix({ scenario }) {
 
         axios(config) //backend call to get data in response
             .then(function (response) {
-                setStakeHolders(response.data);
+                stakeHolders.current = stakeHolders.current.concat(
+                    response.data
+                );
             })
             .catch(function (error) {
                 setErrorBannerMessage(
@@ -175,8 +209,128 @@ export default function IssueMatrix({ scenario }) {
                 );
                 setErrorBannerFade(true);
             });
-
+        setDidGetSHs(true);
         setLoading(false);
+    }
+
+    function saveStakeHolders() {
+        setLoading(true);
+
+        var issues = [];
+        var changedStakeHolder;
+        for (let i = 0; i < stakeHolders.current.length; i++) {
+            let curStakeHolder = stakeHolders.current[i];
+            let curRow = rows[i];
+
+            curStakeHolder.ISSUES.forEach((issue) => {
+                if (
+                    curRow['Issue' + issue.NAME.toUpperCase()] !==
+                    issue.COVERAGE_SCORE
+                ) {
+                    issue.COVERAGE_SCORE =
+                        curRow['Issue' + issue.NAME.toUpperCase()];
+                    changedStakeHolder = curStakeHolder;
+                }
+                issues.push({
+                    COVERAGE_SCORE: issue.COVERAGE_SCORE,
+                    ISSUE: issue.ISSUE,
+                    STAKEHOLDER: issue.STAKEHOLDER,
+                });
+            });
+        }
+
+        if (changedStakeHolder !== undefined) {
+            var data = [...issues];
+
+            var config = {
+                method: 'put',
+                url:
+                    baseURL +
+                    '/multi_coverage?STAKEHOLDER=' +
+                    changedStakeHolder.STAKEHOLDER,
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                data: data,
+            };
+
+            axios(config)
+                .then(function (response) {
+                    setSuccessBannerMessage(
+                        'Successfully saved the issues for this stakeholder!'
+                    );
+                    setSuccessBannerFade(true);
+                })
+                .catch(function (error) {
+                    setErrorBannerMessage(
+                        'Failed to save the issues for this stakeholder! Please try again.'
+                    );
+                    setErrorBannerFade(true);
+                });
+        }
+        setLoading(false);
+    }
+
+    function setColData() {
+        let cols = [
+            { title: 'Name', field: 'NAME' },
+            { title: 'Description', field: 'DESCRIPTION' },
+        ];
+        stakeHolders.current[0].ISSUES.forEach((issue) => {
+            let insertBoolean = true;
+            for (let i = 0; i < cols.length; i++) {
+                if (cols[i].title === 'Issue' + issue.NAME) {
+                    insertBoolean = false;
+                }
+            }
+            if (insertBoolean) {
+                cols.push({
+                    title: 'Issue' + issue.NAME,
+                    field: 'Issue' + issue.NAME.toUpperCase(),
+                    type: 'numeric',
+                });
+            }
+        });
+        setColumns(cols);
+    }
+    function onStakeHolderIssueChange() {
+        let sums = { NAME: '', DESCRIPTION: 'Running Issue Sums' };
+        for (let j = 0; j < stakeHolders.current.length; j++) {
+            let stakeHolder = stakeHolders.current[j];
+            for (let i = 0; i < stakeHolder.ISSUES.length; i++) {
+                let curIssue = stakeHolder.ISSUES[i];
+                if (sums['Issue' + curIssue.NAME.toUpperCase()] === undefined) {
+                    sums['Issue' + curIssue.NAME.toUpperCase()] = 0;
+                }
+                sums['Issue' + curIssue.NAME.toUpperCase()] +=
+                    rows[j]['Issue' + curIssue.NAME.toUpperCase()];
+            }
+        }
+        setSums(sums);
+        saveStakeHolders();
+    }
+
+    function setRowData() {
+        setLoading(true);
+        let sums = { NAME: '', DESCRIPTION: 'Running Issue Sums' };
+        let data = stakeHolders.current.map((stakeHolder) => {
+            let row = {
+                NAME: stakeHolder.NAME,
+                DESCRIPTION: stakeHolder.JOB,
+            };
+            stakeHolder.ISSUES.forEach((curIssue) => {
+                row['Issue' + curIssue.NAME.toUpperCase()] =
+                    curIssue.COVERAGE_SCORE;
+                if (sums['Issue' + curIssue.NAME.toUpperCase()] === undefined) {
+                    sums['Issue' + curIssue.NAME.toUpperCase()] = 0;
+                }
+                sums['Issue' + curIssue.NAME.toUpperCase()] +=
+                    curIssue.COVERAGE_SCORE;
+            });
+            return row;
+        });
+        setSums(sums);
+        setRows(data);
     }
 
     if (isLoading) {
@@ -185,39 +339,63 @@ export default function IssueMatrix({ scenario }) {
 
     if (!didGetSHs) {
         //if stakeholders have alreasdy been loaded, don't do it again
-        setDidGetSHs(true);
         getExistingStakeHolders();
     }
+    /*if (didGetSHs && !didGetIssues) {
+        setDidGetIssues(true);
+        //getIssues();
+    }
+    if (didGetIssues && !didSetData) {
+        setDidSetData(true);
+        setColData();
+        setRowData();
+    }*/
 
     return (
         <Container component="main" className={classes.container}>
             <MaterialTable /*table*/
                 icons={tableIcons} /*all the icons*/
                 title={'Issue Coverage Matrix'}
-                cellEditable={{
-                    /*sets the cells to be editable*/ cellStyle: {},
-                    onCellEditApproved: (
-                        newValue,
-                        oldValue,
-                        rowData,
-                        columnDef
-                    ) => {
-                        return new Promise((resolve, reject) => {
-                            console.log('newValue: ' + newValue);
-                            setTimeout(resolve, 4000);
-                        });
-                    },
+                options={{
+                    exportButton: true,
                 }}
-                columns={[
-                    { title: 'Name', field: 'NAME' },
-                    { title: 'Description', field: 'DESCRIPTION' },
-                ]}
-                data={stakeHolders.map((
-                    stakeHolder /*populates the NAME and DESCRIPTION field with stakeholder data*/
-                ) => ({
-                    NAME: stakeHolder.NAME,
-                    DESCRIPTION: stakeHolder.DESCRIPTION,
-                }))}
+                editable={{
+                    isEditHidden: (rowData) =>
+                        rowData.DESCRIPTION === 'Running Issue Sums',
+                    isDeleteHidden: (rowData) =>
+                        rowData.DESCRIPTION === 'Running Issue Sums',
+                    onRowAdd: (newData) =>
+                        new Promise((resolve, reject) => {
+                            setTimeout(() => {
+                                setRows([...rows, newData]);
+
+                                resolve();
+                            }, 1000);
+                        }),
+                    onRowUpdate: (newData, oldData) =>
+                        new Promise((resolve, reject) => {
+                            setTimeout(() => {
+                                const dataUpdate = [...rows];
+                                const index = oldData.tableData.id;
+                                dataUpdate[index] = newData;
+                                setRows([...dataUpdate]);
+                                resolve();
+                            }, 1000);
+                        }),
+                    onRowDelete: (oldData) =>
+                        new Promise((resolve, reject) => {
+                            setTimeout(() => {
+                                /*const dataDelete = [...data];
+                                const index = oldData.tableData.id;
+                                dataDelete.splice(index, 1);
+                                setData([...dataDelete]);*/
+
+                                resolve();
+                            }, 1000);
+                        }),
+                }}
+                columns={cols}
+                data={rows.concat(issueSums)}
             />
         </Container>
     );

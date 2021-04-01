@@ -125,13 +125,13 @@ export default function IssueMatrix({ scenario }) {
     const classes = useStyles();
 
     const [didGetSHs, setDidGetSHs] = useState(false); //stores status of whether stakeholders have been received
-    const [stakeHolders, setStakeHolders] = useState([]); //stores stakeholders
-    const [didGetIssues, setDidGetIssues] = useState(false);
-
-    const [didSetData, setDidSetData] = useState(false);
-    const [cols, setColumns] = useState([]); //stores stakeholders
+    const [stakeHolders, setStakeHolders] = useState([]);
+    const [cols, setColumns] = useState([]);
     const [rows, setRows] = useState([]);
     const [issueSums, setSums] = useState([]);
+
+    const [didGetIssues, setDidGetIssues] = useState(false);
+    const [didSetData, setDidSetData] = useState(false);
 
     const [isLoading, setLoading] = useState(false); //stores status of whether something is loading
     var axios = require('axios'); //backend
@@ -187,7 +187,9 @@ export default function IssueMatrix({ scenario }) {
 
         axios(config) //backend call to get data in response
             .then(function (response) {
-                setStakeHolders(response.data);
+                stakeHolders.current = stakeHolders.current.concat(
+                    response.data
+                );
                 setLoading(false);
             })
             .catch(function (error) {
@@ -324,11 +326,12 @@ export default function IssueMatrix({ scenario }) {
 
     if (!didGetSHs) {
         //if stakeholders have alreasdy been loaded, don't do it again
+        getExistingStakeHolders();
         setDidGetSHs(true);
     }
     if (didGetSHs && !didGetIssues) {
         setDidGetIssues(true);
-        getIssues();
+        //getIssues();
     }
     if (didGetIssues && !didSetData) {
         setDidSetData(true);

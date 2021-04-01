@@ -77,16 +77,6 @@ CREATE TABLE student_times (
   FOREIGN KEY (COURSE) REFERENCES courses (COURSE)
 );
 
-CREATE TABLE pages_to_scenario (
-  page_id INTEGER,
-  scenario_id INTEGER,
-  page_version INTEGER,
-  scenario_version INTEGER,
-  PRIMARY KEY (page_id, scenario_id, page_version, scenario_version),
-  FOREIGN KEY (page_id, page_version) REFERENCES pages (PAGE, VERSION),
-  FOREIGN KEY (scenario_id, scenario_version) REFERENCES scenarios (SCENARIO, VERSION)
-);
-
 CREATE TABLE pages (
   PAGE INTEGER,
   PAGE_TYPE TEXT,
@@ -95,12 +85,22 @@ CREATE TABLE pages (
   VERSION INTEGER,
   BODY TEXT,
   NEXT_PAGE INTEGER,
+  NEXT_PAGE_VERSION INTEGER,
   X_COORDINATE INTEGER,
   Y_COORDINATE INTEGER,
   COMPLETED BOOLEAN,
   PRIMARY KEY (PAGE, VERSION),
   FOREIGN KEY (SCENARIO) REFERENCES scenarios (SCENARIO_ID),
-  FOREIGN KEY (NEXT_PAGE) REFERENCES pages (PAGE)
+  FOREIGN KEY (NEXT_PAGE, NEXT_PAGE_VERSION) REFERENCES pages (PAGE, VERSION)
+);
+
+CREATE TABLE pages_to_scenario (
+  page_id INTEGER,
+  scenario_id INTEGER,
+  page_version INTEGER,
+  PRIMARY KEY (page_id, scenario_id, page_version),
+  FOREIGN KEY (page_id, page_version) REFERENCES pages (PAGE, VERSION),
+  FOREIGN KEY (scenario_id) REFERENCES scenarios (SCENARIO_ID)
 );
 
 CREATE TABLE responses (
@@ -110,6 +110,7 @@ CREATE TABLE responses (
   SCENARIO INTEGER,
   VERSION INTEGER,
   PAGE INTEGER,
+  PAGE_VERSION INTEGER,
   COURSE INTEGER,
   DATE_TAKEN DATE,
   CHOICE TEXT,
@@ -117,7 +118,7 @@ CREATE TABLE responses (
   FOREIGN KEY (STUDENT) REFERENCES students (STUDENT),
   FOREIGN KEY (COURSE) REFERENCES courses (COURSE),
   FOREIGN KEY (SCENARIO) REFERENCES scenarios (SCENARIO_ID),
-  FOREIGN KEY (PAGE) REFERENCES pages (PAGE),
+  FOREIGN KEY (PAGE, PAGE_VERSION) REFERENCES pages (PAGE, VERSION),
   UNIQUE (RESPONSE, STUDENT, SCENARIO, PAGE, COURSE, DATE_TAKEN)
 );
 
@@ -178,11 +179,9 @@ CREATE TABLE responses_to_conversations (
 
 CREATE TABLE reflection_questions (
   id INTEGER,
-  PAGE INTEGER,
   REFLECTION_QUESTION TEXT,
   VERSION INTEGER,
-  PRIMARY KEY (id, PAGE, REFLECTION_QUESTION),
-  FOREIGN KEY (PAGE) REFERENCES pages (PAGE)
+  PRIMARY KEY (id, version)
 );
 
 CREATE TABLE reflection_question_to_page (
@@ -191,15 +190,16 @@ CREATE TABLE reflection_question_to_page (
   reflection_question_version INTEGER,
   page_version INTEGER,
   PRIMARY KEY (reflection_question_id, page_id, reflection_question_version, page_version),
-  FOREIGN KEY (reflection_question_id, reflection_question_version) REFERENCES reflection_questions (id, reflection_question),
+  FOREIGN KEY (reflection_question_id, reflection_question_version) REFERENCES reflection_questions (id, VERSION),
   FOREIGN KEY (page_id, page_version) REFERENCES pages (PAGE, VERSION)
 );
 
 CREATE TABLE stakeholder_to_page (
   PAGE INTEGER,
+  PAGE_VERSION INTEGER,
   STAKEHOLDER INTEGER,
-  PRIMARY KEY (PAGE, STAKEHOLDER),
-  FOREIGN KEY (PAGE) REFERENCES pages (PAGE),
+  PRIMARY KEY (PAGE, PAGE_VERSION, STAKEHOLDER),
+  FOREIGN KEY (PAGE, PAGE_VERSION) REFERENCES pages (PAGE, VERSION),
   FOREIGN KEY (STAKEHOLDER) REFERENCES stakeholders (STAKEHOLDER)
 );
 
@@ -208,25 +208,26 @@ CREATE TABLE generic_page (
   PAGE INTEGER,
   BODY TEXT,
   VERSION INTEGER,
-  PRIMARY KEY (id, PAGE, BODY, VERSION),
-  FOREIGN KEY (PAGE) REFERENCES pages (PAGE)
+  PRIMARY KEY (id, VERSION),
+  FOREIGN KEY (PAGE, version) REFERENCES pages (PAGE, version)
 );
 
 CREATE TABLE action_page (
   id INTEGER UNIQUE,
   PAGE INTEGER,
+  VERSION INTEGER,
   CHOICE TEXT,
   RESULT_PAGE INTEGER,
-  VERSION INTEGER,
-  PRIMARY KEY (id, PAGE, CHOICE, VERSION),
-  FOREIGN KEY (PAGE) REFERENCES pages (PAGE)
+  PRIMARY KEY (id, VERSION),
+  FOREIGN KEY (PAGE, version) REFERENCES pages (PAGE, version)
 );
 
 CREATE TABLE response_to_action_page (
   RESPONSE_ID INTEGER,
   ACTION_PAGE INTEGER,
+  ACTION_PAGE_VERSION INTEGER,
   FOREIGN KEY (RESPONSE_ID) REFERENCES responses (RESPONSE_ID),
-  FOREIGN KEY (ACTION_PAGE) REFERENCES action_page (id)
+  FOREIGN KEY (ACTION_PAGE, ACTION_PAGE_VERSION) REFERENCES action_page (id, VERSION)
 );
 
 CREATE TABLE scenarios_for (

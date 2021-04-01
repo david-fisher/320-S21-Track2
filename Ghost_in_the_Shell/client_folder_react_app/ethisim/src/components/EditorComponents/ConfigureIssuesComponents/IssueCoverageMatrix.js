@@ -125,7 +125,7 @@ export default function IssueMatrix({ scenario }) {
     const classes = useStyles();
 
     const [didGetSHs, setDidGetSHs] = useState(false); //stores status of whether stakeholders have been received
-    const [stakeHolders, setStakeHolders] = useState([]);
+    const stakeHolders = useRef(null);
     const [cols, setColumns] = useState([]);
     const [rows, setRows] = useState([]);
     const [issueSums, setSums] = useState([]);
@@ -144,10 +144,20 @@ export default function IssueMatrix({ scenario }) {
     }, []);
 
     useEffect(() => {
-        if (didGetIssues && didSetData) {
+        if (didGetSHs && didSetData) {
             onStakeHolderIssueChange();
         }
     }, [rows]);
+
+    useEffect(() => {
+        if (didGetSHs) {
+            setTimeout(() => {
+                setDidSetData(true);
+                setColData();
+                setRowData();
+            }, 750);
+        }
+    }, [stakeHolders]);
 
     //let issuePromises = [];
 
@@ -173,7 +183,7 @@ export default function IssueMatrix({ scenario }) {
     }, [errorBannerFade]);
 
     function getExistingStakeHolders() {
-        setLoading(true); //starts loading icon
+        //setLoading(true); //starts loading icon
 
         var data = { SCENARIO: { scenario } };
         var config = {
@@ -190,7 +200,6 @@ export default function IssueMatrix({ scenario }) {
                 stakeHolders.current = stakeHolders.current.concat(
                     response.data
                 );
-                setLoading(false);
             })
             .catch(function (error) {
                 setErrorBannerMessage(
@@ -198,6 +207,8 @@ export default function IssueMatrix({ scenario }) {
                 );
                 setErrorBannerFade(true);
             });
+        setDidGetSHs(true);
+        setLoading(false);
     }
 
     function saveStakeHolders() {
@@ -327,9 +338,8 @@ export default function IssueMatrix({ scenario }) {
     if (!didGetSHs) {
         //if stakeholders have alreasdy been loaded, don't do it again
         getExistingStakeHolders();
-        setDidGetSHs(true);
     }
-    if (didGetSHs && !didGetIssues) {
+    /*if (didGetSHs && !didGetIssues) {
         setDidGetIssues(true);
         //getIssues();
     }
@@ -337,7 +347,7 @@ export default function IssueMatrix({ scenario }) {
         setDidSetData(true);
         setColData();
         setRowData();
-    }
+    }*/
 
     return (
         <Container component="main" className={classes.container}>

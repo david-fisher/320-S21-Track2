@@ -24,7 +24,8 @@ import addStakeHolder from '../ConversationEditorComponents/StakeHoldersComponen
 
 //import saveStakeHolder from '../ConversationEditorComponents/StakeHoldersComponent/stakeHolders';
 
-//import saveStakeHolders from 'ethisim/src/components/EditorComponents/ConversationEditorComponents/StakeHoldersComponent/stakeHolders.js'
+// import saveStakeHolders from 'ethisim/src/components/EditorComponents/ConversationEditorComponents/StakeHoldersComponent/stakeHolders.js'
+
 import HelpIcon from '@material-ui/icons/Help';
 import GenericInfoButton from '../../InfoButtons/GenericInfoButton';
 

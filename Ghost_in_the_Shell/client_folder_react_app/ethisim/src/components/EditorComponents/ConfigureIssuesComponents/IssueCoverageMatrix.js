@@ -157,7 +157,7 @@ export default function IssueMatrix({ scenario }) {
                     setColData();
                     setRowData();
                 }
-            }, 750);
+            }, 2000);
         }
     }, [stakeHolders]);
 
@@ -230,12 +230,12 @@ export default function IssueMatrix({ scenario }) {
                     issue.COVERAGE_SCORE =
                         curRow['Issue' + issue.NAME.toUpperCase()];
                     changedStakeHolder = curStakeHolder;
-                    issues.push({
-                        COVERAGE_SCORE: issue.COVERAGE_SCORE,
-                        ISSUE: issue.ISSUE,
-                        STAKEHOLDER: issue.STAKEHOLDER,
-                    });
                 }
+                issues.push({
+                    COVERAGE_SCORE: issue.COVERAGE_SCORE,
+                    ISSUE: issue.ISSUE,
+                    STAKEHOLDER: issue.STAKEHOLDER,
+                });
             });
         }
 

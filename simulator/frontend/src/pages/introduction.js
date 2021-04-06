@@ -106,7 +106,7 @@ function Introduction(props) {
         </Grid>
         <Grid item style={{ marginRight: "0rem", marginTop: "-3rem" }}>
           <Link
-            to={`${props.match.url}/${2}`}>
+            to={`${props.match.url}/${props.nextPageNumber}`}>
             <Button >
               Next
             </Button>

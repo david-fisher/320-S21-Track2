@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { makeStyles, withStyles, Typography, Box, Grid, Button,
   Card, CardContent, Modal, Dialog, DialogContent, DialogContentText } from "@material-ui/core";
 import { useTheme } from "@material-ui/core/styles";
-import { GatheredInfoContext } from './simulationWindow';
+import { GatheredInfoContext } from './simulator_window';
 import { BASE_URL, STUDENT_ID, SCENARIO_ID } from "../constants/config";
 import axios from 'axios';
 import Conversation from './conversation';
@@ -128,7 +128,7 @@ function Stakeholders({ pages, setPages, activePage, setActivePage }) {
         });
       }).catch(err => {
         console.log(err);
-        alert(err);
+        //alert(err);
       });
   })()
   }, [scenarios])

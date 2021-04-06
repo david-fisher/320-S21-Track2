@@ -6,8 +6,6 @@ import Stakeholders from './stakeholders'
 
 function Page(props) {
 
-    console.log(props)
-
     const pageTypes = {
         "G": (
             <Introduction 
@@ -17,13 +15,21 @@ function Page(props) {
             <Introduction 
                 {...props}
             />),
+        "S": (
+            <Stakeholders 
+                {
+                    ...props
+
+                }
+            />
+        )
     };
 
     const { state, setState } = React.useState({
         visited: props.visited,
         completed: props.completed,
         pageNumber: props.pageNumber,
-    })
+    });
 
     return (pageTypes[props.type]);
 }

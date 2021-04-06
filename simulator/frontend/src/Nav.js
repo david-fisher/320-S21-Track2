@@ -18,7 +18,8 @@ import MenuIcon from "@material-ui/icons/Menu";
 
 import { BrowserRouter as Router, Switch, Route, Link, Redirect } from "react-router-dom";
 //import SimulationWindow from "./pages/simulationWindow";
- import SimulationWindow from "./pages/sim_window";
+//import SimulationWindow from "./pages/sim_window";
+import SimulationWindow from './pages/simulator_window';
 
 const useStyles = makeStyles((theme) => ({
   root: {

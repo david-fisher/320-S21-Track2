@@ -51,9 +51,9 @@ services:
     networks:
       - default-net
 
-  shibboleth:
+  apache:
     restart: always
-    container_name: shibd
+    container_name: apache
     environment: 
       BUILDKIT_INLINE_CACHE: 1
       DOCKER_IP: DOCKER_HOST

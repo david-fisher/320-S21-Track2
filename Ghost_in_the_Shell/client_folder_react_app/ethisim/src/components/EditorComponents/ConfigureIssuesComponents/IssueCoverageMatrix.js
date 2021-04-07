@@ -144,21 +144,29 @@ export default function IssueMatrix({ scenario }) {
     }, []);
 
     useEffect(() => {
-        if (didGetSHs && didSetData) {
+        if (stakeHolders.current.length > 0 && didSetData) {
             onStakeHolderIssueChange();
+            getExistingStakeHolders();
         }
     }, [rows]);
 
     useEffect(() => {
-        if (didGetSHs) {
+        /*if (didGetSHs) {
             setTimeout(() => {
                 if (stakeHolders.current.length > 0) {
                     setDidSetData(true);
                     setColData();
                     setRowData();
                 }
-            }, 2000);
-        }
+           
+        }*/
+        //if (stakeHolders.current.length > 0) {
+        setTimeout(() => {
+            setDidSetData(true);
+            setColData();
+            setRowData();
+        }, 2000);
+        //}
     }, [stakeHolders]);
 
     //let issuePromises = [];
@@ -185,7 +193,7 @@ export default function IssueMatrix({ scenario }) {
     }, [errorBannerFade]);
 
     function getExistingStakeHolders() {
-        //setLoading(true); //starts loading icon
+        setLoading(true); //starts loading icon
 
         var data = { SCENARIO: { scenario } };
         var config = {
@@ -207,6 +215,7 @@ export default function IssueMatrix({ scenario }) {
                 setErrorBannerMessage(
                     'Failed to get Stakeholders! Please try again.'
                 );
+                setLoading(false);
                 setErrorBannerFade(true);
             });
         setDidGetSHs(true);
@@ -259,6 +268,7 @@ export default function IssueMatrix({ scenario }) {
                     setSuccessBannerMessage(
                         'Successfully saved the issues for this stakeholder!'
                     );
+                    setLoading(false);
                     setSuccessBannerFade(true);
                 })
                 .catch(function (error) {
@@ -333,6 +343,53 @@ export default function IssueMatrix({ scenario }) {
         setRows(data);
     }
 
+    function deleteStakeHolder() {
+        setLoading(true);
+
+        var deletedStakeHolder;
+        for (let i = 0; i < stakeHolders.current.length; i++) {
+            let curStakeHolder = stakeHolders.current[i];
+            let curRow = rows[i];
+
+            deletedStakeHolder = curStakeHolder.ISSUES.filter((issue) => {
+                curRow['Issue' + issue.NAME.toUpperCase()] === undefined;
+            });
+        }
+
+        if (deletedStakeHolder !== undefined) {
+            var data = JSON.stringify({});
+
+            var config = {
+                method: 'delete',
+                url:
+                    baseURL +
+                    '/api/stakeholders/' +
+                    deletedStakeHolder.STAKEHOLDER +
+                    '/',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                data: data,
+            };
+
+            axios(config)
+                .then(function (response) {
+                    setSuccessBannerMessage(
+                        'Successfully deleted the stakeholder!'
+                    );
+                    getExistingStakeHolders();
+                    setSuccessBannerFade(true);
+                })
+                .catch(function (error) {
+                    setErrorBannerMessage(
+                        'Failed to delete the stakeholder! Please try again.'
+                    );
+                    setErrorBannerFade(true);
+                });
+            setLoading(false);
+        }
+    }
+
     if (isLoading) {
         return <LoadingSpinner />;
     }
@@ -385,11 +442,11 @@ export default function IssueMatrix({ scenario }) {
                     onRowDelete: (oldData) =>
                         new Promise((resolve, reject) => {
                             setTimeout(() => {
-                                /*const dataDelete = [...data];
+                                const dataDelete = [...rows];
                                 const index = oldData.tableData.id;
                                 dataDelete.splice(index, 1);
-                                setData([...dataDelete]);*/
-
+                                setRows([...dataDelete]);
+                                deleteStakeHolder();
                                 resolve();
                             }, 1000);
                         }),

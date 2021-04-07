@@ -20,14 +20,13 @@ import ErrorIcon from '@material-ui/icons/Error';
 import PropTypes from 'prop-types';
 import IssueMatrix from './IssueCoverageMatrix';
 import MaterialTable from 'material-table';
-import addStakeHolder from '../ConversationEditorComponents/StakeHoldersComponent/stakeHolders';
-//import saveStakeHolder from '../ConversationEditorComponents/StakeHoldersComponent/stakeHolders';
-//import saveStakeHolders from 'ethisim/src/components/EditorComponents/ConversationEditorComponents/StakeHoldersComponent/stakeHolders.js'
-import HelpIcon from '@material-ui/icons/Help';
-import GenericInfoButton from '../../InfoButtons/GenericInfoButton';
+// import addStakeHolder from '../ConversationEditorComponents/StakeHoldersComponent/stakeHolders';
+// import saveStakeHolder from '../ConversationEditorComponents/StakeHoldersComponent/stakeHolders';
+var axios = require('axios');
 
 //Need scenarioID
 const endpointGET = '/api/issues/?SCENARIO=';
+const baseURL = 'http://127.0.0.1:8000';
 
 const useStyles = makeStyles((theme) => ({
     issue: {
@@ -65,13 +64,80 @@ const useStyles = makeStyles((theme) => ({
 ConfigureIssues.propTypes = {
     scenario_ID: PropTypes.number,
 };
+let values = {};
 
 export default function ConfigureIssues({ scenario_ID }) {
+    const addStakeHolders = () => {
+        // if (!checkTime(setCurrentTime, currentTime)) {
+        //     return;
+        // }
+        // setLoading(true);
+
+        var data = JSON.stringify({
+            SCENARIO: scenario_ID,
+        });
+
+        var config = {
+            method: 'post',
+            url: baseURL + '/stakeholder',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            data: data,
+        };
+        axios(config)
+            .then(function (response) {
+                //console.log(values)
+                response.data['NAME'] = values['NAME'];
+                response.data['DESCRIPTION'] = values['DESCRIPTION'];
+                response.data['INTRODUCTION'] = values['INTRODUCTION'];
+                response.data['JOB'] = values['JOB'];
+                saveStakeHolders(response.data);
+                // setStakeHolders([...stakeHolders, response.data]);
+                // setSuccessBannerMessage(
+                //     'Successfully created a new stakeholder!'
+                // );
+                //setSuccessBannerFade(true);
+            })
+            .catch(function (error) {
+                // setErrorBannerMessage(
+                //     'Failed to create a stakeholder! Please try again.'
+                // );
+                // setErrorBannerFade(true);
+            });
+    };
+    const saveStakeHolders = (data) => {
+        //var data = [...values]
+
+        var config = {
+            method: 'put',
+            url: baseURL + '/multi_stake?SCENARIO=' + scenario_ID,
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            data: [data],
+        };
+
+        axios(config)
+            .then(function (response) {
+                getData();
+                // setSuccessBannerMessage('Successfully saved the stakeholders!');
+                // setSuccessBannerFade(true);
+            })
+            .catch(function (error) {
+                // setErrorBannerMessage(
+                //     'Failed to save the stakeholders! Please try again.'
+                // );
+                // setErrorBannerFade(true);
+            });
+    };
+
     const [open, setOpen] = React.useState(false);
     const handleClickOpen = () => {
         setOpen(true);
     };
     const handleClose = () => {
+        addStakeHolders();
         setOpen(false);
     };
     const classes = useStyles();
@@ -86,12 +152,6 @@ export default function ConfigureIssues({ scenario_ID }) {
         error: null,
     });
 
-    //for info button
-    const [openHelp, setOpenHelp] = React.useState(false);
-    const handleClickOpenHelp = () => {
-        setOpenHelp(true);
-    };
-
     let getData = () => {
         get(setIssueEntryFieldList, endpointGET + scenario_ID);
         get(setIssueCoverageMatrix, endpointGET + scenario_ID);
@@ -99,7 +159,7 @@ export default function ConfigureIssues({ scenario_ID }) {
 
     useEffect(getData, []);
 
-    if (issueEntryFieldList.loading) {
+    if (issueEntryFieldList.loading || issueCoverageMatrix.loading) {
         return <LoadingSpinner />;
     }
 
@@ -144,22 +204,34 @@ export default function ConfigureIssues({ scenario_ID }) {
         </div>
     );*/
     //for info button
+    let values = {
+        STAKEHOLDER: 1,
+        NAME: '',
+        DESCRIPTION: '',
+        INTRODUCTION: '',
+        SCENARIO: scenario_ID,
+        VERSION: 1,
+        JOB: '',
+    };
+    const getName = (e) => {
+        values['NAME'] = e.target.value;
+    };
+    const getDes = (e) => {
+        values['DESCRIPTION'] = e.target.value;
+    };
+    const getIntro = (e) => {
+        values['INTRODUCTION'] = e.target.value;
+    };
+    const getJob = (e) => {
+        values['JOB'] = e.target.value;
+    };
 
     return (
         <div className={classes.issue}>
             <Typography align="center" variant="h2">
                 Configure Ethical Issues
             </Typography>
-            <Grid container justify="flex-end">
-                <Button color="primary" onClick={handleClickOpenHelp}>
-                    <HelpIcon />
-                </Button>
-                <GenericInfoButton
-                    description={`This page is currently under maintenance.`}
-                    open={openHelp}
-                    setOpen={setOpenHelp}
-                />
-            </Grid>
+
             <div className={classes.spacing}>
                 <Button variant="contained" color="primary" onClick={getData}>
                     <RefreshIcon className={classes.iconRefreshSmall} />
@@ -204,7 +276,7 @@ export default function ConfigureIssues({ scenario_ID }) {
                             name="StakeHolder name"
                             label="Stakeholder name"
                             id="scenariopageAdder"
-                            // onChange={(e)=>addStakeholder(e)}
+                            onChange={(e) => getName(e)}
                         ></TextField>
 
                         <TextField
@@ -215,7 +287,7 @@ export default function ConfigureIssues({ scenario_ID }) {
                             name="Job"
                             label="Job"
                             id="scenariopageAdder"
-                            onChange={(e) => null}
+                            onChange={(e) => getJob(e)}
                         ></TextField>
 
                         <TextField
@@ -226,6 +298,7 @@ export default function ConfigureIssues({ scenario_ID }) {
                             name="Description"
                             label="Description"
                             id="scenariopageAdder"
+                            onChange={(e) => getDes(e)}
                         ></TextField>
                         <TextField
                             variant="outlined"
@@ -235,12 +308,13 @@ export default function ConfigureIssues({ scenario_ID }) {
                             name="Bio"
                             label="Bio"
                             id="scenariopageAdder"
+                            onChange={(e) => getIntro(e)}
                         ></TextField>
                     </Grid>
                 </Grid>
                 <DialogActions>
                     <Button onClick={handleClose} color="primary">
-                        Done
+                        Add
                     </Button>
                 </DialogActions>
             </Dialog>
@@ -251,3 +325,4 @@ export default function ConfigureIssues({ scenario_ID }) {
         </div>
     );
 }
+

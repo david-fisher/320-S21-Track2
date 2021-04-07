@@ -28,4 +28,4 @@ hs_err_pid*
 *.pyc
 *$py.class
 
-./apache/shib_conf/*
+/apache/shib_conf/*

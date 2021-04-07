@@ -34,7 +34,7 @@ const useStylesBootstrapBack = makeStyles((theme) => ({
       useClasses = backClasses; 
       buttonColor = "#e0e0e0";
     }
-    else if (props.type === "submit"){
+    else if (props.type === "save"){
       tooltipPosition = "bottom";
       buttonVariant = "outlined";
     }

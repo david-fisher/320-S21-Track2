@@ -88,7 +88,7 @@ DATABASES = {
     'default': { 'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'segfaulters',
         'USER':'postgres',
-        'PASSWORD':'admin',
+        'PASSWORD':'Pu22leb0c@',
         'HOST':'localhost',
         'PORT':'5432'
     }

@@ -112,7 +112,7 @@ export default function StateTextFields(props) {
         </Grid>
         <Grid item lg={12}>
         <FormHelperText>{helperText}</FormHelperText>
-          <SubmitButton title={nextPageTitle}></SubmitButton>
+          <SpecialButton type="save" title={nextPageTitle}></SpecialButton>
         </Grid>
       </Grid>
     </form>

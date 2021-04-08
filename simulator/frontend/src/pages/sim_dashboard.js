@@ -88,7 +88,7 @@ export default function Dashboard({setScenario}) {
                     key={scenario.scenario_id}
                     id={scenario.scenario_id}
                     name={scenario.name}
-                    onClick={setScenario}
+                    convLimit={scenario.num_conversation}
                 />
             ));
 

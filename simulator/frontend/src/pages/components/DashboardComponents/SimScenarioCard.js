@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { Typography, Grid, Card, CardContent, Button } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import Tooltip from '@material-ui/core/Tooltip';
+import { ConvLimitConsumer } from '../../context/ConvContext';
 
 const useStyles = makeStyles((theme) => ({
     scenarioContainer: {
@@ -54,11 +55,13 @@ const styles = (theme) => ({
 SimScenarioCard.propTypes = {
     id: PropTypes.number,
     name: PropTypes.string,
+    convLimit: PropTypes.number,
 }
 
 export default function SimScenarioCard({
     id,
     name,
+    convLimit,
 }) {
 
     const classes = useStyles();
@@ -67,18 +70,23 @@ export default function SimScenarioCard({
     const startButton = (
         <Link to={`/simulation/${id}`}>
             <Tooltip title="Let's Begin!" arrow placement="bottom" classes={classes}>
-                <Button
-                    className={classes.buttonText}
-                    variant="contained"
-                    color="primary"
-                    className={classes.button}
-                    item
-                    fullWidth="true"
-                >
-                    <Typography variant="subtitle1" noWrap>
-                        Start
-                    </Typography>
-                </Button>
+                <ConvLimitConsumer>
+                    {(context) => 
+                        <Button
+                            className={classes.buttonText}
+                            variant="contained"
+                            color="primary"
+                            className={classes.button}
+                            item
+                            fullWidth="true"
+                            onClick={() => {context.update(convLimit)}}
+                        >
+                            <Typography variant="subtitle1" noWrap>
+                                Start
+                            </Typography>
+                        </Button>
+                    }
+                </ConvLimitConsumer>
             </Tooltip>
         </Link>
     )

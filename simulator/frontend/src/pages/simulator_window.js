@@ -91,18 +91,21 @@ function SimulationWindow(props) {
                     </Grid>
                     <Grid item xs={10} md={8} sm container direction={"column"} spacing={2}>
                         <Grid item xs>
-                            {pages[activePage]}
-                            {isLoading && <p>We are loading the scenario for you...</p>}
-                            {
-                                activePage === 0 && 
-                                <Button onClick={() => changePage(1)}>
-                                    Welcome to the Simulator...Press this button to continue.
-                                </Button>
-                            }
+                            <GatheredInfoContext.Provider value={[]}>
+                                {pages[activePage]}
+                                {isLoading && <p>We are loading the scenario for you...</p>}
+                                {
+                                    activePage === 0 && 
+                                    <Button onClick={() => changePage(1)}>
+                                        Welcome to the Simulator...Press this button to continue.
+                                    </Button>
+                                }
+                            </GatheredInfoContext.Provider>
                         </Grid>
                     </Grid>
                     <Grid item container direction={"column"} md={2}>
-                        {activePage !== 0 && <SpecialButton 
+                        {activePage !== 0 &&
+                        <SpecialButton 
                             type={"next"}
                             onClick={() => changePage(1)}
                         />}

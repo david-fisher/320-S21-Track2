@@ -17,9 +17,8 @@ import {
 import MenuIcon from "@material-ui/icons/Menu";
 
 import { BrowserRouter as Router, Switch, Route, Link, Redirect } from "react-router-dom";
-//import SimulationWindow from "./pages/simulationWindow";
-//import SimulationWindow from "./pages/sim_window";
 import SimulationWindow from './pages/simulator_window';
+import { ConvLimitProvider } from './pages/context/ConvContext';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -86,12 +85,14 @@ function Nav() {
           {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
             <Switch>
+              <ConvLimitProvider>
                 <Route exact path="/" component={Dashboard} />
                 <Route path="/summary" component={Summary} />
                 <ScenariosContext.Provider value={scenariosState}>
                   <Route path="/simulation/:sid([0-9]+)" component={SimulationWindow} />
                 </ScenariosContext.Provider>
                 <Route path="/chartTest" exact component={RadarTest} />
+              </ConvLimitProvider>
             </Switch>
           </ThemeProvider>
         </div>

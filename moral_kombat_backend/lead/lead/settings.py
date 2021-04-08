@@ -119,14 +119,25 @@ DATABASES = {
     'default': {
         # 'ENGINE': 'django.db.backends.sqlite3',
         # 'NAME': BASE_DIR / 'db.sqlite3',
-<<<<<<< HEAD
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': DB_NAME,
-        'USER': DB_USER,
-        'PASSWORD': DB_PASS,
-        'HOST': DB_HOST,
-        'PORT': DB_PORT,
-=======
+# <<<<<<< Updated upstream
+# <<<<<<< HEAD
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': DB_NAME,
+#         'USER': DB_USER,
+#         'PASSWORD': DB_PASS,
+#         'HOST': DB_HOST,
+#         'PORT': DB_PORT,
+# =======
+# =======
+#<<<<<<< HEAD
+        # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        # 'NAME': DB_NAME,
+        # 'USER': DB_USER,
+        # 'PASSWORD': DB_PASS,
+        # 'HOST': DB_HOST,
+        # 'PORT': DB_PORT,
+#=======
+# >>>>>>> Stashed changes
 
         # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
         # 'NAME': 'cnehcbso',
@@ -136,13 +147,30 @@ DATABASES = {
         # 'PORT': '5432',
 
 
+# <<<<<<< Updated upstream
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'hkjdggmf',
+#         'USER': 'hkjdggmf',
+#         'PASSWORD': 'Siw8DtLM7Zg5FaP6lQbj9vyvuQ9C2ghB',
+#         'HOST': 'queenie.db.elephantsql.com',
+#         'PORT': '5432',
+# >>>>>>> 4fd8059eacf0f4358b19ccf7e08e9eb77b8c118c
+# =======
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'hkjdggmf',
         'USER': 'hkjdggmf',
         'PASSWORD': 'Siw8DtLM7Zg5FaP6lQbj9vyvuQ9C2ghB',
         'HOST': 'queenie.db.elephantsql.com',
         'PORT': '5432',
->>>>>>> 4fd8059eacf0f4358b19ccf7e08e9eb77b8c118c
+
+
+        #  'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        # 'NAME': 'Zoomba',
+        # 'USER': 'BackendBoys',
+        # 'PASSWORD': 'youwishyouwerezoomba',
+        # 'HOST': 'zoomba@ethisim-db.cs.umass.edu',
+        # 'PORT': '5432',
+# >>>>>>> Stashed changes
     }
 }
 

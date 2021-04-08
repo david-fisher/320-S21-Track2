@@ -17,7 +17,7 @@ class scenarios(models.Model):
     IS_FINISHED = models.BooleanField(default = False)
     DATE_CREATED = models.DateField(auto_now_add=True)
 
-    SCENARIO_ID = models.IntegerField(primary_key = True, editable=True)
+    SCENARIO_ID = models.IntegerField(primary_key = True, editable=True, default= 0)
 
     # models.OneToOneField('pages', on_delete = models.CASCADE, related_name = "scenarios1", default = 1)
     # def __str__(self):
@@ -40,7 +40,7 @@ class pages(models.Model):
     BODY = models.TextField(default = "default")
     SCENARIO = models.ForeignKey('scenarios', to_field='SCENARIO_ID', on_delete = models.CASCADE, related_name="pages1")
     VERSION = models.IntegerField(default=1, editable=True, unique = True)
-    NEXT_PAGE = models.ForeignKey('pages', to_field='PAGE', on_delete = models.CASCADE, related_name="pages2", unique= True)
+    NEXT_PAGE = models.ForeignKey('pages', to_field='PAGE', on_delete = models.CASCADE, related_name="pages2", unique= True, default= None)
     X_COORDINATE = models.IntegerField()
     Y_COORDINATE = models.IntegerField()
 
@@ -130,9 +130,9 @@ class conversations(models.Model):
 class responses(models.Model):
     class Meta:
         unique_together = (('RESPONSE'), ('STUDENT'),('SCENARIO'),('PAGE'),('COURSE'),('DATE_TAKEN'))
-    RESPONSE_ID = models.AutoField(primary_key = True, editable = False, default = None)
-    RESPONSE = models.IntegerField()
-    CHOICE = models.TextField()
+    #RESPONSE_ID = models.AutoField(primary_key = True, editable = False, default = 1)
+    RESPONSE = models.IntegerField(default = 0)
+    CHOICE = models.TextField(default = 'default')
     STUDENT = models.ForeignKey('students', to_field= 'STUDENT', on_delete = models.CASCADE, related_name="responses1")
     PAGE = models.ForeignKey('pages', to_field= 'PAGE', on_delete = models.CASCADE, related_name="responses3")
     SCENARIO = models.ForeignKey('scenarios', to_field= 'SCENARIO_ID', on_delete = models.CASCADE, related_name="responses2")
@@ -286,7 +286,7 @@ class student_times(models.Model):
     class Meta:
         unique_together = (('STUDENT'),('SCENARIO_ID'),('COURSE'),('DATE_TAKEN'),('PAGE'))
     STUDENT = models.ForeignKey('students', to_field= 'STUDENT', on_delete = models.CASCADE, related_name="student_times1")
-    SCENARIO_ID = models.ForeignKey('scenarios', to_field= 'SCENARIO_ID', on_delete = models.CASCADE, related_name="student_times2")
+    SCENARIO_ID = models.ForeignKey('scenarios', to_field= 'SCENARIO_ID', on_delete = models.CASCADE, related_name="student_times2", default= None)
     
     COURSE = models.ForeignKey('courses', to_field = 'COURSE', on_delete = models.CASCADE,related_name = "student_times3")
     DATE_TAKEN = models.DateField(auto_now_add=True)

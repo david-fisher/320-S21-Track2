@@ -7,10 +7,10 @@ from django.core.validators import MinValueValidator
 class scenarios(models.Model):
     class Meta:
         unique_together = (('SCENARIO'), ('VERSION'))
-    SCENARIO = models.IntegerField(editable=True)
+    SCENARIO = models.IntegerField(editable=True, unique = True)
     #TODO remove professors
     PROFESSOR = models.ForeignKey('professors', to_field = 'PROFESSOR', on_delete =models.CASCADE, related_name="scenario_creator2", default = 1)
-    VERSION = models.IntegerField(default=1, editable=True)
+    VERSION = models.IntegerField(default=1, editable=True, unique = True)
     NAME = models.CharField(max_length = 1000)
     PUBLIC = models.BooleanField(default = False)
     NUM_CONVERSATION = models.IntegerField(default = 0)
@@ -27,7 +27,7 @@ class scenarios(models.Model):
 class pages(models.Model):
     class Meta:
         unique_together = (('PAGE'), ('VERSION'))
-    PAGE = models.IntegerField(unique=True)
+    PAGE = models.AutoField(primary_key= True)
     PAGE_CHOICES = (
         ('I', 'INTRO'),
         ('G', 'GENERIC'),
@@ -37,9 +37,9 @@ class pages(models.Model):
     )
     PAGE_TYPE = models.CharField(max_length = 2, choices = PAGE_CHOICES)
     PAGE_TITLE = models.CharField(max_length = 1000)
-    BODY = models.TextField()
-    SCENARIO = models.ForeignKey('scenarios', to_field='SCENARIO_ID', on_delete = models.CASCADE, related_name="pages1", primary_key= True)
-    VERSION = models.IntegerField(default=1, editable=True)
+    BODY = models.TextField(default = "default")
+    SCENARIO = models.ForeignKey('scenarios', to_field='SCENARIO_ID', on_delete = models.CASCADE, related_name="pages1")
+    VERSION = models.IntegerField(default=1, editable=True, unique = True)
     NEXT_PAGE = models.ForeignKey('pages', to_field='PAGE', on_delete = models.CASCADE, related_name="pages2", unique= True)
     X_COORDINATE = models.IntegerField()
     Y_COORDINATE = models.IntegerField()
@@ -50,17 +50,17 @@ class reflection_questions(models.Model):
     class Meta:
         unique_together = (('PAGE'), ('REFLECTION_QUESTION'), ('id'))
     PAGE = models.ForeignKey('pages', to_field = 'PAGE', on_delete = models.CASCADE, related_name="reflection_questions1")
-    REFLECTION_QUESTION = models.TextField()
+    REFLECTION_QUESTION = models.TextField(unique = True)
     id = models.AutoField(primary_key = True, editable= False)
-    VERSION = models.IntegerField()
+    VERSION = models.IntegerField(default= 1)
 
 class reflection_question_to_page(models.Model):
     class Meta:
         unique_together = (('page_id'), ('reflection_question_version'), ('reflection_question_id'), ('page_version'))
-    page_id = models.ForeignKey('pages', to_field = 'PAGE', on_delete = models.CASCADE, related_name="reflection_questions1")
-    reflection_question_version = models.ForeignKey('reflection_questions', to_field = 'reflection_question', on_delete = models.CASCADE, related_name="reflection_questions2")
-    reflection_question_id = models.ForeignKey('reflection_questions', to_field = 'id', on_delete = models.CASCADE, related_name="reflection_questions3")
-    page_version = models.ForeignKey('pages', to_field = 'VERSION', on_delete = models.CASCADE, related_name="reflection_questions4")
+    page_id = models.ForeignKey('pages', to_field = 'PAGE', on_delete = models.CASCADE, related_name="reflection_questions_to_page1")
+    reflection_question_version = models.ForeignKey('reflection_questions', to_field = 'REFLECTION_QUESTION', on_delete = models.CASCADE, related_name="reflection_questions_to_page2")
+    reflection_question_id = models.ForeignKey('reflection_questions', to_field = 'id', on_delete = models.CASCADE, related_name="reflection_questions_to_page3")
+    page_version = models.ForeignKey('pages', to_field = 'VERSION', on_delete = models.CASCADE, related_name="reflection_questions_to_page4")
 
 class generic_page(models.Model):
     class Meta:
@@ -68,22 +68,22 @@ class generic_page(models.Model):
     PAGE = models.ForeignKey('pages', to_field= 'PAGE', on_delete = models.CASCADE, related_name="generic_page1", unique= True)
     BODY = models.TextField()
     id = models.AutoField(editable = False, primary_key = True)
-    VERSION = models.IntegerField()
+    VERSION = models.IntegerField(default = 1)
     
 
 class pages_to_scenario(models.Model):
     class Meta:
         unique_together = (('page_id'), ('scenario_id'), ('page_version'), ('scenario_version'))
     page_id = models.ForeignKey('pages', to_field = 'PAGE', on_delete = models.CASCADE, related_name="stakeholder_page1", primary_key= True)
-    scenario_id = models.ForeignKey('scenarios', to_field = 'SCENARIO', on_delete = models.CASCADE, related_name="stakeholder_page1")
-    page_version = models.ForeignKey('pages', to_field = 'VERSION', on_delete = models.CASCADE, related_name="stakeholder_page1")
-    scenario_version = models.ForeignKey('scenarios', to_field = 'VERSION', on_delete = models.CASCADE, related_name="stakeholder_page1")
+    scenario_id = models.ForeignKey('scenarios', to_field = 'SCENARIO', on_delete = models.CASCADE, related_name="stakeholder_page2")
+    page_version = models.ForeignKey('pages', to_field = 'VERSION', on_delete = models.CASCADE, related_name="stakeholder_page3")
+    scenario_version = models.ForeignKey('scenarios', to_field = 'VERSION', on_delete = models.CASCADE, related_name="stakeholder_page4")
 
 class stakeholder_to_page(models.Model):
     class Meta:
         unique_together = (('PAGE'), ('STAKEHOLDER'))
-    PAGE = models.ForeignKey('pages', to_field = "PAGE", on_delete = models.CASCADE, related_name="stakeholder_page1")
-    STAKEHOLDER = models.ForeignKey('stakeholders', to_field = 'STAKEHOLDER', on_delete = models.CASCADE, related_name="stakeholder_page2")
+    PAGE = models.ForeignKey('pages', to_field = "PAGE", on_delete = models.CASCADE, related_name="stakeholder_page5")
+    STAKEHOLDER = models.ForeignKey('stakeholders', to_field = 'STAKEHOLDER', on_delete = models.CASCADE, related_name="stakeholder_page6")
 
 
 # class choices_for(models.Model):
@@ -130,7 +130,7 @@ class conversations(models.Model):
 class responses(models.Model):
     class Meta:
         unique_together = (('RESPONSE'), ('STUDENT'),('SCENARIO'),('PAGE'),('COURSE'),('DATE_TAKEN'))
-    RESPONSE_ID = models.AutoField(primary_key = True, editable = False)
+    RESPONSE_ID = models.AutoField(primary_key = True, editable = False, default = None)
     RESPONSE = models.IntegerField()
     CHOICE = models.TextField()
     STUDENT = models.ForeignKey('students', to_field= 'STUDENT', on_delete = models.CASCADE, related_name="responses1")
@@ -168,7 +168,7 @@ class responses_to_conversations(models.Model):
 class reflections_taken(models.Model):
     # class Meta:
     #     unique_together = (('REFLECTIONS'), ('STUDENT'), ('COURSE'), ('SCENARIO'), ('VERSION'), ('DATE_TAKEN'))
-    REFLECTIONS = models.TextField()
+    REFLECTIONS = models.TextField(default= 'default')
     RESPONSE_ID = models.ForeignKey('responses', to_field = 'RESPONSE_ID', on_delete = models.CASCADE, related_name="conversations_had5")
     # STUDENT = models.ForeignKey('students', on_delete = models.CASCADE, related_name="reflections_taken1")
     # COURSE = models.ForeignKey('responses', on_delete = models.CASCADE, related_name="reflections_taken2")
@@ -187,7 +187,7 @@ class courses_to_scenario(models.Model):
     class Meta:
         unique_together = (('COURSE'), ('SCENARIO'))
     COURSE = models.ForeignKey('courses', to_field = 'COURSE', on_delete = models.CASCADE, related_name="reflections_taken1", primary_key= True)
-    SCENARIO = models.ForeignKey('scenarios', to_field = 'SCENARIO_ID', on_delete = models.CASCADE, related_name="reflections_taken1")
+    SCENARIO = models.ForeignKey('scenarios', to_field = 'SCENARIO_ID', on_delete = models.CASCADE, related_name="reflections_taken2")
     PERMISSION = models.IntegerField()
 
 
@@ -201,8 +201,8 @@ class scenarios_for(models.Model):
 
 class students(models.Model):
     STUDENT = models.IntegerField(primary_key = True)
-    FNAME = models.CharField(max_length = 100)
-    LNAME = models.CharField(max_length = 100)
+    FNAME = models.CharField(max_length = 100, default= "default")
+    LNAME = models.CharField(max_length = 100, default= "default")
 
 class demographics(models.Model):
     STUDENT = models.ForeignKey('students',to_field = 'STUDENT', on_delete = models.CASCADE, related_name = "demographics", primary_key = True)
@@ -234,8 +234,8 @@ class professors(models.Model):
     # class Meta:
     #    unique_together = (('PROFESSOR_ID'), ('NAME'))
     PROFESSOR = models.IntegerField(primary_key = True)
-    FNAME = models.CharField(max_length = 1000)
-    LNAME = models.CharField(max_length = 1000)
+    FNAME = models.CharField(max_length = 1000, default= "default")
+    LNAME = models.CharField(max_length = 1000, default= "default")
 
 class professors_to_scenario(models.Model):
     class Meta:
@@ -267,13 +267,13 @@ class action_page(models.Model):
     class Meta:
         unique_together = (('PAGE'),('CHOICE'), ('id'), ('RESULT_PAGE'))
     PAGE = models.ForeignKey('pages',on_delete = models.CASCADE, related_name = 'action_page1')
-    CHOICE = models.TextField()
+    CHOICE = models.TextField(default = 'default')
     RESULT_PAGE = models.IntegerField(null=True)
     id = models.AutoField(primary_key = True)
 
 class response_to_action_page(models.Model):
-    RESPONSE_ID = models.ForeignKey('responses', to_field = 'RESPONSE_ID', on_delete = models.CASCADE, related_name = 'action_page1')
-    ACTION_PAGE = models.ForeignKey('action_page', to_field = 'id', on_delete = models.CASCADE, related_name = 'action_page1')
+    RESPONSE_ID = models.ForeignKey('responses', to_field = 'RESPONSE_ID', on_delete = models.CASCADE, related_name = 'action_page2')
+    ACTION_PAGE = models.ForeignKey('action_page', to_field = 'id', on_delete = models.CASCADE, related_name = 'action_page3')
 
 # class assigned_to(models.Model):
 #     class Meta:

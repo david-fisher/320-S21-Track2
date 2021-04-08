@@ -4,8 +4,6 @@ import { Container, Box, Typography, Grid, Divider } from '@material-ui/core';
 import SimScenarioCard from './components/DashboardComponents/SimScenarioCard';
 import Copyright from './components/Copyright';
 import { BASE_URL, STUDENT_ID } from '../constants/config';
-import { ConvLimitProvider } from './context/ConvContext';
-
 
 const useStyles = makeStyles((theme) => ({
     container: {

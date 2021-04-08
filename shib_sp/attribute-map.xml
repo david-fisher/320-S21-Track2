@@ -59,7 +59,7 @@
     </Attribute>
     
     <!-- Some more eduPerson attributes, uncomment these to use them... -->
-    <!--
+    
     <Attribute name="urn:mace:dir:attribute-def:eduPersonPrimaryAffiliation" id="primary-affiliation">
         <AttributeDecoder xsi:type="StringAttributeDecoder" caseSensitive="false"/>
     </Attribute>
@@ -82,10 +82,10 @@
     
     <Attribute name="urn:oid:1.3.6.1.4.1.5923.1.6.1.1" id="eduCourseOffering"/>
     <Attribute name="urn:oid:1.3.6.1.4.1.5923.1.6.1.2" id="eduCourseMember"/>
-    -->
+   
 
     <!-- Examples of LDAP-based attributes, uncomment to use these... -->
-    <!--
+    
     <Attribute name="urn:mace:dir:attribute-def:cn" id="cn"/>
     <Attribute name="urn:mace:dir:attribute-def:sn" id="sn"/>
     <Attribute name="urn:mace:dir:attribute-def:givenName" id="givenName"/>
@@ -139,10 +139,10 @@
     <Attribute name="urn:oid:2.5.4.11" id="ou"/>
     <Attribute name="urn:oid:2.5.4.15" id="businessCategory"/>
     <Attribute name="urn:oid:2.5.4.19" id="physicalDeliveryOfficeName"/>
-    -->
+   
 
-<!-- UMass SP -->
-		<Attribute name="urn:mace:dir:attribute-def:departmentName" id="departmentName"/>
+    <!-- UMass SP -->
+	<Attribute name="urn:mace:dir:attribute-def:departmentName" id="departmentName"/>
     <Attribute name="urn:oid:2.16.840.1.113730.3.1.2" id="departmentNumber"/>
     <Attribute name="urn:oid:2.16.840.1.113730.3.1.241" id="displayName"/>
     <Attribute name="urn:urn:oid:1.3.6.1.4.1.5923.1.1.1.1" id="eduPersonAffiliation"/>

@@ -61,7 +61,6 @@ class Professors_to_scenario(models.Model):
     scenario = models.ForeignKey(
         Scenario, on_delete=models.CASCADE,)
     permission = models.IntegerField(default=1)
-
     class Meta:
         unique_together = ('professor','scenario')
 
@@ -181,6 +180,7 @@ class Pages_to_scenario(models.Model):
         Scenario, on_delete = models.CASCADE)
     class Meta:
         unique_together = 'page_id','scenario_id'
+
 
 class Response(models.Model):
     response_id = models.AutoField(primary_key=True, editable=False)

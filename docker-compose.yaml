@@ -3,35 +3,70 @@ version: "3.8"
 services:
   backend:
     restart: always
-    command: bash -c "cd lead && python manage.py runserver 0.0.0.0:8000"
     container_name: back
-    build:  
-      context: ./moral_kombat_backend/
-      dockerfile: Dockerfile
-    volumes: 
-      - .:/app/code/
-    ports:
-      - "8000:8000"
+    environment:
+      BUILDKIT_INLINE_CACHE: 1
+      DB_USER: "cnehcbso"
+      DB_NAME: "cnehcbso"
+      DB_HOST: "raja.db.elephantsql.com"
+      DB_PASS: "qy2xdb_zEcAZFOmY7fvQT1SddHRUhbCI"
+      DB_PORT: "5432"
+      ORIGIN_HOST: "localhost"
+      ORIGIN_PORT: "3000"
+      DJ_SK: "@!6b5hzk8m7y+gdyeq$$8&@g!c%0m+8hhaquat0=ml80biwz)kg"
+    image: cs320track2/backend
+    command: bash -c "cd lead && python manage.py check --tag database && python manage.py runserver 0.0.0.0:8000"
+    networks:
+      - default-net
+    image: cs320track2/backend:latest
+    depends_on:
+      - "database"
+
+  database:
+    restart: always
+    container_name: db
+    environment:
+      POSTGRES_PASSWORD: "password"
+      BUILDKIT_INLINE_CACHE: 1
+    image: cs320track2/database:latest
+    volumes:
+      - ./database/postgres.conf:/etc/postgresql/postgresql.conf
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    command: postgres -c config_file=/etc/postgresql/postgresql.conf
     networks:
       - default-net
 
-  editor-frontend:
+  frontend:
     restart: always
     command : npm start
     container_name: front
-    build:
-      context: ./Ghost_in_the_Shell/client_folder_react_app/ethisim/
-      dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
+    environment:
+      BUILDKIT_INLINE_CACHE: 1
+      CI: "true"
+      REACT_APP_ENDPOINT_URL: "http://localhost:8000"
+    image: cs320track2/frontend
     stdin_open: true
     depends_on:
       - backend
     networks:
       - default-net
+
+  shibboleth:
+    restart: always
+    container_name: shibd
+    environment: 
+      BUILDKIT_INLINE_CACHE: 1
+      DOCKER_IP: DOCKER_HOST
+    image: cs320track2/shibboleth
+    stdin_open: true
+    networks:
+      - default-net
+    command: bash -c "./etc/shibboleth/shib_start.sh"
+
 networks:
   default-net:
     driver: bridge
+    
 
 volumes:
   postgres_data:

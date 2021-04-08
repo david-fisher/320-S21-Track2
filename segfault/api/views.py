@@ -498,3 +498,21 @@ class reflection(APIView):
             return DRF_response(reflection_data)
         except Scenario.DoesNotExist:
             return DRF_response(status=status.HTTP_404_NOT_FOUND)
+
+
+class stakeholder_conv(APIView):
+    def get(self, request, *args, **kwargs):
+        stakeholder_id = self.request.query_params.get('stakeholder_id')
+
+        if(stakeholder_id is None):
+            return DRF_response({'detail': "Missing parameter: stakeholder_id"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        conversations_list = []
+        try:
+            conversations = Conversations.objects.filter(stakeholder=stakeholder_id)
+            for conversation in conversations:
+                conversation_data = ConversationSerializer(conversation).data
+                conversations_list.append(conversation_data)
+            return DRF_response(conversations_list, status=status.HTTP_200_OK)
+        except Conversations.DoesNotExist:
+            return DRF_response(status=status.HTTP_404_NOT_FOUND)

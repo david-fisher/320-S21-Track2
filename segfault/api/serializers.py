@@ -173,3 +173,4 @@ class ScenarioToCourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Scenario_to_Course
         fields = '__all__'
+

@@ -221,14 +221,15 @@ class get_pages(APIView):
     def get(self, request, *args, **kwargs):
 
         scenario = self.request.query_params.get('scenario_id')
+        version = self.request.query_params.get('version')
 
         try:
-            scenario = Scenario.objects.get(scenario_id=scenario)
+            scenario = Scenario.objects.get(scenario_id=scenario, version=version)
         except Scenario.DoesNotExist:
             return DRF_response(status=status.HTTP_404_NOT_FOUND)
 
         page_list = []
-        page_id_list = Pages.objects.filter(scenario_id=scenario)
+        page_id_list = Pages.objects.filter(scenario_id=scenario, version=version)
 
         sorted_list = []
         for page1 in page_id_list:

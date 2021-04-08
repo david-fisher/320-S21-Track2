@@ -3,6 +3,7 @@ import React from "react";
 import Summary from "./pages/summary";
 import Home from "./pages/home";
 import RadarTest from "./pages/chartTest";
+import Dashboard from "./pages/sim_dashboard";
 
 import {
   ThemeProvider,

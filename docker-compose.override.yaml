@@ -37,7 +37,7 @@ services:
       - cs320track2/frontend:latest
     mem_limit: 500m
   apache:
-    ports: 
+    ports:
       - "80:80"
     build:
       context: ./apache/

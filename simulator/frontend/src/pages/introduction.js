@@ -12,6 +12,7 @@ import axios from 'axios';
 import HTMLRenderer from './components/htmlRenderer';
 import { ScenariosContext } from "../Nav";
 import { GatheredInfoContext } from './simulationWindow';
+import VideoPlayer from './components/Sim_videoPlayer'
 
 const TextTypography = withStyles({
   root: {
@@ -31,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Introduction({ pages, setPages, activePage, setActivePage }) {
-
+  
   const [gatheredInfo, setGatheredInfo] = React.useContext(GatheredInfoContext);
 
   function goToProjectAssignment() {
@@ -51,6 +52,7 @@ function Introduction({ pages, setPages, activePage, setActivePage }) {
 
   }
 
+  const [showVid, setShowVid] = React.useState(false);
   const [introText, setIntroText] = React.useState('');
   const [scenarios, setScenarios] = React.useContext(ScenariosContext);
   const classes = useStyles();
@@ -108,6 +110,8 @@ function Introduction({ pages, setPages, activePage, setActivePage }) {
           <Box p={2} className={classes.textBox}>
             <HTMLRenderer html={introText}/>
           </Box>
+          {/* could change the parameter to just scenario in the future to be more dynamic */}
+          <VideoPlayer vid_url="https://www.youtube.com/embed/zPsoFhUDLuU" name="Brain Pop Ethics" description="Example Ethics Video from BrainPop for demo purpose."/> 
         </Grid>
       </Grid>
     </div>

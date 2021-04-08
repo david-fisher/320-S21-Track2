@@ -168,8 +168,7 @@ class Pages(models.Model):
         Scenario, related_name='pages',  through='Pages_to_scenario')
     version = models.IntegerField(default=1, editable=True)
     body = models.TextField()
-    next_page = models.ForeignKey(
-        Pages, on_delete= models.SET_NULL)
+    next_page = models.ForeignKey("Pages", on_delete= models.SET_NULL, null=True)
 
     class Meta:
         db_table = 'pages'
@@ -230,13 +229,6 @@ class Stakeholders(models.Model):
         db_table = 'stakeholders'
         unique_together = 'stakeholder','version'
 
-class Stakeholders_to_questions(models.Model):
-    stakeholder_id = models.ForeignKey(
-        Stakeholders, on_delete = models.CASCADE)
-    question_id = models.ForeignKey(
-        Questions, on_delete = models.CASCADE)
-    class Meta:
-        unique_together = 'stakeholder_id','question_id'
 
 
 class Questions(models.Model):
@@ -244,9 +236,17 @@ class Questions(models.Model):
     version = models.IntegerField(default = 1)
     points = models.IntegerField(default = 1)
     question_text = models.TextField()
-    question_summary - models.TextField()
+    question_summary = models.TextField()
     class Meta:
         unique_together = 'question','version'
+        
+class Stakeholders_to_questions(models.Model):
+    stakeholder_id = models.ForeignKey(
+        Stakeholders, on_delete = models.CASCADE)
+    question_id = models.ForeignKey(
+        Questions, on_delete = models.CASCADE)
+    class Meta:
+        unique_together = 'stakeholder_id','question_id'
 
 class Conversations(models.Model):
     conversation = models.AutoField(primary_key=True, editable=False)

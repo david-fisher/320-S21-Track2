@@ -307,15 +307,16 @@ class get_pages(APIView):
 
 class get_stakeholders(APIView):
     def get(self, request):
-        scenario_id1 = self.request.query_params.get('scenario_id')
+        scenario_id = self.request.query_params.get('scenario_id')
+        version = self.request.query_params.get('version')
         try:
-            scenario = Scenario.objects.get(scenario_id=scenario_id1)
+            scenario = Scenario.objects.get(scenario_id=scenario_id, version=version)
         except Scenario.DoesNotExist:
             return DRF_response(status=status.HTTP_404_NOT_FOUND)
 
         stakeholders_list = []
         stakeholders_id_list = Stakeholders.objects.filter(
-            scenario_id=scenario_id1)
+            scenario_id=scenario_id, version=version)
 
         for stakeholder in stakeholders_id_list:
             convos = Conversations.objects.filter(

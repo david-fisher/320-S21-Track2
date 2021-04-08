@@ -29,6 +29,11 @@ router.register(r'student_page_progress',views.Student_page_progressViewSet)
 router.register(r'coverage', views.CoverageViewSet)
 router.register(r'stakeholders', views.StakeholdersViewSet)
 
+router.register(r'questions', views.QuestionsViewSet)
+router.register(r'stakeholders_to_questions', views.StakeholdersToQuestionsViewSet)
+router.register(r'pages_to_scenario', views.PagesToScenarioViewSet)
+router.register(r'reflection_question_to_page', views.ReflectionQuestionToPageViewSet)
+
 #TODO: register apiviews to api_root view(there are only viewsets now)
 
 # The API URLs are now determined automatically by the router.

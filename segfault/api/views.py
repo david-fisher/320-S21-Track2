@@ -154,6 +154,21 @@ class ScenarioToCourseViewSet(viewsets.ModelViewSet):
     queryset = Scenario_to_Course.objects.all()
     serializer_class = ScenarioToCourseSerializer
 
+class QuestionsViewSet(viewsets.ModelViewSet):
+    queryset = Questions.objects.all()
+    serializer_class = QuestionsSerializer
+
+class StakeholdersToQuestionsViewSet(viewsets.ModelViewSet):
+    queryset = Stakeholders_to_questions.objects.all()
+    serializer_class = StakeholdersToQuestionsSerializer
+
+class PagesToScenarioViewSet(viewsets.ModelViewSet):
+    queryset = Pages_to_scenario.objects.all()
+    serializer_class = PagesToScenarioSerializer
+
+class ReflectionQuestionToPageViewSet(viewsets.ModelViewSet):
+    queryset = Reflection_question_to_page.objects.all()
+    serializer_class = ReflectionQuestionToPageSerializer
 
 # TODO: Some viewsets are not necessary, remove after implementaion of some endpoints
 

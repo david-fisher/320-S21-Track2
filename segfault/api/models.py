@@ -139,6 +139,17 @@ class Scenario_to_Course(models.Model):
         unique_together = ('scenario', 'course')
         db_table = 'scenario_for'
 
+class Courses_to_Scenario(models.Model):
+
+    scenario = models.ForeignKey(
+        Scenario, on_delete=models.CASCADE,)
+    course = models.ForeignKey(
+        Course, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('scenario', 'course')
+        db_table = 'courses_to_scenario'
+        
 
 class Pages(models.Model):
     page = models.AutoField(primary_key=True, editable=False)

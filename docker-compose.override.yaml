@@ -1,4 +1,4 @@
-version: "3.8"
+version: "2.4"
 
 
 services:
@@ -12,6 +12,7 @@ services:
       dockerfile: Dockerfile
       cache_from:
         - cs320track2/backend:latest
+    mem_limit: 500m
   database:
     ports:
       - "5432:5432"
@@ -22,6 +23,7 @@ services:
       dockerfile: Dockerfile
       cache_from:
         - cs320track2/database:latest
+    mem_limit: 500m
   frontend:
     ports:
       - "3000:3000"
@@ -33,6 +35,7 @@ services:
       dockerfile: Dockerfile
       cache_from:
       - cs320track2/frontend:latest
+    mem_limit: 500m
   apache:
     ports: 
       - "80:80"
@@ -41,3 +44,4 @@ services:
       dockerfile: Dockerfile
       cache_from:
       - cs320track2/shibboleth:latest
+    mem_limit: 500m

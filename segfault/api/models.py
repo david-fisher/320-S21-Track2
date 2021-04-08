@@ -29,8 +29,7 @@ class Scenario(models.Model):
     date_created = models.DateField(auto_now_add=True)
 
     class Meta:
-        db_table = 'scenario'
-        ordering = ['date_created', 'name']
+        db_table = 'scenarios'
         unique_together = ('scenario', 'version')
 
 
@@ -62,6 +61,8 @@ class Professors_to_scenario(models.Model):
     scenario = models.ForeignKey(
         Scenario, on_delete=models.CASCADE,)
     permission = models.IntegerField(default=1)
+    class Meta:
+        unique_together = ('professor','scenario')
 
 
 class Course(models.Model):
@@ -87,7 +88,7 @@ class Student_to_Course(models.Model):
 
     class Meta:
         unique_together = ('student', 'course')
-        db_table = 'student_to_course'
+        db_table = 'students_to_course'
 
 
 class Professor_to_Course(models.Model):
@@ -98,7 +99,7 @@ class Professor_to_Course(models.Model):
 
     class Meta:
         unique_together = ('professor', 'course')
-        db_table = 'professor_to_course'
+        db_table = 'professors_to_courses'
 
 
 class Demographic(models.Model):
@@ -137,7 +138,7 @@ class Scenario_to_Course(models.Model):
 
     class Meta:
         unique_together = ('scenario', 'course')
-        db_table = 'scenario_for'
+        db_table = 'scenarios_for'
 
 class Courses_to_Scenario(models.Model):
 
@@ -162,13 +163,23 @@ class Pages(models.Model):
     )
     page_type = models.CharField(max_length=2, choices=page_choices)
     page_title = models.CharField(max_length=1000)
-    scenario = models.ForeignKey(
-        Scenario, on_delete=models.CASCADE)
+    scenarios = models.ManyToManyField(
+        Scenario, related_name='pages',  through='Pages_to_scenario')
+    version = models.IntegerField(default=1, editable=True)
     body = models.TextField()
-    next_page = models.IntegerField(null=True)
+    next_page = models.ForeignKey("Pages", on_delete= models.SET_NULL, null=True)
 
     class Meta:
         db_table = 'pages'
+        unique_together = 'page','version'
+
+class Pages_to_scenario(models.Model):
+    page_id = models.ForeignKey(
+        Pages, on_delete = models.CASCADE)
+    scenario_id = models.ForeignKey(
+        Scenario, on_delete = models.CASCADE)
+    class Meta:
+        unique_together = 'page_id','scenario_id'
 
 
 class Response(models.Model):
@@ -194,7 +205,7 @@ class Response(models.Model):
 
 class Issue(models.Model):
     issue = models.AutoField(default=None, primary_key=True, editable=False)
-    scenario = models.ForeignKey(
+    scenario_id = models.ForeignKey(
         Scenario, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     importance_score = models.FloatField(validators=[MinValueValidator(0.0)])
@@ -204,17 +215,38 @@ class Issue(models.Model):
 
 
 class Stakeholders(models.Model):
-    stakeholder = models.AutoField(primary_key=True, editable=False)
+    stakeholder = models.IntegerField(default = 1)
+    version = models.IntegerField(default = 1)
     scenario = models.ForeignKey(
         Scenario, on_delete=models.CASCADE, null=False)
     name = models.CharField(max_length=1000,  null=False)
     description = models.TextField(default="")
     job = models.TextField(default="default")
     introduction = models.TextField(default='default')
+    enable_multi_convo = models.BooleanField(default = False)
 
     class Meta:
         db_table = 'stakeholders'
+        unique_together = 'stakeholder','version'
 
+
+
+class Questions(models.Model):
+    question = models.IntegerField(default = 1)
+    version = models.IntegerField(default = 1)
+    points = models.IntegerField(default = 1)
+    question_text = models.TextField()
+    question_summary = models.TextField()
+    class Meta:
+        unique_together = 'question','version'
+        
+class Stakeholders_to_questions(models.Model):
+    stakeholder_id = models.ForeignKey(
+        Stakeholders, on_delete = models.CASCADE)
+    question_id = models.ForeignKey(
+        Questions, on_delete = models.CASCADE)
+    class Meta:
+        unique_together = 'stakeholder_id','question_id'
 
 class Conversations(models.Model):
     conversation = models.AutoField(primary_key=True, editable=False)
@@ -228,19 +260,26 @@ class Conversations(models.Model):
 
 
 class Reflection_questions(models.Model):
-    page = models.ForeignKey(
-        Pages, on_delete=models.CASCADE)
     reflection_question = models.TextField()
+    version = models.IntegerField(default = 1)
 
     class Meta:
         db_table = 'reflection_questions'
 
+class Reflection_question_to_page(models.Model):
+    reflection_questions_id = models.ForeignKey(
+        Reflection_questions, on_delete = models.CASCADE)
+    page_id = models.ForeignKey(
+        Pages, on_delete = models.CASCADE)
+    class Meta: 
+        unique_together = 'page_id', 'reflection_questions_id'
 
 class Generic_page(models.Model):
 
     page = models.ForeignKey(
         Pages, on_delete=models.CASCADE)
     body = models.TextField()
+    version = models.IntegerField(default = 1)
 
     class Meta:
         db_table = 'generic_page'
@@ -262,6 +301,7 @@ class Action_page(models.Model):
         db_table = 'action_page'
     page = models.ForeignKey(
         Pages, on_delete=models.CASCADE)
+    version = models.IntegerField(default = 1)
     choice = models.TextField()
     result_page = models.IntegerField(null=True)
 

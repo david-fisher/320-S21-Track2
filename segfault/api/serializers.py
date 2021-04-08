@@ -174,22 +174,22 @@ class ScenarioToCourseSerializer(serializers.ModelSerializer):
         model = Scenario_to_Course
         fields = '__all__'
 
-class QuestionsSerializer(serializer.ModelSerializer):
+class QuestionsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Questions
         fields = '__all__'
 
-class StakeholdersToQuestionsSerializer(serializer.ModelSerializer):
+class StakeholdersToQuestionsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Stakeholders_to_questions
         fields = '__all__'
 
-class PagesToScenarioSerializer(serializer.ModelSerializer):
+class PagesToScenarioSerializer(serializers.ModelSerializer):
     class Meta:
         model = Pages_to_scenario
         fields = '__all__'
 
-class ReflectionQuestionToPageSerializer(serializer.ModelSerializer):
+class ReflectionQuestionToPageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reflection_question_to_page
         fields = '__all__'

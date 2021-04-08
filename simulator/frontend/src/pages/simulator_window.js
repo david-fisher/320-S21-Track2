@@ -45,8 +45,15 @@ function SimulationWindow(props) {
         .then( (pagesData) => {
 
             let newPages = {};
+
+            let allPages = pagesData.results.slice();
             
-            pagesData.results.forEach((page) => {
+            allPages.filter((page) => {
+                console.log(page.scenario.toString() === props.match.params.sid)
+                return page.scenario.toString() === props.match.params.sid;
+            })
+            .forEach((page, index) => {
+                console.log(page);
 
                 const commonProps = {
                     visited: false, 
@@ -61,21 +68,15 @@ function SimulationWindow(props) {
                     changePage: changePage
                 };
             
-                newPages[page.page] = (<Page {...commonProps} />);
+                newPages[index + 1] = (<Page {...commonProps} />);
+
+                console.log(newPages);
             });
 
             setPages(newPages);
             setIsLoading(false);
         })
     }, [activePage]);
-
-    const nextPage = () => {
-        if(!pages[activePage + 1]) {
-            return;
-        } else if(activePage < 1)
-        setActivePage(activePage + 1);
-        setPages(pages);
-    }
 
     return (
         <div className={classes.root}>

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { makeStyles, withStyles, Typography, Box, Grid, Button,
   Card, CardContent, Modal, Dialog, DialogContent, DialogContentText } from "@material-ui/core";
 import { useTheme } from "@material-ui/core/styles";
@@ -137,6 +137,25 @@ function Stakeholders(props) {
   //     });
   // })()
   // }, [scenarios])
+
+  /**
+   * Gets stakeholders to show for the page.
+   * NOTE: Every stakeholder is returned with current endpoint. The hook filters out the correct
+   * ones for the current scenario. NEEDS TO BE CHANGED when endpoint works.
+   */
+  useEffect(() => {
+    fetch(BASE_URL + `/stakeholders/`)
+    .then(response => response.json())
+    .then(data => {
+
+      let results = data.results.slice();
+
+      setStakeholders(results.filter((holder) => {
+        return holder.scenario.toString() === props.match.params.sid;
+      }));
+
+    })
+  }, [scenarios]);
  
 
   function getStakeholderCards(id, name, designation, description, styles) {
@@ -269,7 +288,7 @@ function Stakeholders(props) {
           </ConvLimitConsumer>
         </Box>
         <TextTypography variant="body1" align="center">
-          {introText}
+          {props.content}
         </TextTypography>
       </Grid>
         {stakeholdersGrid}

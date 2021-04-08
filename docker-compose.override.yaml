@@ -36,12 +36,3 @@ services:
       cache_from:
       - cs320track2/frontend:latest
     mem_limit: 500m
-  apache:
-    ports:
-      - "80:80"
-    build:
-      context: ./apache/
-      dockerfile: Dockerfile
-      cache_from:
-      - cs320track2/shibboleth:latest
-    mem_limit: 500m

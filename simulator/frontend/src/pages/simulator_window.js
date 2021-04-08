@@ -68,7 +68,7 @@ function SimulationWindow(props) {
                     changePage: changePage
                 };
             
-                newPages[index + 1] = (<Page {...commonProps} />);
+                newPages[index] = (<Page {...commonProps} />);
 
                 console.log(newPages);
             });
@@ -83,33 +83,24 @@ function SimulationWindow(props) {
             <Grid className={classes.simulator} item container direction={"row"} justify="center">
                 <Grid container direction={"row"} xs={8} spacing={2}>
                     <Grid item container direction={"column"} md={2}>
-                        {activePage !== 0 && 
-                            <SpecialButton 
-                                type={"back"}
-                                onClick={() => changePage(-1)}
-                            />
-                        }
+                        <SpecialButton 
+                            type={"back"}
+                            onClick={() => changePage(-1)}
+                        />
                     </Grid>
                     <Grid item xs={10} md={8} sm container direction={"column"} spacing={2}>
                         <Grid item xs>
                             <GatheredInfoContext.Provider value={[]}>
                                 {pages[activePage]}
                                 {isLoading && <p>We are loading the scenario for you...</p>}
-                                {
-                                    activePage === 0 && 
-                                    <Button onClick={() => changePage(1)}>
-                                        Welcome to the Simulator...Press this button to continue.
-                                    </Button>
-                                }
                             </GatheredInfoContext.Provider>
                         </Grid>
                     </Grid>
                     <Grid item container direction={"column"} md={2}>
-                        {activePage !== 0 &&
                         <SpecialButton 
                             type={"next"}
                             onClick={() => changePage(1)}
-                        />}
+                        />
                     </Grid>
                 </Grid>
             </Grid>

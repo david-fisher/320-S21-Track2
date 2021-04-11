@@ -7,8 +7,6 @@ import GenericDeleteWarning from '../../DeleteWarnings/GenericDeleteWarning';
 import deleteReq from '../../../universalHTTPRequests/delete';
 import post from '../../../universalHTTPRequests/post';
 import put from '../../../universalHTTPRequests/put';
-import { baseURL } from '../../../Constants/Config';
-
 const endpointPOST = '/api/issues/';
 //Need issueID
 const endpointPUT = '/api/issues/';
@@ -31,7 +29,6 @@ IssueEntryField.propTypes = {
     score: PropTypes.number,
     isNewIssue: PropTypes.bool,
     issueEntryFieldList: PropTypes.any.isRequired,
-    scenario_stakeHolders: PropTypes.any.isRequired,
     setIssueEntryFieldList: PropTypes.any.isRequired,
     setSuccessBannerFade: PropTypes.any,
     setSuccessBannerMessage: PropTypes.any,
@@ -47,7 +44,6 @@ export default function IssueEntryField({
     isNewIssue,
     setIssueEntryFieldList,
     issueEntryFieldList,
-    scenario_stakeHolders,
     setSuccessBannerMessage,
     setSuccessBannerFade,
     setErrorBannerMessage,
@@ -97,8 +93,6 @@ export default function IssueEntryField({
     const [errorNameText, setErrorNameText] = useState('');
     const [errorScore, setErrorScore] = useState(false);
     const [errorScoreText, setErrorScoreText] = useState('');
-
-    var axios = require('axios'); //backend
 
     const saveIssue = () => {
         let validInput = true;

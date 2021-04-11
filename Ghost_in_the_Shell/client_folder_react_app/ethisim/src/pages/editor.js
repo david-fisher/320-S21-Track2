@@ -13,6 +13,7 @@ import Logistics from '../components/EditorComponents/LogisticsPageComponents/Lo
 import Generic from '../components/EditorComponents/GenericPageComponents/Generic';
 import ConfigureIssues from '../components/EditorComponents/ConfigureIssuesComponents/ConfigureIssues';
 import ConversationEditor from '../components/EditorComponents/ConversationEditorComponents/ConversationEditor';
+import ICMatrix from '../components/EditorComponents/IssueCoverageMatrixComponents/IssueCoverageMatrixPage';
 import Reflection from '../components/EditorComponents/ReflectionPageComponents/Reflection';
 import Action from '../components/EditorComponents/ActionPageComponents/Action';
 import Introduction from '../components/EditorComponents/GenericPageComponents/Introduction';
@@ -210,7 +211,12 @@ export default function Editor(props) {
                 title: 'Conversation Editor',
                 component: <ConversationEditor />,
             },
-            { id: -4, title: 'Flow Diagram', component: <FlowDiagram /> },
+            {
+                id: -4,
+                title: 'Issue Coverage Matrix',
+                component: <ICMatrix />,
+            },
+            { id: -5, title: 'Flow Diagram', component: <FlowDiagram /> },
         ];
 
         const endpoint = '/logistics?scenario_id=' + scenario_ID;
@@ -239,6 +245,9 @@ export default function Editor(props) {
                 ></ConversationEditor>
             );
             initialComponents[3].component = (
+                <ICMatrix scenario_ID={p.scenario_ID}></ICMatrix>
+            );
+            initialComponents[4].component = (
                 <FlowDiagram scenario_ID={p.scenario_ID}></FlowDiagram>
             );
 
@@ -445,7 +454,7 @@ export default function Editor(props) {
 
     let onClick = (id, title, scenarioPages) => {
         setCurrentPageID(id);
-        if (id !== -1 && id !== -2 && id !== -3 && id !== -4) {
+        if (id !== -1 && id !== -2 && id !== -3 && id !== -4 && id !== -5) {
             handlePageGet(setGetValues, id, scenarioPages);
         }
         setScenarioComponent(

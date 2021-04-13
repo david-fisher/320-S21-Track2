@@ -272,9 +272,11 @@ class ACTION_PAGE(models.Model):
     RESULT_PAGE = models.IntegerField(null=True)
     id = models.AutoField(primary_key = True)
 
+#Updated 4/12
 class RESPONSE_TO_ACTION_PAGE(models.Model):
     RESPONSE_ID = models.ForeignKey('responses', to_field = 'RESPONSE_ID', on_delete = models.CASCADE, related_name = 'action_page2')
     ACTION_PAGE = models.ForeignKey('action_page', to_field = 'id', on_delete = models.CASCADE, related_name = 'action_page3')
+    ACTION_PAGE_VERSION = models.ForeignKey('action_page', to_field='version', on_delete=models.CASCADE, related_name = 'action_page4')
 
 # class assigned_to(models.Model):
 #     class Meta:

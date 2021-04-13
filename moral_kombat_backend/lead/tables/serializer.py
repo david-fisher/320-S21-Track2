@@ -131,7 +131,7 @@ class Scenarios_forSerializer(serializers.ModelSerializer):
 class Generic_pageSerializer(serializers.ModelSerializer):
     class Meta:
         model = GENERIC_PAGE
-        fields = ('PAGE', 'BODY')
+        fields = ('PAGE', 'BODY', 'ID', 'VERSION')
 
 
 class Professors_to_coursesSerializer(serializers.ModelSerializer):

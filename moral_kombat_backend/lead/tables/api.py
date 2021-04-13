@@ -3,35 +3,35 @@ from tables.models import *
 from .serializer import DemographicsSerializer, StudentSerializer, ProfessorSerializer, ScenariosSerializer, Choices_forSerializer, Stakeholder_pageSerializer, StakeholdersSerializer, ConversationsSerializer, Stakeholder_inSerializer
 
 class DemographicsViewSet(viewsets.ModelViewSet):
-    queryset = demographics.objects.all()
+    queryset = DEMOGRAPHICS.objects.all()
     permission_classes = [
         permissions.AllowAny
     ]
     serializer_class = DemographicsSerializer
 
 class StudentsViewSet(viewsets.ModelViewSet):
-    queryset = students.objects.all()
+    queryset = STUDENTS.objects.all()
     permission_classes = [
         permissions.AllowAny
     ]
     serializer_class = StudentSerializer
 
 class ProfessorsViewSet(viewsets.ModelViewSet):
-    queryset = professors.objects.all()
+    queryset = PROFESSORS.objects.all()
     permission_classes = [
         permissions.AllowAny
     ]
     serializer_class = ProfessorSerializer
 
 class StudentTimesViewSet(viewsets.ModelViewSet):
-    queryset = student_times.objects.all()
+    queryset = STUDENT_TIMES.objects.all()
     permission_classes = [
         permissions.AllowAny
     ]
     serializer_class = StudentTimesSerializer
 
 class ScenariosViewSet(viewsets.ModelViewSet):
-    queryset = scenarios.objects.all()
+    queryset = SCENARIOS.objects.all()
     permissions_classes = [
         permissions.AllowAny
     ]
@@ -39,7 +39,7 @@ class ScenariosViewSet(viewsets.ModelViewSet):
 
 # Choices_For ViewSet
 class Choices_forViewSet(viewsets.ModelViewSet):
-    queryset = choices_for.objects.all()
+    queryset = CHOICES_FOR.objects.all()
     permissions_classes = [
         permissions.AllowAny
     ]
@@ -47,7 +47,7 @@ class Choices_forViewSet(viewsets.ModelViewSet):
 
 # Stakeholder_page Viewset
 class Stakeholder_pageViewSet(viewsets.ModelViewSet):
-    queryset = stakeholder_page.objects.all()
+    queryset = STAKEHOLDER_PAGE.objects.all()
     permissions_classes = [
         permissions.AllowAny
     ]
@@ -55,7 +55,7 @@ class Stakeholder_pageViewSet(viewsets.ModelViewSet):
 
 # Stakeholders ViewSet
 class StakeholdersViewSet(viewsets.ModelViewSet):
-    queryset = stakeholders.objects.all()
+    queryset = STAKEHOLDERS.objects.all()
     permissions_classes = [
         permissions.AllowAny
     ]
@@ -63,7 +63,7 @@ class StakeholdersViewSet(viewsets.ModelViewSet):
 
 # Conversations ViewSet
 class ConversationsViewSet(viewsets.ModelViewSet):
-    queryset = conversations.objects.all()
+    queryset = CONVERSATIONS.objects.all()
     permissions_classes = [
         permissions.AllowAny
     ]
@@ -71,7 +71,7 @@ class ConversationsViewSet(viewsets.ModelViewSet):
 
 # Stakeholders_in ViewSet
 class Stakeholder_inViewSet(viewsets.ModelViewSet):
-    queryset = stakeholder_in.objects.all()
+    queryset = STAKEHOLDER_IN.objects.all()
     permissions_classes = [
         permissions.AllowAny
     ]

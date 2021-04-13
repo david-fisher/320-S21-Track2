@@ -14,6 +14,10 @@ class StudentSerializer(serializers.ModelSerializer):
         model = students
         fields = ('STUDENT', 'FNAME', 'LNAME')
 
+class QuestionsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = QUESTIONS
+        fields = ('QUESTION', 'VERSION', 'POINTS', 'QUESTION_TEXT', 'QUESTION_SUMMARY')
 
 class StudentTimesSerializer(serializers.ModelSerializer):
     class Meta:

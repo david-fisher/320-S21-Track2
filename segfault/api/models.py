@@ -57,7 +57,7 @@ class CoursesToScenario(models.Model):
 class Coverage(models.Model):
     stakeholder = models.ForeignKey('Stakeholders', models.DO_NOTHING, db_column='stakeholder', blank=True, null=True)
     issue = models.ForeignKey('Issues', models.DO_NOTHING, db_column='issue', blank=True, null=True)
-    coverage_score = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    coverage_score = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
     id = models.IntegerField(primary_key=True)
 
     class Meta:
@@ -243,7 +243,7 @@ class ResponsesToConversations(models.Model):
     response = models.ForeignKey(Responses, models.DO_NOTHING, blank=True, null=True)
     stakeholder = models.ForeignKey('Stakeholders', models.DO_NOTHING, db_column='stakeholder', blank=True, null=True)
     stakeholder_version = models.IntegerField(blank=True, null=True)
-    score = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    score = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
     conversation = models.ForeignKey(Conversations, models.DO_NOTHING, db_column='conversation', blank=True, null=True)
     id = models.IntegerField(primary_key=True)
 

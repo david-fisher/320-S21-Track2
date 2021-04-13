@@ -519,3 +519,27 @@ class reflection(APIView):
             return DRF_response(reflection_data)
         except Scenarios.DoesNotExist:
             return DRF_response(status=status.HTTP_404_NOT_FOUND)
+
+     def put(self, request, *args, **kwargs):
+        page_id = self.request.query_params.get('page_id') 
+        student_id = self.request.query_params.get('student_id')
+        scenario_id = self.request.query_params.get('scenario_id')
+        reflections = self.request.query_params.get('reflections')
+
+        # extra check for if the given JSON has the required fields
+        if(scenario_id is None or page_id is None or student_id is None or reflections is None):
+            return DRF_response({'detail': "Missing one or more parameters"}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            response = Responses.objects.get(page= page_id, student = student_id, scenario = scenario_id)
+        except Responses.DoesNotExist:
+            return DRF_response(status=status.HTTP_404_NOT_FOUND)
+        
+        try:
+            ref = ReflectionsTaken.objects.filter(response = response.response_id).first()
+            serializer = ReflectionsTakenSerializer(ref, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return DRF_response(serializer.data)
+        except:
+            return DRF_response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

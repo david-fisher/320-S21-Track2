@@ -24,7 +24,7 @@ class SCENARIOS(models.Model):
     # def __str__(self):
     #     return "%s the scenario" % self.name
 
-#pages model and serializer done
+
 class PAGES(models.Model):
     class Meta:
         unique_together = (('PAGE'), ('VERSION'))
@@ -44,7 +44,6 @@ class PAGES(models.Model):
     NEXT_PAGE = models.ForeignKey('PAGES', to_field='PAGE', on_delete = models.CASCADE, related_name="pages2", unique= True)
     X_COORDINATE = models.IntegerField()
     Y_COORDINATE = models.IntegerField()
-    #NEXT_PAGE_VERSION = models.ForeignKey('PAGES', to_field='VERSION', on_delete = models.CASCADE, related_name="pages3", unique= True)
 
 
 
@@ -273,7 +272,7 @@ class ACTION_PAGE(models.Model):
     RESULT_PAGE = models.IntegerField(null=True)
     id = models.AutoField(primary_key = True)
 
-#done
+#Updated 4/12
 class RESPONSE_TO_ACTION_PAGE(models.Model):
 
     RESPONSE_ID = models.ForeignKey('RESPONSES', to_field = 'RESPONSE_ID', on_delete = models.CASCADE, related_name = 'action_page2')

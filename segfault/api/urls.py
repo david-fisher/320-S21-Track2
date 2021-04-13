@@ -24,7 +24,7 @@ router.register(r'reflections_taken', views.ReflectionsTakenViewSet)
 router.register(r'response_to_action_page', views.ResponseToActionPageViewSet)
 router.register(r'responses_to_conversations', views.Responses_to_conversationsViewSet)
 router.register(r'student_times', views.StudentTimesViewSet)
-router.register(r'student_page_progress',views.Student_page_progressViewSet)
+# router.register(r'student_page_progress',views.Student_page_progressViewSet)
 
 router.register(r'coverage', views.CoverageViewSet)
 router.register(r'stakeholders', views.StakeholdersViewSet)
@@ -33,6 +33,9 @@ router.register(r'questions', views.QuestionsViewSet)
 router.register(r'stakeholders_to_questions', views.StakeholdersToQuestionsViewSet)
 router.register(r'pages_to_scenario', views.PagesToScenarioViewSet)
 router.register(r'reflection_question_to_page', views.ReflectionQuestionToPageViewSet)
+
+router.register(r'scenarios_for', views.ScenariosForViewSet)
+router.register(r'professor_to_scenarios', views.ProfessorsToScenarioViewSet)
 
 #TODO: register apiviews to api_root view(there are only viewsets now)
 

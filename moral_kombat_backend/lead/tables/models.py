@@ -294,6 +294,16 @@ class STUDENT_TIMES(models.Model):
     START_TIME = models.DateField(null = True)
     END_TIME = models.DateField(null = True)
 
+'Question is complete'
+class QUESTIONS(models.Model):
+    class Meta:
+        unique_together = (('QUESTION'),('QUESTION_VERSION'))
+  QUESTION = models.AutoField(primary_key= True)
+  VERSION = models.IntegerField(default = 1)
+  POINTS = models.IntegerField(default = 1)
+  QUESTION_TEXT = models.TextField(default = 'default')
+  QUESTION_SUMMARY = models.TextField(default = 'default')
+)
 
 """class scenario_creator(models.Model):
     SCENARIO = models.ForeignKey('scenarios', on_delete = models.CASCADE, related_name="scenario_creator1")

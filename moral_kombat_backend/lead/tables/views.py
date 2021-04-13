@@ -41,6 +41,13 @@ class StakeholdersViewSet(viewsets.ModelViewSet):
     ]
     serializer_class = StakeholdersSerializer
 
+class QuestionsViewset(viewsets.ModelViewSet):
+    queryset = QUESTIONS.objects.all()
+    permissions_classes = [
+        permissions.AllowAny
+    ]
+    serializer_class = QuestionsViewset
+
 # Conversations ViewSet
 class ConversationsViewSet(viewsets.ModelViewSet):
     queryset = conversations.objects.all()

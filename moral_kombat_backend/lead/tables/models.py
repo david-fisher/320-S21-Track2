@@ -4,6 +4,7 @@ from django.core.validators import MinValueValidator
 
 # Create your models here.
 
+#scenarios is updated
 class SCENARIOS(models.Model):
     class Meta:
         unique_together = (('SCENARIO'), ('VERSION'))
@@ -17,7 +18,7 @@ class SCENARIOS(models.Model):
     IS_FINISHED = models.BooleanField(default = False)
     DATE_CREATED = models.DateField(auto_now_add=True)
 
-    SCENARIO_ID = models.IntegerField(primary_key = True, editable=True)
+    SCENARIO_ID = models.IntegerField(primary_key = True)
 
     # models.OneToOneField('pages', on_delete = models.CASCADE, related_name = "scenarios1", default = 1)
     # def __str__(self):
@@ -294,7 +295,7 @@ class STUDENT_TIMES(models.Model):
     START_TIME = models.DateField(null = True)
     END_TIME = models.DateField(null = True)
 
-'Question is complete'
+#questions is complete
 class QUESTIONS(models.Model):
     class Meta:
         unique_together = (('QUESTION'),('QUESTION_VERSION'))

@@ -1,5 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Typography, Button } from '@material-ui/core';
+import {
+    Typography,
+    Button,
+    Grid,
+    TextField,
+    MenuItem,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogContentText,
+    DialogActions,
+} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import EntryFields from './IssueEntryFieldList';
 import get from '../../../universalHTTPRequests/get';
@@ -52,18 +63,30 @@ ConfigureIssues.propTypes = {
 };
 
 export default function ConfigureIssues({ scenario_ID }) {
+    const [open, setOpen] = React.useState(false);
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+    const handleClose = () => {
+        setOpen(false);
+    };
     const classes = useStyles();
     const [issueEntryFieldList, setIssueEntryFieldList] = useState({
         data: null,
         loading: true,
         error: null,
     });
-    const [stakeHolders, setStakeHolders] = useState([]);
     const [issueCoverageMatrix, setIssueCoverageMatrix] = useState({
         data: null,
         loading: true,
         error: null,
     });
+
+    //for info button
+    const [openHelp, setOpenHelp] = React.useState(false);
+    const handleClickOpenHelp = () => {
+        setOpenHelp(true);
+    };
 
     let getData = () => {
         get(setIssueEntryFieldList, endpointGET + scenario_ID);
@@ -119,6 +142,7 @@ export default function ConfigureIssues({ scenario_ID }) {
             />
         </div>
     );*/
+    //for info button
 
     /*<Button
                 className={classes.button}
@@ -195,7 +219,16 @@ export default function ConfigureIssues({ scenario_ID }) {
             <Typography align="center" variant="h2">
                 Configure Ethical Issues
             </Typography>
-
+            <Grid container justify="flex-end">
+                <Button color="primary" onClick={handleClickOpenHelp}>
+                    <HelpIcon />
+                </Button>
+                <GenericInfoButton
+                    description={`This page is currently under maintenance.`}
+                    open={openHelp}
+                    setOpen={setOpenHelp}
+                />
+            </Grid>
             <div className={classes.spacing}>
                 <Button variant="contained" color="primary" onClick={getData}>
                     <RefreshIcon className={classes.iconRefreshSmall} />

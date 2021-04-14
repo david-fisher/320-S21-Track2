@@ -86,10 +86,10 @@ WSGI_APPLICATION = 'segfault.wsgi.application'
 
 DATABASES = {
     'default': { 'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'backendtesting',
-        'USER':'postgres',
-        'PASSWORD':'Aa12345678',
-        'HOST':'localhost',
+        'NAME': 'zoomba',
+        'USER':'Segfaulters',
+        'PASSWORD':'youwishyouwerebackendboys',
+        'HOST':'http://ethisim-db.cs.umass.edu/',
         'PORT':'5432'
     }
 }

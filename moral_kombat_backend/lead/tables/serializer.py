@@ -43,7 +43,7 @@ class PagesSerializer(serializers.ModelSerializer):
     class Meta:
         model = PAGES
         fields = ('PAGE', 'PAGE_TYPE', 'PAGE_TITLE', 'BODY', 'SCENARIO',
-                  'VERSION', 'NEXT_PAGE', 'X_COORDINATE', 'Y_COORDINATE')
+                  'VERSION', 'NEXT_PAGE', 'X_COORDINATE', 'Y_COORDINATE', 'NEXT_PAGE_VERSION')
 
 
 class Stakeholder_to_pageSerializer(serializers.ModelSerializer):
@@ -55,7 +55,7 @@ class Stakeholder_to_pageSerializer(serializers.ModelSerializer):
 class Reflection_questionsSerializer(serializers.ModelSerializer):
     class Meta:
         model = REFLECTION_QUESTIONS
-        fields = ('PAGE', 'REFLECTION_QUESTION', 'id', 'VERSION')
+        fields = ('REFLECTION_QUESTION', 'ID', 'VERSION')
 
 class Reflection_questions_to_pageSerializer(serializers.ModelSerializer):
     class Meta:
@@ -113,8 +113,7 @@ class ResponsesSerializer(serializers.ModelSerializer):
 class PagesToScenarioSerializer(serializers.ModelSerializer):
     class Meta:
         model = PAGES_TO_SCENARIO
-        fields = (
-            'page_id'), ('scenario_id'), ('page_version'), ('scenario_version')
+        fields = ('PAGE_ID'), ('SCENARIO_ID'), ('PAGE_VERSION'), ('SCENARIO_VERSION')
 
 
 class allScenariosSerializer(serializers.ModelSerializer):
@@ -132,7 +131,7 @@ class Scenarios_forSerializer(serializers.ModelSerializer):
 class Generic_pageSerializer(serializers.ModelSerializer):
     class Meta:
         model = GENERIC_PAGE
-        fields = ('PAGE', 'BODY')
+        fields = ('PAGE', 'BODY', 'ID', 'VERSION')
 
 
 class Professors_to_coursesSerializer(serializers.ModelSerializer):

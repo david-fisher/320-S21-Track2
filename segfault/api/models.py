@@ -113,10 +113,17 @@ class Issues(models.Model):
 
 class Pages(models.Model):
     page = models.IntegerField()
-    page_type = models.TextField()
-    page_title = models.TextField()
-    scenario = models.ForeignKey('Scenarios', on_delete = models.CASCADE, db_column='scenario')
-    version = models.IntegerField()
+    page_choices = (
+        ('I', 'INTRO'),
+        ('G', 'GENERIC'),
+        ('R', 'REFLECTION'),
+        ('S', 'STAKEHOLDER'),
+        ('A', 'ACTION'),
+    )
+    page_type = models.CharField(max_length=2, choices=page_choices)
+    page_title = models.CharField(max_length=1000)
+    scenario = models.ForeignKey('Scenarios', on_delete=models.CASCADE, db_column='scenario')
+    version = models.IntegerField(default=1, editable=True)
     body = models.TextField(blank=True, null=True)
     next = models.ForeignKey('self',on_delete = models.CASCADE, null=True)
     x_coordinate = models.IntegerField()
@@ -221,7 +228,7 @@ class Responses(models.Model):
     version = models.IntegerField()
     page = models.ForeignKey(Pages, on_delete = models.CASCADE, db_column='page', )
     course = models.ForeignKey(Courses, on_delete = models.CASCADE, db_column='course', )
-    date_taken = models.DateField()
+    date_taken = models.DateField(auto_now_add=True)
     choice = models.TextField()
 
     class Meta:

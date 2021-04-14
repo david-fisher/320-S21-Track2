@@ -453,7 +453,7 @@ class response_to_conversations(APIView):
         # takes in a JSON of the format:
         # {
         #     "scenario_id": 1,
-        #     "student_id": 1,
+        #     "student_id": "student netID",
         #     "conversation_id": 1,
         #     "score": 1,
         #     "course_id": 1,
@@ -472,31 +472,40 @@ class response_to_conversations(APIView):
             return DRF_response({'detail': "Missing one or more parameters"}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            conversation = Conversations.objects.get(
-                conversation=conversation_id)
-            stakeholder = conversation.stakeholder.stakeholder
+            conversation = Conversations.objects.get(conversation=conversation_id)
+            stakeholder_id = conversation.stakeholder.id
+            stakeholder = Stakeholders.objects.get(id=stakeholder_id)
+            scenario = Scenarios.objects.get(scenario_id=scenario_id)
 
-            # formats the response entry to match the model
-            response = {
-                "student": student_id,
-                "scenario": scenario_id,
-                "page": page_id,
-                "course": course_id,
-                "choice": str(conversation_id)
-            }
+            # Check if response is already in db
+            try:
+                responseObj = Responses.objects.get(response=0, student=student_id, scenario=scenario_id, page=page_id, course=course_id)
+                responseSerializer = ResponseSerializer(responseObj)
+            except:
+                # formats the response entry to match the model if response does not exist
+                response = {
+                    "response": 0,
+                    "student": student_id,
+                    "scenario": scenario_id,
+                    "page": page_id,
+                    "version": 0,
+                    "course": course_id,
+                    "choice": str(conversation_id)
+                }
+                # deserialize the response entry, and check if the response entry is valid
+                responseSerializer = ResponseSerializer(data=response)
+                if not responseSerializer.is_valid():
+                    return DRF_response(responseSerializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                
+                # saves the response to the database
+                responseSerializer.save()
 
-            # deserialize the response entry, and check if the response entry is valid
-            responseSerializer = ResponseSerializer(data=response)
-            if not responseSerializer.is_valid():
-                return DRF_response(responseSerializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-            # saves the response to the database
-            responseSerializer.save()
 
             # formats the entries of response_to_conv to match the model
             response_to_conv = {
                 "response": responseSerializer.data['response_id'],
-                "stakeholder": stakeholder,
+                "stakeholder": stakeholder_id,
+                "stakeholder_version": stakeholder.version,
                 "score": score,
                 "conversation": conversation_id
             }
@@ -509,10 +518,14 @@ class response_to_conversations(APIView):
 
             # saves the response_to_conversation entry
             responseToConvSerializer.save()
+
+            #increase version of response on success input
+            responseObj = Responses.objects.get(response=0, student=student_id, scenario=scenario_id, page=page_id, course=course_id)
+            responseObj.version = responseObj.version + 1
+            response_instance = responseObj.save()
             return DRF_response(responseToConvSerializer.data, status=status.HTTP_200_OK)
-        except Conversations.DoesNotExist:
-            return DRF_response({'detail': "conversation_id not found"}, status=status.HTTP_404_NOT_FOUND)
-        # Only need exception check for Conversations.DoesNotExist, all other bad inputs are handled by the serializer.valid()
+        except:
+            return DRF_response({'detail': "at least one parameter not found"}, status=status.HTTP_404_NOT_FOUND)
 
 class reflection(APIView):
     #retrieve a reflection for a particular response from the database
@@ -561,3 +574,20 @@ class reflection(APIView):
                 return DRF_response(serializer.data)
         except:
             return DRF_response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class stakeholder_conv(APIView):
+    def get(self, request, *args, **kwargs):
+        stakeholder_id = self.request.query_params.get('stakeholder_id')
+
+        if(stakeholder_id is None):
+            return DRF_response({'detail': "Missing parameter: stakeholder_id"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        conversations_list = []
+        try:
+            conversations = Conversations.objects.filter(stakeholder=stakeholder_id)
+            for conversation in conversations:
+                conversation_data = ConversationSerializer(conversation).data
+                conversations_list.append(conversation_data)
+            return DRF_response(conversations_list, status=status.HTTP_200_OK)
+        except Conversations.DoesNotExist:
+            return DRF_response(status=status.HTTP_404_NOT_FOUND)

@@ -267,7 +267,7 @@ export default function Editor(props) {
                 }
                 //Intro page is first page on sidebar
                 if (pages[i].PAGE_TYPE === 'I') {
-                    initialComponents.splice(4, 0, {
+                    initialComponents.splice(6, 0, {
                         id: pages[i].PAGE,
                         title: pages[i].PAGE_TITLE,
                         isIntroPage: true,

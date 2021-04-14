@@ -156,9 +156,14 @@ export default function IssueMatrix({ scenario, scenario_stakeHolders }) {
     }, [rows]);
 
     useEffect(() => {
-        setColData();
-        setRowData();
-        setDidSetData(true);
+        if (
+            stakeHolders.current !== undefined &&
+            stakeHolders.current.length > 0
+        ) {
+            setColData();
+            setRowData();
+            setDidSetData(true);
+        }
     }, [stakeHolders.current]);
 
     /*useEffect(() => {

@@ -520,7 +520,7 @@ class reflection(APIView):
         except Scenarios.DoesNotExist:
             return DRF_response(status=status.HTTP_404_NOT_FOUND)
 
-     def put(self, request, *args, **kwargs):
+    def put(self, request, *args, **kwargs):
         page_id = self.request.query_params.get('page_id') 
         student_id = self.request.query_params.get('student_id')
         scenario_id = self.request.query_params.get('scenario_id')

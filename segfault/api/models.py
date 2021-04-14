@@ -5,8 +5,10 @@
 #   * Make sure each ForeignKey and OneToOneField has `on_delete` set to the desired behavior
 #   * Remove `` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
+import django
 from django.db import models
-
+from django.contrib.auth.models import User
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 class ActionPage(models.Model):
     action_page_id = models.IntegerField()
@@ -33,13 +35,19 @@ class Conversations(models.Model):
 class Courses(models.Model):
     course = models.AutoField(primary_key=True)
     name = models.TextField()
+    students = models.ManyToManyField(
+        'Students', related_name='courses', through='StudentsToCourse')
+    professors = models.ManyToManyField(
+        'Professors', related_name='courses', through='ProfessorsToCourses')
+    scenarios = models.ManyToManyField(
+        'Scenarios', related_name='courses',  through='CoursesToScenario')
 
     class Meta:
         db_table = 'courses'
 
 
 class CoursesToScenario(models.Model):
-    course = models.ForeignKey(Courses, on_delete = models.CASCADE, db_column='course', null=False)
+    course = models.ForeignKey('Courses', on_delete = models.CASCADE, db_column='course', null=False)
     scenario = models.ForeignKey('Scenarios',on_delete = models.CASCADE, db_column='scenario', null=False)
     permission = models.IntegerField()
 
@@ -59,12 +67,24 @@ class Coverage(models.Model):
 
 
 class Demographics(models.Model):
-    student = models.OneToOneField('Students', on_delete = models.CASCADE, db_column='student', primary_key=True)
-    age = models.IntegerField()
-    grade = models.IntegerField()
-    gender = models.TextField()
-    race = models.TextField()
-    major = models.TextField()
+    student = models.OneToOneField('Students', primary_key=True, on_delete=models.CASCADE, related_name="demographics", null=False, db_column='student')
+    age = models.IntegerField(validators=[MaxValueValidator(100), MinValueValidator(0)], db_column='age')
+    grade_choices = (('0', 'Other'),
+                     ('1', 'Freshmen'),
+                     ('2', 'Sophomore'),
+                     ('3', 'Junior'),
+                     ('4', 'Senior'))
+    grade = models.CharField(
+        max_length=1, choices=grade_choices, db_column='grade')
+    gender_choices = (
+        ('M', 'Male'),
+        ('F', 'Female'),
+        ('OT', 'Other'),
+    )
+    gender = models.CharField(
+        max_length=2, choices=gender_choices, db_column='gender')
+    race = models.CharField(max_length=30, db_column='race')
+    major = models.CharField(max_length=30, db_column='major')
 
     class Meta:
         db_table = 'demographics'
@@ -121,6 +141,7 @@ class Professors(models.Model):
     professor = models.TextField(primary_key=True)
     fname = models.TextField()
     lname = models.TextField(blank=True)
+    # courses = models.ManyToManyField( Courses, related_name='professor',  through='ProfessorsToCourses')
 
     class Meta:
         db_table = 'professors'
@@ -221,14 +242,14 @@ class ResponsesToConversations(models.Model):
 
 
 class Scenarios(models.Model):
-    scenario = models.IntegerField()
-    version = models.IntegerField()
-    name = models.TextField()
-    public = models.BooleanField()
-    num_conversation = models.IntegerField()
-    is_finished = models.BooleanField()
-    date_created = models.DateField()
-    scenario_id = models.AutoField(primary_key=True)
+    scenario_id = models.AutoField(primary_key=True, editable=False)
+    scenario = models.IntegerField(default=1, editable=True)
+    version = models.IntegerField(default=1, editable=True)
+    name = models.TextField(max_length=50, null=False)
+    public = models.BooleanField(default=False)
+    num_conversation = models.IntegerField(default=0)
+    is_finished = models.BooleanField(default=False)
+    date_created = models.DateField(auto_now_add=True)
 
     class Meta:
         db_table = 'scenarios'

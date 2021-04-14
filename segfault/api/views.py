@@ -174,6 +174,10 @@ class ProfessorsToScenarioViewSet(viewsets.ModelViewSet):
     queryset = ProfessorsToScenario.objects.all()
     serializer_class = ProfessorsToScenarioSerializer
 
+class ProfessorsToCoursesViewSet(viewsets.ModelViewSet):
+    queryset = ProfessorsToCourses.objects.all()
+    serializer_class = ProfessorsToCoursesSerializer
+
 # TODO: Some viewsets are not necessary, remove after implementaion of some endpoints
 
 

@@ -197,4 +197,9 @@ class ReflectionQuestionToPageSerializer(serializers.ModelSerializer):
 class ProfessorsToScenarioSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProfessorsToScenario
-        field = '__all__'
+        fields = '__all__'
+
+class ProfessorsToCoursesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProfessorsToCourses
+        fields = '__all__'

@@ -48,6 +48,7 @@ urlpatterns = [
     path('dashboard/',views.DashBoard.as_view()),
     path('get_scenario/', views.Get_scenario.as_view()),
     path('get_pages/',views.get_pages.as_view()),
+    path('get_page_info/',views.get_page_info.as_view()),
     path('get_stakeholders/',views.get_stakeholders.as_view()),
     path('get_issues/',views.get_Issues.as_view()),
     path('conversations_had/', views.response_to_conversations.as_view()), #for "response_to_conversations" endpoint

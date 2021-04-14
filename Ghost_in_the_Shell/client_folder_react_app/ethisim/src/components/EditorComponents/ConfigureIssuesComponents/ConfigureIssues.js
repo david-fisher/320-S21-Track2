@@ -276,8 +276,8 @@ export default function ConfigureIssues({ scenario_ID }) {
                 aria-labelledby=""
                 aria-describedby=""
             >
-                <DialogTitle id="Add stakeholder">
-                    {'Add Stakeholder'}
+                <DialogTitle id="Add Issues">
+                    {'Add Issue'}
                 </DialogTitle>
                 <Grid container direction="row" justify="centre">
                     <Grid item xs={8}>

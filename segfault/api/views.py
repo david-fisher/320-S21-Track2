@@ -281,18 +281,24 @@ class get_page_info(APIView):
         page_type = page.page_type
         # Check page.PAGE_TYPE = 'REFLECTION'
         if (page_type == 'R'):
-            reflection_query = ReflectionQuestions.objects.filter(
-                page=page_id).values()
+            reflection_queries = ReflectionQuestionToPage.objects.filter(page=page_id)
+            reflection_qs = []
+            for quer in reflection_queries:
+                try:
+                    question = ReflectionQuestions.objects.get(id=quer.id)
+                except Scenarios.DoesNotExist:
+                    return DRF_response(status=status.HTTP_404_NOT_FOUND)
+                quer_data = Reflection_questionsSerializer(quer).data
+                reflection_qs.append(quer_data)
             page_data.update(
                 {
-                    "body": reflection_query
+                    "body": reflection_qs
                 }
             )
 
         # Check page.PAGE_TYPE = 'ACTION'
         elif (page_type == 'A'):
-            action_query = ActionPage.objects.filter(
-                page=page_id).values()
+            action_query = ActionPage.objects.filter(page=page_id).values()
             page_data.update(
                 {
                     "body": action_query
@@ -301,8 +307,7 @@ class get_page_info(APIView):
 
         # Check page.PAGE_TYPE = 'GENERIC'
         elif (page_type == 'G' or page_type == 'I'):
-            generic_query = GenericPage.objects.filter(
-                page=page_id).values()
+            generic_query = GenericPage.objects.filter(page=page_id).values()
             page_data.update(
                 {
                     "body": generic_query
@@ -311,8 +316,7 @@ class get_page_info(APIView):
 
         # Check page.PAGE_TYPE = 'STAKEHOLDER'
         elif (page_type == 'S'):
-            stakeholder_query = StakeholderToPage.objects.filter(
-                page=page_id).values()
+            stakeholder_query = StakeholderToPage.objects.filter(page=page_id).values()
             page_data.update(
                 {
                     "body": stakeholder_query

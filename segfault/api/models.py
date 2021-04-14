@@ -86,8 +86,6 @@ class Demographics(models.Model):
     race = models.CharField(max_length=30, db_column='race')
     major = models.CharField(max_length=30, db_column='major')
 
-    class Meta:
-        db_table = 'demographics'
 
 
 class GenericPage(models.Model):

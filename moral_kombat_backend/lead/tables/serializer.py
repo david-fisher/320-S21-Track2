@@ -72,7 +72,7 @@ class StakeholdersSerializer(serializers.ModelSerializer):
 class ConversationsSerializer(serializers.ModelSerializer):
     class Meta:
         model = CONVERSATIONS
-        fields = ('STAKEHOLDER', 'CONVERSATION', 'QUESTION', 'RESPONSE')
+        fields = ('STAKEHOLDER', 'STAKEHOLDER_VERSION', 'CONVERSATION', 'QUESTION', 'RESPONSE')
 
 class Courses_to_ScenarioSerializer(serializers.ModelSerializer):
     class Meta:
@@ -202,7 +202,7 @@ class Pages_stakeholderSerializer(serializers.ModelSerializer):
 class coverageSerializer(serializers.ModelSerializer):
     class Meta:
         model = COVERAGE
-        fields = ('STAKEHOLDER', 'ISSUE', 'COVERAGE_SCORE')
+        fields = ('STAKEHOLDER', 'STAKEHOLDER_VERSION','ISSUE', 'COVERAGE_SCORE')
 
 
 # class Actions_takenSerializer(serializers.ModelSerializer):

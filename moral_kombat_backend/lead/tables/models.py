@@ -121,11 +121,12 @@ class STAKEHOLDERS(models.Model):
     # VERSION_ID = models.ForeignKey('scenarios', on_delete = models.CASCADE, related_name="stakeholder3")
 
 
-
+#updated 4/14
 class CONVERSATIONS(models.Model):
     # class Meta:
     #     unique_together = (('STAKEHOLDER'), ('CONVERSATION'))
     STAKEHOLDER = models.ForeignKey('STAKEHOLDERS', to_field = 'STAKEHOLDER', on_delete = models.CASCADE, related_name="conversations1")
+    STAKEHOLDER_VERSION = models.ForeignKey('STAKEHOLDERS', to_field = 'VERSION', on_delete = models.CASCADE, related_name="conversations2")
     CONVERSATION = models.AutoField(default = None, primary_key = True)
     QUESTION = models.TextField(default = "default")
     RESPONSE = models.TextField(default = "default")
@@ -144,6 +145,7 @@ class RESPONSES(models.Model):
     COURSE = models.ForeignKey('COURSES', to_field= 'COURSE', on_delete = models.CASCADE, related_name="responses4")
     DATE_TAKEN = models.DateField(auto_now_add=True)
     CHOICE = models.TextField()
+
 #Updated 4/12 by Cooper
 class RESPONSES_TO_CONVERSATIONS(models.Model):
     class Meta:
@@ -253,13 +255,13 @@ class PROFESSORS_TO_SCENARIO(models.Model):
     SCENARIO = models.ForeignKey('SCENARIOS', to_field = 'SCENARIO_ID', on_delete = models.CASCADE, related_name="professors_to_scenario2")
     PERMISSION = models.IntegerField()
 
-
+#updated 4/14
 class ISSUES(models.Model):
     # class Meta:
     #     unique_together = (('SCENARIO'),('ISSUE'),('VERSION'))
     SCENARIO_ID = models.ForeignKey('SCENARIOS', to_field= 'SCENARIO_ID', on_delete = models.CASCADE, related_name = "scenario_id1", default = None)
     ISSUE = models.AutoField(default = None, primary_key = True, editable = False)
-    VERSION = models.IntegerField(default=1, editable=False)
+    # VERSION = models.IntegerField(default=1, editable=False)
     NAME = models.CharField(max_length = 1000)
     IMPORTANCE_SCORE = models.IntegerField(validators = [MinValueValidator(0.0)])
 

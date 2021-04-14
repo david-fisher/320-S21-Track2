@@ -20,8 +20,6 @@ import ErrorIcon from '@material-ui/icons/Error';
 import PropTypes from 'prop-types';
 import IssueMatrix from './IssueCoverageMatrix';
 import MaterialTable from 'material-table';
-// import addStakeHolder from '../ConversationEditorComponents/StakeHoldersComponent/stakeHolders';
-// import saveStakeHolder from '../ConversationEditorComponents/StakeHoldersComponent/stakeHolders';
 var axios = require('axios');
 
 //Need scenarioID
@@ -133,6 +131,7 @@ export default function ConfigureIssues({ scenario_ID }) {
     };
 
     const [open, setOpen] = React.useState(false);
+    const [open2, setOpen2] = React.useState(false);
     const handleClickOpen = () => {
         setOpen(true);
     };
@@ -140,6 +139,18 @@ export default function ConfigureIssues({ scenario_ID }) {
         addStakeHolders();
         setOpen(false);
     };
+    const handleClickOpen2 = () => {
+        setOpen2(true);
+    };
+    const handleClose2 =()=>{
+        console.log(issueValues)
+        // issueEntryFieldList =[issueValues]
+        // setIssueEntryFieldList={setIssueEntryFieldList}
+        //scenarioID={scenario_ID}
+        getData()
+        setOpen2(false);
+    }
+
     const classes = useStyles();
     const [issueEntryFieldList, setIssueEntryFieldList] = useState({
         data: null,
@@ -204,6 +215,7 @@ export default function ConfigureIssues({ scenario_ID }) {
         </div>
     );*/
     //for info button
+    let issueValues = {}
     let values = {
         STAKEHOLDER: 1,
         NAME: '',
@@ -225,6 +237,8 @@ export default function ConfigureIssues({ scenario_ID }) {
     const getJob = (e) => {
         values['JOB'] = e.target.value;
     };
+    const getIssueName = (e)=>{issueValues['NAME']=e.target.value;}
+    const getImportance =(e)=>{issueValues['IMPORTANCE_SCORE']=e.target.value;}
 
     return (
         <div className={classes.issue}>
@@ -245,6 +259,58 @@ export default function ConfigureIssues({ scenario_ID }) {
                 setIssueEntryFieldList={setIssueEntryFieldList}
                 scenarioID={scenario_ID}
             />
+              <Button
+                className={classes.button}
+                id="button"
+                onClick={handleClickOpen2}
+                variant="contained"
+                color="primary"
+            >
+                {' '}
+                Add Issues
+            </Button>
+
+            <Dialog
+                open={open2}
+                onClose={handleClose2}
+                aria-labelledby=""
+                aria-describedby=""
+            >
+                <DialogTitle id="Add stakeholder">
+                    {'Add Stakeholder'}
+                </DialogTitle>
+                <Grid container direction="row" justify="centre">
+                    <Grid item xs={8}>
+                        <TextField
+                            variant="outlined"
+                            margin="normal"
+                            required
+                            fullWidth
+                            name="Issue Name"
+                            label="Issue Name"
+                            id="scenariopageAdder"
+                            onChange={(e) => getIssueName(e)}
+                        ></TextField>
+
+                        
+                         <TextField
+                            variant="outlined"
+                            margin="normal"
+                            required
+                            fullWidth
+                            name="Importance Factor"
+                            label="Importance Factor"
+                            id="scenariopageAdder"
+                            onChange={(e) => getImportance(e)}
+                        ></TextField>
+                    </Grid>
+                </Grid>
+                <DialogActions>
+                    <Button onClick={handleClose2} color="primary">
+                        Add
+                    </Button>
+                </DialogActions>
+            </Dialog>
 
             <Button
                 className={classes.button}
@@ -256,7 +322,7 @@ export default function ConfigureIssues({ scenario_ID }) {
                 {' '}
                 Add Stakeholders
             </Button>
-
+            
             <Dialog
                 open={open}
                 onClose={handleClose}
@@ -325,4 +391,5 @@ export default function ConfigureIssues({ scenario_ID }) {
         </div>
     );
 }
+
 

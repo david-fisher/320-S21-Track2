@@ -49,7 +49,7 @@ class PagesSerializer(serializers.ModelSerializer):
 class Stakeholder_to_pageSerializer(serializers.ModelSerializer):
     class Meta:
         model = STAKEHOLDER_TO_PAGE
-        fields = ('PAGE', 'STAKEHOLDER')
+        fields = ('PAGE', 'PAGE_VERSION', 'STAKEHOLDER', 'STAKEHOLDER_VERSION')
 
 
 class Reflection_questionsSerializer(serializers.ModelSerializer):

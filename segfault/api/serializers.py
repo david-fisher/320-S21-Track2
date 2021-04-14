@@ -4,7 +4,7 @@ from api.models import *
 
 class CourseSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Course
+        model = Courses
         fields = '__all__'
 
 # TODO: Need to disable for all non-admin after depolying(security)
@@ -15,7 +15,7 @@ class StudentSerializer(serializers.ModelSerializer):
         many=True, source='courses', read_only=True)
 
     class Meta:
-        model = Student
+        model = Students
         fields = '__all__'
 
 
@@ -24,7 +24,7 @@ class ProfessorSerializer(serializers.ModelSerializer):
         many=True, source='courses', read_only=True)
 
     class Meta:
-        model = Professor
+        model = Professors
         fields = '__all__'
 
 
@@ -32,14 +32,14 @@ class DemographicSerializer(serializers.ModelSerializer):
     student_info = StudentSerializer(source='student',read_only=True)
 
     class Meta:
-        model = Demographic
+        model = Demographics
         fields = '__all__'
         depth = 3
 
 
 class ScenarioSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Scenario
+        model = Scenarios
         fields = '__all__'
 
 
@@ -51,13 +51,13 @@ class ConversationSerializer(serializers.ModelSerializer):
 
 class ResponseSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Response
+        model = Responses
         fields = '__all__'
 
 
 class IssueSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Issue
+        model = Issues
         fields = '__all__'
 
 
@@ -69,25 +69,25 @@ class PagesSerializer(serializers.ModelSerializer):
 
 class Stakeholder_to_pageSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Stakeholder_to_page
+        model = StakeholderToPage
         fields = '__all__'
 
 
 class Reflection_questionsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Reflection_questions
+        model = ReflectionQuestions
         fields = '__all__'
 
 
 class Action_pageSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Action_page
+        model = ActionPage
         fields = '__all__'
 
 
 class Generic_pageSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Generic_page
+        model = GenericPage
         fields = '__all__'
 
 # page types serializer
@@ -126,25 +126,25 @@ class Pages_stakeholderSerializer(serializers.ModelSerializer):
 
 class ReflectionsTakenSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Reflections_taken
+        model = ReflectionsTaken
         fields = '__all__'
 
 
 class ResponseToActionPageSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Response_to_action_page
+        model = ResponseToActionPage
         fields = '__all__'
 
 
 class Responses_to_conversationsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Responses_to_conversations
+        model = ResponsesToConversations
         fields = '__all__'
 
 
 class StudentTimesSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Student_times
+        model = StudentTimes
         fields = '__all__'
 
 
@@ -159,17 +159,47 @@ class StakeholderSerializer(serializers.ModelSerializer):
         model = Stakeholders
         fields = '__all__'
 
-class Student_page_progressSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Student_page_progress
-        fields = '__all__'
+# class Student_page_progressSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Student_page_progress
+#         fields = '__all__'
 
 class StudentToCourseSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Student_to_Course
+        model = StudentsToCourse
         fields = '__all__'
 
-class ScenarioToCourseSerializer(serializers.ModelSerializer):
+class ScenarioForSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Scenario_to_Course
+        model = ScenariosFor
+        fields = '__all__'
+
+class QuestionsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Questions
+        fields = '__all__'
+
+class StakeholdersToQuestionsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StakeholdersToQuestions
+        fields = '__all__'
+
+class PagesToScenarioSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PagesToScenario
+        fields = '__all__'
+
+class ReflectionQuestionToPageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ReflectionQuestionToPage
+        fields = '__all__'
+
+class ProfessorsToScenarioSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProfessorsToScenario
+        fields = '__all__'
+
+class ProfessorsToCoursesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProfessorsToCourses
         fields = '__all__'

@@ -70,11 +70,24 @@ ICMatrix.propTypes = {
 
 export default function ICMatrix({ scenario_ID }) {
     const [open, setOpen] = React.useState(false);
+    const [open2, setOpen2] = React.useState(false);
+
     const handleClickOpen = () => {
         setOpen(true);
     };
     const handleClose = () => {
         setOpen(false);
+    };
+    const handleClickOpen2 = () => {
+        setOpen2(true);
+    };
+    const handleClose2 = () => {
+        console.log(issueValues);
+        // issueEntryFieldList =[issueValues]
+        // setIssueEntryFieldList={setIssueEntryFieldList}
+        //scenarioID={scenario_ID}
+        getData();
+        setOpen2(false);
     };
     const classes = useStyles();
     const [issueEntryFieldList, setIssueEntryFieldList] = useState({
@@ -201,6 +214,35 @@ export default function ICMatrix({ scenario_ID }) {
         return <LoadingSpinner />;
     }
 
+    let issueValues = {};
+    let values = {
+        STAKEHOLDER: 1,
+        NAME: '',
+        DESCRIPTION: '',
+        INTRODUCTION: '',
+        SCENARIO: scenario_ID,
+        VERSION: 1,
+        JOB: '',
+    };
+    const getName = (e) => {
+        values['NAME'] = e.target.value;
+    };
+    const getDes = (e) => {
+        values['DESCRIPTION'] = e.target.value;
+    };
+    const getIntro = (e) => {
+        values['INTRODUCTION'] = e.target.value;
+    };
+    const getJob = (e) => {
+        values['JOB'] = e.target.value;
+    };
+    const getIssueName = (e) => {
+        issueValues['NAME'] = e.target.value;
+    };
+    const getImportance = (e) => {
+        issueValues['IMPORTANCE_SCORE'] = e.target.value;
+    };
+
     return (
         <div className={classes.issue}>
             <Typography align="center" variant="h2">
@@ -234,6 +276,56 @@ export default function ICMatrix({ scenario_ID }) {
             <Button
                 className={classes.button}
                 id="button"
+                onClick={handleClickOpen2}
+                variant="contained"
+                color="primary"
+            >
+                {' '}
+                Add Issues
+            </Button>
+
+            <Dialog
+                open={open2}
+                onClose={handleClose2}
+                aria-labelledby=""
+                aria-describedby=""
+            >
+                <DialogTitle id="Add Issues">{'Add Issue'}</DialogTitle>
+                <Grid container direction="row" justify="centre">
+                    <Grid item xs={8}>
+                        <TextField
+                            variant="outlined"
+                            margin="normal"
+                            required
+                            fullWidth
+                            name="Issue Name"
+                            label="Issue Name"
+                            id="scenariopageAdder"
+                            onChange={(e) => getIssueName(e)}
+                        ></TextField>
+
+                        <TextField
+                            variant="outlined"
+                            margin="normal"
+                            required
+                            fullWidth
+                            name="Importance Factor"
+                            label="Importance Factor"
+                            id="scenariopageAdder"
+                            onChange={(e) => getImportance(e)}
+                        ></TextField>
+                    </Grid>
+                </Grid>
+                <DialogActions>
+                    <Button onClick={handleClose2} color="primary">
+                        Add
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
+            <Button
+                className={classes.button}
+                id="button"
                 onClick={handleClickOpen}
                 variant="contained"
                 color="primary"
@@ -261,7 +353,7 @@ export default function ICMatrix({ scenario_ID }) {
                             name="StakeHolder name"
                             label="Stakeholder name"
                             id="scenariopageAdder"
-                            // onChange={(e)=>addStakeholder(e)}
+                            onChange={(e) => getName(e)}
                         ></TextField>
 
                         <TextField
@@ -272,7 +364,7 @@ export default function ICMatrix({ scenario_ID }) {
                             name="Job"
                             label="Job"
                             id="scenariopageAdder"
-                            onChange={(e) => null}
+                            onChange={(e) => getJob(e)}
                         ></TextField>
 
                         <TextField
@@ -283,6 +375,7 @@ export default function ICMatrix({ scenario_ID }) {
                             name="Description"
                             label="Description"
                             id="scenariopageAdder"
+                            onChange={(e) => getDes(e)}
                         ></TextField>
                         <TextField
                             variant="outlined"
@@ -292,12 +385,13 @@ export default function ICMatrix({ scenario_ID }) {
                             name="Bio"
                             label="Bio"
                             id="scenariopageAdder"
+                            onChange={(e) => getIntro(e)}
                         ></TextField>
                     </Grid>
                 </Grid>
                 <DialogActions>
                     <Button onClick={handleClose} color="primary">
-                        Done
+                        Add
                     </Button>
                 </DialogActions>
             </Dialog>

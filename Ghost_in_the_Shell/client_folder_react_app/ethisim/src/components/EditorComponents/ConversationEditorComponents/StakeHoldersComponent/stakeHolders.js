@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import StakeHolder from './stakeHolder';
-import {Grid,Button} from '@material-ui/core';
+import { Grid, Button } from '@material-ui/core';
 import './stakeHolders.css';
 import PropTypes from 'prop-types';
 import SuccessBanner from './../../../Banners/SuccessBanner';
@@ -264,8 +264,9 @@ export default function StakeHolderFields({ scenario }) {
                 onClick={addStakeHolder}
                 variant="contained"
                 color="primary"
+                //style={{ textTransform: 'unset' }}
             >
-                Add Stake Holder
+                Add Stakeholder
             </Button>
 
             <form id="form">
@@ -289,6 +290,7 @@ export default function StakeHolderFields({ scenario }) {
                     variant="contained"
                     color="primary"
                     onClick={saveStakeHolders}
+                    //style={{ textTransform: 'unset' }}
                 >
                     Save Stakeholder Changes
                 </Button>

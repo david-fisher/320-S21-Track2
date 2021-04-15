@@ -80,18 +80,19 @@ class multi_conv(APIView):
         conv_query = conversations.objects.filter(STAKEHOLDER = STAKEHOLDER).values()
         return Response(conv_query)
 
-# class multi_stake(APIView):
-#     def put(self, request, *args, **kwargs):
-#         SCENARIO = self.request.query_params.get('SCENARIO')
-#         if SCENARIO == None:
-#             return Response({'status': 'details'}, status=status.HTTP_404_NOT_FOUND)
-#         for updated_stake in request.data:
-#             extant_stake = stakeholders.objects.get(SCENARIO = SCENARIO, STAKEHOLDER = updated_stake['STAKEHOLDER'])
-#             serializer = StakeholdersSerializer(extant_stake, data=updated_stake)
-#             if serializer.is_valid(): 
-#                 serializer.save()
-#         stake_query = stakeholders.objects.filter(SCENARIO = SCENARIO).values()
-#         return Response(stake_query)
+# No change - checked - Chirag - 04/15/2021
+class multi_stake(APIView):
+    def put(self, request, *args, **kwargs):
+        SCENARIO = self.request.query_params.get('SCENARIO')
+        if SCENARIO == None:
+            return Response({'status': 'details'}, status=status.HTTP_404_NOT_FOUND)
+        for updated_stake in request.data:
+            extant_stake = stakeholders.objects.get(SCENARIO = SCENARIO, STAKEHOLDER = updated_stake['STAKEHOLDER'])
+            serializer = StakeholdersSerializer(extant_stake, data=updated_stake)
+            if serializer.is_valid(): 
+                serializer.save()
+        stake_query = stakeholders.objects.filter(SCENARIO = SCENARIO).values()
+        return Response(stake_query)
 
 # class multi_coverage(APIView):
 #     def put(self, request, *args, **kwargs):
@@ -107,12 +108,13 @@ class multi_conv(APIView):
 #         return Response(coverage_query)
 
 
+# Done - Chirag - 04/15/2021
 class CoverageViewSet(viewsets.ModelViewSet):
     queryset = COVERAGE.objects.all()
     permission_classe = [permissions.AllowAny]
     serializer_class = coverageSerializer
-    # filter_backends = [DjangoFilterBackend]
-    # filterset_fields = ['STAKEHOLDER']
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['STAKEHOLDER']
 
     
 
@@ -159,17 +161,17 @@ class ScenariosViewSet(viewsets.ModelViewSet):
     ]
     serializer_class = ScenariosSerializer
 
-    # def delete(self, request, pk, format=None):
-    #     snippet = self.get_object(pk)
-    #     snippet.delete()
-    #     return Response(status=status.HTTP_204_NO_CONTENT)
+    # Uncommeented cuz main - Chirag - 04/15/2021
+    def delete(self, request, pk, format=None):
+        snippet = self.get_object(pk)
+        snippet.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 class SingleScenarioViewSet(viewsets.ModelViewSet):
     def get(self, request):
         scenario = SCENARIOS.objects.all()
         serializer = ScenariosSerializer(scenarios)
         return Response(serializer.data)
-
 
 
 class PagesViewSet(viewsets.ModelViewSet):
@@ -278,14 +280,15 @@ class generic_pageViewSet(viewsets.ModelViewSet):
 #     ]
 #     serializer_class = Professors_teachSerializer
 
+# Changed - Chirag - 04/15/2021
 class IssuesViewSet(viewsets.ModelViewSet):
     queryset = ISSUES.objects.all()
     permission_classes = [
         permissions.AllowAny
     ]
     serializer_class = IssuesSerializer
-    # filter_backends = [DjangoFilterBackend]
-    # filterset_fields = ['SCENARIO', "NAME"]
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['SCENARIO', "NAME"]
 
 
 class Action_pageViewSet(viewsets.ModelViewSet):

@@ -97,15 +97,15 @@ class multi_stake(APIView):
 # checked - Ed - 4/15/2021
 class multi_coverage(APIView):
     def put(self, request, *args, **kwargs):
-        STAKEHOLDER = self.request.query_params.get('STAKEHOLDER')
-        if STAKEHOLDER == None:
+        STAKEHOLDER_id = self.request.query_params.get('STAKEHOLDER')
+        if STAKEHOLDER_id == None:
             return Response({'status': 'details'}, status=status.HTTP_404_NOT_FOUND)
         for updated_coverage in request.data:
-            extant_coverage = coverage.objects.get(STAKEHOLDER = STAKEHOLDER, ISSUE = updated_coverage['ISSUE'])
+            extant_coverage = coverage.objects.get(STAKEHOLDER = STAKEHOLDER_id, ISSUE = updated_coverage['ISSUE'])
             serializer = coverageSerializer(extant_coverage, data=updated_coverage)
             if serializer.is_valid(): 
                 serializer.save()
-        coverage_query = coverage.objects.filter(STAKEHOLDER = STAKEHOLDER).values()
+        coverage_query = coverage.objects.filter(STAKEHOLDER = STAKEHOLDER_id).values()
         return Response(coverage_query)
 
 
@@ -314,10 +314,10 @@ class logistics_page(APIView):
     def get(self, request, *args, **kwargs):
         
         #take professor_id as input from URL by adding ?professor_id=<the id #> to the end of the url.
-        SCENARIO = self.request.query_params.get('scenario_id')
+        SCENARIO_id = self.request.query_params.get('SCENARIO')
         #TODO check that id != none
         #get all scenarios belonging to this professor
-        scenario = scenarios.objects.get(SCENARIO = SCENARIO)
+        scenario = scenarios.objects.get(SCENARIO = SCENARIO_id)
         scenario_dict = ScenariosSerializer(scenario).data
         #loop through scenarios and append required information (course, page info)
 
@@ -409,10 +409,10 @@ class dashboard_page(APIView):
     def get(self, request, *args, **kwargs):
         
         #take professor_id as input from URL by adding ?professor=<the id #> to the end of the url.
-        PROFESSOR = self.request.query_params.get('PROFESSOR')
+        PROFESSOR_id = self.request.query_params.get('PROFESSOR')
         #TODO check that id != none
         #get all scenarios belonging to this professor
-        scenario_query = scenarios.objects.filter(PROFESSOR = PROFESSOR).values()
+        scenario_query = scenarios.objects.filter(PROFESSOR = PROFESSOR_id).values()
         #loop through scenarios and append required information (course, page info)
         logistics = []
         for scenario in scenario_query:
@@ -523,11 +523,11 @@ class dashboard_page(APIView):
 #change a list of issue objects at URL /multi_issue?scenario=<insert id number here>
 class multi_issue(APIView):
     def put(self, request, *args, **kwargs):
-        SCENARIO = self.request.query_params.get('SCENARIO')
-        if SCENARIO == None:
+        SCENARIO_id = self.request.query_params.get('SCENARIO')
+        if SCENARIO_id == None:
             return Response({'status': 'details'}, status=status.HTTP_404_NOT_FOUND)
         for updated_issue in request.data:
-            extant_issue = Issues.objects.get(SCENARIO = SCENARIO, ISSUE = updated_issue['ISSUE'])
+            extant_issue = Issues.objects.get(SCENARIO = SCENARIO_id, ISSUE = updated_issue['ISSUE'])
             serializer = IssuesSerializer(extant_issue, data=updated_issue)
             if not serializer.is_valid(): 
                 return Response(serializer.errors)
@@ -535,7 +535,7 @@ class multi_issue(APIView):
                 serializer.save()
             except:
                 print('something went wrong with the PUT')
-        issues_query = Issues.objects.filter(SCENARIO = SCENARIO).values()
+        issues_query = Issues.objects.filter(SCENARIO = SCENARIO_id).values()
         return Response(issues_query)
 
 # Checked - Ed - 4/15/2021
@@ -543,8 +543,8 @@ class multi_issue(APIView):
 class flowchart(APIView):
     #get all page objects given a scenario id
     def get(self, request, *args, **kwargs):
-        SCENARIO = self.request.query_params.get('SCENARIO')
-        pages_query = pages.objects.filter(SCENARIO=SCENARIO).values()
+        SCENARIO_id = self.request.query_params.get('SCENARIO')
+        pages_query = pages.objects.filter(SCENARIO=SCENARIO_id).values()
         for page in pages_query:
             if page['PAGE_TYPE'] == 'A':
                 page['ACTION'] = action_page.objects.filter(PAGE=page['PAGE']).values()
@@ -552,10 +552,10 @@ class flowchart(APIView):
 
         return Response(pages_query)
 
-    update the next_page field of all page objects
+    #update the next_page field of all page objects
     def put(self, request, *args, **kwargs):
-        SCENARIO = self.request.query_params.get('SCENARIO')
-        if SCENARIO == None:
+        SCENARIO_id = self.request.query_params.get('SCENARIO')
+        if SCENARIO_id == None:
             return Response({'status': 'details'}, status=status.HTTP_404_NOT_FOUND)
   
         for updated_page in request.data:
@@ -569,14 +569,14 @@ class flowchart(APIView):
                         return Response(action_serializer.errors)
                     action_serializer.save()
             #save the page itself    
-            extant_page = pages.objects.get(SCENARIO = SCENARIO, PAGE = updated_page['PAGE'])
+            extant_page = pages.objects.get(SCENARIO = SCENARIO_id, PAGE = updated_page['PAGE'])
             serializer = PagesSerializer(extant_page, data=updated_page)
             if not serializer.is_valid():
                 print("error with PUTing pages")
                 return Response(serializer.errors)
             serializer.save()
         #return query with newly saved pages     
-        pages_query = pages.objects.filter(SCENARIO=SCENARIO).values()
+        pages_query = pages.objects.filter(SCENARIO=SCENARIO_id).values()
         for page in pages_query:
             if page['PAGE_TYPE'] == 'A':
                 page['ACTION'] = action_page.objects.filter(PAGE=page['PAGE']).values()
@@ -984,8 +984,8 @@ class Page_StakeholderViewSet(generics.CreateAPIView):
 # Checked - Ed - 4/15/2021
 class student_info(APIView):
     def get(self,request,*args,**kwargs):
-        SCENARIO = self.request.query_params.get('SCENARIO')
-        responses_query = responses.objects.filter(SCENARIO=SCENARIO).values()
+        SCENARIO_id = self.request.query_params.get('SCENARIO')
+        responses_query = responses.objects.filter(SCENARIO=SCENARIO_id).values()
         student_ids = []
         data = []
         for response in responses_query:

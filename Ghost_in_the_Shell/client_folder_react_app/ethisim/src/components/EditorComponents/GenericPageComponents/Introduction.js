@@ -210,8 +210,10 @@ export default function Introduction(props) {
                     <HelpIcon />
                 </Button>
                 <GenericInfoButton
-                    description={`Give the student an introduction to the ethical scenario. What is the problem? Think about both the positive and negative potential consequences of the technology, 
-                    as well as the stakeholders who are promoting the technology and the stakeholders who will be most directly impacted.
+                    description={`Give your scenario some background! 
+                    This is the first page students will see in the simulator. 
+                    Give useful information introducing the company/people involved in your ethical quandary. 
+                    Don’t forget to click “Save” before leaving this page.
                     `}
                     open={open}
                     setOpen={setOpen}

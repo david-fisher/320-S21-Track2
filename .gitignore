@@ -27,3 +27,6 @@ hs_err_pid*
 *.py[cod]
 *.pyc
 *$py.class
+
+/apache/shib_conf/*
+/apache/apache_conf/*

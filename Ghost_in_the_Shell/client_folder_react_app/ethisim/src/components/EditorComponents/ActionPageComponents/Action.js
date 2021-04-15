@@ -284,7 +284,11 @@ export default function Action(props) {
                     <HelpIcon />
                 </Button>
                 <GenericInfoButton
-                    description={`on this page`}
+                    description={`Creation of Action pages is for giving students choice. 
+                    As you can see at the bottom of this page, two options are required. An example of the Action component being used is labeling option 1, 
+                    “Delay”, and option 2, “Go Ahead”. The student can either choose “Delay” and be sent to the Conversations page to continue speaking with stakeholders or choose “Go Ahead”, and be sent to a page further along in the scenario 
+                    (Remember, you decide page order on the Flow Diagram page). 
+                    These pages are added to your menu and can be edited and deleted at your discretion.`}
                     open={open}
                     setOpen={setOpen}
                 />

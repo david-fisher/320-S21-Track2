@@ -8,6 +8,11 @@
         "prettier" //This turns off all ESLint rules that are unnecessary or might conflict with Prettier
 
     ],
+    "settings": {
+        "react": {
+          "version": "detect"
+        }
+    },
     "globals": {
         "Atomics": "readonly",
         "SharedArrayBuffer": "readonly"

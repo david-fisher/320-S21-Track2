@@ -142,7 +142,7 @@ function Action(props) {
           <HTMLRenderer html={props.content}/>
         </Grid>
         <Grid item lg={12}>
-          <Checkbox pageNumber={props.pageNumber} changePage={props.changePage} /> 
+          <Checkbox pageNumber={props.pageNumber} changePage={props.changePage} pageId={props.id}/> 
         </Grid>
       </Grid>
     </div>

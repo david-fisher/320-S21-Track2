@@ -34,7 +34,7 @@ export default function ErrorRadios(props)
   const [choices, setChoices] = React.useState([]);
 
   useEffect (() => {
-    fetch(BASE_URL + '/action_page/')
+    fetch(`${BASE_URL}/get_page_info?page_id=${props.page_id}`)
     .then(res => res.json())
     .then(actionData => {
       let actionChoices = []

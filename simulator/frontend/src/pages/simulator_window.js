@@ -64,6 +64,7 @@ function SimulationWindow(props) {
             .forEach((page, index) => {
 
                 const commonProps = {
+                    id: page.id,
                     visited: false, 
                     completed: false, 
                     pageNumber: page.page, 

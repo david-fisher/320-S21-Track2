@@ -210,7 +210,9 @@ export default function Generic(props) {
                     <HelpIcon />
                 </Button>
                 <GenericInfoButton
-                    description={`on this page`}
+                    description={`This page simply includes a Title and Body field that you can insert anywhere in the simulation page sequence. 
+                    Create a Project Task Assignment page to put after your introduction to let students know their role in this scenario. Create a Conclusion page to end your scenario with and give students a final thought as they finish. The choice is yours! 
+                    hese pages are added to your menu and can be edited and deleted at your discretion.`}
                     open={open}
                     setOpen={setOpen}
                 />

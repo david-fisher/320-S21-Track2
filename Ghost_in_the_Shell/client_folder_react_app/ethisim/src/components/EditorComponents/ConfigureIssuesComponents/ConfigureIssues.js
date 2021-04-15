@@ -202,21 +202,19 @@ export default function ConfigureIssues({ scenario_ID }) {
                 Configure Ethical Issues
             </Typography>
             <Grid container justify="flex-end">
-                    <Button color="primary" onClick={handleClickOpen}>
-                        <HelpIcon />
-                    </Button>
-                    <GenericInfoButton
-                        description={`On this page you will create ethical issues as well, perhaps, as other non-ethical issues (e.g. salary and advancement) 
+                <Button color="primary" onClick={handleClickOpen}>
+                    <HelpIcon />
+                </Button>
+                <GenericInfoButton
+                    description={`On this page you will create ethical issues as well, perhaps, as other non-ethical issues (e.g. salary and advancement) 
                         that might complicate consideration of the ethical issues for the student and rate their importance on a scale of 0-5. 
                         You may create as many issues as you deem necessary. Click “Save” before leaving the page.`}
-                        open={open}
-                        setOpen={setOpen}
-                    />
-                </Grid>
-            
+                    open={open}
+                    setOpen={setOpen}
+                />
+            </Grid>
 
             <div className={classes.spacing}>
-                
                 <Button variant="contained" color="primary" onClick={getData}>
                     <RefreshIcon className={classes.iconRefreshSmall} />
                 </Button>

@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
             margin: theme.spacing(1),
             marginBottom: theme.spacing(1),
             width: '100%',
-            textTransform: 'unset',
+            //textTransform: 'unset',
         },
     },
     authorButtons: {
@@ -506,7 +506,7 @@ export default function Logistics({ scenario_ID }) {
                     noValidate
                     autoComplete="off"
                 >
-                    Simulation Title
+                    Scenario Title
                     {errorName ? (
                         <TextField
                             error
@@ -540,7 +540,7 @@ export default function Logistics({ scenario_ID }) {
                             At least one course must be selected
                         </Typography>
                     ) : null}
-                    Max Number Of Selected Conversations
+                    Maximum Number of Conversations Allowed
                     {errorNumConvos ? (
                         <TextField
                             error
@@ -568,7 +568,7 @@ export default function Logistics({ scenario_ID }) {
                                 color="primary"
                             />
                         }
-                        label="Public"
+                        label="Make Public"
                         labelPlacement="start"
                     />
 
@@ -580,17 +580,10 @@ export default function Logistics({ scenario_ID }) {
                                 color="primary"
                             />
                         }
-                        label="Is Finished"
+                        label="Publish"
                         labelPlacement="start"
                     />
                 </form>
-                <div className={classes.subdiv}>
-                    <form
-                        className={classes.buttons}
-                        noValidate
-                        autoComplete="off"
-                    ></form>
-                </div>
 
                 <div className={classes.subdiv}>
                     <form

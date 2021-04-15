@@ -9,26 +9,9 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
-from os import environ
+
 from pathlib import Path
 from corsheaders.defaults import default_headers
-
-# Copy database info from envrionment variables
-# used by docker containers to set database info 
-try:  
-   DB_USER = environ["DB_USER"]
-   DB_NAME = environ["DB_NAME"]
-   DB_HOST = environ["DB_HOST"]
-   DB_PASS = environ["DB_PASS"]
-   DB_PORT = environ["DB_PORT"]
-except KeyError: 
-   # defaults to containerdb
-   DB_USER = 'postgres'
-   DB_NAME = 'db'
-   DB_HOST = 'db'
-   DB_PASS = 'password'
-   DB_PORT = '5432'
-
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -39,19 +22,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = environ["DJ_SK"]
+SECRET_KEY = '@!6b5hzk8m7y+gdyeq$8&@g!c%0m+8hhaquat0=ml80biwz)kg'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-try:
-    ORIGIN_HOST = environ["ORIGIN_HOST"]
-    ORIGIN_PORT = environ["ORIGIN_PORT"]
-except KeyError:
-    ORIGIN_HOST = '127.0.0.1'
-    ORIGIN_PORT = '3000'
-
-ALLOWED_HOSTS = ['localhost','127.0.0.1', ORIGIN_HOST]
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -72,23 +48,21 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware', 
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',  
+    'django.middleware.common.CommonMiddleware', 
 ]
-
-# don't change the ordering of these parameters, idk why but they seem to only work in this orientation
+CORS_ORIGIN_ALLOW_ALL = True # If this is used then `CORS_ORIGIN_WHITELIST` will not have any effect
 CORS_ALLOW_CREDENTIALS = True
-CORS_ORIGIN_ALLOW_ALL = False # If this is used then `CORS_ORIGIN_WHITELIST` will not have any effect
 CORS_ORIGIN_WHITELIST = [
-    'http://localhost:3000',
-    f'http://{ORIGIN_HOST}:{ORIGIN_PORT}'
+    'http://localhost:3030',
 ] # If this is used, then not need to use `CORS_ORIGIN_ALLOW_ALL = True`
 CORS_ORIGIN_REGEX_WHITELIST = [
-    r"^http(s|)://[^/]*umass\.edu" # should allow any umass domain in the cors origin
+    'http://localhost:3030',
 ]
 
 ROOT_URLCONF = 'lead.urls'
@@ -119,18 +93,20 @@ DATABASES = {
     'default': {
         # 'ENGINE': 'django.db.backends.sqlite3',
         # 'NAME': BASE_DIR / 'db.sqlite3',
-        # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        # 'NAME': DB_NAME,
-        # 'USER': DB_USER,
-        # 'PASSWORD': DB_PASS,
-        # 'HOST': DB_HOST,
-        # 'PORT': DB_PORT,
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'hkjdggmf',
-        'USER': 'hkjdggmf',
-        'PASSWORD': 'Siw8DtLM7Zg5FaP6lQbj9vyvuQ9C2ghB',
-        'HOST': 'queenie.db.elephantsql.com',
-        'PORT': '5432'
+        'NAME': 'cnehcbso',
+        'USER': 'cnehcbso',
+        'PASSWORD': 'qy2xdb_zEcAZFOmY7fvQT1SddHRUhbCI',
+        'HOST': 'raja.db.elephantsql.com',
+        'PORT': '5432',
+
+        # docker db info:
+        # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        # 'NAME': 'db',
+        # 'USER': 'postgres',
+        # 'PASSWORD': 'password',
+        # 'HOST': 'db',
+        # 'PORT': '5432',
     }
 }
 

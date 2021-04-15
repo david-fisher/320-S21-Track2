@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import Body from '../GeneralPageComponents/Body';
-import { Typography, Container, Button, Grid, TextField } from '@material-ui/core';
+import {
+    Typography,
+    Container,
+    Button,
+    Grid,
+    TextField,
+} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import universalPost from '../../../universalHTTPRequests/post.js';
@@ -28,7 +34,7 @@ Consequences.propTypes = {
     body: PropTypes.any,
 };
 export default function Consequences(props) {
-    const { scenario_ID , body} = props;
+    const { scenario_ID, body } = props;
 
     const classes = useStyles();
 
@@ -40,7 +46,6 @@ export default function Consequences(props) {
 
     //for text body
     const [bodyText, setBodyText] = useState(body);
-
 
     return (
         <Container component="main">
@@ -58,7 +63,7 @@ export default function Consequences(props) {
                 />
             </Grid>
 
-                <Body
+            <Body
                 body={bodyText}
                 setBody={setBodyText}
                 // error={errorBody}

@@ -23,8 +23,6 @@ import { baseURL } from '../../../Constants/Config';
 
 import MaterialTable from 'material-table';
 import addStakeHolder from '../ConversationEditorComponents/StakeHoldersComponent/stakeHolders';
-//import saveStakeHolder from '../ConversationEditorComponents/StakeHoldersComponent/stakeHolders';
-//import saveStakeHolders from 'ethisim/src/components/EditorComponents/ConversationEditorComponents/StakeHoldersComponent/stakeHolders.js'
 import HelpIcon from '@material-ui/icons/Help';
 import GenericInfoButton from '../../InfoButtons/GenericInfoButton';
 
@@ -68,7 +66,89 @@ ICMatrix.propTypes = {
     scenario_ID: PropTypes.number,
 };
 
+let values = {};
+
 export default function ICMatrix({ scenario_ID }) {
+    //for info button
+    const [openHelp, setOpenHelp] = React.useState(false);
+    const handleClickOpenHelp = () => {
+        setOpenHelp(true);
+    };
+
+    const stakeHolders = useRef(null);
+    const [isLoading, setLoading] = useState(false); //stores status of whether something is loading
+
+    var axios = require('axios'); //backend
+    const [successBannerMessage, setSuccessBannerMessage] = useState(''); //success banner
+    const [successBannerFade, setSuccessBannerFade] = useState(false);
+    const [errorBannerMessage, setErrorBannerMessage] = useState(''); //error banner
+    const [errorBannerFade, setErrorBannerFade] = useState(false);
+
+    const addStakeHolders = () => {
+        // if (!checkTime(setCurrentTime, currentTime)) {
+        //     return;
+        // }
+        // setLoading(true);
+
+        var data = JSON.stringify({
+            SCENARIO: scenario_ID,
+        });
+
+        var config = {
+            method: 'post',
+            url: baseURL + '/stakeholder',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            data: data,
+        };
+        axios(config)
+            .then(function (response) {
+                //console.log(values)
+                response.data['NAME'] = values['NAME'];
+                response.data['DESCRIPTION'] = values['DESCRIPTION'];
+                response.data['INTRODUCTION'] = values['INTRODUCTION'];
+                response.data['JOB'] = values['JOB'];
+                saveStakeHolders(response.data);
+                // setStakeHolders([...stakeHolders, response.data]);
+                // setSuccessBannerMessage(
+                //     'Successfully created a new stakeholder!'
+                // );
+                //setSuccessBannerFade(true);
+            })
+            .catch(function (error) {
+                // setErrorBannerMessage(
+                //     'Failed to create a stakeholder! Please try again.'
+                // );
+                // setErrorBannerFade(true);
+            });
+    };
+    const saveStakeHolders = (data) => {
+        //var data = [...values]
+
+        var config = {
+            method: 'put',
+            url: baseURL + '/multi_stake?SCENARIO=' + scenario_ID,
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            data: [data],
+        };
+
+        axios(config)
+            .then(function (response) {
+                getExistingStakeHolders();
+                // setSuccessBannerMessage('Successfully saved the stakeholders!');
+                // setSuccessBannerFade(true);
+            })
+            .catch(function (error) {
+                // setErrorBannerMessage(
+                //     'Failed to save the stakeholders! Please try again.'
+                // );
+                // setErrorBannerFade(true);
+            });
+    };
+
     const [open, setOpen] = React.useState(false);
     const [open2, setOpen2] = React.useState(false);
 
@@ -76,6 +156,7 @@ export default function ICMatrix({ scenario_ID }) {
         setOpen(true);
     };
     const handleClose = () => {
+        addStakeHolders();
         setOpen(false);
     };
     const handleClickOpen2 = () => {
@@ -100,21 +181,6 @@ export default function ICMatrix({ scenario_ID }) {
         loading: true,
         error: null,
     });
-
-    //for info button
-    const [openHelp, setOpenHelp] = React.useState(false);
-    const handleClickOpenHelp = () => {
-        setOpenHelp(true);
-    };
-
-    const stakeHolders = useRef(null);
-    const [isLoading, setLoading] = useState(false); //stores status of whether something is loading
-
-    var axios = require('axios'); //backend
-    const [successBannerMessage, setSuccessBannerMessage] = useState(''); //success banner
-    const [successBannerFade, setSuccessBannerFade] = useState(false);
-    const [errorBannerMessage, setErrorBannerMessage] = useState(''); //error banner
-    const [errorBannerFade, setErrorBannerFade] = useState(false);
 
     useEffect(() => {
         getData();
@@ -152,9 +218,9 @@ export default function ICMatrix({ scenario_ID }) {
         );
     }
 
-    function onStakeHolderChange(childData) {
+    const onStakeHolderChange = () => {
         getExistingStakeHolders();
-    }
+    };
 
     /*<IssueMatrix onChange = {this.onStakeHolderChange}/>*/
 
@@ -403,6 +469,7 @@ export default function ICMatrix({ scenario_ID }) {
             <IssueMatrix /*this might need to be edited, sends scenario id to IssueCoverageMatrix*/
                 scenario_stakeHolders={stakeHolders.current}
                 scenario={scenario_ID}
+                // onChangeStakeHolders={onStakeHolderChange}
             />
         </div>
     );

@@ -19,7 +19,7 @@ import Introduction from '../components/EditorComponents/GenericPageComponents/I
 import FlowDiagram from '../components/EditorComponents/FlowDiagramComponents/FlowDiagram';
 import AddNewSimulationScenarioPageDialog from '../components//EditorComponents/AddNewSimulationScenarioPageDialog';
 import NavSideBarList from '../components/ConfigurationSideBarComponents/NavSideBarList';
-import ToDoListDialog from '../components/EditorComponents/ToDoListDialog';
+import ToDoListDialog from '../components/ToDo/ToDoListDialog';
 import AddIcon from '@material-ui/icons/Add';
 import { Link } from 'react-router-dom';
 import LoadingSpinner from '../components/LoadingSpinner';
@@ -30,6 +30,7 @@ import { useLocation } from 'react-router-dom';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import ErrorIcon from '@material-ui/icons/Error';
 import ViewListIcon from '@material-ui/icons/ViewList';
+import Consequences from '../components/EditorComponents/ConsequencesPageComponents/Consequences';
 
 import universalPost from '../universalHTTPRequests/post.js';
 import universalFetch from '../universalHTTPRequests/get.js';
@@ -213,7 +214,16 @@ export default function Editor(props) {
                 title: 'Conversation Editor',
                 component: <ConversationEditor />,
             },
-            { id: -4, title: 'Flow Diagram', component: <FlowDiagram /> },
+            {
+                id: -4,
+                title: 'Flow Diagram',
+                component: <FlowDiagram />,
+            },
+            {
+                id: -6,
+                title: 'Consequences',
+                component: <Consequences />,
+            },
         ];
 
         const endpoint = '/logistics?scenario_id=' + scenario_ID;
@@ -244,6 +254,9 @@ export default function Editor(props) {
             initialComponents[3].component = (
                 <FlowDiagram scenario_ID={p.scenario_ID}></FlowDiagram>
             );
+            initialComponents[5].component = (
+                <Consequences scenario_ID={p.scenario_ID}></Consequences>
+            );
 
             let pages = logistics_and_pages.PAGES;
 
@@ -254,7 +267,7 @@ export default function Editor(props) {
                 }
                 //Intro page is first page on sidebar
                 if (pages[i].PAGE_TYPE === 'I') {
-                    initialComponents.splice(4, 0, {
+                    initialComponents.splice(6, 0, {
                         id: pages[i].PAGE,
                         title: pages[i].PAGE_TITLE,
                         isIntroPage: true,

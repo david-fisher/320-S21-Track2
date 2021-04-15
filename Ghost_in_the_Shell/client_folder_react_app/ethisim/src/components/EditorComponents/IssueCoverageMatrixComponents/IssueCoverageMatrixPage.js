@@ -319,7 +319,11 @@ export default function ICMatrix({ scenario_ID }) {
                     <HelpIcon />
                 </Button>
                 <GenericInfoButton
-                    description={`This page is currently under maintenance.`}
+                    description={`On this page, you will notice an issue coverage matrix. This table displays all your stakeholders and the issues associated with them. 
+                    There is a search function for ease of access. A running sum is calculated as a column sum for each issue. This table can be exported as a PDF or CSV file. 
+                    You can add stakeholders to the Issue Coverage Matrix without leaving the page using the “Add Stakeholder” button. 
+                    Clicking this button will show you a popup window with fields like Name, Job, etc. which you can fill in to create a new stakeholder. 
+                    You can also create new issues and rate their importance on this page by clicking on the “Add Issue” button.`}
                     open={openHelp}
                     setOpen={setOpenHelp}
                 />

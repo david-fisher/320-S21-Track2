@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Typography, Button } from '@material-ui/core';
+import { Typography, Button, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import EntryFields from './IssueEntryFieldList';
 import get from '../../../universalHTTPRequests/get';
@@ -64,6 +64,12 @@ export default function ConfigureIssues({ scenario_ID }) {
         loading: true,
         error: null,
     });
+
+    //for info button
+    const [open, setOpen] = React.useState(false);
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
 
     let getData = () => {
         get(setIssueEntryFieldList, endpointGET + scenario_ID);
@@ -195,8 +201,22 @@ export default function ConfigureIssues({ scenario_ID }) {
             <Typography align="center" variant="h2">
                 Configure Ethical Issues
             </Typography>
+            <Grid container justify="flex-end">
+                    <Button color="primary" onClick={handleClickOpen}>
+                        <HelpIcon />
+                    </Button>
+                    <GenericInfoButton
+                        description={`On this page you will create ethical issues as well, perhaps, as other non-ethical issues (e.g. salary and advancement) 
+                        that might complicate consideration of the ethical issues for the student and rate their importance on a scale of 0-5. 
+                        You may create as many issues as you deem necessary. Click “Save” before leaving the page.`}
+                        open={open}
+                        setOpen={setOpen}
+                    />
+                </Grid>
+            
 
             <div className={classes.spacing}>
+                
                 <Button variant="contained" color="primary" onClick={getData}>
                     <RefreshIcon className={classes.iconRefreshSmall} />
                 </Button>

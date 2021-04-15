@@ -20,7 +20,7 @@ import ICMatrix from '../components/EditorComponents/IssueCoverageMatrixComponen
 import FlowDiagram from '../components/EditorComponents/FlowDiagramComponents/FlowDiagram';
 import AddNewSimulationScenarioPageDialog from '../components//EditorComponents/AddNewSimulationScenarioPageDialog';
 import NavSideBarList from '../components/ConfigurationSideBarComponents/NavSideBarList';
-import ToDoListDialog from '../components/ToDo/ToDoListDialog';
+//import ToDoListDialog from '../components/ToDo/ToDoListDialog';
 import AddIcon from '@material-ui/icons/Add';
 import { Link } from 'react-router-dom';
 import LoadingSpinner from '../components/LoadingSpinner';

@@ -61,7 +61,6 @@ export default function NavSideBarNode(props) {
             id === -3 ||
             id === -4 ||
             id === -5 ||
-            id === -6 ||
             isIntroPage
         ) {
             //logistics to introduction pages

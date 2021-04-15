@@ -93,18 +93,19 @@ class multi_conv(APIView):
 #         stake_query = stakeholders.objects.filter(SCENARIO = SCENARIO).values()
 #         return Response(stake_query)
 
-# class multi_coverage(APIView):
-#     def put(self, request, *args, **kwargs):
-#         STAKEHOLDER = self.request.query_params.get('STAKEHOLDER')
-#         if STAKEHOLDER == None:
-#             return Response({'status': 'details'}, status=status.HTTP_404_NOT_FOUND)
-#         for updated_coverage in request.data:
-#             extant_coverage = coverage.objects.get(STAKEHOLDER = STAKEHOLDER, ISSUE = updated_coverage['ISSUE'])
-#             serializer = coverageSerializer(extant_coverage, data=updated_coverage)
-#             if serializer.is_valid(): 
-#                 serializer.save()
-#         coverage_query = coverage.objects.filter(STAKEHOLDER = STAKEHOLDER).values()
-#         return Response(coverage_query)
+# checked - Ed - 4/15/2021
+class multi_coverage(APIView):
+    def put(self, request, *args, **kwargs):
+        STAKEHOLDER = self.request.query_params.get('STAKEHOLDER')
+        if STAKEHOLDER == None:
+            return Response({'status': 'details'}, status=status.HTTP_404_NOT_FOUND)
+        for updated_coverage in request.data:
+            extant_coverage = coverage.objects.get(STAKEHOLDER = STAKEHOLDER, ISSUE = updated_coverage['ISSUE'])
+            serializer = coverageSerializer(extant_coverage, data=updated_coverage)
+            if serializer.is_valid(): 
+                serializer.save()
+        coverage_query = coverage.objects.filter(STAKEHOLDER = STAKEHOLDER).values()
+        return Response(coverage_query)
 
 
 class CoverageViewSet(viewsets.ModelViewSet):

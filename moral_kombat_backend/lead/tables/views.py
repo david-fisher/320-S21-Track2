@@ -1068,7 +1068,7 @@ class Page_StakeholderViewSet(generics.CreateAPIView):
 #                 # issueList.update({"NAME": IssuesSerializer(Issues.objects.get(ISSUE=issueID)).data['NAME']})
 #                 # Getting the issue for the coverage dictionary associated with the stakeholder_id
 #                 try:
-#                     issue = Issues.objects.get(ISSUE=coverages.get('ISSUE_id'))
+#                     issue = Issues.objects.get(ISSUE=coverages.get('ISSUE'))
 #                 except:
 #                     continue
 #                 issues_dict.update(coverages)

@@ -20,26 +20,26 @@ from rest_framework import mixins
 
 
 
-# Stakeholders ViewSet
-# class StakeholdersViewSet(viewsets.ModelViewSet):
-#     def get_queryset(self):
-#         queryset = stakeholders.objects.all()
-#         return queryset
-#     queryset = stakeholders.objects.all()
-#     permissions_classes = [
-#         permissions.AllowAny
-#     ]
-#     serializer_class = StakeholdersSerializer
-#     filter_backends = [DjangoFilterBackend]
-#     filterset_fields = ['SCENARIO']
-#     lookup_field = "STAKEHOLDER"
-
+# Stakeholders ViewSet - Chirag - 4/14
 class StakeholdersViewSet(viewsets.ModelViewSet):
-    queryset = STAKEHOLDERS.objects.all()
+    def get_queryset(self):
+        queryset = stakeholders.objects.all()
+        return queryset
+    queryset = stakeholders.objects.all()
     permissions_classes = [
         permissions.AllowAny
     ]
     serializer_class = StakeholdersSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['SCENARIO']
+    lookup_field = "STAKEHOLDER"
+
+# class StakeholdersViewSet(viewsets.ModelViewSet):
+#     queryset = STAKEHOLDERS.objects.all()
+#     permissions_classes = [
+#         permissions.AllowAny
+#     ]
+#     serializer_class = StakeholdersSerializer
 
 class QuestionsViewset(viewsets.ModelViewSet):
     queryset = QUESTIONS.objects.all()
@@ -49,14 +49,15 @@ class QuestionsViewset(viewsets.ModelViewSet):
     serializer_class = QuestionsViewset
 
 # Conversations ViewSet
+# checked - Chirag - 04/15/2021
 class ConversationsViewSet(viewsets.ModelViewSet):
     queryset = CONVERSATIONS.objects.all()
     permissions_classes = [
         permissions.AllowAny
     ]
     serializer_class = ConversationsSerializer
-    # filter_backends = [DjangoFilterBackend]
-    # filterset_fields = ['STAKEHOLDER', 'QUESTION']
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['STAKEHOLDER', 'QUESTION']
 
 class Responses_to_ConversationsViewSet(viewsets.ModelViewSet):
     queryset = RESPONSES_TO_CONVERSATIONS.objects.all()
@@ -65,19 +66,19 @@ class Responses_to_ConversationsViewSet(viewsets.ModelViewSet):
     ]
     serializer_class = Responses_to_ConversationsSerializer
 
-
-# class multi_conv(APIView):
-#     def put(self, request, *args, **kwargs):
-#         STAKEHOLDER = self.request.query_params.get('STAKEHOLDER')
-#         if STAKEHOLDER == None:
-#             return Response({'status': 'details'}, status=status.HTTP_404_NOT_FOUND)
-#         for updated_conv in request.data:
-#             extant_conv = conversations.objects.get(STAKEHOLDER = STAKEHOLDER, CONVERSATION = updated_conv['CONVERSATION'])
-#             serializer = ConversationsSerializer(extant_conv, data=updated_conv)
-#             if serializer.is_valid(): 
-#                 serializer.save()
-#         conv_query = conversations.objects.filter(STAKEHOLDER = STAKEHOLDER).values()
-#         return Response(conv_query)
+# checked - Chirag - 04/15/2021
+class multi_conv(APIView):
+    def put(self, request, *args, **kwargs):
+        STAKEHOLDER = self.request.query_params.get('STAKEHOLDER')
+        if STAKEHOLDER == None:
+            return Response({'status': 'details'}, status=status.HTTP_404_NOT_FOUND)
+        for updated_conv in request.data:
+            extant_conv = conversations.objects.get(STAKEHOLDER = STAKEHOLDER, CONVERSATION = updated_conv['CONVERSATION'])
+            serializer = ConversationsSerializer(extant_conv, data=updated_conv)
+            if serializer.is_valid(): 
+                serializer.save()
+        conv_query = conversations.objects.filter(STAKEHOLDER = STAKEHOLDER).values()
+        return Response(conv_query)
 
 # class multi_stake(APIView):
 #     def put(self, request, *args, **kwargs):
@@ -1007,90 +1008,92 @@ class Page_StakeholderViewSet(generics.CreateAPIView):
 #         #     data.append(demographic)
 #         return Response(data)
 
-# class coverages_page(APIView):
-#     def put(self, request, *args, **kwargs):
-#         # """
-#         # docstring
-#         # """
-#         data = JSONParser().parse(request)
 
-#         if type(data) == list:
-#             response = []
-#             for item in data:
-#                 stkholderid = item['STAKEHOLDER']
-#                 issueid = item['ISSUE']
-#                 updatingItem = coverage.objects.get(
-#                     STAKEHOLDER=stkholderid, ISSUE=issueid)
-#                 serializer = coverageSerializer(
-#                     updatingItem, data=item)
-#                 if serializer.is_valid():
-#                     serializer.save()
-#                     response.append(serializer.data)
-#                 else:
-#                     return Response(response, status=status.HTTP_400_BAD_REQUEST)
+# seems like no change required - Chirag - 4/15
+class coverages_page(APIView):
+    def put(self, request, *args, **kwargs):
+        # """
+        # docstring
+        # """
+        data = JSONParser().parse(request)
 
-#             return Response(response, status=status.HTTP_200_OK)
-#         else:
-#             stkholderid = data['STAKEHOLDER']
-#             issueid = data['ISSUE']
-#             updatingItem = coverage.objects.get(
-#                 STAKEHOLDER=stkholderid, ISSUE=issueid)
-#             serializer = coverageSerializer(
-#                 updatingItem, data=data)
-#             if serializer.is_valid():
-#                 serializer.save()
-#                 return Response(serializer.data, status=status.HTTP_200_OK)
-#             else:
-#                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        if type(data) == list:
+            response = []
+            for item in data:
+                stkholderid = item['STAKEHOLDER']
+                issueid = item['ISSUE']
+                updatingItem = coverage.objects.get(
+                    STAKEHOLDER=stkholderid, ISSUE=issueid)
+                serializer = coverageSerializer(
+                    updatingItem, data=item)
+                if serializer.is_valid():
+                    serializer.save()
+                    response.append(serializer.data)
+                else:
+                    return Response(response, status=status.HTTP_400_BAD_REQUEST)
+
+            return Response(response, status=status.HTTP_200_OK)
+        else:
+            stkholderid = data['STAKEHOLDER']
+            issueid = data['ISSUE']
+            updatingItem = coverage.objects.get(
+                STAKEHOLDER=stkholderid, ISSUE=issueid)
+            serializer = coverageSerializer(
+                updatingItem, data=data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# class stakeholders_page(APIView):
+class stakeholders_page(APIView):
     
-#     def add_detail(self, stkholders):
+    def add_detail(self, stkholders):
 
-#         for stkholder in stkholders:
-#             stakeholder_id = stkholder['STAKEHOLDER']
+        for stkholder in stkholders:
+            stakeholder_id = stkholder['STAKEHOLDER']
 
-#             queryset = conversations.objects.filter(STAKEHOLDER=stakeholder_id)
-#             conList = ConversationsSerializer(queryset, many=True).data
-#             stkholder['CONVERSATIONS'] = conList
+            queryset = conversations.objects.filter(STAKEHOLDER=stakeholder_id)
+            conList = ConversationsSerializer(queryset, many=True).data
+            stkholder['CONVERSATIONS'] = conList
 
-#             try: 
-#                 coverage_list = coverage.objects.filter(STAKEHOLDER=stakeholder_id).values()
-#             except coverage.DoesNotExist:
-#                 return Response(status=status.HTTP_404_NOT_FOUND)
+            try: 
+                coverage_list = coverage.objects.filter(STAKEHOLDER=stakeholder_id).values()
+            except coverage.DoesNotExist:
+                return Response(status=status.HTTP_404_NOT_FOUND)
 
-#             issue_list = []
-#             # Check for every single coverage object that belongs to the staheholder id 'id' 
-#             for coverages in coverage_list:
-#                 issues_dict = {}
-#                 # issueList = coverageSerializer(coverage.objects.get(ISSUE=issueID)).data
-#                 # issueList.update({"NAME": IssuesSerializer(Issues.objects.get(ISSUE=issueID)).data['NAME']})
-#                 # Getting the issue for the coverage dictionary associated with the stakeholder_id
-#                 try:
-#                     issue = Issues.objects.get(ISSUE=coverages.get('ISSUE'))
-#                 except:
-#                     continue
-#                 issues_dict.update(coverages)
-#                 del issues_dict['id']
-#                 issues_dict['ISSUE'] = issues_dict['ISSUE_id']
-#                 del issues_dict['ISSUE_id']
-#                 issues_dict['STAKEHOLDER'] = issues_dict['STAKEHOLDER_id']
-#                 del issues_dict['STAKEHOLDER_id']
-#                 issues_dict.update(
-#                     {
-#                         "NAME": issue.NAME
-#                     })
+            issue_list = []
+            # Check for every single coverage object that belongs to the staheholder id 'id' 
+            for coverages in coverage_list:
+                issues_dict = {}
+                # issueList = coverageSerializer(coverage.objects.get(ISSUE=issueID)).data
+                # issueList.update({"NAME": IssuesSerializer(Issues.objects.get(ISSUE=issueID)).data['NAME']})
+                # Getting the issue for the coverage dictionary associated with the stakeholder_id
+                try:
+                    issue = ISSUES.objects.get(ISSUE=coverages.get('ISSUE_id'))
+                except:
+                    continue
+                issues_dict.update(coverages)
+                del issues_dict['id']
+                issues_dict['ISSUE'] = issues_dict['ISSUE_id']
+                del issues_dict['ISSUE_id']
+                issues_dict['STAKEHOLDER'] = issues_dict['STAKEHOLDER_id']
+                del issues_dict['STAKEHOLDER_id']
+                issues_dict.update(
+                    {
+                        "NAME": issue.NAME
+                    })
 
-#                 issue_list.append(issues_dict)
+                issue_list.append(issues_dict)
             
-#             stkholder.update(
-#                 {
-#                     "ISSUES": issue_list
-#                 }
-#             )
+            stkholder.update(
+                {
+                    "ISSUES": issue_list
+                }
+            )
 
-#         return stkholders
+        return stkholders
 
 #         '''
 #         page_data = PagesSerializer(page).datapage_data.update(

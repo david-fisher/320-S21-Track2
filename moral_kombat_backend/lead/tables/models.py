@@ -83,12 +83,14 @@ class PAGES_TO_SCENARIO(models.Model):
     PAGE_VERSION = models.ForeignKey('PAGES', to_field = 'VERSION', on_delete = models.CASCADE, related_name="stakeholder_page3")
     SCENARIO_VERSION = models.ForeignKey('SCENARIOS', to_field = 'VERSION', on_delete = models.CASCADE, related_name="stakeholder_page4")
 
+#updated 4/14
 class STAKEHOLDER_TO_PAGE(models.Model):
     class Meta:
-        unique_together = (('PAGE'), ('STAKEHOLDER'))
+        unique_together = (('PAGE'), ('PAGE_VERSION'), ('STAKEHOLDER'), ('STAKEHOLDER_VERSION'))
     PAGE = models.ForeignKey('PAGES', to_field = "PAGE", on_delete = models.CASCADE, related_name="stakeholder_page5")
+    PAGE_VERSION = models.ForeignKey('PAGES', to_field = "VERSION", on_delete = models.CASCADE, related_name="stakeholder_page7")
     STAKEHOLDER = models.ForeignKey('STAKEHOLDERS', to_field = 'STAKEHOLDER', on_delete = models.CASCADE, related_name="stakeholder_page6")
-
+    STAKEHOLDER_VERSION = models.ForeignKey('STAKEHOLDERS', to_field = 'VERSION', on_delete = models.CASCADE, related_name="stakeholder_page8")
 
 # class choices_for(models.Model):
 #     class Meta:
@@ -97,8 +99,7 @@ class STAKEHOLDER_TO_PAGE(models.Model):
 #     VERSION_ID = models.ForeignKey('scenarios', on_delete = models.CASCADE, related_name="choices_for2")
 #     CHOICES = models.TextField()
 
-
-
+#updated 4/14
 class STAKEHOLDERS(models.Model):
     class Meta:
         unique_together = (('STAKEHOLDER'), ('VERSION'))
@@ -110,8 +111,7 @@ class STAKEHOLDERS(models.Model):
     JOB = models.TextField(default = "default")
     # MATRIX = ArrayField(ArrayField(models.IntegerField(), size = 15), size = 15)
     INTRODUCTION = models.TextField(default = 'default')
-
-
+    ENABLE_MULTI_CONVO = models.BooleanField(default = False)
 
 # class stakeholders_in(models.Model):
 #     class Meta:
@@ -120,12 +120,12 @@ class STAKEHOLDERS(models.Model):
 #     SCENARIO_ID = models.ForeignKey('scenarios', to_field = 'SCENARIO_ID', on_delete =models.CASCADE, related_name="stakeholder2")
     # VERSION_ID = models.ForeignKey('scenarios', on_delete = models.CASCADE, related_name="stakeholder3")
 
-
-
+#updated 4/14
 class CONVERSATIONS(models.Model):
     # class Meta:
     #     unique_together = (('STAKEHOLDER'), ('CONVERSATION'))
     STAKEHOLDER = models.ForeignKey('STAKEHOLDERS', to_field = 'STAKEHOLDER', on_delete = models.CASCADE, related_name="conversations1")
+    STAKEHOLDER_VERSION = models.ForeignKey('STAKEHOLDERS', to_field = 'VERSION', on_delete = models.CASCADE, related_name="conversations2")
     CONVERSATION = models.AutoField(default = None, primary_key = True)
     QUESTION = models.TextField(default = "default")
     RESPONSE = models.TextField(default = "default")
@@ -144,6 +144,7 @@ class RESPONSES(models.Model):
     COURSE = models.ForeignKey('COURSES', to_field= 'COURSE', on_delete = models.CASCADE, related_name="responses4")
     DATE_TAKEN = models.DateField(auto_now_add=True)
     CHOICE = models.TextField()
+
 #Updated 4/12 by Cooper
 class RESPONSES_TO_CONVERSATIONS(models.Model):
     class Meta:
@@ -158,7 +159,6 @@ class RESPONSES_TO_CONVERSATIONS(models.Model):
 #     RESPONSE = models.ForeignKey('responses', on_delete = models.CASCADE, related_name="actions_taken1")
 #     ACTION_PAGE = models.ForeignKey('action_page', on_delete = models.CASCADE, related_name="actions_taken2")
 
-
 # class conversations_had(models.Model):
 #     STUDENT = models.ForeignKey('students', on_delete = models.CASCADE, related_name="conversations_had1")
 #     COURSE = models.ForeignKey('responses', on_delete = models.CASCADE, related_name="conversations_had2")
@@ -168,7 +168,6 @@ class RESPONSES_TO_CONVERSATIONS(models.Model):
 #     STAKEHOLDER = models.ForeignKey('stakeholders', on_delete = models.CASCADE, related_name="conversations_had6")
 #     SCORE = models.IntegerField()
 #     CONVERSATION = models.ForeignKey('conversations', on_delete = models.CASCADE, related_name="conversations_had7")
-
 
 #Updated 4/12 by Cooper (Nothing actually changed just verified)
 class REFLECTIONS_TAKEN(models.Model):
@@ -182,7 +181,6 @@ class REFLECTIONS_TAKEN(models.Model):
     # VERSION = models.IntegerField(default=1, editable=False)
     # DATE_TAKEN = models.ForeignKey('responses', on_delete = models.CASCADE, related_name="reflections_taken5")
     # REFLECTION_PAGE = models.ForeignKey('pages',null = True, on_delete = models.CASCADE, related_name = 'reflections_taken6')
-
 
 #Updated 4/12 by Cooper (just verified, nothing actually changed)
 class COURSES(models.Model):
@@ -210,6 +208,7 @@ class STUDENTS(models.Model):
     STUDENT = models.IntegerField(primary_key = True)
     FNAME = models.CharField(max_length = 100, default= "default")
     LNAME = models.CharField(max_length = 100, default= "default")
+
 #Updated 4/12 by Cooper (just verified, nothing actually changed)
 class DEMOGRAPHICS(models.Model):
     STUDENT = models.ForeignKey('STUDENTS',to_field = 'STUDENT', on_delete = models.CASCADE, related_name = "demographics", primary_key = True)
@@ -230,6 +229,7 @@ class STUDENTS_TO_COURSE(models.Model):
         unique_together = (('STUDENT'), ('COURSE'))
     STUDENT = models.ForeignKey('STUDENTS', to_field = 'STUDENT', on_delete = models.CASCADE, related_name="students_to_course1", primary_key= True)
     COURSE = models.ForeignKey('COURSES', to_field = 'COURSE', on_delete = models.CASCADE, related_name="students_to_couse2")
+
 #Updated 4/12 by Cooper (just verified, nothing actually changed)
 class PROFESSORS_TO_COURSES(models.Model):
     class Meta:
@@ -253,21 +253,22 @@ class PROFESSORS_TO_SCENARIO(models.Model):
     SCENARIO = models.ForeignKey('SCENARIOS', to_field = 'SCENARIO_ID', on_delete = models.CASCADE, related_name="professors_to_scenario2")
     PERMISSION = models.IntegerField()
 
-
+#updated 4/14
 class ISSUES(models.Model):
     # class Meta:
     #     unique_together = (('SCENARIO'),('ISSUE'),('VERSION'))
     SCENARIO_ID = models.ForeignKey('SCENARIOS', to_field= 'SCENARIO_ID', on_delete = models.CASCADE, related_name = "scenario_id1", default = None)
     ISSUE = models.AutoField(default = None, primary_key = True, editable = False)
-    VERSION = models.IntegerField(default=1, editable=False)
+    # VERSION = models.IntegerField(default=1, editable=False)
     NAME = models.CharField(max_length = 1000)
     IMPORTANCE_SCORE = models.IntegerField(validators = [MinValueValidator(0.0)])
 
-
+#updated 4/14
 class COVERAGE(models.Model):
     class Meta:
         unique_together = (('STAKEHOLDER'),('ISSUE'))
-    STAKEHOLDER = models.ForeignKey('STAKEHOLDERS', to_field = 'STAKEHOLDER', on_delete = models.CASCADE, related_name = "coverage2", default = None)
+    STAKEHOLDER = models.ForeignKey('STAKEHOLDERS', to_field = 'STAKEHOLDER', on_delete = models.CASCADE, related_name = "coverage2", default = None, primary_key = true)
+    STAKEHOLDER_VERSION = models.ForeignKey('STAKEHOLDERS', to_field = 'VERSION', on_delete=models.CASCADE, related_name = "coverage4")
     ISSUE = models.ForeignKey('ISSUES', to_field = 'ISSUE', on_delete = models.CASCADE, related_name = "coverage1", default = None)
     # VERSION_ID = models.ForeignKey('stakeholders',on_delete = models.CASCADE, related_name = "coverage3", default = None)
     COVERAGE_SCORE = models.FloatField(validators = [MinValueValidator(0.0)])
@@ -282,14 +283,12 @@ class ACTION_PAGE(models.Model):
     ID = models.AutoField(primary_key = True)
     VERSION = models.ForeignKey('PAGES', to_field = 'VERSION', on_delete = models.CASCADE, related_name = 'action_page2')
     
-
 #Updated 4/12
 class RESPONSE_TO_ACTION_PAGE(models.Model):
 
     RESPONSE_ID = models.ForeignKey('RESPONSES', to_field = 'RESPONSE_ID', on_delete = models.CASCADE, related_name = 'action_page2')
     ACTION_PAGE = models.ForeignKey('ACTION_PAGE', to_field = 'ID', on_delete = models.CASCADE, related_name = 'action_page3')
     ACTION_PAGE_VERSION = models.ForeignKey('ACTION_PAGE', to_field='VERSION', on_delete=models.CASCADE, related_name = 'action_page4')
-
 
 # class assigned_to(models.Model):
 #     class Meta:

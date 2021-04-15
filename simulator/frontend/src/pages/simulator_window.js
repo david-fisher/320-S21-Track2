@@ -10,6 +10,7 @@ import { Grid, Typography, Box, Button } from '@material-ui/core';
 import { STUDENT_ID, BASE_URL } from '../constants/config';
 import Page from './page_factory';
 import SpecialButton from './components/SpecialButton';
+import {Link} from 'react-router-dom'
 
 export const GatheredInfoContext = createContext();
 
@@ -31,7 +32,7 @@ function SimulationWindow(props) {
     const [ isLoading, setIsLoading ] = useState(true);
 
     const stepChange = (change) => {
-        const pageToGoTo = activePage + change;
+        const pageToGoTo = parseInt(activePage) + change;
         if(pages[pageToGoTo]) {
             setActivePage(pageToGoTo);
         }
@@ -39,7 +40,7 @@ function SimulationWindow(props) {
 
     const goToPage = (pageNumber) => {
         Object.keys(pages).forEach(key => {
-            if(pages[key].pageNumber === pageNumber.toString()) {
+            if(pages[key].pageNumber === pageNumber) {
                 setActivePage(key);
             }
         });
@@ -57,6 +58,9 @@ function SimulationWindow(props) {
             allPages.filter((page) => {
                 return page.scenario.toString() === props.match.params.sid;
             })
+            .sort((a, b) => {
+                return a.id - b.id;
+            })
             .forEach((page, index) => {
 
                 const commonProps = {
@@ -64,7 +68,7 @@ function SimulationWindow(props) {
                     completed: false, 
                     pageNumber: page.page, 
                     type: page.page_type,
-                    nextPageNumber: page.next_page, 
+                    nextPageNumber: page.next, 
                     title: page.page_title, 
                     content: page.body,
                     match: props.match,
@@ -88,10 +92,13 @@ function SimulationWindow(props) {
             <Grid className={classes.simulator} item container direction={"row"} justify="center">
                 <Grid container direction={"row"} xs={8} spacing={2}>
                     <Grid item container direction={"column"} md={2}>
-                        <SpecialButton 
-                            type={"back"}
-                            onClick={() => stepChange(-1)}
-                        />
+                        {
+                            activePage > 0 &&
+                            <SpecialButton 
+                                type={"back"}
+                                onClick={() => stepChange(-1)}
+                            />
+                        }
                     </Grid>
                     <Grid item xs={10} md={8} sm container direction={"column"} spacing={2}>
                         <Grid item xs>
@@ -102,10 +109,19 @@ function SimulationWindow(props) {
                         </Grid>
                     </Grid>
                     <Grid item container direction={"column"} md={2}>
-                        <SpecialButton 
-                            type={"next"}
-                            onClick={() => stepChange(1)}
-                        />
+                        {
+                            (activePage !== Object.keys(pages).length-1) ?
+                            (<SpecialButton 
+                                type={"next"}
+                                onClick={() => stepChange(1)}
+                            />)
+                            :
+                            (<Link to="/">
+                                <SpecialButton
+                                    type={"finish"}
+                                />
+                            </Link>)
+                        }
                     </Grid>
                 </Grid>
             </Grid>

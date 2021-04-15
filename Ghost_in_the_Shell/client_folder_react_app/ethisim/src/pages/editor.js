@@ -17,6 +17,7 @@ import Reflection from '../components/EditorComponents/ReflectionPageComponents/
 import Action from '../components/EditorComponents/ActionPageComponents/Action';
 import Introduction from '../components/EditorComponents/GenericPageComponents/Introduction';
 import ICMatrix from '../components/EditorComponents/IssueCoverageMatrixComponents/IssueCoverageMatrixPage';
+import Consequences from '../components/EditorComponents/ConsequencePageComponents/Consequences';
 import FlowDiagram from '../components/EditorComponents/FlowDiagramComponents/FlowDiagram';
 import AddNewSimulationScenarioPageDialog from '../components//EditorComponents/AddNewSimulationScenarioPageDialog';
 import NavSideBarList from '../components/ConfigurationSideBarComponents/NavSideBarList';
@@ -224,6 +225,11 @@ export default function Editor(props) {
                 title: 'Flow Diagram',
                 component: <FlowDiagram />,
             },
+            {
+                id: -6,
+                title: 'Consequences',
+                component: <Consequences />,
+            },
         ];
 
         const endpoint = '/logistics?scenario_id=' + scenario_ID;
@@ -256,6 +262,9 @@ export default function Editor(props) {
             );
             initialComponents[4].component = (
                 <FlowDiagram scenario_ID={p.scenario_ID}></FlowDiagram>
+            );
+            initialComponents[5].component = (
+                <Consequences scenario_ID={p.scenario_ID}></Consequences>
             );
 
             let pages = logistics_and_pages.PAGES;
@@ -461,7 +470,14 @@ export default function Editor(props) {
 
     let onClick = (id, title, scenarioPages) => {
         setCurrentPageID(id);
-        if (id !== -1 && id !== -2 && id !== -3 && id !== -4 && id !== -5) {
+        if (
+            id !== -1 &&
+            id !== -2 &&
+            id !== -3 &&
+            id !== -4 &&
+            id !== -5 &&
+            id !== -6
+        ) {
             handlePageGet(setGetValues, id, scenarioPages);
         }
         setScenarioComponent(

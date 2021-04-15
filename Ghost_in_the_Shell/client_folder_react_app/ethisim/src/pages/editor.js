@@ -16,6 +16,7 @@ import ConversationEditor from '../components/EditorComponents/ConversationEdito
 import Reflection from '../components/EditorComponents/ReflectionPageComponents/Reflection';
 import Action from '../components/EditorComponents/ActionPageComponents/Action';
 import Introduction from '../components/EditorComponents/GenericPageComponents/Introduction';
+import ICMatrix from '../components/EditorComponents/IssueCoverageMatrixComponents/IssueCoverageMatrixPage';
 import FlowDiagram from '../components/EditorComponents/FlowDiagramComponents/FlowDiagram';
 import AddNewSimulationScenarioPageDialog from '../components//EditorComponents/AddNewSimulationScenarioPageDialog';
 import NavSideBarList from '../components/ConfigurationSideBarComponents/NavSideBarList';
@@ -216,6 +217,13 @@ export default function Editor(props) {
             },
             {
                 id: -4,
+
+                title: 'Issue Coverage Matrix',
+                component: <ICMatrix />,
+            },
+            {
+                id: -5,
+
                 title: 'Flow Diagram',
                 component: <FlowDiagram />,
             },
@@ -223,6 +231,9 @@ export default function Editor(props) {
                 id: -6,
                 title: 'Consequences',
                 component: <Consequences />,
+
+                title: 'Issue Coverage Matrix',
+                component: <ICMatrix />,
             },
         ];
 
@@ -252,6 +263,9 @@ export default function Editor(props) {
                 ></ConversationEditor>
             );
             initialComponents[3].component = (
+                <ICMatrix scenario_ID={p.scenario_ID}></ICMatrix>
+            );
+            initialComponents[4].component = (
                 <FlowDiagram scenario_ID={p.scenario_ID}></FlowDiagram>
             );
             initialComponents[5].component = (
@@ -461,7 +475,7 @@ export default function Editor(props) {
 
     let onClick = (id, title, scenarioPages) => {
         setCurrentPageID(id);
-        if (id !== -1 && id !== -2 && id !== -3 && id !== -4) {
+        if (id !== -1 && id !== -2 && id !== -3 && id !== -4 && id !== -5 && id !== -6) {
             handlePageGet(setGetValues, id, scenarioPages);
         }
         setScenarioComponent(

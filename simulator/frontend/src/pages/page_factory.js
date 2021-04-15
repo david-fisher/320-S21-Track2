@@ -17,12 +17,12 @@ function Page(props) {
             />),
         "S": (
             <Stakeholders 
-                {
-                    ...props
-
-                }
-            />
-        )
+                {...props}
+            />),
+        "A": (
+            <Action
+                {...props}
+            />)
     };
 
     const { state, setState } = React.useState({

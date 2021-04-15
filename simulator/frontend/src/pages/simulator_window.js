@@ -30,13 +30,19 @@ function SimulationWindow(props) {
     const [ pages, setPages ] = useState([]);
     const [ isLoading, setIsLoading ] = useState(true);
 
-    const changePage = (change) => {
+    const stepChange = (change) => {
         const pageToGoTo = activePage + change;
         if(pages[pageToGoTo]) {
-            console.log("set active page");
             setActivePage(pageToGoTo);
-            setPages(pages);
         }
+    }
+
+    const goToPage = (pageNumber) => {
+        Object.keys(pages).forEach(key => {
+            if(pages[key].pageNumber === pageNumber.toString()) {
+                setActivePage(key);
+            }
+        });
     }
 
     useEffect(() => {
@@ -49,11 +55,9 @@ function SimulationWindow(props) {
             let allPages = pagesData.results.slice();
             
             allPages.filter((page) => {
-                console.log(page.scenario.toString() === props.match.params.sid)
                 return page.scenario.toString() === props.match.params.sid;
             })
             .forEach((page, index) => {
-                console.log(page);
 
                 const commonProps = {
                     visited: false, 
@@ -65,12 +69,13 @@ function SimulationWindow(props) {
                     content: page.body,
                     match: props.match,
                     activePage: activePage,
-                    changePage: changePage
+                    changePage: goToPage
                 };
             
-                newPages[index] = (<Page {...commonProps} />);
-
-                console.log(newPages);
+                newPages[index] = {
+                    pageNumber: page.page,
+                    component: (<Page {...commonProps} />)
+                };
             });
 
             setPages(newPages);
@@ -85,13 +90,13 @@ function SimulationWindow(props) {
                     <Grid item container direction={"column"} md={2}>
                         <SpecialButton 
                             type={"back"}
-                            onClick={() => changePage(-1)}
+                            onClick={() => stepChange(-1)}
                         />
                     </Grid>
                     <Grid item xs={10} md={8} sm container direction={"column"} spacing={2}>
                         <Grid item xs>
                             <GatheredInfoContext.Provider value={[]}>
-                                {pages[activePage]}
+                                {!isLoading && pages[activePage].component}
                                 {isLoading && <p>We are loading the scenario for you...</p>}
                             </GatheredInfoContext.Provider>
                         </Grid>
@@ -99,7 +104,7 @@ function SimulationWindow(props) {
                     <Grid item container direction={"column"} md={2}>
                         <SpecialButton 
                             type={"next"}
-                            onClick={() => changePage(1)}
+                            onClick={() => stepChange(1)}
                         />
                     </Grid>
                 </Grid>

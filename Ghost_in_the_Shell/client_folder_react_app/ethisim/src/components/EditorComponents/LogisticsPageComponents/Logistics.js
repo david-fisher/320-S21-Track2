@@ -490,13 +490,13 @@ export default function Logistics({ scenario_ID }) {
                         <HelpIcon />
                     </Button>
                     <GenericInfoButton
-                        description={`If it's your first time using Ethism, you'll see in the top left an icon of three horizontal lines.
-                    This is the menu and is accessable from all pages.
-                    The page you're on is the Logistics page handles some organizational pieces of your ethical scenario. 
-                    Here, you can edit the name of your scenario, the courses associated with this scenario, etc.
-                    By default the max number of selected conversations in zero. However, you may enter the maximum number of stakeholders you would like to permit students to speak with.
-                    This will be explained more in depth later. The Public checkbox allows your scenario to be viewed publicly by all that have access to Ethism. The
-                    Is Finished checkbox puts your scenario in the Finished section, ready for student distribution.`}
+                        description={`If it's your first time using Ethism, you'll see in the top left of the screen an icon of three horizontal lines. 
+                        This is the menu and is accessible from all pages.
+                        The page you're on is the Logistics page and handles some organizational pieces of your ethical scenario.
+                         Here, you can edit the name of your scenario, the courses associated with this scenario, and max number of selected conversations. 
+                         By default the max number of selected conversations is zero. However, you may enter the maximum number of stakeholders you would like to permit students to speak with. This will be explained more in depth on the Conversation Editor page.
+                          Clicking the “Public” box allows your scenario to be viewed publicly by others. Clicking the “Is Finished” box puts your scenario in the Finished section of the Dashboard, 
+                        ready for student distribution. Don’t forget to click “Save” before leaving the page.`}
                         open={open}
                         setOpen={setOpen}
                     />

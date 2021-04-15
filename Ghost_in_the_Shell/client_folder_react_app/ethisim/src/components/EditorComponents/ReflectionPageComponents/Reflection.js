@@ -264,7 +264,11 @@ export default function Reflection(props) {
                     <HelpIcon />
                 </Button>
                 <GenericInfoButton
-                    description={`on this page`}
+                    description={`Creation of Reflection pages is for stopping students in the scenario and making them reflect. Give this page a title and description. 
+                    Then at the bottom you can see an “Add Question” button. Create as many questions as you deem necessary. 
+                    These questions will be shown to the student and they will have to respond to them before continuing in the simulation.  The student will not be allowed to return to revisit and revise their answers to these questions.
+                      A common use for these pages is to have an initial reflection after introducing the ethical quandary, a middle reflection after stakeholder conversations, and a final reflection after a consequences page. 
+                    These pages are added to your menu and can be edited and deleted at your discretion.`}
                     open={open}
                     setOpen={setOpen}
                 />

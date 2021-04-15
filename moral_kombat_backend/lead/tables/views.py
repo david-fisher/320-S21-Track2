@@ -518,70 +518,69 @@ class dashboard_page(APIView):
         scenario_dict['STAKEHOLDER_PAGE'] = stakeholder_page_serializer.data
         return Response(scenario_dict)
 
+     
+# Checked - Ed - 4/15/2021
+#change a list of issue objects at URL /multi_issue?scenario=<insert id number here>
+class multi_issue(APIView):
+    def put(self, request, *args, **kwargs):
+        SCENARIO = self.request.query_params.get('SCENARIO')
+        if SCENARIO == None:
+            return Response({'status': 'details'}, status=status.HTTP_404_NOT_FOUND)
+        for updated_issue in request.data:
+            extant_issue = Issues.objects.get(SCENARIO = SCENARIO, ISSUE = updated_issue['ISSUE'])
+            serializer = IssuesSerializer(extant_issue, data=updated_issue)
+            if not serializer.is_valid(): 
+                return Response(serializer.errors)
+            try:
+                serializer.save()
+            except:
+                print('something went wrong with the PUT')
+        issues_query = Issues.objects.filter(SCENARIO = SCENARIO).values()
+        return Response(issues_query)
 
-                
-            
-
-#change a list of issue objects at URL /multi_issue?scenario_id=<insert id number here>
-# class multi_issue(APIView):
-#     def put(self, request, *args, **kwargs):
-#         SCENARIO = self.request.query_params.get('scenario_id')
-#         if SCENARIO == None:
-#             return Response({'status': 'details'}, status=status.HTTP_404_NOT_FOUND)
-#         for updated_issue in request.data:
-#             extant_issue = Issues.objects.get(SCENARIO = SCENARIO, ISSUE = updated_issue['ISSUE'])
-#             serializer = IssuesSerializer(extant_issue, data=updated_issue)
-#             if not serializer.is_valid(): 
-#                 return Response(serializer.errors)
-#             try:
-#                 serializer.save()
-#             except:
-#                 print('something went wrong with the PUT')
-#         issues_query = Issues.objects.filter(SCENARIO = SCENARIO).values()
-#         return Response(issues_query)
-
+# Checked - Ed - 4/15/2021
 #for use in the pages flowchart, input is an array of page objects
-# class flowchart(APIView):
-#     #get all page objects given a scenario id
-#     def get(self, request, *args, **kwargs):
-#         SCENARIO = self.request.query_params.get('scenario_id')
-#         pages_query = pages.objects.filter(SCENARIO=SCENARIO).values()
-#         for page in pages_query:
-#             if page['PAGE_TYPE'] == 'A':
-#                 page['ACTION'] = action_page.objects.filter(PAGE=page['PAGE']).values()
+class flowchart(APIView):
+    #get all page objects given a scenario id
+    def get(self, request, *args, **kwargs):
+        SCENARIO = self.request.query_params.get('SCENARIO')
+        pages_query = pages.objects.filter(SCENARIO=SCENARIO).values()
+        for page in pages_query:
+            if page['PAGE_TYPE'] == 'A':
+                page['ACTION'] = action_page.objects.filter(PAGE=page['PAGE']).values()
 
 
-#         return Response(pages_query)
+        return Response(pages_query)
 
-    #update the next_page field of all page objects
-    # def put(self, request, *args, **kwargs):
-    #     SCENARIO = self.request.query_params.get('scenario_id')
-    #     if SCENARIO == None:
-    #         return Response({'status': 'details'}, status=status.HTTP_404_NOT_FOUND)
+    update the next_page field of all page objects
+    def put(self, request, *args, **kwargs):
+        SCENARIO = self.request.query_params.get('SCENARIO')
+        if SCENARIO == None:
+            return Response({'status': 'details'}, status=status.HTTP_404_NOT_FOUND)
   
-    #     for updated_page in request.data:
-    #         #save updated choices within action pages  
-    #         if updated_page['PAGE_TYPE'] == 'A':
-    #             for updated_choice in updated_page['ACTION']:
-    #                 extant_choice = action_page.objects.get(id=updated_choice['id']) 
-    #                 action_serializer = Action_pageSerializer(extant_choice, updated_choice)
-    #                 if not action_serializer.is_valid():
-    #                     print("error with PUTing choices")
-    #                     return Response(action_serializer.errors)
-    #                 action_serializer.save()
-    #         #save the page itself    
-    #         extant_page = pages.objects.get(SCENARIO = SCENARIO, PAGE = updated_page['PAGE'])
-    #         serializer = PagesSerializer(extant_page, data=updated_page)
-    #         if not serializer.is_valid():
-    #             print("error with PUTing pages")
-    #             return Response(serializer.errors)
-    #         serializer.save()
-    #     #return query with newly saved pages     
-    #     pages_query = pages.objects.filter(SCENARIO=SCENARIO).values()
-    #     for page in pages_query:
-    #         if page['PAGE_TYPE'] == 'A':
-    #             page['ACTION'] = action_page.objects.filter(PAGE=page['PAGE']).values()
-    #     return Response(pages_query)
+        for updated_page in request.data:
+            #save updated choices within action pages  
+            if updated_page['PAGE_TYPE'] == 'A':
+                for updated_choice in updated_page['ACTION']:
+                    extant_choice = action_page.objects.get(id=updated_choice['id']) 
+                    action_serializer = Action_pageSerializer(extant_choice, updated_choice)
+                    if not action_serializer.is_valid():
+                        print("error with PUTing choices")
+                        return Response(action_serializer.errors)
+                    action_serializer.save()
+            #save the page itself    
+            extant_page = pages.objects.get(SCENARIO = SCENARIO, PAGE = updated_page['PAGE'])
+            serializer = PagesSerializer(extant_page, data=updated_page)
+            if not serializer.is_valid():
+                print("error with PUTing pages")
+                return Response(serializer.errors)
+            serializer.save()
+        #return query with newly saved pages     
+        pages_query = pages.objects.filter(SCENARIO=SCENARIO).values()
+        for page in pages_query:
+            if page['PAGE_TYPE'] == 'A':
+                page['ACTION'] = action_page.objects.filter(PAGE=page['PAGE']).values()
+        return Response(pages_query)
 
 
 
@@ -981,38 +980,40 @@ class Page_StakeholderViewSet(generics.CreateAPIView):
 #             dem['NAME'] = name
 #             dem['DATE_TAKEN'] = response['DATE_TAKEN']
 #             data.append(dem)
-# class student_info(APIView):
-#     def get(self,request,*args,**kwargs):
-#         SCENARIO = self.request.query_params.get('scenario_id')
-#         responses_query = responses.objects.filter(SCENARIO_id=SCENARIO).values()
-#         student_ids = []
-#         data = []
-#         for response in responses_query:
-#             student = response['STUDENT_id']
-#             if student not in student_ids:
-#                 date_taken = response['DATE_TAKEN']
-#                 student_ids.append(student)
-#         for student in student_ids:
-#             demographics_query = demographics.objects.filter(STUDENT_id = student).values()
-#             for dem in demographics_query:
-#                 student_query = students.objects.filter(STUDENT = dem['STUDENT_id']).values()
-#                 for x in student_query:
-#                     name = x['NAME']
-#             dem['NAME'] = name
-#             dem['DATE_TAKEN'] = date_taken
-#             data.append(dem)
+
+# Checked - Ed - 4/15/2021
+class student_info(APIView):
+    def get(self,request,*args,**kwargs):
+        SCENARIO = self.request.query_params.get('SCENARIO')
+        responses_query = responses.objects.filter(SCENARIO=SCENARIO).values()
+        student_ids = []
+        data = []
+        for response in responses_query:
+            student = response['STUDENT']
+            if student not in student_ids:
+                date_taken = response['DATE_TAKEN']
+                student_ids.append(student)
+        for student in student_ids:
+            demographics_query = demographics.objects.filter(STUDENT = student).values()
+            for dem in demographics_query:
+                student_query = students.objects.filter(STUDENT = dem['STUDENT']).values()
+                for x in student_query:
+                    name = x['NAME']
+            dem['NAME'] = name
+            dem['DATE_TAKEN'] = date_taken
+            data.append(dem)
 
                 
 
 
-#         # for demographic in demographics_query:
-#         #     student_query = students.objects.filter(STUDENT = demographic['STUDENT_id']).values()
-#         #     for x in student_query:
-#         #         name = x['NAME']
+        # for demographic in demographics_query:
+        #     student_query = students.objects.filter(STUDENT = demographic['STUDENT_id']).values()
+        #     for x in student_query:
+        #         name = x['NAME']
 
-#         #     demographic['NAME'] = name
-#         #     data.append(demographic)
-#         return Response(data)
+        #     demographic['NAME'] = name
+        #     data.append(demographic)
+        return Response(data)
 
 
 # seems like no change required - Chirag - 4/15

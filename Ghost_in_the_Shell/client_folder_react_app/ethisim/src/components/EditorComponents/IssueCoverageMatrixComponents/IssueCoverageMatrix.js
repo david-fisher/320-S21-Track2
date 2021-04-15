@@ -112,15 +112,15 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 IssueMatrix.propTypes = {
-    onChange: PropTypes.any,
     scenario_stakeHolders: PropTypes.any,
     scenario: PropTypes.number,
+    //onChangeStakeholders: PropTypes.any.isRequired,
 };
 
 //Needs scenario id
 const endpointGET = '/student_info?scenario_id=';
 
-export default function IssueMatrix({ scenario, scenario_stakeHolders }) {
+export default function IssueMatrix({ scenario_stakeHolders, scenario }) {
     //receives the scenario ID
     const classes = useStyles();
 
@@ -334,26 +334,27 @@ export default function IssueMatrix({ scenario, scenario_stakeHolders }) {
         setLoading(false);
     }
 
-    function deleteStakeHolder() {
+    function deleteStakeHolder(index) {
         setLoading(true);
 
-        var deletedStakeHolder;
-        var index;
-        for (let i = 0; i < stakeHolders.current.length; i++) {
+        var deletedStakeHolder = stakeHolders.current[index];
+        //var index;
+        /*for (let i = 0; i < stakeHolders.current.length; i++) {
             let curStakeHolder = stakeHolders.current[i];
             curStakeHolder.ISSUES.forEach((issue) => {
                 rows.forEach((curRow) => {
                     if (
-                        curRow['Issue' + issue.NAME.toUpperCase()] === undefined
+                        curRow['Issue' + issue.NAME.toUpperCase()] == undefined
                     ) {
                         deletedStakeHolder = curStakeHolder;
                         index = i;
                     }
                 });
             });
-        }
+        }*/
+
         if (deletedStakeHolder !== undefined) {
-            stakeHolders.splice(index, 1);
+            stakeHolders.current.splice(index, 1);
             var data = JSON.stringify({});
 
             var config = {
@@ -374,6 +375,7 @@ export default function IssueMatrix({ scenario, scenario_stakeHolders }) {
                     setSuccessBannerMessage(
                         'Successfully deleted the stakeholder!'
                     );
+                    //onChangeStakeHolders();
                     setSuccessBannerFade(true);
                 })
                 .catch(function (error) {
@@ -385,53 +387,6 @@ export default function IssueMatrix({ scenario, scenario_stakeHolders }) {
             //this.props.onStakeHolderChange(stakeHolders.current);
         }
         setLoading(false);
-    }
-
-    function deleteStakeHolder() {
-        /*setLoading(true);
-
-        var deletedStakeHolder;
-        for (let i = 0; i < stakeHolders.current.length; i++) {
-            let curStakeHolder = stakeHolders.current[i];
-            let curRow = rows[i];
-
-            deletedStakeHolder = curStakeHolder.ISSUES.forEach((issue) => {
-                return curRow['Issue' + issue.NAME.toUpperCase()] === undefined;
-            });
-        }
-
-        if (deletedStakeHolder !== undefined) {
-            var data = JSON.stringify({});
-
-            var config = {
-                method: 'delete',
-                url:
-                    baseURL +
-                    '/api/stakeholders/' +
-                    deletedStakeHolder.STAKEHOLDER +
-                    '/',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                data: data,
-            };
-
-            axios(config)
-                .then(function (response) {
-                    setSuccessBannerMessage(
-                        'Successfully deleted the stakeholder!'
-                    );
-                    //getExistingStakeHolders();
-                    setSuccessBannerFade(true);
-                })
-                .catch(function (error) {
-                    setErrorBannerMessage(
-                        'Failed to delete the stakeholder! Please try again.'
-                    );
-                    setErrorBannerFade(true);
-                });
-            setLoading(false);
-        }*/
     }
 
     if (isLoading) {
@@ -491,7 +446,7 @@ export default function IssueMatrix({ scenario, scenario_stakeHolders }) {
                                 const index = oldData.tableData.id;
                                 dataDelete.splice(index, 1);
                                 setRows([...dataDelete]);
-                                deleteStakeHolder();
+                                deleteStakeHolder(index);
                                 resolve();
                             }, 1000);
                         }),

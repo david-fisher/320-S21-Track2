@@ -110,3 +110,85 @@ https://[server ip]/Shibboleth.sso/Login
 And enjoy the beauty
 
 ![Successful login](login.png)
+
+
+
+
+
+
+
+# Instructions about adding Shibboleth to the CSCF server. 
+1. Connect to the CSCF server.
+2. Recommendation
+3. Download and install Repository Package
+4. Installation
+5. Creating a new SP
+6. Testing
+
+## Connect to the CSCF Server
+The host uses the CentOS operating system.
+Connect to the CSCF server by using ssh. In our case it was connecting to the server using cerberus@ethisim2.cs.umass.edu. Enter password when prompted.
+
+## Recommendation
+To download software and configuration files, installing curl is recommended. Curl can be installed with:
+```bash
+sudo dnf install curl
+```
+
+## Download and install Repository Package
+The repository package maintained by the Shibboleth project. This repository contains the up-to-date version of Shibboleth and it is recommended to use this repository. To download and install the repository package:
+```bash
+sudo curl --output /etc/yum.repos.d/security:shibboleth.repo  https://download.opensuse.org/repositories/security:/shibboleth/CentOS_8/security:shibboleth.repo
+```
+
+## Installation
+Installing the Shibboleth Service Provider:
+For 32-bit OS:
+```bash
+sudo dnf install shibboleth
+```
+For 64-bit OS:
+```bash
+sudo dnf install shibboleth.x86_64
+```
+If asked to confirm whether you really want to install Shibboleth and all dependencies, answer with 'Y' for yes.
+After installation of the package, you need to start and enable the shibd daemon:
+```bash
+sudo systemctl start shibd.service
+sudo systemctl enable shibd.service
+```
+The Service Provider should now be installed on the system.
+
+
+## Creating a new SP
+Go to https://webauth.umass.edu/admin/ and create a new SP.
+Make sure that the hostname is the server name, in this case ethisim2.cs.umass.edu
+
+## Testing
+Shibboleth Configuration Check
+Execute the following command to see whether the Shibboleth Service Provider can load the default configuration:
+```bash
+sudo shibd -t
+```
+It is important that the last line of the output is:
+```bash
+overall configuration is loadable, check console for non-fatal problems
+```
+Apache Configuration Check
+Also test the Apache configuration with the command:
+```bash
+sudo apachectl configtest
+```
+The output of this command should be:
+```bash
+Syntax OK
+```
+
+Check to see if Shibboleth is loaded on the server.
+Go to url: https://ethisim2.cs.umass.edu/Shibboleth.sso/Session
+
+The web server should return a page that says:
+```bash
+A valid session was not found.
+```
+This message shows that the Shibboleth module is loaded by the webserver and is communicating with the shibd process.

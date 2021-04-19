@@ -23,9 +23,9 @@ from rest_framework import mixins
 # Stakeholders ViewSet - Chirag - 4/14
 class StakeholdersViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
-        queryset = stakeholders.objects.all()
+        queryset = STAKEHOLDERS.objects.all()
         return queryset
-    queryset = stakeholders.objects.all()
+    queryset = STAKEHOLDERS.objects.all()
     permissions_classes = [
         permissions.AllowAny
     ]
@@ -46,7 +46,7 @@ class QuestionsViewset(viewsets.ModelViewSet):
     permissions_classes = [
         permissions.AllowAny
     ]
-    serializer_class = QuestionsViewset
+    serializer_class = QuestionsSerializer
 
 # Conversations ViewSet
 # checked - Chirag - 04/15/2021

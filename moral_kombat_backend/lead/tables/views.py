@@ -289,7 +289,7 @@ class IssuesViewSet(viewsets.ModelViewSet):
     ]
     serializer_class = IssuesSerializer
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['SCENARIO', "NAME"]
+    filterset_fields = ['SCENARIO_ID', "NAME"]
 
 
 class Action_pageViewSet(viewsets.ModelViewSet):

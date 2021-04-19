@@ -10,15 +10,12 @@ class SCENARIOS(models.Model):
     class Meta:
         unique_together = (('SCENARIO'), ('VERSION'))
     SCENARIO = models.IntegerField(editable=True, unique = True)
-    #TODO remove professors
-    PROFESSOR = models.ForeignKey('PROFESSORS', to_field = 'PROFESSOR', on_delete =models.CASCADE, related_name="scenario_creator2", default = 1)
     VERSION = models.IntegerField(default=1, editable=True, unique = True)
     NAME = models.CharField(max_length = 1000)
     PUBLIC = models.BooleanField(default = False)
     NUM_CONVERSATION = models.IntegerField(default = 0)
     IS_FINISHED = models.BooleanField(default = False)
     DATE_CREATED = models.DateField(auto_now_add=True)
-
     SCENARIO_ID = models.AutoField(primary_key = True)
 
     # models.OneToOneField('pages', on_delete = models.CASCADE, related_name = "scenarios1", default = 1)

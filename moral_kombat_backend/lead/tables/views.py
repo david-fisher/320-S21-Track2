@@ -23,9 +23,9 @@ from rest_framework import mixins
 # Stakeholders ViewSet - Chirag - 4/14
 class StakeholdersViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
-        queryset = stakeholders.objects.all()
+        queryset = STAKEHOLDERS.objects.all()
         return queryset
-    queryset = stakeholders.objects.all()
+    queryset = STAKEHOLDERS.objects.all()
     permissions_classes = [
         permissions.AllowAny
     ]
@@ -46,7 +46,7 @@ class QuestionsViewset(viewsets.ModelViewSet):
     permissions_classes = [
         permissions.AllowAny
     ]
-    serializer_class = QuestionsViewset
+    serializer_class = QuestionsSerializer
 
 # Conversations ViewSet
 # checked - Chirag - 04/15/2021
@@ -89,7 +89,7 @@ class multi_stake(APIView):
         for updated_stake in request.data:
             extant_stake = stakeholders.objects.get(SCENARIO = SCENARIO, STAKEHOLDER = updated_stake['STAKEHOLDER'])
             serializer = StakeholdersSerializer(extant_stake, data=updated_stake)
-            if serializer.is_valid(): 
+            if serializer.is_valid():
                 serializer.save()
         stake_query = stakeholders.objects.filter(SCENARIO = SCENARIO).values()
         return Response(stake_query)

@@ -267,7 +267,7 @@ class ISSUES(models.Model):
 class COVERAGE(models.Model):
     class Meta:
         unique_together = (('STAKEHOLDER'),('ISSUE'))
-    STAKEHOLDER = models.ForeignKey('STAKEHOLDERS', to_field = 'STAKEHOLDER', on_delete = models.CASCADE, related_name = "coverage2", default = None, primary_key = true)
+    STAKEHOLDER = models.ForeignKey('STAKEHOLDERS', to_field = 'STAKEHOLDER', on_delete = models.CASCADE, related_name = "coverage2", default = None, primary_key = True)
     STAKEHOLDER_VERSION = models.ForeignKey('STAKEHOLDERS', to_field = 'VERSION', on_delete=models.CASCADE, related_name = "coverage4")
     ISSUE = models.ForeignKey('ISSUES', to_field = 'ISSUE', on_delete = models.CASCADE, related_name = "coverage1", default = None)
     # VERSION_ID = models.ForeignKey('stakeholders',on_delete = models.CASCADE, related_name = "coverage3", default = None)
@@ -314,12 +314,11 @@ class STUDENT_TIMES(models.Model):
 class QUESTIONS(models.Model):
     class Meta:
         unique_together = (('QUESTION'),('QUESTION_VERSION'))
-  QUESTION = models.AutoField(primary_key= True)
-  VERSION = models.IntegerField(default = 1)
-  POINTS = models.IntegerField(default = 1)
-  QUESTION_TEXT = models.TextField(default = 'default')
-  QUESTION_SUMMARY = models.TextField(default = 'default')
-)
+    QUESTION = models.AutoField(primary_key= True)
+    VERSION = models.IntegerField(default = 1)
+    POINTS = models.IntegerField(default = 1)
+    QUESTION_TEXT = models.TextField(default = 'default')
+    QUESTION_SUMMARY = models.TextField(default = 'default')
 
 """class scenario_creator(models.Model):
     SCENARIO = models.ForeignKey('scenarios', on_delete = models.CASCADE, related_name="scenario_creator1")

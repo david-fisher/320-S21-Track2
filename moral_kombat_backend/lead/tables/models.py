@@ -72,7 +72,7 @@ class GENERIC_PAGE(models.Model):
     PAGE = models.ForeignKey('PAGES', to_field= 'PAGE', on_delete = models.CASCADE, related_name="generic_page1", unique= True)
     BODY = models.TextField(default = True)
     ID = models.AutoField(editable = False, primary_key = True)
-    VERSION = PAGE = models.ForeignKey('PAGES', to_field= 'VERSION', on_delete = models.CASCADE, related_name="generic_page2", unique= True)
+    VERSION = models.ForeignKey('PAGES', to_field= 'VERSION', on_delete = models.CASCADE, related_name="generic_page2", unique= True)
     
 #updated on 4/12/2021
 class PAGES_TO_SCENARIO(models.Model):
@@ -105,7 +105,7 @@ class STAKEHOLDERS(models.Model):
         unique_together = (('STAKEHOLDER'), ('VERSION'))
     STAKEHOLDER = models.AutoField(primary_key = True, editable = False)
     SCENARIO = models.ForeignKey('SCENARIOS', to_field = 'SCENARIO_ID', on_delete = models.CASCADE, related_name="stakeholders1", default = 1)
-    VERSION = models.IntegerField(default=1, editable=True)
+    VERSION = models.IntegerField(default=1, editable=True, unique = True)
     NAME = models.CharField(max_length = 1000, default = "default")
     DESCRIPTION = models.TextField(default = "default")
     JOB = models.TextField(default = "default")
@@ -280,8 +280,8 @@ class ACTION_PAGE(models.Model):
     PAGE = models.ForeignKey('PAGES', to_field = 'PAGE', on_delete = models.CASCADE, related_name = 'action_page1')
     CHOICE = models.TextField(default = 'default')
     RESULT_PAGE = models.IntegerField(null=True)
-    ID = models.AutoField(primary_key = True)
-    VERSION = models.ForeignKey('PAGES', to_field = 'VERSION', on_delete = models.CASCADE, related_name = 'action_page2')
+    ID = models.AutoField(primary_key = True, unique= True)
+    VERSION = models.ForeignKey('PAGES', to_field = 'VERSION', on_delete = models.CASCADE, related_name = 'action_page2', unique= True)
     
 #Updated 4/12
 class RESPONSE_TO_ACTION_PAGE(models.Model):
@@ -313,7 +313,7 @@ class STUDENT_TIMES(models.Model):
 #questions is complete - 04/12/2021
 class QUESTIONS(models.Model):
     class Meta:
-        unique_together = (('QUESTION'),('QUESTION_VERSION'))
+        unique_together = (('QUESTION'),('VERSION'))
     QUESTION = models.AutoField(primary_key= True)
     VERSION = models.IntegerField(default = 1)
     POINTS = models.IntegerField(default = 1)

@@ -36,7 +36,7 @@ class ScenariosSerializer(serializers.ModelSerializer):
     class Meta:
         model = SCENARIOS
         fields = ('SCENARIO', 'VERSION', 'NAME', 'IS_FINISHED',
-                  'PUBLIC', 'NUM_CONVERSATION', 'PROFESSOR', 'SCENARIO_ID')
+                  'PUBLIC', 'NUM_CONVERSATION', 'DATE_CREATED', 'SCENARIO_ID')
 
 
 class PagesSerializer(serializers.ModelSerializer):

@@ -208,7 +208,7 @@ class STUDENTS(models.Model):
 
 #Updated 4/12 by Cooper (just verified, nothing actually changed)
 class DEMOGRAPHICS(models.Model):
-    STUDENT = models.ForeignKey('STUDENTS',to_field = 'STUDENT', on_delete = models.CASCADE, related_name = "demographics", primary_key = True)
+    STUDENT = models.ForeignKey('STUDENTS', to_field = 'STUDENT', on_delete = models.CASCADE, related_name = "demographics", unique = True)
     AGE = models.SmallIntegerField()
     GRADE = models.CharField(max_length = 10, default = "default")
     GENDER_CHOICES = (

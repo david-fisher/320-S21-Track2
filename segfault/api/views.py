@@ -568,10 +568,12 @@ class reflection(APIView):
         
         try:
             ref = ReflectionsTaken.objects.filter(response = response.response_id).first()
-            serializer = ReflectionsTakenSerializer(ref, data=request.data)
-            if serializer.is_valid():
-                serializer.save()
-                return DRF_response(serializer.data)
+            ref.reflections = reflections
+           
+            serializer = ReflectionsTakenSerializer(ref)
+            ref.save()
+            return DRF_response(serializer.data)
+           
         except:
             return DRF_response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

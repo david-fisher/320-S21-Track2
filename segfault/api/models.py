@@ -128,7 +128,7 @@ class Pages(models.Model):
     next = models.ForeignKey('self',on_delete = models.CASCADE, null=True)
     x_coordinate = models.IntegerField()
     y_coordinate = models.IntegerField()
-    completed = models.BooleanField()
+    completed = models.BooleanField(default= False)
 
     class Meta:
         db_table = 'pages'

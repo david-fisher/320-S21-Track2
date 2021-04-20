@@ -208,7 +208,7 @@ class STUDENTS(models.Model):
 
 #Updated 4/12 by Cooper (just verified, nothing actually changed)
 class DEMOGRAPHICS(models.Model):
-    STUDENT = models.ForeignKey('STUDENTS',to_field = 'STUDENT', on_delete = models.CASCADE, related_name = "demographics", primary_key = True)
+    STUDENT = models.ForeignKey('STUDENTS', to_field = 'STUDENT', on_delete = models.CASCADE, related_name = "demographics", unique = True)
     AGE = models.SmallIntegerField()
     GRADE = models.CharField(max_length = 10, default = "default")
     GENDER_CHOICES = (
@@ -264,7 +264,7 @@ class ISSUES(models.Model):
 class COVERAGE(models.Model):
     class Meta:
         unique_together = (('STAKEHOLDER'),('ISSUE'))
-    STAKEHOLDER = models.ForeignKey('STAKEHOLDERS', to_field = 'STAKEHOLDER', on_delete = models.CASCADE, related_name = "coverage2", default = None, primary_key = True)
+    STAKEHOLDER = models.ForeignKey('STAKEHOLDERS', to_field = 'STAKEHOLDER', on_delete = models.CASCADE, related_name = "coverage2", default = None, unique = True)
     STAKEHOLDER_VERSION = models.ForeignKey('STAKEHOLDERS', to_field = 'VERSION', on_delete=models.CASCADE, related_name = "coverage4")
     ISSUE = models.ForeignKey('ISSUES', to_field = 'ISSUE', on_delete = models.CASCADE, related_name = "coverage1", default = None)
     # VERSION_ID = models.ForeignKey('stakeholders',on_delete = models.CASCADE, related_name = "coverage3", default = None)

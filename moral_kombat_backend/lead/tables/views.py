@@ -409,10 +409,10 @@ class dashboard_page(APIView):
     def get(self, request, *args, **kwargs):
         
         #take professor_id as input from URL by adding ?professor=<the id #> to the end of the url.
-        PROFESSOR_id = self.request.query_params.get('PROFESSOR')
+        PROFESSOR_id = self.request.query_params.get('professor')
         #TODO check that id != none
         #get all scenarios belonging to this professor
-        scenario_query = scenarios.objects.filter(PROFESSOR = PROFESSOR_id).values()
+        scenario_query = SCENARIOS.objects.filter(PROFESSOR = PROFESSOR_id).values()
         #loop through scenarios and append required information (course, page info)
         logistics = []
         for scenario in scenario_query:

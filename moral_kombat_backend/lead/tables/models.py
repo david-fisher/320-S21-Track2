@@ -125,6 +125,8 @@ class CONVERSATIONS(models.Model):
     STAKEHOLDER_VERSION = models.ForeignKey('STAKEHOLDERS', to_field = 'VERSION', on_delete = models.CASCADE, related_name="conversations2")
     CONVERSATION = models.AutoField(default = None, primary_key = True)
     QUESTION = models.TextField(default = "default")
+    POINTS = models.IntegerField(default = 1)
+    QUESTION_SUMMARY = models.TextField(default = 'default')
     RESPONSE = models.TextField(default = "default")
 
 #updated 4/12 by Cooper (hope it works, if it doesnt then it was chirag)

@@ -94,29 +94,26 @@ DATABASES = {
         # 'ENGINE': 'django.db.backends.sqlite3',
         # 'NAME': BASE_DIR / 'db.sqlite3',
 
-        #BELOW IS GOOD CODE
-        #'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        #'NAME': 'cnehcbso',
-        #'USER': 'cnehcbso',
-        #'PASSWORD': 'qy2xdb_zEcAZFOmY7fvQT1SddHRUhbCI',
-        #'HOST': 'raja.db.elephantsql.com',
-        #'PORT': '5432',
+        #  'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        #  'NAME': 'hkjdggmf',
+        #  'USER': 'hkjdggmf',
+        #  'PASSWORD': 'Siw8DtLM7Zg5FaP6lQbj9vyvuQ9C2ghB',
+        #  'HOST': 'queenie.db.elephantsql.com',
+        #  'PORT': '5432',
 
-        # docker db info:
+         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+         'NAME': 'qelfnxes',
+         'USER': 'qelfnxes',
+         'PASSWORD': 'MV7YEGQjB5A9FijyB-IcUZ1wP9xSvxp-',
+         'HOST': 'queenie.db.elephantsql.com',
+         'PORT': '5432',
+
         # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        # 'NAME': 'db',
-        # 'USER': 'postgres',
-        # 'PASSWORD': 'password',
-        # 'HOST': 'db',
-        # 'PORT': '5432',
-
-        #BELOW IS LOCAL MACHINE
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'hkjdggmf',
-        'USER': 'hkjdggmf',
-        'PASSWORD': 'Siw8DtLM7Zg5FaP6lQbj9vyvuQ9C2ghB',
-        'HOST': 'queenie.db.elephantsql.com',
-        'PORT': '5432',
+        # 'NAME': 'Zoomba',
+        # 'USER': 'backendboys',
+        # 'PASSWORD': 'youwishyouwerezoomba',
+        # 'HOST': 'zoomba@ethisim-db.cs.umass.edu',
+        # 'PORT': '5432'
     }
 }
 

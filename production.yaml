@@ -1,4 +1,4 @@
-# run with "docker-compose -f docker-compose.yml -f production.yml up -d"
+# run with "docker-compose -f docker-compose.yaml -f production.yaml up -d"
 version: "3.8"
 
 services:
@@ -17,6 +17,12 @@ services:
   frontend:
     ports:
       - "3000:3000"
+    environment:
+      PRODUCTION: "true"
+
+  shibboleth:
+    ports:
+      - "80:80"
     environment:
       PRODUCTION: "true"
 

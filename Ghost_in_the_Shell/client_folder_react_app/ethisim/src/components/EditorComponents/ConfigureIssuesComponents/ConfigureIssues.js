@@ -21,10 +21,10 @@ import PropTypes from 'prop-types';
 import IssueMatrix from './IssueCoverageMatrix';
 import MaterialTable from 'material-table';
 import addStakeHolder from '../ConversationEditorComponents/StakeHoldersComponent/stakeHolders';
-
 //import saveStakeHolder from '../ConversationEditorComponents/StakeHoldersComponent/stakeHolders';
-
-// import saveStakeHolders from 'ethisim/src/components/EditorComponents/ConversationEditorComponents/StakeHoldersComponent/stakeHolders.js'
+//import saveStakeHolders from 'ethisim/src/components/EditorComponents/ConversationEditorComponents/StakeHoldersComponent/stakeHolders.js'
+import HelpIcon from '@material-ui/icons/Help';
+import GenericInfoButton from '../../InfoButtons/GenericInfoButton';
 
 //Need scenarioID
 const endpointGET = '/api/issues/?SCENARIO=';
@@ -86,6 +86,12 @@ export default function ConfigureIssues({ scenario_ID }) {
         error: null,
     });
 
+    //for info button
+    const [openHelp, setOpenHelp] = React.useState(false);
+    const handleClickOpenHelp = () => {
+        setOpenHelp(true);
+    };
+
     let getData = () => {
         get(setIssueEntryFieldList, endpointGET + scenario_ID);
         get(setIssueCoverageMatrix, endpointGET + scenario_ID);
@@ -144,7 +150,16 @@ export default function ConfigureIssues({ scenario_ID }) {
             <Typography align="center" variant="h2">
                 Configure Ethical Issues
             </Typography>
-
+            <Grid container justify="flex-end">
+                <Button color="primary" onClick={handleClickOpenHelp}>
+                    <HelpIcon />
+                </Button>
+                <GenericInfoButton
+                    description={`This page is currently under maintenance.`}
+                    open={openHelp}
+                    setOpen={setOpenHelp}
+                />
+            </Grid>
             <div className={classes.spacing}>
                 <Button variant="contained" color="primary" onClick={getData}>
                     <RefreshIcon className={classes.iconRefreshSmall} />

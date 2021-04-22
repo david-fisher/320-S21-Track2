@@ -66,7 +66,7 @@ QuestionField.propTypes = {
     summary: PropTypes.string,
     QRs: PropTypes.any,
     setQRs: PropTypes.any,
-    StakeHolders: PropTypes.any,
+    //StakeHolders: PropTypes.any,
 };
 
 export default function QuestionField({
@@ -78,12 +78,12 @@ export default function QuestionField({
     summary,
     QRs,
     setQRs,
-    StakeHolders,
+    //StakeHolders,
 }) {
     const [questionValue, setQuestionValue] = useState(question);
     const [responseValue, setResponseValue] = useState(response);
     const [summaryValue, setSummaryValue] = useState(summary);
-    const [stakeHolders, setStakeHolders] = useState(StakeHolders);
+    //const [stakeHolders, setStakeHolders] = useState(StakeHolders);
 
     /*const [didGetIssues, setDidGetIssues] = useState(false);
     //const [issues, setIssues] = useState([]);
@@ -309,7 +309,7 @@ export default function QuestionField({
     }
 
     const rows = [createData(0, 2, 4, 0, 1)];
-    const header = setHeader();
+    const header = [];
 
     // function setHeader() {
     //     setLoading(true);

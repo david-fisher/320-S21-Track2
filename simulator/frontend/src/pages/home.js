@@ -1,17 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../App.css';
+import Dashboard from './sim_dashboard';
 
-function Home() {
+export default function Home() {
+  
+  /** TODO: Set scenarioID picked from dashboard */
+  const [scenario, setScenario] = useState(null);
+
+  // let pickedScenario = (scenarioID) => {
+  //   setScenario(scenarioID)
+  // }
+
   return (
-    <div>
-      <body>
-
-        <h1>Home Page</h1>
-        <p>This is the home page for the simulator.</p>
-
-      </body>
-    </div>
+    <Dashboard
+      setScenario={setScenario}
+    />
   );
 }
-
-export default Home;

@@ -1,113 +1,74 @@
+# This is an auto-generated Django model module.
+# You'll have to do the following manually to clean this up:
+#   * Rearrange models' order
+#   * Make sure each model has one field with primary_key=True
+#   * Make sure each ForeignKey and OneToOneField has `on_delete` set to the desired behavior
+#   * Remove `` lines if you wish to allow Django to create, modify, and delete the table
+# Feel free to rename the models, but don't rename db_table values or field names.
 import django
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
 
-
-# All attributes are pending to be changed after SQL team giving their construction
-# dont use default = none to prevent empty names
-
-""" 
-# Name "Webuser" to distinguish from auth.User, we might use that later
-    class Webuser(User):
-    takingClass = ArrayField(models.ForeignKey(Course, related_name='students',on_delete=models.CASCADE,))
-    teachingClass  = ArrayField(models.ForeignKey(Course, related_name='instructors',on_delete=models.CASCADE,))
-    class Meta:
-        db_table = 'users'
- """
-
-
-class Scenario(models.Model):
-
-    scenario_id = models.AutoField(primary_key=True, editable=False)
-    scenario = models.IntegerField(default=1, editable=True)
-    version = models.IntegerField(default=1, editable=True)
-    name = models.CharField(max_length=50, null=False)
-    public = models.BooleanField(default=False)
-    num_conversation = models.IntegerField(default=0)
-    is_finished = models.BooleanField(default=False)
-    date_created = models.DateField(auto_now_add=True)
+class ActionPage(models.Model):
+    action_page_id = models.IntegerField()
+    page = models.ForeignKey('Pages', on_delete = models.CASCADE, db_column='page')
+    version = models.IntegerField()
+    choice = models.TextField()
+    result_page = models.IntegerField()
 
     class Meta:
-        db_table = 'scenarios'
-        unique_together = ('scenario', 'version')
+        db_table = 'action_page'
+        unique_together = ('action_page_id', 'version')
 
 
-class Student(models.Model):
-    student = models.AutoField(
-        primary_key=True, editable=False, db_column='student')
-    first_name = models.CharField(max_length=50, null=False, db_column='fname')
-    last_name = models.CharField(max_length=50, null=False, db_column='lname')
-
-    class Meta:
-        db_table = 'students'
-
-
-class Professor(models.Model):
-    professor = models.AutoField(
-        primary_key=True, editable=False, db_column='professor')
-    first_name = models.CharField(max_length=50, null=False, db_column='fname')
-    last_name = models.CharField(max_length=50, null=False, db_column='lname')
-    scenarios = models.ManyToManyField(
-        Scenario, related_name='professor',  through='Professors_to_scenario')
+class Conversations(models.Model):
+    conversation = models.AutoField(primary_key=True)
+    stakeholder = models.ForeignKey('Stakeholders', on_delete = models.CASCADE, db_column='stakeholder')
+    question = models.TextField()
+    response = models.TextField()
 
     class Meta:
-        db_table = 'professors'
+        db_table = 'conversations'
 
 
-class Professors_to_scenario(models.Model):
-    professor = models.ForeignKey(
-        Professor, on_delete=models.CASCADE)
-    scenario = models.ForeignKey(
-        Scenario, on_delete=models.CASCADE,)
-    permission = models.IntegerField(default=1)
-    class Meta:
-        unique_together = ('professor','scenario')
-
-
-class Course(models.Model):
-    course = models.AutoField(
-        primary_key=True, editable=False, db_column='course')
-    name = models.CharField(max_length=50, null=False)
+class Courses(models.Model):
+    course = models.AutoField(primary_key=True)
+    name = models.TextField()
     students = models.ManyToManyField(
-        Student, related_name='courses', through='Student_to_Course')
+        'Students', related_name='courses', through='StudentsToCourse')
     professors = models.ManyToManyField(
-        Professor, related_name='courses', through='Professor_to_Course')
+        'Professors', related_name='courses', through='ProfessorsToCourses')
     scenarios = models.ManyToManyField(
-        Scenario, related_name='courses',  through='Scenario_to_Course')
+        'Scenarios', related_name='courses',  through='CoursesToScenario')
 
     class Meta:
         db_table = 'courses'
 
 
-class Student_to_Course(models.Model):
-    student = models.ForeignKey(
-        Student, on_delete=models.CASCADE, db_column='student')
-    course = models.ForeignKey(
-        Course, on_delete=models.CASCADE, db_column='course')
+class CoursesToScenario(models.Model):
+    course = models.ForeignKey('Courses', on_delete = models.CASCADE, db_column='course', null=False)
+    scenario = models.ForeignKey('Scenarios',on_delete = models.CASCADE, db_column='scenario', null=False)
+    permission = models.IntegerField()
 
     class Meta:
-        unique_together = ('student', 'course')
-        db_table = 'students_to_course'
+        db_table = 'courses_to_scenario'
+        unique_together = ('course', 'scenario')
 
 
-class Professor_to_Course(models.Model):
-    professor = models.ForeignKey(
-        Professor, on_delete=models.CASCADE, db_column='professor')
-    course = models.ForeignKey(
-        Course, on_delete=models.CASCADE, db_column='course')
+class Coverage(models.Model):
+    stakeholder = models.ForeignKey('Stakeholders',on_delete = models.CASCADE, db_column='stakeholder')
+    issue = models.ForeignKey('Issues', on_delete = models.CASCADE, db_column='issue')
+    coverage_score = models.DecimalField(max_digits=5, decimal_places=2)
 
     class Meta:
-        unique_together = ('professor', 'course')
-        db_table = 'professors_to_courses'
+        db_table = 'coverage'
+        unique_together = ('stakeholder', 'issue')
 
 
-class Demographic(models.Model):
-    student = models.OneToOneField(
-        Student, primary_key=True, on_delete=models.CASCADE, related_name="demographics", null=False, db_column='student')
-    # TODO: May Use Birthday
-    age = models.IntegerField(
-        validators=[MaxValueValidator(100), MinValueValidator(0)], db_column='age')
+class Demographics(models.Model):
+    student = models.OneToOneField('Students', primary_key=True, on_delete=models.CASCADE, related_name="demographics", null=False, db_column='student')
+    age = models.IntegerField(validators=[MaxValueValidator(100), MinValueValidator(0)], db_column='age')
     grade_choices = (('0', 'Other'),
                      ('1', 'Freshmen'),
                      ('2', 'Sophomore'),
@@ -129,31 +90,29 @@ class Demographic(models.Model):
         db_table = 'demographics'
 
 
-class Scenario_to_Course(models.Model):
-
-    scenario = models.ForeignKey(
-        Scenario, on_delete=models.CASCADE,)
-    course = models.ForeignKey(
-        Course, on_delete=models.CASCADE)
-
-    class Meta:
-        unique_together = ('scenario', 'course')
-        db_table = 'scenarios_for'
-
-class Courses_to_Scenario(models.Model):
-
-    scenario = models.ForeignKey(
-        Scenario, on_delete=models.CASCADE,)
-    course = models.ForeignKey(
-        Course, on_delete=models.CASCADE)
+class GenericPage(models.Model):
+    generic_page_id = models.IntegerField()
+    page = models.ForeignKey('Pages', on_delete = models.CASCADE, db_column='page')
+    body = models.TextField()
+    version = models.IntegerField()
 
     class Meta:
-        unique_together = ('scenario', 'course')
-        db_table = 'courses_to_scenario'
-        
+        db_table = 'generic_page'
+        unique_together = ('generic_page_id', 'version')
+
+
+class Issues(models.Model):
+    issue = models.AutoField(primary_key=True)
+    scenario = models.ForeignKey('Scenarios', on_delete = models.CASCADE)
+    name = models.TextField()
+    importance_score = models.IntegerField()
+
+    class Meta:
+        db_table = 'issues'
+
 
 class Pages(models.Model):
-    page = models.AutoField(primary_key=True, editable=False)
+    page = models.IntegerField()
     page_choices = (
         ('I', 'INTRO'),
         ('G', 'GENERIC'),
@@ -163,219 +122,217 @@ class Pages(models.Model):
     )
     page_type = models.CharField(max_length=2, choices=page_choices)
     page_title = models.CharField(max_length=1000)
-    scenarios = models.ManyToManyField(
-        Scenario, related_name='pages',  through='Pages_to_scenario')
+    scenario = models.ForeignKey('Scenarios', on_delete=models.CASCADE, db_column='scenario')
     version = models.IntegerField(default=1, editable=True)
-    body = models.TextField()
-    next_page = models.ForeignKey("Pages", on_delete= models.SET_NULL, null=True)
+    body = models.TextField(blank=True, null=True)
+    next = models.ForeignKey('self',on_delete = models.CASCADE, null=True)
+    x_coordinate = models.IntegerField()
+    y_coordinate = models.IntegerField()
+    completed = models.BooleanField(default= False)
 
     class Meta:
         db_table = 'pages'
-        unique_together = 'page','version'
-
-class Pages_to_scenario(models.Model):
-    page_id = models.ForeignKey(
-        Pages, on_delete = models.CASCADE)
-    scenario_id = models.ForeignKey(
-        Scenario, on_delete = models.CASCADE)
-    class Meta:
-        unique_together = 'page_id','scenario_id'
+        unique_together = ('page', 'version')
 
 
-class Response(models.Model):
-    response_id = models.AutoField(primary_key=True, editable=False)
-    student = models.ForeignKey(
-        Student, on_delete=models.CASCADE)
-    scenario = models.ForeignKey(
-        Scenario, on_delete=models.CASCADE)
-    page = models.ForeignKey(
-        Pages, on_delete=models.CASCADE)
-    course = models.ForeignKey(
-        Course, on_delete=models.CASCADE)
-    date_taken = models.DateField(auto_now_add=True)
-    choice = models.CharField(max_length=300)
-
-    # TODO: Verify page in scenario
+class PagesToScenario(models.Model):
+    page = models.ForeignKey(Pages, on_delete = models.CASCADE)
+    scenario = models.ForeignKey('Scenarios', on_delete = models.CASCADE)
 
     class Meta:
-        db_table = 'responses'
-        ordering = ['scenario', 'page', 'student']
-        unique_together = ('scenario', 'page', 'student', 'course')
+        db_table = 'pages_to_scenario'
+        unique_together = ('page', 'scenario')
 
 
-class Issue(models.Model):
-    issue = models.AutoField(default=None, primary_key=True, editable=False)
-    scenario_id = models.ForeignKey(
-        Scenario, on_delete=models.CASCADE)
-    name = models.CharField(max_length=100)
-    importance_score = models.FloatField(validators=[MinValueValidator(0.0)])
+class Professors(models.Model):
+    professor = models.TextField(primary_key=True)
+    fname = models.TextField()
+    lname = models.TextField(blank=True)
+    # courses = models.ManyToManyField( Courses, related_name='professor',  through='ProfessorsToCourses')
 
     class Meta:
-        db_table = 'issues'
+        db_table = 'professors'
 
 
-class Stakeholders(models.Model):
-    stakeholder = models.IntegerField(default = 1)
-    version = models.IntegerField(default = 1)
-    scenario = models.ForeignKey(
-        Scenario, on_delete=models.CASCADE, null=False)
-    name = models.CharField(max_length=1000,  null=False)
-    description = models.TextField(default="")
-    job = models.TextField(default="default")
-    introduction = models.TextField(default='default')
-    enable_multi_convo = models.BooleanField(default = False)
+class ProfessorsToCourses(models.Model):
+    professor = models.ForeignKey(Professors, on_delete = models.CASCADE, db_column='professor')
+    course = models.ForeignKey(Courses, on_delete = models.CASCADE, db_column='course')
 
     class Meta:
-        db_table = 'stakeholders'
-        unique_together = 'stakeholder','version'
+        db_table = 'professors_to_courses'
+        unique_together = ('professor', 'course')
 
+
+class ProfessorsToScenario(models.Model):
+    professor = models.ForeignKey(Professors, on_delete = models.CASCADE, db_column='professor')
+    scenario = models.ForeignKey('Scenarios', on_delete = models.CASCADE, db_column='scenario')
+    permission = models.IntegerField()
+
+    class Meta:
+        db_table = 'professors_to_scenario'
+        unique_together = ('professor', 'scenario')
 
 
 class Questions(models.Model):
-    question = models.IntegerField(default = 1)
-    version = models.IntegerField(default = 1)
-    points = models.IntegerField(default = 1)
-    question_text = models.TextField()
-    question_summary = models.TextField()
-    class Meta:
-        unique_together = 'question','version'
-        
-class Stakeholders_to_questions(models.Model):
-    stakeholder_id = models.ForeignKey(
-        Stakeholders, on_delete = models.CASCADE)
-    question_id = models.ForeignKey(
-        Questions, on_delete = models.CASCADE)
-    class Meta:
-        unique_together = 'stakeholder_id','question_id'
-
-class Conversations(models.Model):
-    conversation = models.AutoField(primary_key=True, editable=False)
-    stakeholder = models.ForeignKey(
-        Stakeholders, on_delete=models.CASCADE)
-    question = models.CharField(max_length=100)
-    response = models.TextField(max_length=100)
+    question = models.IntegerField()
+    version = models.IntegerField()
+    points = models.IntegerField()
+    question_text = models.TextField(blank=True)
+    question_summary = models.TextField(blank=True)
 
     class Meta:
-        db_table = 'conversations'
+        db_table = 'questions'
+        unique_together = ('question', 'version')
 
 
-class Reflection_questions(models.Model):
+class ReflectionQuestionToPage(models.Model):
+    reflection_question = models.ForeignKey('ReflectionQuestions', on_delete = models.CASCADE)
+    page = models.ForeignKey(Pages, on_delete = models.CASCADE)
+
+    class Meta:
+        db_table = 'reflection_question_to_page'
+        unique_together = ('reflection_question', 'page')
+
+
+class ReflectionQuestions(models.Model):
+    reflection_question_id = models.IntegerField()
     reflection_question = models.TextField()
-    version = models.IntegerField(default = 1)
+    version = models.IntegerField()
 
     class Meta:
         db_table = 'reflection_questions'
-
-class Reflection_question_to_page(models.Model):
-    reflection_questions_id = models.ForeignKey(
-        Reflection_questions, on_delete = models.CASCADE)
-    page_id = models.ForeignKey(
-        Pages, on_delete = models.CASCADE)
-    class Meta: 
-        unique_together = 'page_id', 'reflection_questions_id'
-
-class Generic_page(models.Model):
-
-    page = models.ForeignKey(
-        Pages, on_delete=models.CASCADE)
-    body = models.TextField()
-    version = models.IntegerField(default = 1)
-
-    class Meta:
-        db_table = 'generic_page'
+        unique_together = ('reflection_question_id', 'version')
 
 
-class Stakeholder_to_page(models.Model):
-    class Meta:
-        unique_together = ['page', 'stakeholder']
-        db_table = 'stakeholder_to_page'
-    page = models.ForeignKey(
-        Pages, on_delete=models.CASCADE)
-    stakeholder = models.ForeignKey(
-        Stakeholders, on_delete=models.CASCADE)
-
-
-class Action_page(models.Model):
-    class Meta:
-        unique_together = ['page', 'choice']
-        db_table = 'action_page'
-    page = models.ForeignKey(
-        Pages, on_delete=models.CASCADE)
-    version = models.IntegerField(default = 1)
-    choice = models.TextField()
-    result_page = models.IntegerField(null=True)
-
-
-class Reflections_taken(models.Model):
-    reflections = models.TextField(max_length=100)
-    response = models.ForeignKey(
-        Response, on_delete=models.CASCADE)
+class ReflectionsTaken(models.Model):
+    reflections = models.TextField(blank=True)
+    response = models.OneToOneField('Responses', on_delete = models.CASCADE, primary_key=True)
 
     class Meta:
         db_table = 'reflections_taken'
 
 
-class Response_to_action_page(models.Model):
-    response = models.ForeignKey(
-        Response, on_delete=models.CASCADE)
-    action_page = models.ForeignKey(
-        Action_page, on_delete=models.CASCADE)
+class ResponseToActionPage(models.Model):
+    response = models.ForeignKey('Responses', on_delete = models.CASCADE, )
+    action_page = models.ForeignKey(ActionPage, on_delete = models.CASCADE, db_column='action_page', )
 
     class Meta:
         db_table = 'response_to_action_page'
-        unique_together = ['response', 'action_page']
 
 
-class Responses_to_conversations(models.Model):
-    response = models.ForeignKey(
-        Response, on_delete=models.CASCADE)
-    stakeholder = models.ForeignKey(
-        Stakeholders, on_delete=models.CASCADE)
+class Responses(models.Model):
+    response_id = models.AutoField(primary_key=True)
+    response = models.IntegerField()
+    student = models.ForeignKey('Students', on_delete = models.CASCADE, db_column='student', )
+    scenario = models.ForeignKey('Scenarios', on_delete = models.CASCADE, db_column='scenario', )
+    version = models.IntegerField()
+    page = models.ForeignKey(Pages, on_delete = models.CASCADE, db_column='page', )
+    course = models.ForeignKey(Courses, on_delete = models.CASCADE, db_column='course', )
+    date_taken = models.DateField(auto_now_add=True)
+    choice = models.TextField()
+
+    class Meta:
+        db_table = 'responses'
+        unique_together = ('response', 'student', 'scenario', 'page', 'course', 'date_taken')
+
+
+class ResponsesToConversations(models.Model):
+    response = models.ForeignKey(Responses, on_delete = models.CASCADE)
+    stakeholder = models.ForeignKey('Stakeholders', on_delete = models.CASCADE, db_column='stakeholder')
+    stakeholder_version = models.IntegerField()
     score = models.DecimalField(max_digits=5, decimal_places=2)
-    conversation = models.ForeignKey(
-        Conversations, on_delete=models.CASCADE)
+    conversation = models.ForeignKey(Conversations, on_delete = models.CASCADE, db_column='conversation')
 
     class Meta:
         db_table = 'responses_to_conversations'
+        unique_together = ('response', 'conversation')
 
 
-class Student_times(models.Model):
-    student = models.ForeignKey(
-        Student, on_delete=models.CASCADE)
-    course = models.ForeignKey(
-        Course, on_delete=models.CASCADE)
-    scenario_id = models.ForeignKey(
-        Scenario, on_delete=models.CASCADE)
-    date_taken = models.DateField(auto_now_add=True)
-    page = models.ForeignKey(
-        Pages, on_delete=models.CASCADE)
-    start_time = models.DateField(auto_now_add=True)
-    end_time = models.DateField(null=True)
+class Scenarios(models.Model):
+    scenario_id = models.AutoField(primary_key=True, editable=False)
+    scenario = models.IntegerField(default=1, editable=True)
+    version = models.IntegerField(default=1, editable=True)
+    name = models.TextField(max_length=50, null=False)
+    public = models.BooleanField(default=False)
+    num_conversation = models.IntegerField(default=0)
+    is_finished = models.BooleanField(default=False)
+    date_created = models.DateField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'scenarios'
+        unique_together = ('scenario', 'version')
+
+
+class ScenariosFor(models.Model):
+    scenario = models.ForeignKey(Scenarios, on_delete = models.CASCADE)
+    version = models.IntegerField()
+    course = models.ForeignKey(Courses, on_delete = models.CASCADE, db_column='course')
+
+    class Meta:
+        db_table = 'scenarios_for'
+        unique_together = ('scenario', 'course')
+
+
+class StakeholderToPage(models.Model):
+    page = models.ForeignKey(Pages, on_delete = models.CASCADE, db_column='page')
+    stakeholder = models.ForeignKey('Stakeholders', on_delete = models.CASCADE, db_column='stakeholder')
+
+    class Meta:
+        db_table = 'stakeholder_to_page'
+        unique_together = ('page', 'stakeholder')
+
+
+class Stakeholders(models.Model):
+    stakeholder = models.IntegerField()
+    scenario = models.ForeignKey(Scenarios, on_delete = models.CASCADE, db_column='scenario')
+    version = models.IntegerField()
+    name = models.TextField()
+    description = models.TextField()
+    job = models.TextField()
+    introduction = models.TextField()
+    enable_multi_convo = models.BooleanField()
+
+    class Meta:
+        db_table = 'stakeholders'
+        unique_together = ('stakeholder', 'version')
+
+
+class StakeholdersToQuestions(models.Model):
+    stakeholder = models.ForeignKey(Stakeholders, on_delete = models.CASCADE, db_column='stakeholder')
+    question = models.ForeignKey(Questions, on_delete = models.CASCADE, db_column='question')
+
+    class Meta:
+        db_table = 'stakeholders_to_questions'
+        unique_together = ('stakeholder', 'question')
+
+
+class StudentTimes(models.Model):
+    student = models.ForeignKey('Students', on_delete = models.CASCADE, db_column='student')
+    course = models.ForeignKey(Courses, on_delete = models.CASCADE, db_column='course')
+    scenario = models.ForeignKey(Scenarios, on_delete = models.CASCADE)
+    date_taken = models.DateField()
+    page = models.IntegerField()
+    start_time = models.DateField()
+    end_time = models.DateField()
 
     class Meta:
         db_table = 'student_times'
-        unique_together = ['student', 'scenario_id', 'course', 'page']
+        unique_together = ('student', 'course', 'scenario', 'date_taken', 'page')
 
 
-class Coverage(models.Model):
-
-    stakeholder = models.ForeignKey(
-        Stakeholders, on_delete=models.CASCADE,  default=None)
-    issue = models.ForeignKey(
-        Issue, on_delete=models.CASCADE, default=None)
-    coverage_score = models.FloatField(validators=[MinValueValidator(0.0)])
+class Students(models.Model):
+    student = models.TextField(primary_key=True)
+    fname = models.TextField()
+    lname = models.TextField()
 
     class Meta:
-        unique_together = (('stakeholder'), ('issue'))
-        db_table = 'coverage'
+        db_table = 'students'
 
 
-class Student_page_progress(models.Model):
-    student = models.ForeignKey(
-        Student, on_delete=models.CASCADE, default=None)
-    page = models.ForeignKey(
-        Pages, on_delete=models.CASCADE, default=None)
-    completed = models.BooleanField(default=False)
+class StudentsToCourse(models.Model):
+    student = models.ForeignKey(Students, on_delete = models.CASCADE, db_column='student')
+    course = models.ForeignKey(Courses, on_delete = models.CASCADE, db_column='course')
 
     class Meta:
-        unique_together = ('student', "page")
+        db_table = 'students_to_course'
+        unique_together = ('student', 'course')

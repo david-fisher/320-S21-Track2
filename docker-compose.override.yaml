@@ -1,0 +1,20 @@
+version: "3.8"
+
+
+services:
+  backend:
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./moral_kombat_backend:/app/api
+  database:
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: "password"
+  frontend:
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./Ghost_in_the_Shell/client_folder_react_app/ethisim:/app/frontend
+      - /app/frontend/node_modules

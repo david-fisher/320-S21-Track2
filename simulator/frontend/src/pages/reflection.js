@@ -11,6 +11,7 @@ import {
 import { BASE_URL, STUDENT_ID, SCENARIO_ID }from "../constants/config";
 import axios from 'axios';
 import { ScenariosContext } from "../Nav";
+import SpecialButton from "./components/SpecialButton"
 
 const TextTypography = withStyles({
   root: {
@@ -45,6 +46,7 @@ function Reflection({ pages, setPages, activePage, setActivePage,
     }
   }
 
+  let prevPageTitle;
   const classes = useStyles();
 
   const [bodyText, setBodyText] = React.useState('');
@@ -98,27 +100,39 @@ function Reflection({ pages, setPages, activePage, setActivePage,
     });
   }
 
+  function getPrevPageTitle(prevPageID) {
+    switch (prevPageID) {
+      case "projectAssignment": prevPageTitle = "Project Assignment";
+      break;
+      case "stakeholders": prevPageTitle = "Stakeholders";
+      break;
+      case "feedback": prevPageTitle = "Feedback";
+      break;
+      default:
+        break;
+    }
+  }
+
+  getPrevPageTitle(prevPageID);
+
   return (
+    
     <div>
-      <Grid container direction="row" justify="center" alignItems="center">
+      <Grid container direction="row" justify="center" alignItems="center" noWrap={true}>
+      <Grid item style={{ marginRight: "-5rem", marginTop: "0rem" }}>
         <Box mt={5}>
           <TextTypography variant="h4" align="center" gutterBottom>
             {title}
           </TextTypography>
         </Box>
+        </Grid>
       </Grid>
       <Grid container direction="row" justify="space-between">
         <Grid item style={{ marginRight: "0rem", marginTop: "-3rem" }}>
-          <Button
-            variant="contained"
-            disableElevation
-            onClick={() => goToPage(prevPageID)}
-          >
-            Back
-          </Button>
+          <SpecialButton title={prevPageTitle} onClick={() => goToPage(prevPageID)}></SpecialButton>
         </Grid>
-        <Grid item style={{ marginRight: "0rem", marginTop: "-3rem" }}>
-        </Grid>
+        {/* <Grid item style={{ marginRight: "0rem", marginTop: "-3rem" }}>
+        </Grid> */}
       </Grid>
 
       <Grid container spacing={2}>

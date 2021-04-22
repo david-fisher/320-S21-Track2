@@ -13,17 +13,17 @@ from api.serializers import *
 
 
 class CourseViewSet(viewsets.ModelViewSet):
-    queryset = Course.objects.all()
+    queryset = Courses.objects.all()
     serializer_class = CourseSerializer
 
 
 class ProfessorViewSet(viewsets.ModelViewSet):
-    queryset = Professor.objects.all()
+    queryset = Professors.objects.all()
     serializer_class = ProfessorSerializer
 
 
 class StudentViewSet(viewsets.ModelViewSet):
-    queryset = Student.objects.all()
+    queryset = Students.objects.all()
     serializer_class = StudentSerializer
 
     @action(detail=True, renderer_classes=[renderers.JSONOpenAPIRenderer])
@@ -41,22 +41,22 @@ class StudentViewSet(viewsets.ModelViewSet):
 
 
 class DemographicViewSet(viewsets.ModelViewSet):
-    queryset = Demographic.objects.all()
+    queryset = Demographics.objects.all()
     serializer_class = DemographicSerializer
 
 
 class ScenariosViewSet(viewsets.ModelViewSet):
-    queryset = Scenario.objects.all()
+    queryset = Scenarios.objects.all()
     serializer_class = ScenarioSerializer
 
 
 class ResponsesViewSet(viewsets.ModelViewSet):
-    queryset = Response.objects.all()
+    queryset = Responses.objects.all()
     serializer_class = ResponseSerializer
 
 
 class IssueViewSet(viewsets.ModelViewSet):
-    queryset = Issue.objects.all()
+    queryset = Issues.objects.all()
     serializer_class = IssueSerializer
 
 
@@ -71,22 +71,22 @@ class PagesViewSet(viewsets.ModelViewSet):
 
 
 class Stakeholder_to_pageViewSet(viewsets.ModelViewSet):
-    queryset = Stakeholder_to_page.objects.all()
+    queryset = StakeholderToPage.objects.all()
     serializer_class = Stakeholder_to_pageSerializer
 
 
 class Reflection_QuestionsViewSet(viewsets.ModelViewSet):
-    queryset = Reflection_questions.objects.all()
+    queryset = ReflectionQuestions.objects.all()
     serializer_class = Reflection_questionsSerializer
 
 
 class Generic_pageViewSet(viewsets.ModelViewSet):
-    queryset = Generic_page.objects.all()
+    queryset = GenericPage.objects.all()
     serializer_class = Generic_pageSerializer
 
 
 class Action_pageViewSet(viewsets.ModelViewSet):
-    queryset = Action_page.objects.all()
+    queryset = ActionPage.objects.all()
     serializer_class = Action_pageSerializer
 
 
@@ -111,27 +111,27 @@ class Page_StakeholderViewSet(generics.CreateAPIView):
 
 
 class ReflectionsTakenViewSet(viewsets.ModelViewSet):
-    queryset = Reflections_taken.objects.all()
+    queryset = ReflectionsTaken.objects.all()
     serializer_class = ReflectionsTakenSerializer
 
 
 class ResponseToActionPageViewSet(viewsets.ModelViewSet):
-    queryset = Response_to_action_page.objects.all()
+    queryset = ResponseToActionPage.objects.all()
     serializer_class = ResponseToActionPageSerializer
 
 
 class Responses_to_conversationsViewSet(viewsets.ModelViewSet):
-    queryset = Responses_to_conversations.objects.all()
+    queryset = ResponsesToConversations.objects.all()
     serializer_class = Responses_to_conversationsSerializer
 
 
-class Student_page_progressViewSet(viewsets.ModelViewSet):
-    queryset = Student_page_progress.objects.all()
-    serializer_class = Student_page_progressSerializer
+# class Student_page_progressViewSet(viewsets.ModelViewSet):
+#     queryset = Student_page_progress.objects.all()
+#     serializer_class = Student_page_progressSerializer
 
 
 class StudentTimesViewSet(viewsets.ModelViewSet):
-    queryset = Student_times.objects.all()
+    queryset = StudentTimes.objects.all()
     serializer_class = StudentTimesSerializer
 
 
@@ -146,14 +146,37 @@ class StakeholdersViewSet(viewsets.ModelViewSet):
 
 
 class StudentToCourseViewSet(viewsets.ModelViewSet):
-    queryset = Student_to_Course.objects.all()
+    queryset = StudentsToCourse.objects.all()
     serializer_class = StudentToCourseSerializer
 
 
-class ScenarioToCourseViewSet(viewsets.ModelViewSet):
-    queryset = Scenario_to_Course.objects.all()
-    serializer_class = ScenarioToCourseSerializer
+class ScenariosForViewSet(viewsets.ModelViewSet):
+    queryset = ScenariosFor.objects.all()
+    serializer_class = ScenarioForSerializer
 
+class QuestionsViewSet(viewsets.ModelViewSet):
+    queryset = Questions.objects.all()
+    serializer_class = QuestionsSerializer
+
+class StakeholdersToQuestionsViewSet(viewsets.ModelViewSet):
+    queryset = StakeholdersToQuestions.objects.all()
+    serializer_class = StakeholdersToQuestionsSerializer
+
+class PagesToScenarioViewSet(viewsets.ModelViewSet):
+    queryset = PagesToScenario.objects.all()
+    serializer_class = PagesToScenarioSerializer
+
+class ReflectionQuestionToPageViewSet(viewsets.ModelViewSet):
+    queryset = ReflectionQuestionToPage.objects.all()
+    serializer_class = ReflectionQuestionToPageSerializer
+
+class ProfessorsToScenarioViewSet(viewsets.ModelViewSet):
+    queryset = ProfessorsToScenario.objects.all()
+    serializer_class = ProfessorsToScenarioSerializer
+
+class ProfessorsToCoursesViewSet(viewsets.ModelViewSet):
+    queryset = ProfessorsToCourses.objects.all()
+    serializer_class = ProfessorsToCoursesSerializer
 
 # TODO: Some viewsets are not necessary, remove after implementaion of some endpoints
 
@@ -165,14 +188,14 @@ class DashBoard(views.APIView):
         if student_id is not None:
             try:
                 scenario_list = []
-                student_courses = Student.objects.get(
+                student_courses = Students.objects.get(
                     student=student_id).courses.all()
                 for course in student_courses:
                     scenario_list.extend(course.scenarios.all())
 
                 serializer = ScenarioSerializer(scenario_list, many=True)
                 return DRF_response(serializer.data)
-            except Student.DoesNotExist:
+            except Students.DoesNotExist:
                 raise Http404
             """  
             except:
@@ -192,13 +215,13 @@ class Get_scenario(APIView):
             return DRF_response(status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            scenario = Scenario.objects.get(scenario_id=scenario_id)
+            scenario = Scenarios.objects.get(scenario_id=scenario_id)
             if(scenario == None):
-                return Response({'status': 'details'}, status=status.HTTP_404_NOT_FOUND)
+                return Responses({'status': 'details'}, status=status.HTTP_404_NOT_FOUND)
             data = ScenarioSerializer(scenario).data
 
             return DRF_response(data, status=status.HTTP_200_OK)
-        except Scenario.DoesNotExist:
+        except Scenarios.DoesNotExist:
             return DRF_response({'status': 'No scenario found for this scenario id'}, status=status.HTTP_404_NOT_FOUND)
 
 
@@ -208,15 +231,22 @@ class get_pages(APIView):
         scenario = self.request.query_params.get('scenario_id')
 
         try:
-            scenario = Scenario.objects.get(scenario_id=scenario)
-        except Scenario.DoesNotExist:
+            scenario = Scenarios.objects.get(scenario_id=scenario)
+        except Scenarios.DoesNotExist:
             return DRF_response(status=status.HTTP_404_NOT_FOUND)
 
         page_list = []
-        page_id_list = Pages.objects.filter(scenario_id=scenario)
+        page_id_list = PagesToScenario.objects.filter(scenario=scenario)
+
+        for pg_id in page_id_list:
+            try:
+                page = Pages.objects.get(id=pg_id.page)
+            except Scenarios.DoesNotExist:
+                return DRF_response(status=status.HTTP_404_NOT_FOUND)
+            page_list.append(page)
 
         sorted_list = []
-        for page1 in page_id_list:
+        for page1 in page_list:
             has_parent = False
             for page2 in page_id_list:
                 if page2.next_page != None and page2.next_page == page1.page:
@@ -232,75 +262,84 @@ class get_pages(APIView):
                 if page1.next_page == page2.page:
                     sorted_list.append(page2)
 
-        for page1 in page_id_list:
+        for page1 in page_list:
             if page1 not in sorted_list:
                 sorted_list.append(page1)
 
-        for page in sorted_list:
-            page_data = PagesSerializer(page).data
-            page_id = page.page
+        return DRF_response(sorted_list, status=status.HTTP_200_OK)
 
-            page_type = page.page_type
-            # Check page.PAGE_TYPE = 'REFLECTION'
-            if (page_type == 'R'):
-                reflection_query = Reflection_questions.objects.filter(
-                    page=page_id).values()
-                page_data.update(
-                    {
-                        "body": reflection_query
-                    }
-                )
-                page_list.append(page_data)
+class get_page_info(APIView):
+    def get(self, request, *args, **kwargs):
+        page_id = self.request.query_params.get('page_id')
+    
+        try:
+            page = Pages.objects.get(id=page_id)
+        except Scenarios.DoesNotExist:
+            return DRF_response(status=status.HTTP_404_NOT_FOUND)
+        page_data = PagesSerializer(page).data
 
-            # Check page.PAGE_TYPE = 'ACTION'
-            elif (page_type == 'A'):
-                action_query = Action_page.objects.filter(
-                    page=page_id).values()
-                page_data.update(
-                    {
-                        "body": action_query
-                    }
-                )
-                page_list.append(page_data)
+        page_type = page.page_type
+        # Check page.PAGE_TYPE = 'REFLECTION'
+        if (page_type == 'R'):
+            reflection_queries = ReflectionQuestionToPage.objects.filter(page=page_id)
+            reflection_qs = []
+            for quer in reflection_queries:
+                try:
+                    question = ReflectionQuestions.objects.get(id=quer.id)
+                except Scenarios.DoesNotExist:
+                    return DRF_response(status=status.HTTP_404_NOT_FOUND)
+                quer_data = Reflection_questionsSerializer(quer).data
+                reflection_qs.append(quer_data)
+            page_data.update(
+                {
+                    "body": reflection_qs
+                }
+            )
 
-            # Check page.PAGE_TYPE = 'GENERIC'
-            elif (page_type == 'G' or page_type == 'I'):
-                generic_query = Generic_page.objects.filter(
-                    page=page_id).values()
-                page_data.update(
-                    {
-                        "body": generic_query
-                    }
-                )
-                page_list.append(page_data)
+        # Check page.PAGE_TYPE = 'ACTION'
+        elif (page_type == 'A'):
+            action_query = ActionPage.objects.filter(page=page_id).values()
+            page_data.update(
+                {
+                    "body": action_query
+                }
+            )
 
-            # Check page.PAGE_TYPE = 'STAKEHOLDER'
-            elif (page_type == 'S'):
-                stakeholder_query = Stakeholder_to_page.objects.filter(
-                    page=page_id).values()
-                page_data.update(
-                    {
-                        "body": stakeholder_query
-                    }
-                )
-                page_list.append(page_data)
-            # Neither of these pages, something went wrong or missing implementation
-            else:
-                return DRF_response(status=status.HTTP_400_BAD_REQUEST)
-        return DRF_response(page_list, status=status.HTTP_200_OK)
+        # Check page.PAGE_TYPE = 'GENERIC'
+        elif (page_type == 'G' or page_type == 'I'):
+            generic_query = GenericPage.objects.filter(page=page_id).values()
+            page_data.update(
+                {
+                    "body": generic_query
+                }
+            )
 
+        # Check page.PAGE_TYPE = 'STAKEHOLDER'
+        elif (page_type == 'S'):
+            stakeholder_query = StakeholderToPage.objects.filter(page=page_id).values()
+            page_data.update(
+                {
+                    "body": stakeholder_query
+                }
+            )
+        # Neither of these pages, something went wrong or missing implementation
+        else:
+            return DRF_response(status=status.HTTP_400_BAD_REQUEST)
+
+        return DRF_response(page_data, status=status.HTTP_200_OK)
 
 class get_stakeholders(APIView):
     def get(self, request):
-        scenario_id1 = self.request.query_params.get('scenario_id')
+        scenario_id = self.request.query_params.get('scenario_id')
+        version = self.request.query_params.get('version')
         try:
-            scenario = Scenario.objects.get(scenario_id=scenario_id1)
-        except Scenario.DoesNotExist:
+            scenario = Scenarios.objects.get(scenario_id=scenario_id, version=version)
+        except Scenarios.DoesNotExist:
             return DRF_response(status=status.HTTP_404_NOT_FOUND)
 
         stakeholders_list = []
         stakeholders_id_list = Stakeholders.objects.filter(
-            scenario_id=scenario_id1)
+            scenario_id=scenario_id, version=version)
 
         for stakeholder in stakeholders_id_list:
             convos = Conversations.objects.filter(
@@ -347,8 +386,8 @@ class get_Issues(APIView):
     def get(self, request, format=None):
         scenario_id1 = self.request.query_params.get('scenario_id')
         try:
-            scenario = Scenario.objects.get(scenario_id=scenario_id1)
-        except Scenario.DoesNotExist:
+            scenario = Scenarios.objects.get(scenario_id=scenario_id1)
+        except Scenarios.DoesNotExist:
             return DRF_response(status=status.HTTP_404_NOT_FOUND)
         # serializer = IssueSerializer(scenario_id, many=True)
         # return DRF_response(serializer.data)
@@ -356,15 +395,47 @@ class get_Issues(APIView):
             return DRF_response(status=status.HTTP_400_BAD_REQUEST)
         try:
             issues_list = []
-            AllIssues = Issue.objects.filter(scenario_id=scenario_id1)
+            AllIssues = Issues.objects.filter(scenario_id=scenario_id1)
 
             for issue in AllIssues:
                 issue_data = IssueSerializer(issue).data
                 issues_list.append(issue_data)
             # serializer = IssueSerializer(issues_list, many=True)
             return DRF_response(issues_list)
-        except Scenario.DoesNotExist:
+        except Scenarios.DoesNotExist:
             return DRF_response(status=status.HTTP_404_NOT_FOUND)
+
+class get_student_results(APIView):
+
+    def get(self, request, format=None):
+        scenario_id1 = self.request.query_params.get('scenario_id')
+        student_id = self.request.query_params.get('student_id')
+        try:
+            scenario = Scenarios.objects.get(scenario_id=scenario_id1)
+        except Scenarios.DoesNotExist:
+            return DRF_response(status=status.HTTP_404_NOT_FOUND)
+        if(scenario_id1 == None):
+            return DRF_response(status=status.HTTP_400_BAD_REQUEST)
+        try:
+            mp= {}
+            AllResponses = Responses.objects.filter(student=student_id,scenario = scenario_id1) 
+            stakeholderSet = set()
+            for response in AllResponses:
+                response_id = response.response_id
+                responseToConvo = ResponsesToConversations.objects.filter(response=response_id).first()
+                if responseToConvo is not None:
+                    stakeholderSet.add(responseToConvo.stakeholder.stakeholder)
+            for stakeholder in stakeholderSet:
+                coverages = Coverage.objects.filter(stakeholder=stakeholder)
+                for coverage in coverages:
+                    if coverage is not None:
+                        issue_id = coverage.issue.name
+                        coverage_score = coverage.coverage_score
+                        mp[issue_id] = mp.get(issue_id, 0) + coverage_score
+            return DRF_response(mp)
+        except Scenarios.DoesNotExist:
+            return DRF_response(status=status.HTTP_404_NOT_FOUND)
+
 
 
 class response_to_conversations(APIView):
@@ -375,22 +446,22 @@ class response_to_conversations(APIView):
         student_id = self.request.query_params.get('student_id')
         
         try:
-            scenario = Scenario.objects.get(scenario_id = scenario_id)
+            scenario = Scenarios.objects.get(scenario_id = scenario_id)
             page = Pages.objects.get(page = page_id)
-            student = Student.objects.get(student = student_id)
-        except Scenario.DoesNotExist:
+            student = Students.objects.get(student = student_id)
+        except Scenarios.DoesNotExist:
             return rest_framework.response.Response(status=status.HTTP_404_NOT_FOUND)
         except Pages.DoesNotExist:
             return rest_framework.response.Response(status=status.HTTP_404_NOT_FOUND) 
-        except Student.DoesNotExist:
+        except Students.DoesNotExist:
             return rest_framework.response.Response(status=status.HTTP_404_NOT_FOUND)
         
-        response_id_lst = Response.objects.filter(student_id = student_id, page = page_id, scenario = scenario_id)
+        response_id_lst = Responses.objects.filter(student_id = student_id, page = page_id, scenario = scenario_id)
     
         resp_to_convo_final_lst = []
         for response in response_id_lst:
             resp_json = ResponseSerializer(response).data
-            resp_to_convos_obj_lst = Responses_to_conversations.objects.filter(response_id = response.response_id)
+            resp_to_convos_obj_lst = ResponsesToConversations.objects.filter(response_id = response.response_id)
             for j in resp_to_convos_obj_lst:
                 convos = Conversations.objects.filter(conversation = j.conversation.conversation)
                 convo_lst = []
@@ -414,7 +485,7 @@ class response_to_conversations(APIView):
         # takes in a JSON of the format:
         # {
         #     "scenario_id": 1,
-        #     "student_id": 1,
+        #     "student_id": "student netID",
         #     "conversation_id": 1,
         #     "score": 1,
         #     "course_id": 1,
@@ -433,31 +504,40 @@ class response_to_conversations(APIView):
             return DRF_response({'detail': "Missing one or more parameters"}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            conversation = Conversations.objects.get(
-                conversation=conversation_id)
-            stakeholder = conversation.stakeholder.stakeholder
+            conversation = Conversations.objects.get(conversation=conversation_id)
+            stakeholder_id = conversation.stakeholder.id
+            stakeholder = Stakeholders.objects.get(id=stakeholder_id)
+            scenario = Scenarios.objects.get(scenario_id=scenario_id)
 
-            # formats the response entry to match the model
-            response = {
-                "student": student_id,
-                "scenario": scenario_id,
-                "page": page_id,
-                "course": course_id,
-                "choice": str(conversation_id)
-            }
+            # Check if response is already in db
+            try:
+                responseObj = Responses.objects.get(response=0, student=student_id, scenario=scenario_id, page=page_id, course=course_id)
+                responseSerializer = ResponseSerializer(responseObj)
+            except:
+                # formats the response entry to match the model if response does not exist
+                response = {
+                    "response": 0,
+                    "student": student_id,
+                    "scenario": scenario_id,
+                    "page": page_id,
+                    "version": 0,
+                    "course": course_id,
+                    "choice": str(conversation_id)
+                }
+                # deserialize the response entry, and check if the response entry is valid
+                responseSerializer = ResponseSerializer(data=response)
+                if not responseSerializer.is_valid():
+                    return DRF_response(responseSerializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                
+                # saves the response to the database
+                responseSerializer.save()
 
-            # deserialize the response entry, and check if the response entry is valid
-            responseSerializer = ResponseSerializer(data=response)
-            if not responseSerializer.is_valid():
-                return DRF_response(responseSerializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-            # saves the response to the database
-            responseSerializer.save()
 
             # formats the entries of response_to_conv to match the model
             response_to_conv = {
                 "response": responseSerializer.data['response_id'],
-                "stakeholder": stakeholder,
+                "stakeholder": stakeholder_id,
+                "stakeholder_version": stakeholder.version,
                 "score": score,
                 "conversation": conversation_id
             }
@@ -470,10 +550,14 @@ class response_to_conversations(APIView):
 
             # saves the response_to_conversation entry
             responseToConvSerializer.save()
+
+            #increase version of response on success input
+            responseObj = Responses.objects.get(response=0, student=student_id, scenario=scenario_id, page=page_id, course=course_id)
+            responseObj.version = responseObj.version + 1
+            response_instance = responseObj.save()
             return DRF_response(responseToConvSerializer.data, status=status.HTTP_200_OK)
-        except Conversations.DoesNotExist:
-            return DRF_response({'detail': "conversation_id not found"}, status=status.HTTP_404_NOT_FOUND)
-        # Only need exception check for Conversations.DoesNotExist, all other bad inputs are handled by the serializer.valid()
+        except:
+            return DRF_response({'detail': "at least one parameter not found"}, status=status.HTTP_404_NOT_FOUND)
 
 class reflection(APIView):
     #retrieve a reflection for a particular response from the database
@@ -488,13 +572,56 @@ class reflection(APIView):
             return DRF_response({'detail': "Missing one or more parameters"}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            response = Response.objects.get(page= page_id, student = student_id, scenario = scenario_id)
-        except Response.DoesNotExist:
+            response = Responses.objects.get(page= page_id, student = student_id, scenario = scenario_id)
+        except Responses.DoesNotExist:
             return DRF_response(status=status.HTTP_404_NOT_FOUND)
         
         try:
-            ref = Reflections_taken.objects.filter(response = response.response_id).first()
+            ref = ReflectionsTaken.objects.filter(response = response.response_id).first()
             reflection_data = ReflectionsTakenSerializer(ref).data
             return DRF_response(reflection_data)
-        except Scenario.DoesNotExist:
+        except Scenarios.DoesNotExist:
+            return DRF_response(status=status.HTTP_404_NOT_FOUND)
+
+    def put(self, request, *args, **kwargs):
+        page_id = self.request.query_params.get('page_id') 
+        student_id = self.request.query_params.get('student_id')
+        scenario_id = self.request.query_params.get('scenario_id')
+        reflections = self.request.query_params.get('reflections')
+
+        # extra check for if the given JSON has the required fields
+        if(scenario_id is None or page_id is None or student_id is None or reflections is None):
+            return DRF_response({'detail': "Missing one or more parameters"}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            response = Responses.objects.get(page= page_id, student = student_id, scenario = scenario_id)
+        except Responses.DoesNotExist:
+            return DRF_response(status=status.HTTP_404_NOT_FOUND)
+        
+        try:
+            ref = ReflectionsTaken.objects.filter(response = response.response_id).first()
+            ref.reflections = reflections
+           
+            serializer = ReflectionsTakenSerializer(ref)
+            ref.save()
+            return DRF_response(serializer.data)
+           
+        except:
+            return DRF_response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class stakeholder_conv(APIView):
+    def get(self, request, *args, **kwargs):
+        stakeholder_id = self.request.query_params.get('stakeholder_id')
+
+        if(stakeholder_id is None):
+            return DRF_response({'detail': "Missing parameter: stakeholder_id"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        conversations_list = []
+        try:
+            conversations = Conversations.objects.filter(stakeholder=stakeholder_id)
+            for conversation in conversations:
+                conversation_data = ConversationSerializer(conversation).data
+                conversations_list.append(conversation_data)
+            return DRF_response(conversations_list, status=status.HTTP_200_OK)
+        except Conversations.DoesNotExist:
             return DRF_response(status=status.HTTP_404_NOT_FOUND)

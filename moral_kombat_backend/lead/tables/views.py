@@ -321,14 +321,15 @@ class logistics_page(APIView):
     def get(self, request, *args, **kwargs):
         
         #take professor_id as input from URL by adding ?professor_id=<the id #> to the end of the url.
-        SCENARIO_id = self.request.query_params.get('SCENARIO')
+        SCENARIO_id = self.request.query_params.get('scenario')
         #TODO check that id != none
         #get all scenarios belonging to this professor
-        scenario = scenarios.objects.get(SCENARIO = SCENARIO_id)
+        # scenario_query = PROFESSORS_TO_SCENARIO.objects.filter(PROFESSOR = PROFESSOR_id).values()
+        scenario = SCENARIOS.objects.get(SCENARIO_ID = SCENARIO_id)
         scenario_dict = ScenariosSerializer(scenario).data
         #loop through scenarios and append required information (course, page info)
-
-        scenarios_for_query = scenarios_for.objects.filter(SCENARIO=scenario_dict['SCENARIO']).values()
+        print(scenario_dict)
+        scenarios_for_query = SCENARIOS_FOR.objects.filter(SCENARIO=scenario_dict['SCENARIO']).values()
         course_id_array = []
         for x in scenarios_for_query:
             print(x)
@@ -336,10 +337,10 @@ class logistics_page(APIView):
 
         course_dict_array = []
         for x in course_id_array:
-            course = courses.objects.get(COURSE = x)
+            course = COURSES.objects.get(COURSE = x)
             course_dict_array.append({"COURSE":course.COURSE, "NAME": course.NAME})
                 
-        pages_query = pages.objects.filter(SCENARIO=scenario_dict['SCENARIO']).values()
+        pages_query = PAGES.objects.filter(SCENARIO=scenario_dict['SCENARIO']).values()
         
         page_array = []
         for page in pages_query:
@@ -357,6 +358,7 @@ class logistics_page(APIView):
 
         
         logistics = scenario_dict
+        print(logistics)
         return Response(logistics)
     
     """format:
@@ -419,12 +421,12 @@ class dashboard_page(APIView):
         PROFESSOR_id = self.request.query_params.get('professor')
         #TODO check that id != none
         #get all scenarios belonging to this professor
-        scenario_query = PROFESSORS_TO_SCENARIO.objects.filter(PROFESSOR = PROFESSOR_id).values()
+        scenario_query = SCENARIOS.objects.filter(professors_to_scenario2 = PROFESSOR_id).values()
         #loop through scenarios and append required information (course, page info)
         logistics = []
         print(scenario_query)
         for scenario in scenario_query:
-            scenarios_for_query = SCENARIOS_FOR.objects.filter(SCENARIO_ID = scenario['SCENARIO_id']).values()
+            scenarios_for_query = SCENARIOS_FOR.objects.filter(SCENARIO_ID = scenario['SCENARIO']).values()
             course_id_array = []
             for x in scenarios_for_query:
                 course_id_array.append(x['COURSE'])

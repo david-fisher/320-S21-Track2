@@ -52,7 +52,7 @@ urlpatterns = [
     path('multi_conv', multi_conv.as_view()),
     # path('multi_stake', multi_stake.as_view()),
     path('multi_coverage', multi_coverage.as_view()),
-    # path('logistics', logistics_page.as_view()),
+    path('logistics', logistics_page.as_view()),
     path('multi_issue', multi_issue.as_view()),
     path('dashboard', dashboard_page.as_view()),
     # path('flowchart', flowchart.as_view()),

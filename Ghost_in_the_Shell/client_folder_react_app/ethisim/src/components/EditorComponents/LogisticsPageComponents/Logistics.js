@@ -87,7 +87,7 @@ Logistics.propTypes = {
 
 export default function Logistics({ scenario_ID }) {
     //Need scenario id
-    const endpointGetLogistics = '/logistics?scenario_id=';
+    const endpointGetLogistics = '/logistics?scenario=';
     const endpointGetCourses = '/api/courses/';
     const endPointPut = '/logistics';
 

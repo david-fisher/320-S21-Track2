@@ -42,7 +42,8 @@ router.register('api/generic_page', generic_pageViewSet, 'GENERIC_PAGE') #
 #router.register('api/single_scenario', SingleScenarioViewSet, 'single_scenario')
 router.register('api/issues', IssuesViewSet, 'ISSUES') #
 router.register('api/action_page', Action_pageViewSet, 'ACTION_PAGE') #
-router.register('api/coverage', CoverageViewSet, 'COVERAGE') #
+router.register('api/coverage', CoverageViewSet, 'COVERAGE')
+router.register('api/profscenarios', professors_to_scenarioViewSet, 'PROFESSORS_TO_SCENARIO') #
 #router.register('api/actions_taken',ActionsTakenViewSet,'actions_taken')
 
 
@@ -53,7 +54,7 @@ urlpatterns = [
     path('multi_coverage', multi_coverage.as_view()),
     # path('logistics', logistics_page.as_view()),
     path('multi_issue', multi_issue.as_view()),
-    # path('dashboard', dashboard_page.as_view()),
+    path('dashboard', dashboard_page.as_view()),
     # path('flowchart', flowchart.as_view()),
     # path('student_info',student_info.as_view()),
     # path('student_responses',student_responses.as_view()),

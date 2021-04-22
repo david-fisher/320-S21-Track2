@@ -143,7 +143,7 @@ class Professors_to_coursesSerializer(serializers.ModelSerializer):
 class Professors_to_scenarioSerializer(serializers.ModelSerializer):
     class Meta:
         model = PROFESSORS_TO_SCENARIO
-        fields = ('PROFESSOR', 'COURSE', 'PERMISSION')
+        fields = ('PROFESSOR', 'SCENARIO', 'PERMISSION')
 
 class Responses_to_ConversationsSerializer(serializers.ModelSerializer):
     class Meta:

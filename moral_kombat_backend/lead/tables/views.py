@@ -306,6 +306,13 @@ class response_to_action_pageViewSet(viewsets.ModelViewSet):
     ]
     serializer_class = Response_to_action_pageSerializer
 
+class professors_to_scenarioViewSet(viewsets.ModelViewSet):
+    queryset = PROFESSORS_TO_SCENARIO.objects.all()
+    permission_classes = [
+        permissions.AllowAny
+    ]
+    serializer_class = Professors_to_scenarioSerializer
+
 # Checked - Ed - 4/15/21
 #for getting/editing scenarios in dashboard
 class logistics_page(APIView):
@@ -409,14 +416,15 @@ class dashboard_page(APIView):
     def get(self, request, *args, **kwargs):
         
         #take professor_id as input from URL by adding ?professor=<the id #> to the end of the url.
-        PROFESSOR_id = self.request.query_params.get('PROFESSOR')
+        PROFESSOR_id = self.request.query_params.get('professor')
         #TODO check that id != none
         #get all scenarios belonging to this professor
-        scenario_query = scenarios.objects.filter(PROFESSOR = PROFESSOR_id).values()
+        scenario_query = PROFESSORS_TO_SCENARIO.objects.filter(PROFESSOR = PROFESSOR_id).values()
         #loop through scenarios and append required information (course, page info)
         logistics = []
+        print(scenario_query)
         for scenario in scenario_query:
-            scenarios_for_query = scenarios_for.objects.filter(SCENARIO = scenario['SCENARIO']).values()
+            scenarios_for_query = SCENARIOS_FOR.objects.filter(SCENARIO_ID = scenario['SCENARIO_id']).values()
             course_id_array = []
             for x in scenarios_for_query:
                 course_id_array.append(x['COURSE'])

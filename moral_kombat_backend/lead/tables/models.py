@@ -246,7 +246,7 @@ class PROFESSORS(models.Model):
 class PROFESSORS_TO_SCENARIO(models.Model):
     class Meta:
         unique_together = (('PROFESSOR'), ('SCENARIO'))
-    PROFESSOR = models.ForeignKey('PROFESSORS', to_field = 'PROFESSOR', on_delete = models.CASCADE, related_name="professors_to_scenario1", primary_key= True)
+    PROFESSOR = models.ForeignKey('PROFESSORS', to_field = 'PROFESSOR', on_delete = models.CASCADE, related_name="professors_to_scenario1", unique= True)
     SCENARIO = models.ForeignKey('SCENARIOS', to_field = 'SCENARIO_ID', on_delete = models.CASCADE, related_name="professors_to_scenario2")
     PERMISSION = models.IntegerField()
 

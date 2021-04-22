@@ -421,7 +421,7 @@ class get_student_results(APIView):
             AllResponses = Responses.objects.filter(student=student_id,scenario = scenario_id1) 
             stakeholderSet = set()
             for response in AllResponses:
-                response_id = response.response
+                response_id = response.response_id
                 responseToConvo = ResponsesToConversations.objects.filter(response=response_id).first()
                 if responseToConvo is not None:
                     stakeholderSet.add(responseToConvo.stakeholder.stakeholder)
@@ -429,7 +429,7 @@ class get_student_results(APIView):
                 coverages = Coverage.objects.filter(stakeholder=stakeholder)
                 for coverage in coverages:
                     if coverage is not None:
-                        issue_id = coverage.issue.issue
+                        issue_id = coverage.issue.name
                         coverage_score = coverage.coverage_score
                         mp[issue_id] = mp.get(issue_id, 0) + coverage_score
             return DRF_response(mp)

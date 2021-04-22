@@ -240,6 +240,7 @@ export default function QuestionFields({ qrs, stakeholder_id }) {
                         summary={data.SUMMARY}
                         QRs={QRs}
                         setQRs={setQRs}
+                        StakeHolders={StakeHolders}
                     />
                 ))}
             </form>

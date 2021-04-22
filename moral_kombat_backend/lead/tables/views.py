@@ -1076,7 +1076,7 @@ class stakeholders_page(APIView):
             stkholder['CONVERSATIONS'] = conList
 
             try: 
-                coverage_list = coverage.objects.filter(STAKEHOLDER=stakeholder_id).values()
+                coverage_list = COVERAGE.objects.filter(STAKEHOLDER=stakeholder_id).values()
             except coverage.DoesNotExist:
                 return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -1126,82 +1126,82 @@ class stakeholders_page(APIView):
 #             )
 #         '''
 
-#     def get(self, request, *args, **kwargs):
-#         '''
-#         return format
-#         [
-#             {
-#                 "STAKEHOLDER": 3,
-#                 "NAME": "Mon",
-#                 "DESCRIPTION": "This is Mon",
-#                 "JOB": "Driver",
-#                 "INTRODUCTION": "Mon is a driver",
-#                 "SCENARIO": 1,
-#                 "VERSION": 1,
-#                 "CONVERSATIONS": [
-#                     {
-#                         "CONVERSATION": 4,
-#                         "QUESTION": "Question 1",
-#                         "RESPONSE": "Answer 1",
-#                         "STAKEHOLDER": 3
-#                     }
-#                 ],
-#                 "ISSUES": [
-#                     {
-#                         "ISSUE": 4,
-#                         "NAME": "Issue 3",
-#                         "IMPORTANCE_SCORE": 10.0,
-#                         "SCENARIO": 1,
-#                         "VERSION": 1
-#                     }
-#                 ]
-#             },
-#         ]
-#         parse scenario_id and stakeholder_id from the request URL
-#         example
-#         http://127.0.0.1:8000/stakeholders?scenario_id=3
-#         http://127.0.0.1:8000/stakeholders?stakeholder_id=0
-#         '''
-#         SCENARIO_ID = self.request.query_params.get('scenario_id')
-#         STAKEHOLDER_ID = self.request.query_params.get('stakeholder_id')
-#         # STAKEHOLDER_ID = self.request.GET.get('stakeholder_id')
+    def get(self, request, *args, **kwargs):
+        '''
+        return format
+        [
+            {
+                "STAKEHOLDER": 3,
+                "NAME": "Mon",
+                "DESCRIPTION": "This is Mon",
+                "JOB": "Driver",
+                "INTRODUCTION": "Mon is a driver",
+                "SCENARIO": 1,
+                "VERSION": 1,
+                "CONVERSATIONS": [
+                    {
+                        "CONVERSATION": 4,
+                        "QUESTION": "Question 1",
+                        "RESPONSE": "Answer 1",
+                        "STAKEHOLDER": 3
+                    }
+                ],
+                "ISSUES": [
+                    {
+                        "ISSUE": 4,
+                        "NAME": "Issue 3",
+                        "IMPORTANCE_SCORE": 10.0,
+                        "SCENARIO": 1,
+                        "VERSION": 1
+                    }
+                ]
+            },
+        ]
+        parse scenario_id and stakeholder_id from the request URL
+        example
+        http://127.0.0.1:8000/stakeholders?scenario_id=3
+        http://127.0.0.1:8000/stakeholders?stakeholder_id=0
+        '''
+        SCENARIO_ID = self.request.query_params.get('scenario_id')
+        STAKEHOLDER_ID = self.request.query_params.get('stakeholder_id')
+        # STAKEHOLDER_ID = self.request.GET.get('stakeholder_id')
 
-#         # handle request for scenario_id
-#         # get all stakeholder in scenario with id = scenario_id
-#         if SCENARIO_ID != None:
-#             # checking valid scenario ID
-#             try:
-#                 # return empty if scenario doesn't have any stakeholder
-#                 # return list of stakeholder belong to that scenario
-#                 scenarios.objects.get(SCENARIO=SCENARIO_ID)
-#                 queryset = stakeholders.objects.filter(
-#                     SCENARIO=SCENARIO_ID)
-#                 data = list(StakeholdersSerializer(queryset, many=True).data)
-#                 data = self.add_detail(data)
-#                 return Response(data, status=status.HTTP_200_OK)
+        # handle request for scenario_id
+        # get all stakeholder in scenario with id = scenario_id
+        if SCENARIO_ID != None:
+            # checking valid scenario ID
+            try:
+                # return empty if scenario doesn't have any stakeholder
+                # return list of stakeholder belong to that scenario
+                SCENARIOS.objects.get(SCENARIO_ID = SCENARIO_ID)
+                queryset = STAKEHOLDERS.objects.filter(
+                    SCENARIO=SCENARIO_ID)
+                data = list(StakeholdersSerializer(queryset, many=True).data)
+                data = self.add_detail(data)
+                return Response(data, status=status.HTTP_200_OK)
 
-#             # return an error for non-existed scenario id
-#             except scenarios.DoesNotExist:
-#                 message = {'MESSAGE': 'INVALID SCENARIO ID'}
-#                 return Response(message, status=status.HTTP_404_NOT_FOUND)
+            # return an error for non-existed scenario id
+            except scenarios.DoesNotExist:
+                message = {'MESSAGE': 'INVALID SCENARIO ID'}
+                return Response(message, status=status.HTTP_404_NOT_FOUND)
 
-#         # handle request for stakeholder_id
-#         # get the stakeholder id = stakeholder_id
-#         if STAKEHOLDER_ID != None:
-#             try:
-#                 queryset = stakeholders.objects.filter(
-#                     STAKEHOLDER=STAKEHOLDER_ID)
-#                 data = list(StakeholdersSerializer(queryset, many=True).data)
-#                 data = self.add_detail(data)
-#                 return Response(data, status=status.HTTP_200_OK)
+        # handle request for stakeholder_id
+        # get the stakeholder id = stakeholder_id
+        if STAKEHOLDER_ID != None:
+            try:
+                queryset = STAKEHOLDERS.objects.filter(
+                    STAKEHOLDER=STAKEHOLDER_ID)
+                data = list(StakeholdersSerializer(queryset, many=True).data)
+                data = self.add_detail(data)
+                return Response(data, status=status.HTTP_200_OK)
 
-#             except stakeholders.DoesNotExist:
-#                 message = {'MESSAGE': 'INVALID STAKEHOLDER ID'}
-#                 return Response(message, status=status.HTTP_404_NOT_FOUND)
+            except stakeholders.DoesNotExist:
+                message = {'MESSAGE': 'INVALID STAKEHOLDER ID'}
+                return Response(message, status=status.HTTP_404_NOT_FOUND)
 
-#         queryset = stakeholders.objects.all()
-#         data = StakeholdersSerializer(queryset, many=True).data
-#         return Response(data, status=status.HTTP_200_OK)
+        queryset = STAKEHOLDERS.objects.all()
+        data = StakeholdersSerializer(queryset, many=True).data
+        return Response(data, status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
     
@@ -1212,7 +1212,7 @@ class stakeholders_page(APIView):
             stkholderid = serializer.data['STAKEHOLDER']
             scenarioid = serializer.data['SCENARIO']
             stkholderversion = serializer.data['VERSION']
-            queryset = ISSUES.objects.filter(SCENARIO=scenarioid)
+            queryset = ISSUES.objects.filter(SCENARIO_ID=scenarioid)
             data = IssuesSerializer(queryset, many=True).data
             for item in data:
                 itemdict = {}

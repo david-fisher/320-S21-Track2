@@ -53,5 +53,6 @@ urlpatterns = [
     path('get_issues/',views.get_Issues.as_view()),
     path('conversations_had/', views.response_to_conversations.as_view()), #for "response_to_conversations" endpoint
     path('reflection_response/', views.reflection.as_view()),
-    path('stakeholder_conv/', views.stakeholder_conv.as_view())
+    path('stakeholder_conv/', views.stakeholder_conv.as_view()),
+    path('action_response/', views.actions_responses.as_view())
 ]

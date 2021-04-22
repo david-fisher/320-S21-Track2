@@ -84,16 +84,49 @@ WSGI_APPLICATION = 'segfault.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': { 'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'backendtesting',
+#         'USER':'postgres',
+#         'PASSWORD':'Aa12345678',
+#         'HOST':'localhost',
+#         'PORT':'5432'
+#     }
+# }
 DATABASES = {
-    'default': { 'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'backend',
+    'default': {
+        # 'ENGINE': 'django.db.backends.sqlite3',
+        # 'NAME': BASE_DIR / 'db.sqlite3',
+
+        #  'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        #  'NAME': 'hkjdggmf',
+        #  'USER': 'hkjdggmf',
+        #  'PASSWORD': 'Siw8DtLM7Zg5FaP6lQbj9vyvuQ9C2ghB',
+        #  'HOST': 'queenie.db.elephantsql.com',
+        #  'PORT': '5432',
+
+        #  'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        #  'NAME': 'qelfnxes',
+        #  'USER': 'qelfnxes',
+        #  'PASSWORD': 'MV7YEGQjB5A9FijyB-IcUZ1wP9xSvxp-',
+        #  'HOST': 'queenie.db.elephantsql.com',
+        #  'PORT': '5432',
+
+        # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        # 'NAME': 'Zoomba',
+        # 'USER': 'backendboys',
+        # 'PASSWORD': 'youwishyouwerezoomba',
+        # 'HOST': 'zoomba@ethisim-db.cs.umass.edu',
+        # 'PORT': '5432'
+
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'backendtesting',
         'USER':'postgres',
-        'PASSWORD':'1481',
+        'PASSWORD':'Aa12345678',
         'HOST':'localhost',
         'PORT':'5432'
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators

@@ -119,7 +119,6 @@ DATABASES = {
     'default': {
         # 'ENGINE': 'django.db.backends.sqlite3',
         # 'NAME': BASE_DIR / 'db.sqlite3',
-
         #  'ENGINE': 'django.db.backends.postgresql_psycopg2',
         #  'NAME': 'hkjdggmf',
         #  'USER': 'hkjdggmf',
@@ -140,6 +139,7 @@ DATABASES = {
         # 'PASSWORD': 'youwishyouwerezoomba',
         # 'HOST': 'zoomba@ethisim-db.cs.umass.edu',
         # 'PORT': '5432'
+
     }
 }
 

@@ -105,7 +105,7 @@ TEMPLATES = [
 
 # don't change the ordering of these parameters, idk why but they seem to only work in this orientation
 CORS_ALLOW_CREDENTIALS = True
-CORS_ORIGIN_ALLOW_ALL = False # If this is used then `CORS_ORIGIN_WHITELIST` will not have any effect
+CORS_ORIGIN_ALLOW_ALL = True # If this is used then `CORS_ORIGIN_WHITELIST` will not have any effect
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000',
     f'http://{ORIGIN_HOST}:{ORIGIN_PORT}'

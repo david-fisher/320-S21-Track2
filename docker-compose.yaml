@@ -1,4 +1,4 @@
-version: "2.4"
+version: "3.8"
 
 services:
   backend:
@@ -51,10 +51,22 @@ services:
     networks:
       - default-net
 
+  shibboleth:
+    restart: always
+    container_name: shibd
+    environment: 
+      BUILDKIT_INLINE_CACHE: 1
+      DOCKER_IP: DOCKER_HOST
+    image: cs320track2/shibboleth
+    stdin_open: true
+    networks:
+      - default-net
+    command: bash -c "./etc/shibboleth/shib_start.sh"
+
 networks:
   default-net:
     driver: bridge
-
+    
 
 volumes:
   postgres_data:

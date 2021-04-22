@@ -14,7 +14,14 @@ export default function App() {
                 <Redirect to="/home" />
             </Route>
             <Route path="/home" component={Homepage} />
-            <Route path="/login" component={Login} />
+            <Route
+                path="/login"
+                component={() => {
+                    window.location.href =
+                        'https://ethisim2.cs.umass.edu/Shibboleth.sso/Login?target=https://ethisim2.cs.umass.edu/se/dashboard';
+                    return null;
+                }}
+            />
             <Route path="/signup" component={Signup} />
             <Route path="/dashboard" component={Dashboard} />
             <Route
@@ -25,3 +32,8 @@ export default function App() {
         </Router>
     );
 }
+//<Route path="/login" component={Login} />
+/*<Route path="/login" component={() => { 
+                window.location.href = 'https://ethisim2.cs.umass.edu/Shibboleth.sso/Login?target=https://ethisim2.cs.umass.edu/se/dashboard'; 
+                return null;
+            }}/>*/

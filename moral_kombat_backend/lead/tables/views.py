@@ -321,27 +321,15 @@ class logistics_page(APIView):
     def get(self, request, *args, **kwargs):
         
         #take professor_id as input from URL by adding ?professor_id=<the id #> to the end of the url.
-<<<<<<< HEAD
-        SCENARIO_id = self.request.query_params.get('scenario')
-        #TODO check that id != none
-        #get all scenarios belonging to this professor
-        # scenario_query = PROFESSORS_TO_SCENARIO.objects.filter(PROFESSOR = PROFESSOR_id).values()
-        scenario = SCENARIOS.objects.get(SCENARIO_ID = SCENARIO_id)
-        scenario_dict = ScenariosSerializer(scenario).data
-        #loop through scenarios and append required information (course, page info)
-        print(scenario_dict)
-        scenarios_for_query = SCENARIOS_FOR.objects.filter(SCENARIO=scenario_dict['SCENARIO']).values()
-=======
         SCENARIO_id = self.request.query_params.get('professor')
         #TODO check that id != none
         #get all scenarios belonging to this professor
         # scenario = SCENARIOS.objects.get(SCENARIO_ID = SCENARIO_id)
         # scenario_dict = ScenariosSerializer(scenario).data
-        scenario_query = PROFESSORS_TO_SCENARIO.objects.filter(PROFESSOR = PROFESSOR_id).values()
+        scenario_query = SCENARIOS.objects.filter(professors_to_scenario2 = PROFESSOR_id).values()
         #loop through scenarios and append required information (course, page info)
 
         scenarios_for_query = SCENARIOS_FOR.objects.filter(SCENARIO_ID=scenario_dict['SCENARIO_id']).values()
->>>>>>> c0e6c85d89e108bbb865b3ac9d3307b25061460a
         course_id_array = []
         for x in scenario_query:
             print(x)
@@ -352,11 +340,7 @@ class logistics_page(APIView):
             course = COURSES.objects.get(COURSE = x)
             course_dict_array.append({"COURSE":course.COURSE, "NAME": course.NAME})
                 
-<<<<<<< HEAD
-        pages_query = PAGES.objects.filter(SCENARIO=scenario_dict['SCENARIO']).values()
-=======
-        pages_query = PAGES.objects.filter(SCENARIO_ID=scenario_dict['SCENARIO_id']).values()
->>>>>>> c0e6c85d89e108bbb865b3ac9d3307b25061460a
+        pages_query = PAGES.objects.filter(SCENARIO_ID=scenario_dict['SCENARIO']).values()
         
         page_array = []
         for page in pages_query:

@@ -425,7 +425,6 @@ class get_student_results(APIView):
                 responseToConvo = ResponsesToConversations.objects.filter(response=response_id).first()
                 if responseToConvo is not None:
                     stakeholderSet.add(responseToConvo.stakeholder.stakeholder)
-            return DRF_response(stakeholderSet)
             for stakeholder in stakeholderSet:
                 coverages = Coverage.objects.filter(stakeholder=stakeholder)
                 for coverage in coverages:

@@ -405,6 +405,39 @@ class get_Issues(APIView):
         except Scenarios.DoesNotExist:
             return DRF_response(status=status.HTTP_404_NOT_FOUND)
 
+class get_student_results(APIView):
+
+    def get(self, request, format=None):
+        scenario_id1 = self.request.query_params.get('scenario_id')
+        student_id = self.request.query_params.get('student_id')
+        try:
+            scenario = Scenarios.objects.get(scenario_id=scenario_id1)
+        except Scenarios.DoesNotExist:
+            return DRF_response(status=status.HTTP_404_NOT_FOUND)
+        if(scenario_id1 == None):
+            return DRF_response(status=status.HTTP_400_BAD_REQUEST)
+        try:
+            mp= {}
+            AllResponses = Responses.objects.filter(student=student_id,scenario = scenario_id1) 
+            stakeholderSet = set()
+            for response in AllResponses:
+                response_id = response.response
+                responseToConvo = ResponsesToConversations.objects.filter(response=response_id).first()
+                if responseToConvo is not None:
+                    stakeholderSet.add(responseToConvo.stakeholder.stakeholder)
+            return DRF_response(stakeholderSet)
+            for stakeholder in stakeholderSet:
+                coverages = Coverage.objects.filter(stakeholder=stakeholder)
+                for coverage in coverages:
+                    if coverage is not None:
+                        issue_id = coverage.issue.issue
+                        coverage_score = coverage.coverage_score
+                        mp[issue_id] = mp.get(issue_id, 0) + coverage_score
+            return DRF_response(mp)
+        except Scenarios.DoesNotExist:
+            return DRF_response(status=status.HTTP_404_NOT_FOUND)
+
+
 
 class response_to_conversations(APIView):
     def get(self, request):

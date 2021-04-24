@@ -405,7 +405,7 @@ class get_Issues(APIView):
         except Scenarios.DoesNotExist:
             return DRF_response(status=status.HTTP_404_NOT_FOUND)
 
-class get_student_results(APIView):
+class issueScoreAggregateForStudent(APIView):
 
     def get(self, request, format=None):
         scenario_id1 = self.request.query_params.get('scenario_id')

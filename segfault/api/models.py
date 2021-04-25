@@ -212,14 +212,6 @@ class ReflectionsTaken(models.Model):
         db_table = 'reflections_taken'
 
 
-class ResponseToActionPage(models.Model):
-    response = models.ForeignKey('Responses', on_delete = models.CASCADE, )
-    action_page = models.ForeignKey(ActionPage, on_delete = models.CASCADE, db_column='action_page', )
-
-    class Meta:
-        db_table = 'response_to_action_page'
-
-
 class Responses(models.Model):
     response_id = models.AutoField(primary_key=True)
     response = models.IntegerField()
@@ -235,6 +227,12 @@ class Responses(models.Model):
         db_table = 'responses'
         unique_together = ('response', 'student', 'scenario', 'page', 'course', 'date_taken')
 
+class ResponseToActionPage(models.Model):
+    response = models.ForeignKey('Responses', on_delete = models.CASCADE, )
+    action_page = models.ForeignKey(ActionPage, on_delete = models.CASCADE, db_column='action_page', )
+
+    class Meta:
+        db_table = 'response_to_action_page'
 
 class ResponsesToConversations(models.Model):
     response = models.ForeignKey(Responses, on_delete = models.CASCADE)

@@ -405,6 +405,25 @@ class get_Issues(APIView):
         except Scenarios.DoesNotExist:
             return DRF_response(status=status.HTTP_404_NOT_FOUND)
 
+
+
+class issueRadarPlotTotal(APIView):
+
+    def get(self, request, format=None):
+        try:
+            AllCoverages = Coverage.objects.filter()
+        except Coverage.DoesNotExist:
+            return DRF_response(status=status.HTTP_404_NOT_FOUND) 
+        mp = {}
+        for coverage in AllCoverages:
+            issue = coverage.issue.name
+            score = coverage.coverage_score
+            mp[issue] = mp.get(issue, 0) + score
+        return DRF_response(mp)
+
+        
+
+
 class issueScoreAggregateForStudent(APIView):
 
     def get(self, request, format=None):

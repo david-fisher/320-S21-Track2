@@ -646,6 +646,29 @@ class stakeholder_conv(APIView):
             return DRF_response(status=status.HTTP_404_NOT_FOUND)
 
 class response_to_action_page(APIView):
+    def get(self, request, *args, **kwargs):
+        student_id = self.request.query_params.get('student_id')
+        page_id = self.request.query_params.get('page_id')
+
+        if(student_id is None or page_id is None):
+            return DRF_response({'detail': "Missing parameter: stakeholder_id"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            action_pages = ActionPage.objects.filter(page=page_id)
+            # return DRF_response({"detail": str(action_pages)}, status=status.HTTP_404_NOT_FOUND)
+            response = Responses.objects.filter(response = 0, student_id = student_id, page = page_id).first()
+            # return DRF_response({"detail": str(response)}, status=status.HTTP_404_NOT_FOUND)
+            for action_page in action_pages:
+                action_page_id = action_page.action_page_id
+                response_to_action = ResponseToActionPage.objects.filter(response=response, action_page=action_page_id)
+                if(len(response_to_action) > 0):
+                    action_page = ActionPage.objects.get(action_page_id = action_page_id)
+                    action_page_serializer = Action_pageSerializer(action_page)
+                    return DRF_response(action_page_serializer.data, status=status.HTTP_200_OK)
+            return DRF_response({"detail": "No action response entry found."}, status=status.HTTP_404_NOT_FOUND)
+        except:
+            return DRF_response({"detail": "unknown error"}, status=status.HTTP_404_NOT_FOUND)
+
     def put(self, request, *args, **kwargs):
         action_page_id0 = self.request.query_params.get('action_page_id') 
         student_id = self.request.query_params.get('student_id')
@@ -656,18 +679,19 @@ class response_to_action_page(APIView):
             return DRF_response({'detail': "Missing one or more parameters"}, status=status.HTTP_400_BAD_REQUEST)
         
         try:
-            action_page = ActionPage.objects.filter(action_page_id = action_page_id0)
+            action_page = ActionPage.objects.get(action_page_id = action_page_id0)
         except ActionPage.DoesNotExist:
-            return DRF_response(status=status.HTTP_404_NOT_FOUND)
+            return DRF_response({"detail": "action id not found"}, status=status.HTTP_404_NOT_FOUND)
            
         try:
-            response0 = Responses.objects.filter(scenario = scenario_id, student = student_id, course = course_id).first()
+            response0 = Responses.objects.get(response=0, scenario = scenario_id, student = student_id, course = course_id, page=action_page.page)
+            responseSerializer = ResponseSerializer(response0)
         except Responses.DoesNotExist:
             response0 = {
                     "response": 0,
                     "student": student_id,
                     "scenario": scenario_id,
-                    "page": action_page.page,
+                    "page": action_page.page.id,
                     "version": 0,
                     "course": course_id,
                     "choice": str(action_page_id0)
@@ -678,11 +702,9 @@ class response_to_action_page(APIView):
                 return DRF_response(responseSerializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
             responseSerializer.save()
-        
-            response0 = Responses.objects.filter(scenario = scenario_id, student = student_id, course = course_id)
 
         resp_to_action = {
-                "response": response0.response_id,
+                "response": responseSerializer.data['response_id'],
                 "action_page": action_page_id0
             }
            

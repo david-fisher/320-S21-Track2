@@ -233,6 +233,7 @@ class ResponseToActionPage(models.Model):
 
     class Meta:
         db_table = 'response_to_action_page'
+        unique_together = ('response', 'action_page')
 
 class ResponsesToConversations(models.Model):
     response = models.ForeignKey(Responses, on_delete = models.CASCADE)

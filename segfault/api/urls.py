@@ -54,8 +54,7 @@ urlpatterns = [
     path('get_issuesScores/', views.issueScoreAggregateForStudent.as_view()),
     path('get_issueRadarPlotTotal/', views.issueRadarPlotTotal.as_view()),
     path('conversations_had/', views.response_to_conversations.as_view()), #for "response_to_conversations" endpoint
-    path('student_results/', views.get_student_results.as_view()),
     path('reflection_response/', views.reflection.as_view()),
     path('stakeholder_conv/', views.stakeholder_conv.as_view()),
-    path('response_to_action_page_endpoint/', views.response_to_action_page.as_view()) #for "response_to_action_page" get and put endpoints
+    path('action_response/', views.response_to_action_page.as_view()) #for "response_to_action_page" get and put endpoints
 ]

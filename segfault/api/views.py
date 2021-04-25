@@ -410,18 +410,26 @@ class get_Issues(APIView):
 class issueRadarPlotTotal(APIView):
 
     def get(self, request, format=None):
+        scenario_id = self.request.query_params.get('scenario_id')
         try:
-            AllCoverages = Coverage.objects.filter()
-        except Coverage.DoesNotExist:
+            scenario = Scenarios.objects.get(scenario_id=scenario_id)
+        except Scenarios.DoesNotExist:
             return DRF_response(status=status.HTTP_404_NOT_FOUND) 
-        mp = {}
-        for coverage in AllCoverages:
-            issue = coverage.issue.name
-            score = coverage.coverage_score
-            mp[issue] = mp.get(issue, 0) + score
-        return DRF_response(mp)
 
-        
+        mp = {}
+        try:
+            stakeholder_list = Stakeholders.objects.filter(scenario = scenario_id)
+            for stakeholder in stakeholder_list:
+                stakeholder_id = stakeholder.id
+                all_coverages = Coverage.objects.filter(stakeholder = stakeholder_id)
+                for coverage in all_coverages:
+                    issue = coverage.issue.name
+                    score = coverage.coverage_score
+                    mp[issue] = mp.get(issue, 0) + score
+
+            return DRF_response(mp, status=status.HTTP_200_OK)
+        except:
+            return DRF_response(status=status.HTTP_400_BAD_REQUEST)
 
 
 class issueScoreAggregateForStudent(APIView):

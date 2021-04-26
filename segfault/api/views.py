@@ -37,7 +37,6 @@ class StudentViewSet(viewsets.ModelViewSet):
                 raise Http404
         except:
             raise Http404
-    
 
 
 class DemographicViewSet(viewsets.ModelViewSet):
@@ -621,20 +620,53 @@ class reflection(APIView):
             return DRF_response({'detail': "Missing one or more parameters"}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            response = Responses.objects.get(page= page_id, student = student_id, scenario = scenario_id)
+            response = Responses.objects.filter(page= page_id, student = student_id, scenario = scenario_id).first()
+            if response is not None:
+                ref = ReflectionsTaken.objects.filter(response = response.response_id).first()
+                if ref is not None:
+                    ref.reflections = reflections
+                    serializer = ReflectionsTakenSerializer(ref)
+                    ref.save()
+                    return DRF_response(serializer.data)
+        
+                return self.post(request)
         except Responses.DoesNotExist:
             return DRF_response(status=status.HTTP_404_NOT_FOUND)
-        
-        try:
-            ref = ReflectionsTaken.objects.filter(response = response.response_id).first()
-            ref.reflections = reflections
-           
-            serializer = ReflectionsTakenSerializer(ref)
-            ref.save()
-            return DRF_response(serializer.data)
-           
         except:
-            return DRF_response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return DRF_response(status=status.HTTP_400_BAD_REQUEST)
+            """       
+            if response is None:
+                serializer = ResponseSerializer(data=request.data)
+                    if serializer.is_valid():
+                        serializer.save()
+                response = Responses.objects.filter(page= page_id, student = student_id, scenario = scenario_id).first()
+            ReflectionsTaken.objects.create(response=response,reflection=reflections)
+            ref = ReflectionsTaken.objects.filter(response = response.response_id).first()
+            serializer = ReflectionsTakenSerializer(ref)
+            return DRF_response(serializer.data)
+            """
+
+    def post(self, request):
+        page_id = self.request.query_params.get('page_id') 
+        student_id = self.request.query_params.get('student_id')
+        scenario_id = self.request.query_params.get('scenario_id')
+        reflections = self.request.query_params.get('reflections')
+        serializer = ResponseSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+        else:
+            return DRF_response(status=status.HTTP_400_BAD_REQUEST)
+        response = Responses.objects.filter(page= page_id, student = student_id, scenario = scenario_id).first()
+        newref={
+                "response":response,
+                "reflections":reflections
+            }
+        serializer = ReflectionsTakenSerializer(data=newref)
+        if serializer.is_valid():
+            serializer.save()
+            return DRF_response(serializer.data)
+        return DRF_response(status=status.HTTP_400_BAD_REQUEST)
+
 
 class stakeholder_conv(APIView):
     def get(self, request, *args, **kwargs):

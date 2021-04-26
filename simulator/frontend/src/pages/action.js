@@ -42,7 +42,6 @@ function Action(props) {
   const [scenarios, setScenarios] = React.useContext(ScenariosContext);
 
   const [actionChoices, setActionChoices] = React.useState([]);
-  console.log(props.changePage)
   // useEffect (() => {
   //   fetch(BASE_URL + '/action_page/')
   //   .then(res => res.json())
@@ -142,7 +141,7 @@ function Action(props) {
           <HTMLRenderer html={props.content}/>
         </Grid>
         <Grid item lg={12}>
-          <Checkbox pageNumber={props.pageNumber} changePage={props.changePage} pageId={props.id}/> 
+          <Checkbox activePage={props.activePage} pageNumber={props.pageNumber} changePage={props.changePage} pageId={props.id}/> 
         </Grid>
       </Grid>
     </div>

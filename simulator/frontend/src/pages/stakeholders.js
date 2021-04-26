@@ -158,7 +158,7 @@ function Stakeholders(props) {
   }, [scenarios]);
  
 
-  function getStakeholderCards(id, name, designation, description, styles) {
+  function getStakeholderCards(id, name, isMultipart, designation, description, styles) {
     const PAGE_ID_OF_PAGE_BEFORE_CONVERSATIONS = 'gatheredInformation';
 
     function toggleModal(id, toggle) {
@@ -206,15 +206,17 @@ function Stakeholders(props) {
                   <Button variant="contained" onClick={() => {
                       setCurrentStakeholder(prev => ({
                         name: name,
-                        id: id
+                        id: id,
+                        isMultipart: isMultipart
                       }));
                       setStakeholdersDisabled(prev => {
                         let newStakeholdersDisabled = {...prev};
-                        if (numStakeholderTalkedTo + 1 >= context.convLimit) {
+                        if (numStakeholderTalkedTo + 1 > context.state.convLimit) {
                           for (const id in newStakeholdersDisabled) {
                             newStakeholdersDisabled[id] = true;
                           }
-                        }else {
+                        } else {
+                          console.log(id);
                           newStakeholdersDisabled[id] = true;
                         }
                         return newStakeholdersDisabled;
@@ -222,28 +224,28 @@ function Stakeholders(props) {
                       setNumStakeholderTalkedTo(prev => {
                         return (prev + 1)
                       });
-                      axios({
-                        method: 'put',
-                        url: BASE_URL + '/scenarios/stakeholders',
-                        data: {
-                          scenarioID: scenarios.currentScenarioID,
-                          studentID: STUDENT_ID,
-                          stakeholderID: id
-                        }
-                      }).catch(err => {
-                        console.error(err);
-                        alert(err);
-                      })
+                      // axios({
+                      //   method: 'put',
+                      //   url: BASE_URL + '/scenarios/stakeholders',
+                      //   data: {
+                      //     scenarioID: scenarios.currentScenarioID,
+                      //     studentID: STUDENT_ID,
+                      //     stakeholderID: id
+                      //   }
+                      // }).catch(err => {
+                      //   console.error(err);
+                      //   alert(err);
+                      // })
                       setShowStakeholders(false);
                       toggleModal(id, false);
-                      setGatheredInfo(infos => {
-                        let ind = infos.findIndex(info => info.pageId === PAGE_ID_OF_PAGE_BEFORE_CONVERSATIONS);
-                        if (ind < 0) { ind = infos.length; }
-                        let newInfos = [...infos];
-                        newInfos.splice(ind, 0,
-                          { name: name, id: `stakeholder:${id}`, pageId: 'stakeholders'});
-                        return newInfos;
-                      });
+                      // setGatheredInfo(infos => {
+                      //   let ind = infos.findIndex(info => info.pageId === PAGE_ID_OF_PAGE_BEFORE_CONVERSATIONS);
+                      //   if (ind < 0) { ind = infos.length; }
+                      //   let newInfos = [...infos];
+                      //   newInfos.splice(ind, 0,
+                      //     { name: name, id: `stakeholder:${id}`, pageId: 'stakeholders'});
+                      //   return newInfos;
+                      // });
                 }}>Continue
               </Button> )}
             </ConvLimitConsumer>
@@ -255,7 +257,7 @@ function Stakeholders(props) {
 
   function getStakeholdersGrid(stakeholders) {
     let items = stakeholders.map(stakeholder => getStakeholderCards(
-      stakeholder.id, stakeholder.name, stakeholder.designation, stakeholder.description, createdCardStyles));
+      stakeholder.id, stakeholder.name, stakeholder.enable_multi_convo, stakeholder.designation, stakeholder.description, createdCardStyles));
     return (
       <div>
         <Grid container spacing={3} justify={'center'}>
@@ -271,28 +273,35 @@ function Stakeholders(props) {
 
   return (
     <div id="stakeholders">
-      <Box mt={5}>
-        <TextTypography variant="h4" align="center" gutterBottom>
-          {props.title}
-        </TextTypography>
-      </Box>
-      <Grid container spacing={2}>
-      <Grid item lg={12} md={12} sm={12}>
-        <Box m="1rem" align={'center'}>
-          <ConvLimitConsumer>
-            {(context) => (
-              <TextTypography>
-                You've spoken to <b>{numStakeholderTalkedTo} out of {context.state.convLimit}</b> stakeholders
-              </TextTypography>
-            )}
-          </ConvLimitConsumer>
-        </Box>
-        <TextTypography variant="body1" align="center">
-          {props.content}
-        </TextTypography>
-      </Grid>
-        {stakeholdersGrid}
-      </Grid>
+      {showStakeholders &&
+        <div id="stakeholder_cards">
+          <Box mt={5}>
+            <TextTypography variant="h4" align="center" gutterBottom>
+              {props.title}
+            </TextTypography>
+          </Box>
+          <Grid container spacing={2}>
+          <Grid item lg={12} md={12} sm={12}>
+            <Box m="1rem" align={'center'}>
+              <ConvLimitConsumer>
+                {(context) => (
+                  <TextTypography>
+                    You've spoken to <b>{numStakeholderTalkedTo} out of {context.state.convLimit}</b> stakeholders
+                  </TextTypography>
+                )}
+              </ConvLimitConsumer>
+            </Box>
+            <TextTypography variant="body1" align="center">
+              {props.content}
+            </TextTypography>
+          </Grid>
+            {stakeholdersGrid}
+          </Grid>
+        </div>
+      }
+      {!showStakeholders &&
+        <Conversation stakeholder={currentStakeholder} showStakeholders={showStakeholders} setShowStakeholders={setShowStakeholders} />
+      }
     </div>
   );
 

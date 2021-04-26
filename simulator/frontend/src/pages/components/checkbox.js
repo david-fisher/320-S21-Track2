@@ -11,6 +11,7 @@ import SpecialButton from "./SpecialButton"
 import { BASE_URL, STUDENT_ID, SCENARIO_ID } from "../../constants/config";
 import axios from 'axios';
 import { ScenariosContext } from "../../Nav";
+import { PageContext } from '../simulator_window';
 import { TrainOutlined, TrainRounded } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
@@ -34,20 +35,18 @@ export default function ErrorRadios(props)
   const [choices, setChoices] = React.useState([]);
 
   useEffect (() => {
-    fetch(`${BASE_URL}/get_page_info?page_id=${props.page_id}`)
+    fetch(`${BASE_URL}/get_page_info/?page_id=${props.pageId}`)
     .then(res => res.json())
     .then(actionData => {
       let actionChoices = []
       
-      actionData.results.filter(element => element.page === props.pageNumber).
-      forEach(element => {
+      actionData.body.forEach(element => {
         let choice = {
           text: element.choice,
           result_page: element.result_page
         }
         actionChoices.push(choice)
       });
-      console.log(actionChoices)
       setChoices(actionChoices)
     })
   }, [])
@@ -60,11 +59,14 @@ export default function ErrorRadios(props)
 
   const handleSubmit = (event) => {
     console.log("CLICKED")
+    console.log(event);
     event.preventDefault();
     if (value !== '') {
       setHelperText('Good Answer!');
       setError(true);
-      props.changePage(choices.filter(choice => choice.text === value)[0].result_page)
+      const resultPage = choices.filter(choice => choice.text === value)[0].result_page;
+      event.update(props.activePage, resultPage);
+      props.changePage(resultPage);
     } else {
       console.log("FAIL TO GO TO NEXT PAGE")
       setHelperText('Please select an option.');
@@ -123,20 +125,38 @@ export default function ErrorRadios(props)
   // getNextPageTitle(props);
 
   return (
-    <form onSubmit={handleSubmit}>
-      <FormControl component="fieldset" error={error} className={classes.formControl}>
-        <RadioGroup aria-label="quiz" name="quiz" value={value} onChange={handleRadioChange}>
-          {choices.map((choice, index) => (
-              <FormControlLabel value={choice.text} key={index} control={<Radio />} label={choice.text} />
-            ))
+    <PageContext.Consumer>
+      {(context) => (
+        <form onSubmit={(event) => {
+          console.log("CLICKED");
+          event.preventDefault();
+          if (value !== '') {
+            setHelperText('Good Answer!');
+            setError(true);
+            const resultPage = choices.filter(choice => choice.text === value)[0].result_page;
+            context.update(resultPage);
+            props.changePage(resultPage);
+          } else {
+            console.log("FAIL TO GO TO NEXT PAGE")
+            setHelperText('Please select an option.');
+            setError(true);
           }
-        </RadioGroup>
-        <FormHelperText>{helperText}</FormHelperText>
-        <Box width={100}>
-          <SpecialButton type="save" title={nextPageTitle}></SpecialButton>
-        </Box>
-      </FormControl>
-    </form>
+        }}>
+          <FormControl component="fieldset" error={error} className={classes.formControl}>
+            <RadioGroup aria-label="quiz" name="quiz" value={value} onChange={handleRadioChange}>
+              {choices.map((choice, index) => (
+                  <FormControlLabel value={choice.text} key={index} control={<Radio />} label={choice.text} />
+                ))
+              }
+            </RadioGroup>
+            <FormHelperText>{helperText}</FormHelperText>
+            <Box width={100}>
+              <SpecialButton type="save" title={nextPageTitle}></SpecialButton>
+            </Box>
+          </FormControl>
+        </form>
+      )}
+    </PageContext.Consumer>
   );
 }
 

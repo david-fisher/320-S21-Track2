@@ -112,25 +112,25 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 IssueMatrix.propTypes = {
-    stakeHolders: PropTypes.any,
-    setStakeHolders: PropTypes.any,
+    scenario_stakeHolders: PropTypes.any,
     scenario: PropTypes.number,
+    //onChangeStakeholders: PropTypes.any.isRequired,
 };
 
 //Needs scenario id
 const endpointGET = '/student_info?scenario_id=';
 
-export default function IssueMatrix({ scenario }) {
+export default function IssueMatrix({ scenario_stakeHolders, scenario }) {
     //receives the scenario ID
     const classes = useStyles();
 
     const [didGetSHs, setDidGetSHs] = useState(false); //stores status of whether stakeholders have been received
     const stakeHolders = useRef(null);
+    //stakeHolders.current = scenario_stakeHolders;
     const [cols, setColumns] = useState([]);
     const [rows, setRows] = useState([]);
     const [issueSums, setSums] = useState([]);
 
-    const [didGetIssues, setDidGetIssues] = useState(false);
     const [didSetData, setDidSetData] = useState(false);
 
     const [isLoading, setLoading] = useState(false); //stores status of whether something is loading
@@ -140,26 +140,50 @@ export default function IssueMatrix({ scenario }) {
     const [successBannerFade, setSuccessBannerFade] = useState(false);
 
     useEffect(() => {
-        stakeHolders.current = [];
+        stakeHolders.current = scenario_stakeHolders;
     }, []);
 
     useEffect(() => {
-        if (didGetSHs && didSetData) {
+        if (
+            stakeHolders.current !== undefined &&
+            stakeHolders.current.length > 0 &&
+            didSetData &&
+            rows.length === stakeHolders.current.length
+        ) {
             onStakeHolderIssueChange();
+            //getExistingStakeHolders();
         }
     }, [rows]);
 
     useEffect(() => {
-        if (didGetSHs) {
+        if (
+            stakeHolders.current !== undefined &&
+            stakeHolders.current.length > 0
+        ) {
+            setColData();
+            setRowData();
+            setDidSetData(true);
+        }
+    }, [stakeHolders.current]);
+
+    /*useEffect(() => {
+        /*if (didGetSHs) {
             setTimeout(() => {
                 if (stakeHolders.current.length > 0) {
                     setDidSetData(true);
                     setColData();
                     setRowData();
                 }
-            }, 2000);
+           
         }
-    }, [stakeHolders]);
+        //if (stakeHolders.current.length > 0) {
+        setTimeout(() => {
+            setDidSetData(true);
+            setColData();
+            setRowData();
+        }, 2000);
+        //}
+    }, [stakeHolders]);*/
 
     //let issuePromises = [];
 
@@ -183,35 +207,6 @@ export default function IssueMatrix({ scenario }) {
 
         return () => clearTimeout(timeout);
     }, [errorBannerFade]);
-
-    function getExistingStakeHolders() {
-        //setLoading(true); //starts loading icon
-
-        var data = { SCENARIO: { scenario } };
-        var config = {
-            method: 'get',
-            url: baseURL + '/stakeholder?scenario_id=' + scenario,
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            data: data,
-        };
-
-        axios(config) //backend call to get data in response
-            .then(function (response) {
-                stakeHolders.current = stakeHolders.current.concat(
-                    response.data
-                );
-            })
-            .catch(function (error) {
-                setErrorBannerMessage(
-                    'Failed to get Stakeholders! Please try again.'
-                );
-                setErrorBannerFade(true);
-            });
-        setDidGetSHs(true);
-        setLoading(false);
-    }
 
     function saveStakeHolders() {
         setLoading(true);
@@ -259,6 +254,7 @@ export default function IssueMatrix({ scenario }) {
                     setSuccessBannerMessage(
                         'Successfully saved the issues for this stakeholder!'
                     );
+                    setLoading(false);
                     setSuccessBannerFade(true);
                 })
                 .catch(function (error) {
@@ -268,10 +264,12 @@ export default function IssueMatrix({ scenario }) {
                     setErrorBannerFade(true);
                 });
         }
+        //this.props.onChange(stakeHolders.current);
         setLoading(false);
     }
 
     function setColData() {
+        setLoading(true);
         let cols = [
             { title: 'Name', field: 'NAME' },
             { title: 'Description', field: 'DESCRIPTION' },
@@ -292,7 +290,9 @@ export default function IssueMatrix({ scenario }) {
             }
         });
         setColumns(cols);
+        setLoading(false);
     }
+
     function onStakeHolderIssueChange() {
         let sums = { NAME: '', DESCRIPTION: 'Running Issue Sums' };
         for (let j = 0; j < stakeHolders.current.length; j++) {
@@ -331,16 +331,73 @@ export default function IssueMatrix({ scenario }) {
         });
         setSums(sums);
         setRows(data);
+        setLoading(false);
+    }
+
+    function deleteStakeHolder(index) {
+        setLoading(true);
+
+        var deletedStakeHolder = stakeHolders.current[index];
+        //var index;
+        /*for (let i = 0; i < stakeHolders.current.length; i++) {
+            let curStakeHolder = stakeHolders.current[i];
+            curStakeHolder.ISSUES.forEach((issue) => {
+                rows.forEach((curRow) => {
+                    if (
+                        curRow['Issue' + issue.NAME.toUpperCase()] == undefined
+                    ) {
+                        deletedStakeHolder = curStakeHolder;
+                        index = i;
+                    }
+                });
+            });
+        }*/
+
+        if (deletedStakeHolder !== undefined) {
+            stakeHolders.current.splice(index, 1);
+            var data = JSON.stringify({});
+
+            var config = {
+                method: 'delete',
+                url:
+                    baseURL +
+                    '/api/stakeholders/' +
+                    deletedStakeHolder.STAKEHOLDER +
+                    '/',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                data: data,
+            };
+
+            axios(config)
+                .then(function (response) {
+                    setSuccessBannerMessage(
+                        'Successfully deleted the stakeholder!'
+                    );
+                    //onChangeStakeHolders();
+                    setSuccessBannerFade(true);
+                })
+                .catch(function (error) {
+                    setErrorBannerMessage(
+                        'Failed to delete the stakeholder! Please try again.'
+                    );
+                    setErrorBannerFade(true);
+                });
+            //this.props.onStakeHolderChange(stakeHolders.current);
+        }
+        setLoading(false);
     }
 
     if (isLoading) {
         return <LoadingSpinner />;
     }
 
-    if (!didGetSHs) {
+    /*if (!didSetData && stakeHolders.current !== undefined && stakeHolders.current.length > 0) {
         //if stakeholders have alreasdy been loaded, don't do it again
-        getExistingStakeHolders();
-    }
+        setColData()
+        setRowData()
+    }*/
     /*if (didGetSHs && !didGetIssues) {
         setDidGetIssues(true);
         //getIssues();
@@ -385,11 +442,11 @@ export default function IssueMatrix({ scenario }) {
                     onRowDelete: (oldData) =>
                         new Promise((resolve, reject) => {
                             setTimeout(() => {
-                                /*const dataDelete = [...data];
+                                const dataDelete = [...rows];
                                 const index = oldData.tableData.id;
                                 dataDelete.splice(index, 1);
-                                setData([...dataDelete]);*/
-
+                                setRows([...dataDelete]);
+                                deleteStakeHolder(index);
                                 resolve();
                             }, 1000);
                         }),

@@ -28,7 +28,6 @@ export default function Title(props) {
 
     return (
         <div className={classes.root}>
-            <Typography variant="h4">Scenario Page Name</Typography>
             {error ? (
                 <TextField
                     error

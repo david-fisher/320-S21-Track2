@@ -15,19 +15,21 @@ const useStyles = makeStyles((theme) => ({
     button: {
         margin: theme.spacing(1),
         marginTop: theme.spacing(1),
-        //textTransform: 'unset',
+        textTransform: 'unset',
     },
 }));
 
 IssueEntryFieldList.propTypes = {
     issueEntryFieldList: PropTypes.any.isRequired,
     setIssueEntryFieldList: PropTypes.any.isRequired,
+    scenario_stakeHolders: PropTypes.any,
     scenarioID: PropTypes.number,
 };
 
 export default function IssueEntryFieldList({
     issueEntryFieldList,
     setIssueEntryFieldList,
+    scenario_stakeHolders,
     scenarioID,
 }) {
     const classes = useStyles();
@@ -119,6 +121,7 @@ export default function IssueEntryFieldList({
                         score={entry.IMPORTANCE_SCORE}
                         setIssueEntryFieldList={setIssueEntryFieldList}
                         issueEntryFieldList={issueEntryFieldList}
+                        stakeHolders={scenario_stakeHolders}
                         entry={entry}
                         setSuccessBannerFade={setSuccessBannerFade}
                         setSuccessBannerMessage={setSuccessBannerMessage}

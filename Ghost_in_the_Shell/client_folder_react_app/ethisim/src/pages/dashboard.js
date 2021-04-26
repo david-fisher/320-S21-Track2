@@ -59,7 +59,8 @@ const useStyles = makeStyles((theme) => ({
         fontSize: '30px',
     },
     border: {
-        borderStyle: 'none none solid none',
+        //borderStyle: 'none none solid none',
+        marginTop: theme.spacing(2),
         marginBottom: theme.spacing(2),
     },
 }));
@@ -475,7 +476,9 @@ export default function Dashboard() {
                     errorMessage={errorBannerMessage}
                 />
                 <div className={classes.border}>
-                    <Typography variant="h3">Unfinished Scenarios</Typography>
+                    <Typography variant="h3">
+                        Scenarios In Development
+                    </Typography>
                 </div>
                 <Grid
                     container
@@ -488,7 +491,7 @@ export default function Dashboard() {
                     <AddNewScenarioCard onClick={handleClickOpen} />
                 </Grid>
                 <div className={classes.border}>
-                    <Typography variant="h3">Finished Scenarios</Typography>
+                    <Typography variant="h3">Published Scenarios</Typography>
                 </div>
                 <Grid
                     container
@@ -567,7 +570,7 @@ export default function Dashboard() {
                                         color="primary"
                                     />
                                 }
-                                label="Public"
+                                label="Make Public"
                                 labelPlacement="start"
                             />
                         </form>

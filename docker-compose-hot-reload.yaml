@@ -1,4 +1,6 @@
+
 version: "3.8"
+
 
 services:
   backend:
@@ -7,7 +9,9 @@ services:
     volumes:
       - ./moral_kombat_backend:/app/api
     environment:
+
       CHOKIDAR_USEPOLLING: "true" 
+
     build:
       context: ./database/
       dockerfile: Dockerfile
@@ -36,6 +40,7 @@ services:
       dockerfile: Dockerfile
       cache_from:
       - cs320track2/frontend:latest
+
   shibboleth:
     environment: 
       CHOKIDAR_USEPOLLING: "true"
@@ -46,3 +51,4 @@ services:
       dockerfile: Dockerfile
       cache_From:
       - cs320track2/shibboleth:latest
+

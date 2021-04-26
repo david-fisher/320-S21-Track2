@@ -1,4 +1,7 @@
+
 version: "3.8"
+
+
 
 services:
   backend:
@@ -51,6 +54,7 @@ services:
     networks:
       - default-net
 
+
   shibboleth:
     restart: always
     container_name: shibd
@@ -67,6 +71,7 @@ networks:
   default-net:
     driver: bridge
     
+
 
 volumes:
   postgres_data:

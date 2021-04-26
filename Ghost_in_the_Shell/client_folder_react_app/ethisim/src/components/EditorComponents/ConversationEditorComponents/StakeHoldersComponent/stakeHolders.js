@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import StakeHolder from './stakeHolder';
-import Button from '@material-ui/core/Button';
+import { Grid, Button } from '@material-ui/core';
 import './stakeHolders.css';
 import PropTypes from 'prop-types';
 import SuccessBanner from './../../../Banners/SuccessBanner';
 import ErrorBanner from './../../../Banners/ErrorBanner';
 import LoadingSpinner from './../../../LoadingSpinner';
 import { baseURL } from './../../../../Constants/Config';
+import HelpIcon from '@material-ui/icons/Help';
+import GenericInfoButton from '../../../InfoButtons/GenericInfoButton';
 
 StakeHolderFields.propTypes = {
     stakeHolders: PropTypes.any,
@@ -32,6 +34,12 @@ export default function StakeHolderFields({ scenario }) {
     //for success and error banners
     const [successBannerMessage, setSuccessBannerMessage] = useState('');
     const [successBannerFade, setSuccessBannerFade] = useState(false);
+
+    //for info button
+    const [openHelp, setOpenHelp] = React.useState(false);
+    const handleClickOpenHelp = () => {
+        setOpenHelp(true);
+    };
 
     useEffect(() => {
         const timeout = setTimeout(() => {
@@ -232,13 +240,33 @@ export default function StakeHolderFields({ scenario }) {
 
     return (
         <div className="stakeHolders">
+            <Grid container justify="flex-end">
+                <Button color="primary" onClick={handleClickOpenHelp}>
+                    <HelpIcon />
+                </Button>
+                <GenericInfoButton
+                    description={`On this page you will add stakeholders that your students will converse with as they go through the simulation. 
+                    You may create as many stakeholders as you deem necessary. However, students will only be allowed to converse with the number of stakeholders you specified on the Logistics page. 
+                    As each of these stakeholders are added in the Conversation Editor page, a new line is automatically added to the Issue-Coverage Matrix. 
+                    Each stakeholder has a biography and main conversation. Click “View Questions” to add questions, stakeholder responses, and a short summary. 
+                    You can also enable multi-part conversations from within the questions popup window. In doing so, you will make it so that users have the option to view only the questions they select during the simulation instead of seeing everything at once after clicking on a stakeholder. 
+                    When multi-part conversations are enabled, you must assign the stakeholder issue points to each question to represent what aspects of the scenario they focus on. From this page, you can also adjust the overall issue scores associated with each individual by clicking on each stakeholder’s point selection button. 
+                    These values will be used during the simulation if multi-part conversations are not enabled for the individual stakeholder. 
+                    Click “Save Stakeholder Changes” before leaving the page to save any changes you make. Example Stakeholder:
+                    Transgender athlete: A transgender athlete is worried about this software’s implications, since it can result in a disadvantage in their career, possible career loss, monetary loss, and tarnished reputation. 
+                    `}
+                    open={openHelp}
+                    setOpen={setOpenHelp}
+                />
+            </Grid>
             <Button
                 id="button"
                 onClick={addStakeHolder}
                 variant="contained"
                 color="primary"
+                //style={{ textTransform: 'unset' }}
             >
-                Add Stake Holder
+                Add Stakeholder
             </Button>
 
             <form id="form">
@@ -262,6 +290,7 @@ export default function StakeHolderFields({ scenario }) {
                     variant="contained"
                     color="primary"
                     onClick={saveStakeHolders}
+                    //style={{ textTransform: 'unset' }}
                 >
                     Save Stakeholder Changes
                 </Button>

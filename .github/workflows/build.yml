@@ -10,6 +10,8 @@ on:
 jobs:
   build:
     runs-on: self-hosted
+    env:
+      CI: false
     strategy:
       matrix:
         node-version: [15.x]

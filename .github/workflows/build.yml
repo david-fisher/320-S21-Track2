@@ -27,7 +27,12 @@ jobs:
       - name: Build Simulator
         working-directory: ./simulator/frontend/
         run: yarn install && yarn run build
-      - name: Copy build
+      - name: Copy build to workspace apache
         run: |
           cp -r ./Ghost_in_the_Shell/client_folder_react_app/ethisim/build ./apache/build/se
           cp -r ./simulator/frontend/build ./apache/build/simulator
+      - run: rm -rf /ethisim/apache/* || rm -rf /home/mobydock/ethisim/apache/*
+      - name: Copy local to root
+        run: |
+          cp -r ./apache /ethisim/apache
+          cp -r ./apache /home/mobydock/ethisim/apache

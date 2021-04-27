@@ -296,7 +296,27 @@ class IssuesViewSet(viewsets.ModelViewSet):
         serializer = IssuesSerializer(data=request.data)
 
         if serializer.is_valid():
+
             serializer.save()
+
+            scenarioID = serializer.data['SCENARIO_ID']
+            issueID = serializer.data['ISSUE']
+
+            stakeholders = STAKEHOLDERS.objects.filter(SCENARIO=scenarioID).values()
+
+            for stakeholder in stakeholders:
+                newCoverage = {}
+                newCoverage['STAKEHOLDER'] = stakeholder['STAKEHOLDER']
+                newCoverage['STAKEHOLDER_VERSION'] = stakeholder['VERSION']
+                newCoverage['ISSUE'] = issueID
+                newCoverage['COVERAGE_SCORE'] = 0
+
+                coverageSerial = coverageSerializer(data=newCoverage)
+                if coverageSerial.is_valid():
+                    coverageSerial.save()
+                else:
+                    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

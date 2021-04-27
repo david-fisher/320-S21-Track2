@@ -23,6 +23,10 @@
 hs_err_pid*
 
 # python ignore
-__pycache__
+*/__pycache__/*
 *.py[cod]
+*.pyc
 *$py.class
+
+/apache/shib_conf/*
+/apache/apache_conf/*

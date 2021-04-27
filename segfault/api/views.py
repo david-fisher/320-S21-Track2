@@ -699,13 +699,14 @@ class response_to_action_page(APIView):
     def get(self, request, *args, **kwargs):
         student_id = self.request.query_params.get('student_id')
         page_id = self.request.query_params.get('page_id')
+        scenario_id = self.request.query_params.get('scenario_id')
 
-        if(student_id is None or page_id is None):
+        if(student_id is None or page_id is None or scenario_id is None):
             return DRF_response({'detail': "Missing parameter: stakeholder_id"}, status=status.HTTP_400_BAD_REQUEST)
         
         try:
             action_pages = ActionPage.objects.filter(page=page_id)
-            response = Responses.objects.filter(student_id = student_id, page = page_id).first()
+            response = Responses.objects.filter(student_id = student_id, page = page_id, scenario=scenario_id).first()
             for action_page in action_pages:
                 action_page_id = action_page.id
                 response_to_action = ResponseToActionPage.objects.filter(response=response, action_page=action_page_id)

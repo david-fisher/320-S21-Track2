@@ -245,28 +245,35 @@ class get_pages(APIView):
             page_list.append(page)
 
         sorted_list = []
-        for page1 in page_list:
-            has_parent = False
-            for page2 in page_list:
-                if page2.next != None and page2.next == page1.page:
-                    has_parent = True
+        page_parent = {}
+        for page in page_list:
+            if page.next is not None:
+                page_parent[str(page.next)] = page_parent.get(str(page.next), 0) + 1
+        
+
+        for x in range(len(page_list)):
+            page = None
+            for page1 in page_list:
+                if page_parent.get(str(page1), 0) <= 0:
+                    page = page1
                     break
-            if not has_parent:
-                page1 = PagesSerializer(page1).data
-                sorted_list.append(page1)
+            if page is None:
+                break
+            page_serializer_data = PagesSerializer(page).data
+            sorted_list.append(page_serializer_data)
+            if page.next is not None:
+                page_parent[str(page.next)] = page_parent.get(str(page.next), 0) - 1
+            page_list.remove(page)
 
-        for page1 in sorted_list:
-            if page1['next'] == None:
-                continue
-            for page2 in page_list:
-                if page1['next'] == page2.page:
-                    page2 = PagesSerializer(page2).data
-                    sorted_list.append(page2)
-
-        for page1 in page_list:
-            if page1 not in sorted_list:
+        def take_id(elem):
+            return elem.id
+        
+        if len(page_list) > 0:
+            page_list.sort(key=take_id)
+            for page1 in page_list:
                 page1 = PagesSerializer(page1).data
-                sorted_list.append(page1)
+                if page1 not in sorted_list:
+                    sorted_list.append(page1)
 
         return DRF_response(sorted_list, status=status.HTTP_200_OK)
 

@@ -29,7 +29,6 @@ const useStylesBootstrapBack = makeStyles((theme) => ({
     let tooltipPosition = "top-end";
     let buttonVariant = "contained";
     let buttonColor = "primary";
-
     if (props.type === "back"){
       useClasses = backClasses; 
       buttonColor = "#e0e0e0";

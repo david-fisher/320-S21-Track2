@@ -492,7 +492,8 @@ class dashboard_page(APIView):
         "SCENARIO": scenario_dict['SCENARIO'],
         "NEXT_PAGE": None,
         "X_COORDINATE": 0,
-        "Y_COORDINATE": 0
+        "Y_COORDINATE": 0,
+        "NEXT_PAGE_VERSION": None
         }
 
         intro_page_serializer = PagesSerializer(data=intro_page)

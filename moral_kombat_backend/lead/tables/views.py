@@ -613,71 +613,71 @@ class Page_StakeholderViewSet(generics.CreateAPIView):
     
 
 
-# class pages_page(APIView):
-#     # Define get method for pages
-#     # @api_view(['GET'])
-#     def get(self, request, *args, **kwargs):
+class pages_page(APIView):
+    # Define get method for pages
+    # @api_view(['GET'])
+    def get(self, request, *args, **kwargs):
 
-#         # Takes the page_id from the URL if the url has ?page_id=<id> at the end, no parameter passed return error 400
-#         PAGE_ID = self.request.query_params.get('page_id')
+        # Takes the page_id from the URL if the url has ?page_id=<id> at the end, no parameter passed return error 400
+        PAGE_ID = self.request.query_params.get('page_id')
 
-#         # Get all fields from this page_id if ti doesn't exist return error 404
-#         try:
-#             page = pages.objects.get(PAGE = PAGE_ID)
-#         except pages.DoesNotExist:
-#             return Response(status=status.HTTP_404_NOT_FOUND)
+        # Get all fields from this page_id if ti doesn't exist return error 404
+        try:
+            page = PAGES.objects.get(PAGE = PAGE_ID)
+        except PAGES.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
         
-#         # Convers Django Model Object into a dictionary
-#         page_data = PagesSerializer(page).data
+        # Convers Django Model Object into a dictionary
+        page_data = PagesSerializer(page).data
         
-#         page_type = page.PAGE_TYPE
-#         # Check page.PAGE_TYPE = 'REFLECTION'
-#         if (page_type == 'R'):
-#             reflection_query = reflection_questions.objects.filter(PAGE = PAGE_ID).values()
-#             page_data.update(
-#                 {
-#                     "REFLECTION_QUESTIONS": reflection_query
-#                 }
-#             )
+        page_type = PAGE.PAGE_TYPE
+        # Check page.PAGE_TYPE = 'REFLECTION'
+        if (page_type == 'R'):
+            reflection_query = REFLECTION_QUESTIONS.objects.filter(reflection_questions_to_page1 = PAGE_ID).values()
+            page_data.update(
+                {
+                    "REFLECTION_QUESTIONS": reflection_query
+                }
+            )
             
-#             return Response(page_data, status=status.HTTP_200_OK)
+            return Response(page_data, status=status.HTTP_200_OK)
 
-#         # Check page.PAGE_TYPE = 'ACTION'
-#         if (page_type == 'A'):
-#             action_query = action_page.objects.filter(PAGE = PAGE_ID).values()
-#             page_data.update(
-#                 {
-#                     "CHOICES": action_query
-#                 }
-#             )
+        # Check page.PAGE_TYPE = 'ACTION'
+        if (page_type == 'A'):
+            action_query = ACTION_PAGE.objects.filter(PAGE = PAGE_ID).values()
+            page_data.update(
+                {
+                    "CHOICES": action_query
+                }
+            )
 
-#             return Response(page_data, status=status.HTTP_200_OK)
+            return Response(page_data, status=status.HTTP_200_OK)
         
-#         # Check page.PAGE_TYPE = 'GENERIC'
-#         if (page_type == 'G' or page_type == 'I'):
-#             generic_query = generic_page.objects.filter(PAGE = PAGE_ID).values()
-#             page_data.update(
-#                 {
-#                     "BODIES":generic_query
-#                 }
-#             )
+        # Check page.PAGE_TYPE = 'GENERIC'
+        if (page_type == 'G' or page_type == 'I'):
+            generic_query = GENERIC_PAGE.objects.filter(PAGE = PAGE_ID).values()
+            page_data.update(
+                {
+                    "BODIES":generic_query
+                }
+            )
 
-#             return Response(page_data, status=status.HTTP_200_OK)
+            return Response(page_data, status=status.HTTP_200_OK)
         
-#         # Check page.PAGE_TYPE = 'STAKEHOLDER'
-#         if (page_type == 'S'):
-#             stakeholder_query = stakeholder_page.objects.filter(PAGE = PAGE_ID).values()
-#             page_data.update(
-#                 {
-#                     "STAKEHOLDERS": stakeholder_query
-#                 }
-#             )
+        # Check page.PAGE_TYPE = 'STAKEHOLDER'
+        if (page_type == 'S'):
+            stakeholder_query = STAKEHOLDER_TO_PAGE.objects.filter(PAGE = PAGE_ID).values()
+            page_data.update(
+                {
+                    "STAKEHOLDERS": stakeholder_query
+                }
+            )
 
-#             return Response(page_data, status=status.HTTP_200_OK)
+            return Response(page_data, status=status.HTTP_200_OK)
         
-#         # Neither of these pages, something went wrong or missing implementation
-#         else:
-#             return Response(status=status.HTTP_400_BAD_REQUEST)
+        # Neither of these pages, something went wrong or missing implementation
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
     
     
 #     # Define POST function for pages
@@ -1181,7 +1181,7 @@ class stakeholders_page(APIView):
                 return Response(data, status=status.HTTP_200_OK)
 
             # return an error for non-existed scenario id
-            except scenarios.DoesNotExist:
+            except SCENARIOS.DoesNotExist:
                 message = {'MESSAGE': 'INVALID SCENARIO ID'}
                 return Response(message, status=status.HTTP_404_NOT_FOUND)
 

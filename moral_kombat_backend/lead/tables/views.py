@@ -513,6 +513,7 @@ class dashboard_page(APIView):
         "NEXT_PAGE": None,
         "X_COORDINATE": 0,
         "Y_COORDINATE": 0,
+        "NEXT_PAGE_VERSION": None
         }
 
         stakeholder_page_serializer = PagesSerializer(data=STAKEHOLDER_PAGE)

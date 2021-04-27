@@ -531,6 +531,7 @@ class response_to_conversations(APIView):
         student_id = request.data.get('student_id')
         conversation_id = request.data.get('conversation_id')
         # score = request.data.get('score')
+        score = 0
         course_id = request.data.get('course_id')
         page_id = request.data.get('page_id')
 
@@ -573,7 +574,7 @@ class response_to_conversations(APIView):
                 "response": responseSerializer.data['response_id'],
                 "stakeholder": stakeholder_id,
                 "stakeholder_version": stakeholder.version,
-                "score": 0,
+                "score": score,
                 "conversation": conversation_id
             }
 

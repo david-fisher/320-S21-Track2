@@ -1,0 +1,33 @@
+# This workflow will do a clean install of node dependencies, build the source code
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: Build and Deploy
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: self-hosted
+    strategy:
+      matrix:
+        node-version: [15.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Build Editor
+        working-directory: ./Ghost_in_the_Shell/client_folder_react_app/ethisim/
+        run: yarn install && yarn run build
+      - name: Build Simulator
+        working-directory: ./simulator/frontend/
+        run: yarn install && yarn run build
+      - name: Copy build
+        run: |
+          cp -r ./Ghost_in_the_Shell/client_folder_react_app/ethisim/build ./apache/build/se
+          cp -r ./simulator/frontend/build ./apache/build/simulator

@@ -695,14 +695,12 @@ class response_to_action_page(APIView):
         
         try:
             action_pages = ActionPage.objects.filter(page=page_id)
-            # return DRF_response({"detail": str(action_pages)}, status=status.HTTP_404_NOT_FOUND)
-            response = Responses.objects.filter(response = 0, student_id = student_id, page = page_id).first()
-            # return DRF_response({"detail": str(response)}, status=status.HTTP_404_NOT_FOUND)
+            response = Responses.objects.filter(student_id = student_id, page = page_id).first()
             for action_page in action_pages:
-                action_page_id = action_page.action_page_id
+                action_page_id = action_page.id
                 response_to_action = ResponseToActionPage.objects.filter(response=response, action_page=action_page_id)
                 if(len(response_to_action) > 0):
-                    action_page = ActionPage.objects.get(action_page_id = action_page_id)
+                    action_page = ActionPage.objects.get(id = action_page_id)
                     action_page_serializer = Action_pageSerializer(action_page)
                     return DRF_response(action_page_serializer.data, status=status.HTTP_200_OK)
             return DRF_response({"detail": "No action response entry found."}, status=status.HTTP_404_NOT_FOUND)
@@ -719,13 +717,14 @@ class response_to_action_page(APIView):
             return DRF_response({'detail': "Missing one or more parameters"}, status=status.HTTP_400_BAD_REQUEST)
         
         try:
-            action_page = ActionPage.objects.get(action_page_id = action_page_id0)
+            action_page = ActionPage.objects.get(id = action_page_id0)
         except ActionPage.DoesNotExist:
             return DRF_response({"detail": "action id not found"}, status=status.HTTP_404_NOT_FOUND)
            
         try:
             response0 = Responses.objects.get(response=0, scenario = scenario_id, student = student_id, course = course_id, page=action_page.page)
-            responseSerializer = ResponseSerializer(response0)
+            # responseSerializer = ResponseSerializer(response0)
+            return DRF_response({"detail": "The player already made an action choice on this page!"}, status=status.HTTP_400_BAD_REQUEST)
         except Responses.DoesNotExist:
             response0 = {
                     "response": 0,

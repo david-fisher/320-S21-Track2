@@ -40,7 +40,7 @@ class Courses(models.Model):
     professors = models.ManyToManyField(
         'Professors', related_name='courses', through='ProfessorsToCourses')
     scenarios = models.ManyToManyField(
-        'Scenarios', related_name='courses',  through='CoursesToScenario')
+        'Scenarios', related_name='courses',  through='ScenariosFor')
 
     class Meta:
         db_table = 'courses'

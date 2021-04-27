@@ -239,30 +239,33 @@ class get_pages(APIView):
 
         for pg_id in page_id_list:
             try:
-                page = Pages.objects.get(id=pg_id.page)
-            except Scenarios.DoesNotExist:
+                page = Pages.objects.get(id=pg_id.page.id)
+            except Pages.DoesNotExist:
                 return DRF_response(status=status.HTTP_404_NOT_FOUND)
             page_list.append(page)
 
         sorted_list = []
         for page1 in page_list:
             has_parent = False
-            for page2 in page_id_list:
-                if page2.next_page != None and page2.next_page == page1.page:
+            for page2 in page_list:
+                if page2.next != None and page2.next == page1.page:
                     has_parent = True
                     break
             if not has_parent:
+                page1 = PagesSerializer(page1).data
                 sorted_list.append(page1)
 
         for page1 in sorted_list:
-            if page1.next_page == None:
+            if page1['next'] == None:
                 continue
-            for page2 in page_id_list:
-                if page1.next_page == page2.page:
+            for page2 in page_list:
+                if page1['next'] == page2.page:
+                    page2 = PagesSerializer(page2).data
                     sorted_list.append(page2)
 
         for page1 in page_list:
             if page1 not in sorted_list:
+                page1 = PagesSerializer(page1).data
                 sorted_list.append(page1)
 
         return DRF_response(sorted_list, status=status.HTTP_200_OK)

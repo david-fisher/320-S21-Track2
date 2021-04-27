@@ -922,74 +922,59 @@ class pages_page(APIView):
                 return Response(status=status.HTTP_400_BAD_REQUEST) 
 
 
-#     # @api_view(['DELETE'])
-#     def delete(self, request):
+    # @api_view(['DELETE'])
+    def delete(self, request):
 
-#         # Takes the page_id from the URL if the url has ?page_id=<id> at the end, no parameter passed return error 400
-#         PAGE_ID = self.request.query_params.get('page_id')
+        # Takes the page_id from the URL if the url has ?page_id=<id> at the end, no parameter passed return error 400
+        PAGE_ID = self.request.query_params.get('page_id')
 
-#         # Check if the page exists.
-#         try: 
-#             page = pages.objects.get(PAGE=PAGE_ID)
-#         except pages.DoesNotExist:
-#             return Response(status=status.HTTP_404_NOT_FOUND)
+        # Check if the page exists.
+        try: 
+            page = PAGES.objects.get(PAGE=PAGE_ID)
+        except PAGES.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
         
-#         # Delete the page
-#         if (request.method == "DELETE"):
+        # Delete the page
+        if (request.method == "DELETE"):
 
-#             #set next page field of pages pointing to the deleted page to be None/Null
-#             next_pages = pages.objects.filter(NEXT_PAGE = PAGE_ID)
-#             for updated_page in next_pages:
-#                 extant_page = updated_page
-#                 updated_page.NEXT_PAGE = None
-#                 updated_page_dict = PagesSerializer(updated_page).data
-#                 pages_serializer = PagesSerializer(extant_page, data=updated_page_dict)
-#                 if pages_serializer.is_valid():
-#                     pages_serializer.save()
-#                 else:
-#                     print("error in making next_page = null during delete!")
-#                     return Response(pages_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            #set next page field of pages pointing to the deleted page to be None/Null
+            next_pages = PAGES.objects.filter(NEXT_PAGE = PAGE_ID)
+            for updated_page in next_pages:
+                extant_page = updated_page
+                updated_page.NEXT_PAGE = None
+                updated_page_dict = PagesSerializer(updated_page).data
+                pages_serializer = PagesSerializer(extant_page, data=updated_page_dict)
+                if pages_serializer.is_valid():
+                    pages_serializer.save()
+                else:
+                    print("error in making next_page = null during delete!")
+                    return Response(pages_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-#             #also set and result_page fields pointing to the deleted page to be null as well.
-#             action_pages = action_page.objects.filter(RESULT_PAGE = PAGE_ID)
-#             for updated_page in action_pages:
-#                 extant_page = updated_page
-#                 updated_page.RESULT_PAGE = None
-#                 updated_page_dict = Action_pageSerializer(updated_page).data
-#                 action_pages_serializer = Action_pageSerializer(extant_page, data=updated_page_dict)
-#                 if action_pages_serializer.is_valid():
-#                     action_pages_serializer.save()
-#                 else:
-#                     print("error in making next_page = null during delete!")
-#                     return Response(action_pages_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            #also set and result_page fields pointing to the deleted page to be null as well.
+            action_pages = ACTION_PAGE.objects.filter(RESULT_PAGE = PAGE_ID)
+            for updated_page in action_pages:
+                extant_page = updated_page
+                updated_page.RESULT_PAGE = None
+                updated_page_dict = Action_pageSerializer(updated_page).data
+                action_pages_serializer = Action_pageSerializer(extant_page, data=updated_page_dict)
+                if action_pages_serializer.is_valid():
+                    action_pages_serializer.save()
+                else:
+                    print("error in making next_page = null during delete!")
+                    return Response(action_pages_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-#             # Finally delete the page 
+            # Finally delete the page 
 
-#             operation = page.delete()
-#             page_data = {}
-#             if (operation):
-#                 page_data["success"] = "delete successful"
-#             else:
-#                 page_data["failure"] = "delete failed"
+            operation = page.delete()
+            page_data = {}
+            if (operation):
+                page_data["success"] = "delete successful"
+            else:
+                page_data["failure"] = "delete failed"
             
-#             return Response(data=page_data)
+            return Response(data=page_data)
 
-# class student_info(APIView):
-#     def get(self, request, *args, **kwargs):
-#         SCENARIO = self.request.query_params.get('scenario_id')
-#         responses_query = responses.objects.filter(SCENARIO_id = SCENARIO).values()
-#         data = []
-#         for response in responses_query:
-#             demographics_query = demographics.objects.filter(STUDENT_id = response['STUDENT_id']).values()
-#             # demographic = []
-#             for dem in demographics_query:
-#                 student_query = students.objects.filter(STUDENT = dem['STUDENT_id']).values()
-#                 for x in student_query:
-#                     name = x['NAME']
-#             dem['NAME'] = name
-#             dem['DATE_TAKEN'] = response['DATE_TAKEN']
-#             data.append(dem)
 
 # Checked - Ed - 4/15/2021
 class student_info(APIView):
@@ -1077,7 +1062,7 @@ class stakeholders_page(APIView):
 
             try: 
                 coverage_list = COVERAGE.objects.filter(STAKEHOLDER=stakeholder_id).values()
-            except coverage.DoesNotExist:
+            except COVERAGE.DoesNotExist:
                 return Response(status=status.HTTP_404_NOT_FOUND)
 
             issue_list = []
@@ -1195,7 +1180,7 @@ class stakeholders_page(APIView):
                 data = self.add_detail(data)
                 return Response(data, status=status.HTTP_200_OK)
 
-            except stakeholders.DoesNotExist:
+            except STAKEHOLDERS.DoesNotExist:
                 message = {'MESSAGE': 'INVALID STAKEHOLDER ID'}
                 return Response(message, status=status.HTTP_404_NOT_FOUND)
 
@@ -1232,82 +1217,82 @@ class stakeholders_page(APIView):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-#     def delete(self, request, *args, **kwargs):
+    def delete(self, request, *args, **kwargs):
 
-#         STAKEHOLDER_ID = self.request.query_params.get('stakeholder_id')
+        STAKEHOLDER_ID = self.request.query_params.get('stakeholder_id')
 
-#         if STAKEHOLDER_ID != None:
-#             try:
-#                 response = stakeholders.objects.get(
-#                     STAKEHOLDER_ID=STAKEHOLDER_ID)
-#                 response.delete()
-#                 return Response({'message': 'DELETED'}, status=status.HTTP_202_ACCEPTED)
-#             except stakeholders.DoesNotExist:
-#                 return Response({'message': 'NOT FOUND'}, status=status.HTTP_404_NOT_FOUND)
-#         else:
-#             return Response({'message': 'MISSING ID'}, status=status.HTTP_400_BAD_REQUEST)
+        if STAKEHOLDER_ID != None:
+            try:
+                response = STAKEHOLDERS.objects.get(
+                    STAKEHOLDER =STAKEHOLDER_ID)
+                response.delete()
+                return Response({'message': 'DELETED'}, status=status.HTTP_202_ACCEPTED)
+            except STAKEHOLDERS.DoesNotExist:
+                return Response({'message': 'NOT FOUND'}, status=status.HTTP_404_NOT_FOUND)
+        else:
+            return Response({'message': 'MISSING ID'}, status=status.HTTP_400_BAD_REQUEST)
 
-#     def put(self, request, *args, **kwargs):
-#         '''
-#         put can take one object or a list
-#         for one object put
-#         {
-#             "STAKEHOLDER": 1,
-#             "NAME": "Stakeholder 1a",
-#             "DESCRIPTION": "Description 1",
-#             "JOB": "Job 1",
-#             "INTRODUCTION": "Introduction 1",
-#             "SCENARIO": 1,
-#             "VERSION": 1
-#         }
-#         for list put
-#         [
-#             {
-#                 "STAKEHOLDER": 1,
-#                 "NAME": "Stakeholder 1a",
-#                 "DESCRIPTION": "Description 1",
-#                 "JOB": "Job 1",
-#                 "INTRODUCTION": "Introduction 1",
-#                 "SCENARIO": 1,
-#                 "VERSION": 1
-#             },
-#             {
-#                 "STAKEHOLDER": 2,
-#                 "NAME": "Stakeholder 2a",
-#                 "DESCRIPTION": "Description 2",
-#                 "JOB": "Job 2",
-#                 "INTRODUCTION": "Introduction 2",
-#                 "SCENARIO": 1,
-#                 "VERSION": 1
-#             }
-#         ]
-#         '''
-#         data = JSONParser().parse(request)
+    def put(self, request, *args, **kwargs):
+        '''
+        put can take one object or a list
+        for one object put
+        {
+            "STAKEHOLDER": 1,
+            "NAME": "Stakeholder 1a",
+            "DESCRIPTION": "Description 1",
+            "JOB": "Job 1",
+            "INTRODUCTION": "Introduction 1",
+            "SCENARIO": 1,
+            "VERSION": 1
+        }
+        for list put
+        [
+            {
+                "STAKEHOLDER": 1,
+                "NAME": "Stakeholder 1a",
+                "DESCRIPTION": "Description 1",
+                "JOB": "Job 1",
+                "INTRODUCTION": "Introduction 1",
+                "SCENARIO": 1,
+                "VERSION": 1
+            },
+            {
+                "STAKEHOLDER": 2,
+                "NAME": "Stakeholder 2a",
+                "DESCRIPTION": "Description 2",
+                "JOB": "Job 2",
+                "INTRODUCTION": "Introduction 2",
+                "SCENARIO": 1,
+                "VERSION": 1
+            }
+        ]
+        '''
+        data = JSONParser().parse(request)
 
-#         if type(data) == list:
-#             response = []
-#             for item in data:
-#                 id = item['STAKEHOLDER']
-#                 updatingItem = stakeholders.objects.get(STAKEHOLDER=id)
-#                 stkholderSerializer = StakeholdersSerializer(
-#                     updatingItem, data=item)
-#                 if stkholderSerializer.is_valid():
-#                     stkholderSerializer.save()
-#                     response.append(stkholderSerializer.data)
-#                 else:
-#                     return Response(response, status=status.HTTP_400_BAD_REQUEST)
+        if type(data) == list:
+            response = []
+            for item in data:
+                id = item['STAKEHOLDER']
+                updatingItem = STAKEHOLDERS.objects.get(STAKEHOLDER=id)
+                stkholderSerializer = StakeholdersSerializer(
+                    updatingItem, data=item)
+                if stkholderSerializer.is_valid():
+                    stkholderSerializer.save()
+                    response.append(stkholderSerializer.data)
+                else:
+                    return Response(response, status=status.HTTP_400_BAD_REQUEST)
 
-#             return Response(response, status=status.HTTP_200_OK)
-#         else:
-#             id = data['STAKEHOLDER']
-#             updatingItem = stakeholders.objects.get(STAKEHOLDER=id)
-#             stkholderSerializer = StakeholdersSerializer(
-#                 updatingItem, data=data)
-#             if stkholderSerializer.is_valid():
-#                 stkholderSerializer.save()
-#                 return Response(stkholderSerializer.data, status=status.HTTP_200_OK)
-#             else:
-#                 return Response(stkholderSerializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(response, status=status.HTTP_200_OK)
+        else:
+            id = data['STAKEHOLDER']
+            updatingItem = STAKEHOLDERS.objects.get(STAKEHOLDER=id)
+            stkholderSerializer = StakeholdersSerializer(
+                updatingItem, data=data)
+            if stkholderSerializer.is_valid():
+                stkholderSerializer.save()
+                return Response(stkholderSerializer.data, status=status.HTTP_200_OK)
+            else:
+                return Response(stkholderSerializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 # class coverages_page(APIView):

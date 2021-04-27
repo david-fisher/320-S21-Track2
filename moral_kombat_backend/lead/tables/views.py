@@ -682,102 +682,102 @@ class Page_StakeholderViewSet(generics.CreateAPIView):
     
 #     # Define POST function for pages
 #     # @api_view(['POST'])
-#     def post(self, request):
+    def post(self, request):
 
-#         # Takes the scenario_id from the URL if the url has ?scenario_id=<id> at the end, no parameter passed return error 400
+        # Takes the scenario_id from the URL if the url has ?scenario_id=<id> at the end, no parameter passed return error 400
 
-#         page_type = request.data["PAGE_TYPE"]
+        page_type = request.data["PAGE_TYPE"]
 
-#         # If the request is a reflection page  
-#         if (page_type == 'R'):
-#             pages_serializer = PagesSerializer(data=request.data)
-#             if pages_serializer.is_valid():
-#                 pages_serializer.save()
-#                 page_id = pages_serializer.data["PAGE"]
-#                 for question in request.data['REFLECTION_QUESTIONS']:
-#                     question['PAGE'] = page_id
-#                     nested_serializer = Reflection_questionsSerializer(data=question)
-#                     if  nested_serializer.is_valid():
-#                         nested_serializer.save()
-#                     # If the nested page is not valid it deletes the wrapper page created above
-#                     else:
-#                         page = pages.objects.get(PAGE=page_id)
-#                         page.delete()
-#                         return Response(nested_serializer.data, status=status.HTTP_400_BAD_REQUEST)
-#                     #nested_serializer.save()
-#                 return Response(pages_serializer.data, status=status.HTTP_201_CREATED)
+        # If the request is a reflection page  
+        if (page_type == 'R'):
+            pages_serializer = PagesSerializer(data=request.data)
+            if pages_serializer.is_valid():
+                pages_serializer.save()
+                page_id = pages_serializer.data["PAGE"]
+                for question in request.data['REFLECTION_QUESTIONS']:
+                    question['PAGE'] = page_id
+                    nested_serializer = Reflection_questionsSerializer(data=question)
+                    if  nested_serializer.is_valid():
+                        nested_serializer.save()
+                    # If the nested page is not valid it deletes the wrapper page created above
+                    else:
+                        page = pages.objects.get(PAGE=page_id)
+                        page.delete()
+                        return Response(nested_serializer.data, status=status.HTTP_400_BAD_REQUEST)
+                    #nested_serializer.save()
+                return Response(pages_serializer.data, status=status.HTTP_201_CREATED)
             
-#             # If the request was badly made or could not be created
-#             return Response(pages_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            # If the request was badly made or could not be created
+            return Response(pages_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-#         # If the request is an action page  
-#         if (page_type == 'A'):
-#             pages_serializer = PagesSerializer(data=request.data)
-#             if pages_serializer.is_valid():
-#                 pages_serializer.save()
-#                 page_id = pages_serializer.data["PAGE"]
-#                 for choice in request.data['CHOICES']:
-#                     choice['PAGE'] = page_id
-#                     nested_serializer = Action_pageSerializer(data=choice)
-#                     if  nested_serializer.is_valid():
-#                         nested_serializer.save()
-#                     # If the nested page is not valid it deletes the wrapper page created above
-#                     else:
-#                         page = pages.objects.get(PAGE=page_id)
-#                         page.delete()
-#                         return Response(nested_serializer.data, status=status.HTTP_400_BAD_REQUEST)
-#                     #nested_serializer.save()
-#                 return Response(pages_serializer.data, status=status.HTTP_201_CREATED)
+        # If the request is an action page  
+        if (page_type == 'A'):
+            pages_serializer = PagesSerializer(data=request.data)
+            if pages_serializer.is_valid():
+                pages_serializer.save()
+                page_id = pages_serializer.data["PAGE"]
+                for choice in request.data['PAGE_CHOICES']:
+                    choice['PAGE'] = page_id
+                    nested_serializer = Action_pageSerializer(data=choice)
+                    if  nested_serializer.is_valid():
+                        nested_serializer.save()
+                    # If the nested page is not valid it deletes the wrapper page created above
+                    else:
+                        page = pages.objects.get(PAGE=page_id)
+                        page.delete()
+                        return Response(nested_serializer.data, status=status.HTTP_400_BAD_REQUEST)
+                    #nested_serializer.save()
+                return Response(pages_serializer.data, status=status.HTTP_201_CREATED)
             
-#             # If the request was badly made or could not be created
-#             return Response(pages_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            # If the request was badly made or could not be created
+            return Response(pages_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
             
-#         # If the request is a generic page  
-#         if (page_type == 'G' or page_type == 'I'):
-#             pages_serializer = PagesSerializer(data=request.data)
-#             if pages_serializer.is_valid():
-#                 pages_serializer.save()
-#                 page_id = pages_serializer.data["PAGE"]
-#                 for body in request.data['BODIES']:
-#                     body['PAGE'] = page_id
-#                     nested_serializer = Generic_pageSerializer(data=body)
-#                     if  nested_serializer.is_valid():
-#                         nested_serializer.save()
-#                     # If the nested page is not valid it deletes the wrapper page created above
-#                     else:
-#                         page = pages.objects.get(PAGE=page_id)
-#                         page.delete()
-#                         return Response(nested_serializer.data, status=status.HTTP_400_BAD_REQUEST)
-#                     #nested_serializer.save()
-#                 return Response(pages_serializer.data, status=status.HTTP_201_CREATED)
+        # If the request is a generic page  
+        if (page_type == 'G' or page_type == 'I'):
+            pages_serializer = PagesSerializer(data=request.data)
+            if pages_serializer.is_valid():
+                pages_serializer.save()
+                page_id = pages_serializer.data["PAGE"]
+                for body in request.data['BODY']:
+                    body['PAGE'] = page_id
+                    nested_serializer = Generic_pageSerializer(data=body)
+                    if  nested_serializer.is_valid():
+                        nested_serializer.save()
+                    # If the nested page is not valid it deletes the wrapper page created above
+                    else:
+                        page = pages.objects.get(PAGE=page_id)
+                        page.delete()
+                        return Response(nested_serializer.data, status=status.HTTP_400_BAD_REQUEST)
+                    #nested_serializer.save()
+                return Response(pages_serializer.data, status=status.HTTP_201_CREATED)
             
-#             # If the request was badly made or could not be created
-#             return Response(pages_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            # If the request was badly made or could not be created
+            return Response(pages_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-#         # If the request is a stakeholder page 
-#         if (page_type == 'S'):
-#             pages_serializer = PagesSerializer(data=request.data)
-#             if pages_serializer.is_valid():
-#                 pages_serializer.save()
-#                 page_id = pages_serializer.data["PAGE"]
-#                 for stakeholder in request.data['STAKEHOLDERS']:
-#                     stakeholder['PAGE'] = page_id
-#                     nested_serializer = Stakeholder_pageSerializer(data=stakeholder)
-#                     if  nested_serializer.is_valid():
-#                         nested_serializer.save()
-#                     # If the nested page is not valid it deletes the wrapper page created above
-#                     else:
-#                         page = pages.objects.get(PAGE=page_id)
-#                         page.delete()
-#                         return Response(nested_serializer.data, status=status.HTTP_400_BAD_REQUEST)
-#                     #nested_serializer.save() #DELETE
-#                 return Response(pages_serializer.data, status=status.HTTP_201_CREATED)
+        # If the request is a stakeholder page 
+        if (page_type == 'S'):
+            pages_serializer = PagesSerializer(data=request.data)
+            if pages_serializer.is_valid():
+                pages_serializer.save()
+                page_id = pages_serializer.data["PAGE"]
+                for stakeholder in request.data['STAKEHOLDERS']:
+                    stakeholder['PAGE'] = page_id
+                    nested_serializer = Stakeholder_pageSerializer(data=stakeholder)
+                    if  nested_serializer.is_valid():
+                        nested_serializer.save()
+                    # If the nested page is not valid it deletes the wrapper page created above
+                    else:
+                        page = pages.objects.get(PAGE=page_id)
+                        page.delete()
+                        return Response(nested_serializer.data, status=status.HTTP_400_BAD_REQUEST)
+                    #nested_serializer.save() #DELETE
+                return Response(pages_serializer.data, status=status.HTTP_201_CREATED)
 
-#             # If the request was badly made or could not be created
-#             return Response(pages_serializer.data, status=status.HTTP_400_BAD_REQUEST)
+            # If the request was badly made or could not be created
+            return Response(pages_serializer.data, status=status.HTTP_400_BAD_REQUEST)
 
-#         else:
-#             return Response(status=status.HTTP_400_BAD_REQUEST) 
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST) 
 
 #     # @api_view(['PUT'])
 #     def put(self, request):

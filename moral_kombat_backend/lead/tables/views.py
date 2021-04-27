@@ -492,7 +492,8 @@ class dashboard_page(APIView):
         "SCENARIO": scenario_dict['SCENARIO'],
         "NEXT_PAGE": None,
         "X_COORDINATE": 0,
-        "Y_COORDINATE": 0
+        "Y_COORDINATE": 0,
+        "NEXT_PAGE_VERSION": None
         }
 
         intro_page_serializer = PagesSerializer(data=intro_page)
@@ -512,6 +513,7 @@ class dashboard_page(APIView):
         "NEXT_PAGE": None,
         "X_COORDINATE": 0,
         "Y_COORDINATE": 0,
+        "NEXT_PAGE_VERSION": None
         }
 
         stakeholder_page_serializer = PagesSerializer(data=STAKEHOLDER_PAGE)
@@ -1295,47 +1297,47 @@ class stakeholders_page(APIView):
                 return Response(stkholderSerializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# class coverages_page(APIView):
-#     def get(self, request, *args, **kwargs):
-#         stakeholder_id = self.request.query_params.get('stakeholder_id')
+class coverages_page(APIView):
+    def get(self, request, *args, **kwargs):
+        stakeholder_id = self.request.query_params.get('STAKEHOLDER')
 
-#         stkholder = {}
-#         try: 
-#             coverage_list = coverage.objects.filter(STAKEHOLDER=stakeholder_id).values()
-#         except coverage.DoesNotExist:
-#             return Response(status=status.HTTP_404_NOT_FOUND)
+        stkholder = {}
+        try: 
+            coverage_list = coverage.objects.filter(STAKEHOLDER=stakeholder_id).values()
+        except coverage.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
-#         issue_list = []
-#         # Check for every single coverage object that belongs to the staheholder id 'id' 
-#         for coverages in coverage_list:
-#             issues_dict = {}
-#                 # issueList = coverageSerializer(coverage.objects.get(ISSUE=issueID)).data
-#                 # issueList.update({"NAME": IssuesSerializer(Issues.objects.get(ISSUE=issueID)).data['NAME']})
-#                 # Getting the issue for the coverage dictionary associated with the stakeholder_id
-#             try:
-#                 issue = Issues.objects.get(ISSUE=coverages.get('ISSUE_id'))
-#             except:
-#                 continue
-#             issues_dict.update(coverages)
-#             del issues_dict['id']
-#             issues_dict['ISSUE'] = issues_dict['ISSUE_id']
-#             del issues_dict['ISSUE_id']
-#             issues_dict['STAKEHOLDER'] = issues_dict['STAKEHOLDER_id']
-#             del issues_dict['STAKEHOLDER_id']
-#             issues_dict.update(
-#                 {
-#                     "NAME": issue.NAME
-#                 })
+        issue_list = []
+        # Check for every single coverage object that belongs to the staheholder id 'id' 
+        for coverages in coverage_list:
+            issues_dict = {}
+                # issueList = coverageSerializer(coverage.objects.get(ISSUE=issueID)).data
+                # issueList.update({"NAME": IssuesSerializer(Issues.objects.get(ISSUE=issueID)).data['NAME']})
+                # Getting the issue for the coverage dictionary associated with the stakeholder_id
+            try:
+                issue = Issues.objects.get(ISSUE=coverages.get('ISSUE'))
+            except:
+                continue
+            issues_dict.update(coverages)
+            # del issues_dict['id']
+            # issues_dict['ISSUE'] = issues_dict['ISSUE_id']
+            # del issues_dict['ISSUE_id']
+            # issues_dict['STAKEHOLDER'] = issues_dict['STAKEHOLDER_id']
+            # del issues_dict['STAKEHOLDER_id']
+            issues_dict.update(
+                {
+                    "NAME": issue.NAME
+                })
 
-#             issue_list.append(issues_dict)
+            issue_list.append(issues_dict)
             
-#         stkholder.update(
-#             {
-#                 "ISSUES": issue_list
-#             }
-#         )
+        stkholder.update(
+            {
+                "ISSUES": issue_list
+            }
+        )
 
-#         return Response(stkholder, status=status.HTTP_200_OK)
+        return Response(stkholder, status=status.HTTP_200_OK)
 
 
 # Checked - Ed - 4/15/2021

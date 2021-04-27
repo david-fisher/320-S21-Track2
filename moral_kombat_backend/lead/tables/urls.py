@@ -48,20 +48,19 @@ router.register('api/profscenarios', professors_to_scenarioViewSet, 'PROFESSORS_
 
 
 urlpatterns = [
-    # path('allScenarios', allScenariosViewSet.as_view()),
+    path('allScenarios', allScenariosViewSet.as_view()),
     path('multi_conv', multi_conv.as_view()),
-    # path('multi_stake', multi_stake.as_view()),
+    path('multi_stake', multi_stake.as_view()),
     path('multi_coverage', multi_coverage.as_view()),
     path('logistics', logistics_page.as_view()),
     path('multi_issue', multi_issue.as_view()),
     path('dashboard', dashboard_page.as_view()),
     path('flowchart', flowchart.as_view()),
-    # path('student_info',student_info.as_view()),
-    # path('student_responses',student_responses.as_view()),
+    path('student_info',student_info.as_view()),
+    path('student_responses',student_responses.as_view()),
 
-    # path('coverages', coverages_page.as_view()),
+    path('coverages', coverages_page.as_view()),
     path('stakeholder', stakeholders_page.as_view()),
-    # path('coverages', coverages_page.as_view()),
     path('page', pages_page.as_view()),
 
 ] 

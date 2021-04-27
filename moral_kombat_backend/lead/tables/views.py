@@ -87,7 +87,7 @@ class multi_stake(APIView):
         if SCENARIO == None:
             return Response({'status': 'details'}, status=status.HTTP_404_NOT_FOUND)
         for updated_stake in request.data:
-            extant_stake = stakeholders.objects.get(SCENARIO = SCENARIO, STAKEHOLDER = updated_stake['STAKEHOLDER'])
+            extant_stake = STAKEHOLDERS.objects.get(SCENARIO = SCENARIO, STAKEHOLDER = updated_stake['STAKEHOLDER'])
             serializer = StakeholdersSerializer(extant_stake, data=updated_stake)
             if serializer.is_valid():
                 serializer.save()
@@ -1015,6 +1015,47 @@ class student_info(APIView):
 
 # seems like no change required - Chirag - 4/15
 class coverages_page(APIView):
+    def get(self, request, *args, **kwargs):
+        stakeholder_id = self.request.query_params.get('STAKEHOLDER')
+
+        stkholder = {}
+        try: 
+            coverage_list = COVERAGE.objects.filter(STAKEHOLDER=stakeholder_id).values()
+        except COVERAGE.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        issue_list = []
+        # Check for every single coverage object that belongs to the staheholder id 'id' 
+        for coverages in coverage_list:
+            issues_dict = {}
+                # issueList = coverageSerializer(coverage.objects.get(ISSUE=issueID)).data
+                # issueList.update({"NAME": IssuesSerializer(Issues.objects.get(ISSUE=issueID)).data['NAME']})
+                # Getting the issue for the coverage dictionary associated with the stakeholder_id
+            try:
+                issue = ISSUES.objects.get(ISSUE=coverages.get('ISSUE'))
+            except:
+                continue
+            issues_dict.update(coverages)
+            # del issues_dict['id']
+            # issues_dict['ISSUE'] = issues_dict['ISSUE_id']
+            # del issues_dict['ISSUE_id']
+            # issues_dict['STAKEHOLDER'] = issues_dict['STAKEHOLDER_id']
+            # del issues_dict['STAKEHOLDER_id']
+            issues_dict.update(
+                {
+                    "NAME": issue.NAME
+                })
+
+            issue_list.append(issues_dict)
+            
+        stkholder.update(
+            {
+                "ISSUES": issue_list
+            }
+        )
+
+        return Response(stkholder, status=status.HTTP_200_OK)
+
     def put(self, request, *args, **kwargs):
         # """
         # docstring
@@ -1297,47 +1338,7 @@ class stakeholders_page(APIView):
                 return Response(stkholderSerializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class coverages_page(APIView):
-    def get(self, request, *args, **kwargs):
-        stakeholder_id = self.request.query_params.get('STAKEHOLDER')
-
-        stkholder = {}
-        try: 
-            coverage_list = coverage.objects.filter(STAKEHOLDER=stakeholder_id).values()
-        except coverage.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-
-        issue_list = []
-        # Check for every single coverage object that belongs to the staheholder id 'id' 
-        for coverages in coverage_list:
-            issues_dict = {}
-                # issueList = coverageSerializer(coverage.objects.get(ISSUE=issueID)).data
-                # issueList.update({"NAME": IssuesSerializer(Issues.objects.get(ISSUE=issueID)).data['NAME']})
-                # Getting the issue for the coverage dictionary associated with the stakeholder_id
-            try:
-                issue = Issues.objects.get(ISSUE=coverages.get('ISSUE'))
-            except:
-                continue
-            issues_dict.update(coverages)
-            # del issues_dict['id']
-            # issues_dict['ISSUE'] = issues_dict['ISSUE_id']
-            # del issues_dict['ISSUE_id']
-            # issues_dict['STAKEHOLDER'] = issues_dict['STAKEHOLDER_id']
-            # del issues_dict['STAKEHOLDER_id']
-            issues_dict.update(
-                {
-                    "NAME": issue.NAME
-                })
-
-            issue_list.append(issues_dict)
-            
-        stkholder.update(
-            {
-                "ISSUES": issue_list
-            }
-        )
-
-        return Response(stkholder, status=status.HTTP_200_OK)
+# class coverages_page(APIView):
 
 
 # Checked - Ed - 4/15/2021
@@ -1348,22 +1349,22 @@ class student_responses(APIView):
         SCENARIO = self.request.query_params.get('SCENARIO')
         STUDENT = self.request.query_params.get('STUDENT')
         filterargs = {'SCENARIO':SCENARIO,'STUDENT':STUDENT}
-        responses_query = responses.objects.filter(**filterargs).values()
+        responses_query = RESPONSES.objects.filter(**filterargs).values()
         choice_array = []
         choices_array = []
         choices_dict = {}
         #get the different actions
         for response in responses_query:
             #filter by page number 
-            name_query = pages.objects.filter(PAGE = response["ACTION_PAGE"]).values()
+            name_query = PAGES.objects.filter(PAGE = response["ACTION_PAGE"]).values()
 
             for name in name_query:
                 NAME = name['PAGE_TITLE']
                 TYPE = name['PAGE_TYPE']
-            choices_query = action_page.objects.filter(PAGE = response["ACTION_PAGE"]).values()
+            choices_query = ACTION_PAGE.objects.filter(PAGE = response["ACTION_PAGE"]).values()
             for choice in choices_query:
                 choice_array.append(choice['CHOICE'])
-            chosen_query = responses.objects.filter(ACTION_PAGE = response["ACTION_PAGE"]).values()
+            chosen_query = RESPONSES.objects.filter(ACTION_PAGE = response["ACTION_PAGE"]).values()
             for chose in chosen_query:
                 CHOSEN = chose['CHOICE']
                 DATE_TAKEN = chose['DATE_TAKEN']
@@ -1374,19 +1375,20 @@ class student_responses(APIView):
         reflections_array = []
         reflections_dict = {}
         #get the different reflections
-        reflections_query = reflections_taken.objects.filter(**filterargs).values()
+        reflections_query = REFLECTIONS_TAKEN.objects.filter(**filterargs).values()
         for reflection in reflections_query:
-            name_query = pages.objects.filter(PAGE = reflection["PAGE"]).values()
+            name_query = PAGES.objects.filter(PAGE = reflection["PAGE"]).values()
             for name in name_query:
                 NAME = name['PAGE_TITLE']
                 TYPE = name['PAGE_TYPE']
-            ref_questions_query = reflection_questions.objects.filter(PAGE = reflection["PAGE"]).values()
+            ref_questions_query = REFLECTION_QUESTION_TO_PAGE.objects.filter(PAGE_ID = reflection["PAGE"]).values()
             for question in ref_questions_query:
                 QUESTION = question['REFLECTION_QUESTION']
-            ref_answers_query = reflections_taken.objects.filter(PAGE = reflection["PAGE"]).values()
+                DATE_TAKEN = answer['DATE_TAKEN']
+            ref_answers_query = REFLECTIONS_TAKEN.objects.filter(RESPONSE_ID = reflection["RESPONSE_ID"]).values()
             for answer in ref_answers_query:
                 REFLECTION = answer['REFLECTIONS']
-                DATE_TAKEN = answer['DATE_TAKEN']
+                # 
                 #only if it is a reflection page 
             reflections_dict = {"NAME": NAME, "QUESTION": QUESTION, "REFLECTION": REFLECTION, "DATE_TAKEN": DATE_TAKEN}
             reflections_array.append(reflections_dict)

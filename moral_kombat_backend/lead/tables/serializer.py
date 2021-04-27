@@ -43,7 +43,7 @@ class PagesSerializer(serializers.ModelSerializer):
     class Meta:
         model = PAGES
         fields = ('PAGE', 'PAGE_TYPE', 'PAGE_TITLE', 'BODY', 'SCENARIO',
-                  'VERSION', 'NEXT_PAGE', 'X_COORDINATE', 'Y_COORDINATE', 'NEXT_PAGE_VERSION')
+                  'VERSION', 'NEXT_PAGE', 'X_COORDINATE', 'Y_COORDINATE', 'COMPLETED','NEXT_PAGE_VERSION')
 
 
 class Stakeholder_to_pageSerializer(serializers.ModelSerializer):

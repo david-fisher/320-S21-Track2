@@ -20,6 +20,7 @@ const TextTypography = withStyles({
     color: "#373a3c"
   }
 })(Typography);
+
 // visited, completed, pageNumber, type, nextPageNumber, title, content, match, activePage, changePage
 //function Action({ pages, setPages, activePage, setActivePage, content_url, nextPageID, prevPageID, title }) {
 function Action(props) {
@@ -36,12 +37,13 @@ function Action(props) {
   //   }
   // }
 
-  let prevPageTitle = "";
-  const [actionQuestion, setActionQuestion] = React.useState('');
-  const [questionID, setQuestionID] = React.useState('');
-  const [scenarios, setScenarios] = React.useContext(ScenariosContext);
+  // let prevPageTitle = "";
+  // const [actionQuestion, setActionQuestion] = React.useState('');
+  // const [questionID, setQuestionID] = React.useState('');
+  // const [scenarios, setScenarios] = React.useContext(ScenariosContext);
 
-  const [actionChoices, setActionChoices] = React.useState([]);
+  // const [actionChoices, setActionChoices] = React.useState([]);
+
   // useEffect (() => {
   //   fetch(BASE_URL + '/action_page/')
   //   .then(res => res.json())
@@ -141,26 +143,11 @@ function Action(props) {
           <HTMLRenderer html={props.content}/>
         </Grid>
         <Grid item lg={12}>
-          <Checkbox activePage={props.activePage} pageNumber={props.pageNumber} changePage={props.changePage} pageId={props.id}/> 
+        <Checkbox pageNumber={props.pageNumber} changePage={props.changePage} pageId={props.id}/> 
         </Grid>
       </Grid>
     </div>
-  //    <div>
-  //    <Box mt={5}>
-  //      <Grid container direction="row" justify="center" alignItems="center">
-  //        <TextTypography variant="h4" align="center" gutterBottom>
-  //          {props.title}
-  //        </TextTypography>
-  //      </Grid>
-  //    </Box>
-  //    <Grid container spacing={2}>
-  //      <Grid item lg={12}>
-  //        <Box p={2} >
-  //          {props.content}
-  //        </Box>
-  //        </Grid>
-  //    </Grid>
-  //  </div>
+
   );
 }
 

@@ -392,7 +392,7 @@ class logistics_page(APIView):
             scenario_serializer.save()
 
         #delete currently assocated classes
-        SCENARIOS_FOR.objects.filter(SCENARIO = request.data['SCENARIO']).delete()
+        SCENARIOS_FOR.objects.filter(SCENARIO_ID = request.data['SCENARIO']).delete()
         #get array of courses from frontend
         COURSES = request.data['COURSES']
         for course in COURSES:

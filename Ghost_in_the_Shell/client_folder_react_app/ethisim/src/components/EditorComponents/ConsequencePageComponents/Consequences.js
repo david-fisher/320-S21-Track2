@@ -2,7 +2,13 @@ import React, { useState, useEffect } from 'react';
 import Body from '../GeneralPageComponents/Body';
 
 import Title from '../GeneralPageComponents/Title';
-import { Typography, Container, Button, Grid, TextField, } from '@material-ui/core';
+import {
+    Typography,
+    Container,
+    Button,
+    Grid,
+    TextField,
+} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import universalPost from '../../../universalHTTPRequests/post.js';
@@ -43,12 +49,11 @@ export default function Consequences(props) {
     const [bodyText, setBodyText] = useState(body);
 
     return (
-        /*<Container component="main">
+        <Container component="main">
             <Typography align="center" variant="h2">
                 Consequences
             </Typography>
-            //<Grid container justify="flex-end">
-            /* <Grid container justify="flex-end">
+            {/* <Grid container justify="flex-end">
                 <Button color="primary" onClick={handleClickOpen}>
                     <HelpIcon />
                 </Button>
@@ -80,7 +85,7 @@ export default function Consequences(props) {
             >
                 Save
 
-            </Button>
-        </Container>*/
+            </Button> */}
+        </Container>
     );
 }

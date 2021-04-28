@@ -87,11 +87,11 @@ class multi_stake(APIView):
         if SCENARIO == None:
             return Response({'status': 'details'}, status=status.HTTP_404_NOT_FOUND)
         for updated_stake in request.data:
-            extant_stake = STAKEHOLDERS.objects.get(SCENARIO = SCENARIO, STAKEHOLDER = updated_stake['STAKEHOLDER'])
+            extant_stake = STAKEHOLDERS.objects.get(SCENARIO_id = SCENARIO, STAKEHOLDER = updated_stake['STAKEHOLDER'])
             serializer = StakeholdersSerializer(extant_stake, data=updated_stake)
             if serializer.is_valid():
                 serializer.save()
-        stake_query = stakeholders.objects.filter(SCENARIO = SCENARIO).values()
+        stake_query = stakeholders.objects.filter(SCENARIO_id = SCENARIO).values()
         return Response(stake_query)
 
 # checked - Ed - 4/15/2021
@@ -392,7 +392,7 @@ class logistics_page(APIView):
             scenario_serializer.save()
 
         #delete currently assocated classes
-        SCENARIOS_FOR.objects.filter(SCENARIO = request.data['SCENARIO']).delete()
+        SCENARIOS_FOR.objects.filter(SCENARIO_ID = request.data['SCENARIO']).delete()
         #get array of courses from frontend
         COURSES = request.data['COURSES']
         for course in COURSES:

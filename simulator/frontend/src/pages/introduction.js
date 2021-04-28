@@ -31,8 +31,6 @@ const useStyles = makeStyles((theme) => ({
 
 function Introduction(props) {
 
-  console.log(props);
-
   const [showVid, setShowVid] = React.useState(false);
   const [introText, setIntroText] = React.useState('');
   //const [media, setMedia] = React.useState('')

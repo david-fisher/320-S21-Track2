@@ -34,7 +34,7 @@ jobs:
       - name: Build Simulator
         working-directory: ./simulator/frontend/
         run: yarn install && yarn run build
-      - name: Upload Editor artifact
+      - name: Upload Simulator artifact
         uses: actions/upload-artifact@v2
         with:
           name: sim-frontend
@@ -51,14 +51,14 @@ jobs:
       - name: Bundling server
         run: |
           mkdir ethisim;
-          cp -r ./apache /ethisim/;
-          cp docker-compose-deploy.yaml /ethisim/docker-compose.yaml;
-          cp requirements.txt /ethisim/requirements.txt;
-          mkdir /ethisim/apache/build;
-          cp -r ./editor-frontend/* /ethisim/apache/build/se;
-          cp -r ./sim-frontend/* /ethisim/apache/build/simulator;
-          if [ -e ./moral_kombat_backend ]; then cp -r ./moral_kombat_backend /ethisim/; fi;
-          if [ -e ./segfault ]; then cp -r ./segfault /ethisim/; fi;
+          cp -r ./apache ./ethisim/;
+          cp docker-compose-deploy.yaml ./ethisim/docker-compose.yaml;
+          cp requirements.txt ./ethisim/requirements.txt;
+          mkdir ./ethisim/apache/build ./ethisim/apache/build/se ./ethisim/apache/build/simulator;
+          cp -r ./editor-frontend/* ./ethisim/apache/build/se;
+          cp -r ./sim-frontend/* ./ethisim/apache/build/simulator;
+          if [ -e ./moral_kombat_backend ]; then cp -r ./moral_kombat_backend ./ethisim/; fi;
+          if [ -e ./segfault ]; then cp -r ./segfault ./ethisim/; fi;
       - name: Stopping current docker
         working-directory: /ethisim/
         run: if [[ $(docker ps -q) ]]; then docker stop $(docker ps -q); fi
@@ -69,7 +69,7 @@ jobs:
           if [ -e /ethisim/segfault ]; then echo "removing segfault"; rm -rf /ethisim/segfault; fi;
       - name: Copy artifact to server
         run: |
-          if [ -e /ethisim/ ]; then echo "copying to /ethisim"; cp -r /ethisim/* /ethisim/; fi
+          if [ -e /ethisim/ ]; then echo "copying to /ethisim"; cp -r ./ethisim/* /ethisim/; fi
       - name: Starting new server
         working-directory: /ethisim/
         run: docker-compose up --build -d --remove-orphans

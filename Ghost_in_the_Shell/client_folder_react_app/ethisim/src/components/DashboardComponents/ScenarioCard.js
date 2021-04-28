@@ -126,24 +126,20 @@ export default function ScenarioCard({
     //If scenario is finished, we show the button "Edit," "Delete," "View Classes," "Share," "View Student Data"
 
     const dataButton = isFinished ? (
-        <Grid
-            component={Link}
-            to={{
-                pathname: '/data/' + scenarioID,
-                data: data,
-            }}
-            className={classes.button}
-            item
-            xs={12}
-        >
+        <Grid className={classes.button} item xs={12}>
             <Button
+                component={Link}
+                to={{
+                    pathname: '/data/' + scenarioID,
+                    data: data,
+                }}
                 className={classes.buttonText}
                 variant="contained"
                 color="primary"
             >
                 <AssessmentIcon />
                 <Typography variant="subtitle1" noWrap>
-                    Data
+                    View Submitted Responses
                 </Typography>
             </Button>
         </Grid>

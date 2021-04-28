@@ -80,9 +80,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 //Needs scenario id
-const endpointGET = '/flowchart?scenario_id=';
+const endpointGET = '/flowchart?scenario=';
 //Needs scenario id
-const endpointPUT = '/flowchart?scenario_id=';
+const endpointPUT = '/flowchart?scenario=';
 
 FlowDiagram.propTypes = {
     scenario_ID: PropTypes.number,
@@ -517,8 +517,12 @@ export default function FlowDiagram({ scenario_ID }) {
                     <HelpIcon />
                 </Button>
                 <GenericInfoButton
-                    description={`Here you can order the pages the student will go through in the simulation. Click and drag your cursor to move around the diagram box.
-                    Click and drag from one box to another and an arrow will appear, effectively connecting each page. It's advised to start with the introduction page.`}
+                    description={`Here, you set the order of pages that a student will go through as they complete the simulation. 
+                    In the flow diagram click and drag to move around. Double click to zoom in. Simulations start with the introduction. 
+                    To connect two pages click the black dot at the bottom of a page and drag your cursor to the top of the page you wish to connect the first page to. 
+                    A grey arrow will appear visualizing the connection. Generic pages are red, Reflection pages are purple, and Action pages are green. 
+                    Remember that Action pages will require two outgoing arrows for the two possible choices a student might make. 
+                    Use the “Reset” button to revert all changes. Click “Save” before leaving the page.`}
                     open={open}
                     setOpen={setOpen}
                 />

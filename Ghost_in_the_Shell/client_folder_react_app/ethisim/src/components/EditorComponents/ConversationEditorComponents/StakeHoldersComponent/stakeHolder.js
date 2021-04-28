@@ -281,14 +281,14 @@ export default function StakeHolder({
         <div id="parent">
             <div id="SHname">
                 <TextField
-                    label="StakeHolder Name"
+                    label="Stakeholder Name"
                     value={stakeHolderName}
                     onChange={onChangeName}
                 />
             </div>
             <div id="SHjob">
                 <TextField
-                    label="StakeHolder Job"
+                    label="Stakeholder Job"
                     value={stakeHolderJob}
                     onChange={onChangeJob}
                 />
@@ -307,7 +307,7 @@ export default function StakeHolder({
                         variant="contained"
                         color="primary"
                         component="span"
-                        style={{ textTransform: 'unset' }}
+                        //style={{ textTransform: 'unset' }}
                     >
                         Upload
                     </Button>

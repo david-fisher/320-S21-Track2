@@ -613,9 +613,11 @@ class reflection(APIView):
         
         try:
             reflections = []
-            for response in responses:
-                ref = ReflectionsTaken.objects.filter(response = response.response_id).first()
+            for responseObj in responses:
+                ref = ReflectionsTaken.objects.filter(response = responseObj.response_id).first()
                 reflection_data = ReflectionsTakenSerializer(ref).data
+                reflection_data['response_id'] = responseObj.response_id
+                reflection_data['response'] = responseObj.response
                 reflections.append(reflection_data)
             return DRF_response(reflections, status.HTTP_200_OK)
         except ReflectionsTaken.DoesNotExist:

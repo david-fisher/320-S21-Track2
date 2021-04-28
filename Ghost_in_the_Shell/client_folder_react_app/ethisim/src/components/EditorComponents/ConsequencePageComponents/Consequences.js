@@ -47,8 +47,8 @@ export default function Consequences(props) {
             <Typography align="center" variant="h2">
                 Consequences
             </Typography>
-            <Grid container justify="flex-end">
-            {/* <Grid container justify="flex-end">
+            //<Grid container justify="flex-end">
+            /* <Grid container justify="flex-end">
                 <Button color="primary" onClick={handleClickOpen}>
                     <HelpIcon />
                 </Button>
@@ -80,7 +80,7 @@ export default function Consequences(props) {
             >
                 Save
 
-            </Button> */}
+            </Button> */
         </Container>
     );
 }

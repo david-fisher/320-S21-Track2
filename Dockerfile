@@ -7,7 +7,7 @@ RUN python3.6 -m pip install ptvsd
 COPY requirements.txt ./
 RUN python3.6 -m pip install -r requirements.txt
 COPY ./moral_kombat_backend/lead/ /var/www/backend/lead/
-COPY ./simulator/frontend/ /var/www/backend/segfault/
+COPY ./segfault/ /var/www/backend/segfault/
 COPY ./apache/shib_conf/ /etc/shibboleth/
 COPY ./apache/apache_conf/httpd.conf /etc/httpd/conf/
 COPY ./apache/apache_conf/.htaccess /var/www/html/
@@ -15,5 +15,7 @@ COPY ./apache/apache_conf/conf.d/segfault.conf /etc/httpd/conf.d/
 COPY ./apache/apache_conf/conf.d/backendboys.conf /etc/httpd/conf.d/
 COPY ./apache/apache_conf/ssl/ /etc/pki/tls/certs/
 COPY ./apache/build/ /var/www/html/
+COPY ./apache/edit_static_files.sh ./
+RUN bash -c "./edit_static_files.sh"
 RUN echo "export SERVER_NAME=${SERVER_NAME}" >> /etc/environment
 RUN echo "export SERVER_NAME=${SERVER_NAME}" >> /etc/environment

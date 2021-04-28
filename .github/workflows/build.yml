@@ -29,12 +29,15 @@ jobs:
       - name: Build Simulator
         working-directory: ./simulator/frontend/
         run: yarn install && yarn run build
-      - name: Copy build to workspace apache
+      - name: Copy build artifacts to the apache directory
         run: |
           cp -r ./Ghost_in_the_Shell/client_folder_react_app/ethisim/build ./apache/build/se
           cp -r ./simulator/frontend/build ./apache/build/simulator
-      - run: rm -rf /ethisim/apache/* || rm -rf /home/mobydock/ethisim/apache/*
+      - name: Remove exisitng apache files
+        run: |
+          if [ -e /ethisim/apache/ ]; then echo "removing /ethisim/apache/*"; rm -rf /ethisim/apache/*; fi
+          if [ -e /home/mobydock/ethisim/apache/* ]; then echo "removing /home/mobydock/ethisim/apache/*"; rm -rf /home/mobydock/ethisim/apache/*; fi
       - name: Copy local to root
         run: |
-          cp -r ./apache /ethisim/apache
-          cp -r ./apache /home/mobydock/ethisim/apache
+          if [ -e /ethisim/apache/ ]; then echo "copying to /ethisim/apache"; cp -r ./apache /ethisim/apache; fi
+          if [ -e /home/mobydock/ethisim/apache/* ]; then echo "copying to /home/mobydock/ethisim/apache/*"; cp -r ./apache /home/mobydock/ethisim/apache; fi

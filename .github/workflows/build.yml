@@ -33,18 +33,23 @@ jobs:
         run: |
           mkdir ethisim;
           cp -r ./apache ./ethisim/;
+          cp docker-compose-deploy.yaml /ethisim/docker-compose.yaml;
           mkdir ./ethisim/apache/build;
           cp -r ./Ghost_in_the_Shell/client_folder_react_app/ethisim/build ./ethisim/apache/build/se;
           cp -r ./simulator/frontend/build ./ethisim/apache/build/simulator;
-          cp -r ./moral_kombat_backend ./ethisim/;
-          cp -r ./segfault ./ethisim/;
+          if [ -e ./moral_kombat_backend ]; then cp -r ./moral_kombat_backend ./ethisim/; fi;
+          if [ -e ./segfault ]; then cp -r ./segfault ./ethisim/; fi;
       - name: Stopping current docker
-        run: docker-compose -f /ethisim/docker-compose-deploy.yml down
+        working-directory: /ethisim/
+        run: if [[ $(docker ps -q) ]]; then docker stop $(docker ps -q); fi
       - name: Remove exisitng apache files
         run: |
-          if [ -e /ethisim/apache/ ]; then echo "removing /ethisim/apache/*"; rm -rf /ethisim/apache/*; fi
+          if [ -e /ethisim/apache/build ]; then echo "removing apache build"; rm -rf /ethisim/apache/build/*; fi;
+          if [ -e /ethisim/moral_kombat_backend ]; then echo "removing moral_kombat_backend"; rm -rf /ethisim/moral_kombat_backend; fi;
+          if [ -e /ethisim/segfault ]; then echo "removing segfault"; rm -rf /ethisim/segfault; fi;
       - name: Copy artifact to server
         run: |
           if [ -e /ethisim/ ]; then echo "copying to /ethisim"; cp -r ./ethisim/* /ethisim/; fi
       - name: Starting new server
-        run: docker-compose -f /ethisim/docker-compose-deploy.yaml up --build -d --remove-orphans
+        working-directory: /ethisim/
+        run: docker-compose up --build -d --remove-orphans

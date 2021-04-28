@@ -22,7 +22,11 @@ function Page(props) {
         "A": (
             <Action
                 {...props}
-            />)
+            />),
+        "R": (
+            <Reflection
+                {...props}
+            />)    
     };
 
     const { state, setState } = React.useState({

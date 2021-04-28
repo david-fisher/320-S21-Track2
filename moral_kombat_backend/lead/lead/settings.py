@@ -96,7 +96,6 @@ DATABASES = {
         # 'ENGINE': 'django.db.backends.sqlite3',
         # 'NAME': BASE_DIR / 'db.sqlite3',
 
-
         #  'ENGINE': 'django.db.backends.postgresql_psycopg2',
         #  'NAME': 'hkjdggmf',
         #  'USER': 'hkjdggmf',
@@ -104,12 +103,12 @@ DATABASES = {
         #  'HOST': 'queenie.db.elephantsql.com',
         #  'PORT': '5432',
 
-         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-         'NAME': 'qelfnxes',
-         'USER': 'qelfnxes',
-         'PASSWORD': 'MV7YEGQjB5A9FijyB-IcUZ1wP9xSvxp-',
-         'HOST': 'queenie.db.elephantsql.com',
-         'PORT': '5432',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'qelfnxes',
+        'USER': 'qelfnxes',
+        'PASSWORD': 'MV7YEGQjB5A9FijyB-IcUZ1wP9xSvxp-',
+        'HOST': 'queenie.db.elephantsql.com',
+        'PORT': '5432',
 
         # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
         # 'NAME': 'Zoomba',

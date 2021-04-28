@@ -297,7 +297,7 @@ class get_page_info(APIView):
                     question = ReflectionQuestions.objects.get(id=quer.id)
                 except Scenarios.DoesNotExist:
                     return DRF_response(status=status.HTTP_404_NOT_FOUND)
-                quer_data = Reflection_questionsSerializer(quer).data
+                quer_data = Reflection_questionsSerializer(question).data
                 reflection_qs.append(quer_data)
             page_data.update(
                 {

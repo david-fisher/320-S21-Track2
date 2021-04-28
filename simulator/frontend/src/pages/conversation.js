@@ -9,6 +9,7 @@ import {
 } from "@material-ui/core";
 import { BASE_URL } from "../constants/config";
 import { ScenariosContext } from "../Nav";
+import MultipartConvo from './multipart_conversation';
 
 const TextTypography = withStyles({
   root: {
@@ -34,6 +35,7 @@ function Conversation({ showStakeholders, setShowStakeholders, stakeholder }) {
   }
 
   const [monologue, setMonologue] = React.useState('');
+  const [ dialogue, setDialogue ] = React.useState({});
   const [scenarios, setScenarios] = React.useContext(ScenariosContext);
 
   const getConversationData = async () => {
@@ -49,20 +51,28 @@ function Conversation({ showStakeholders, setShowStakeholders, stakeholder }) {
 
   const setConversation = (conversation) => {
 
+    console.log(conversation);
+
     if(!stakeholder.isMultipart) {
       setMonologue(conversation.reduce((text, convPart) => {
         return text + convPart.response;
       }, ''));
     } else {
-      // TODO: Implement multipart conversations
+      setDialogue(conversation.map((convo) => {
+        return {
+          question: convo.question,
+          response: convo.response
+        }; 
+      }));
     }
 
   };
 
   useEffect(() => {
     getConversationData().then(conversationData => {
-      console.log(conversationData)
-      setMonologue(conversationData[0].response);
+      console.log(conversationData);
+      setConversation(conversationData);
+      //setMonologue(conversationData[0].response);
     })
     .catch(err => {
       alert(err);
@@ -105,7 +115,7 @@ function Conversation({ showStakeholders, setShowStakeholders, stakeholder }) {
         <Grid item lg={12}>
           <Box p={2} className={classes.textBox}>
             <Typography>
-              {monologue}
+              {stakeholder.isMultipart ? <MultipartConvo dialogue={dialogue} /> : monologue}
             </Typography>
           </Box>
         </Grid>

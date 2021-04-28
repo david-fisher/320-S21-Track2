@@ -70,7 +70,7 @@ export default function StakeHolderFields({ scenario }) {
         var data = { SCENARIO: { scenario } };
         var config = {
             method: 'get',
-            url: baseURL + '/api/stakeholders/?SCENARIO=' + scenario,
+            url: baseURL + '/api/stakeholders/?SCENARIO=' + 1,
             headers: {
                 'Content-Type': 'application/json',
             },

@@ -337,14 +337,14 @@ export default function ICMatrix({ scenario_ID }) {
                 </Button>
             </div>
 
-            <EntryFields
+            {/* <EntryFields
                 issueEntryFieldList={
                     issueEntryFieldList !== null ? issueEntryFieldList : []
                 }
                 setIssueEntryFieldList={setIssueEntryFieldList}
                 scenario_stakeHolders={stakeHolders}
                 scenarioID={scenario_ID}
-            />
+            /> */}
 
             <Button
                 className={classes.button}

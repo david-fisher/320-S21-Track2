@@ -43,7 +43,7 @@ export default function Consequences(props) {
     const [bodyText, setBodyText] = useState(body);
 
     return (
-        <Container component="main">
+        /*<Container component="main">
             <Typography align="center" variant="h2">
                 Consequences
             </Typography>
@@ -80,7 +80,7 @@ export default function Consequences(props) {
             >
                 Save
 
-            </Button> */
-        </Container>
+            </Button>
+        </Container>*/
     );
 }

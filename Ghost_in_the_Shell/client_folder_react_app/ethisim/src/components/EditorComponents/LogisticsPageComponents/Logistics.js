@@ -242,7 +242,6 @@ export default function Logistics({ scenario_ID }) {
         NAME: '',
         PUBLIC: false,
         NUM_CONVERSATION: 0,
-        PROFESSOR: 0,
         IS_FINISHED: false,
         DATE_CREATED: ' ',
         COURSES: [],
@@ -255,7 +254,6 @@ export default function Logistics({ scenario_ID }) {
             NewScenario.NAME = response.data.NAME;
             NewScenario.PUBLIC = response.data.PUBLIC;
             NewScenario.NUM_CONVERSATION = response.data.NUM_CONVERSATION;
-            NewScenario.PROFESSOR = response.data.PROFESSOR;
             NewScenario.IS_FINISHED = response.data.IS_FINISHED;
             NewScenario.DATE_CREATED = response.data.DATA_CREATED;
             NewScenario.COURSES = response.data.COURSES;

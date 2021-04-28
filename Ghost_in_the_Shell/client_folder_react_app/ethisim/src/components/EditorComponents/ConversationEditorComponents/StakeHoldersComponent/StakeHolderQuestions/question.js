@@ -66,6 +66,7 @@ QuestionField.propTypes = {
     summary: PropTypes.string,
     QRs: PropTypes.any,
     setQRs: PropTypes.any,
+    //StakeHolders: PropTypes.any,
 };
 
 export default function QuestionField({
@@ -77,10 +78,12 @@ export default function QuestionField({
     summary,
     QRs,
     setQRs,
+    //StakeHolders,
 }) {
     const [questionValue, setQuestionValue] = useState(question);
     const [responseValue, setResponseValue] = useState(response);
     const [summaryValue, setSummaryValue] = useState(summary);
+    //const [stakeHolders, setStakeHolders] = useState(StakeHolders);
 
     /*const [didGetIssues, setDidGetIssues] = useState(false);
     //const [issues, setIssues] = useState([]);
@@ -116,6 +119,8 @@ export default function QuestionField({
 
         return () => clearTimeout(timeout);
     }, [successBannerFade]);*/
+
+    const [isLoading, setLoading] = useState(false);
 
     const [errorBannerMessage, setErrorBannerMessage] = useState(''); //error banner
     const [errorBannerFade, setErrorBannerFade] = useState(false);
@@ -304,6 +309,31 @@ export default function QuestionField({
     }
 
     const rows = [createData(0, 2, 4, 0, 1)];
+    const header = [];
+
+    // function setHeader() {
+    //     setLoading(true);
+    //     let cols = [
+    //         <TableCell align="right">{"Question"}</TableCell>
+    //     ];
+    //     stakeHolders.ISSUES.forEach((issue) => {
+    //             cols.push(<TableCell align="right">{'Issue: ' + issue.NAME.toUpperCase()}</TableCell>)
+    //     });
+    //     setLoading(false);
+    //     return cols
+    // }
+
+    // function setRows(){
+    //     setLoading(true);
+    //     let rows = []
+
+    //     stakeHolders.ISSUES.forEach((issue) => {
+    //             cols.push(<TableCell align="right">{'Issue: ' + issue.NAME.toUpperCase()}</TableCell>)
+    //     });
+    //     setLoading(false);
+    //     return cols
+
+    // }
 
     const classes = useStyles();
 
@@ -357,13 +387,7 @@ export default function QuestionField({
                             aria-label="a dense table"
                         >
                             <TableHead>
-                                <TableRow>
-                                    <TableCell align="right">Issue 1</TableCell>
-                                    <TableCell align="right">Issue 2</TableCell>
-                                    <TableCell align="right">Issue 3</TableCell>
-                                    <TableCell align="right">Issue 4</TableCell>
-                                    <TableCell align="right">Issue 5</TableCell>
-                                </TableRow>
+                                <TableRow>{header}</TableRow>
                             </TableHead>
                             <TableBody>
                                 {rows.map((row) => (

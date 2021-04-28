@@ -80,9 +80,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 //Needs scenario id
-const endpointGET = '/flowchart?scenario_id=';
+const endpointGET = '/flowchart?scenario=';
 //Needs scenario id
-const endpointPUT = '/flowchart?scenario_id=';
+const endpointPUT = '/flowchart?scenario=';
 
 FlowDiagram.propTypes = {
     scenario_ID: PropTypes.number,

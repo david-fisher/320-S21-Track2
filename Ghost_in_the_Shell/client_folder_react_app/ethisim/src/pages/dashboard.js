@@ -238,12 +238,13 @@ export default function Dashboard() {
 
         if (validInput) {
             setNewScenario({
+                SCENARIO: 0,
+                VERSION: 0,
                 NAME: ' ',
                 IS_FINISHED: false,
                 PUBLIC: false,
                 NUM_CONVERSATIONS: 0,
-                PROFESSOR: 1,
-                COURSES: [],
+                SCENARIO_ID: 0,
             });
             //Smooth loading animation, loading animation will not reset during POST and GET Request
             setFetchScenariosResponse({
@@ -251,13 +252,7 @@ export default function Dashboard() {
                 loading: true,
                 error: null,
             });
-            post(
-                setPost,
-                endpointPost,
-                onFailurePost,
-                onSuccessPost,
-                NewScenario
-            );
+            post(setPost, endpointPost, onFailurePost, NewScenario);
             setOpen(false);
         }
     };
@@ -265,12 +260,13 @@ export default function Dashboard() {
     //X button on dialog for creating new scenario
     const handleClose = () => {
         setNewScenario({
+            SCENARIO: 0,
+            VERSION: 0,
             NAME: ' ',
             IS_FINISHED: false,
             PUBLIC: false,
             NUM_CONVERSATIONS: 0,
-            PROFESSOR: 1,
-            COURSES: [],
+            SCENARIO_ID: 0,
         });
         setErrorName(false);
         setErrorCourses(false);

@@ -153,19 +153,6 @@ class RESPONSES_TO_CONVERSATIONS(models.Model):
     SCORE = models.FloatField(validators = [MinValueValidator(0.0)])
     CONVERSATION = models.ForeignKey('CONVERSATIONS', to_field= 'CONVERSATION', on_delete = models.CASCADE, related_name="responsesTC3")
 
-# class actions_taken(models.Model):
-#     RESPONSE = models.ForeignKey('responses', on_delete = models.CASCADE, related_name="actions_taken1")
-#     ACTION_PAGE = models.ForeignKey('action_page', on_delete = models.CASCADE, related_name="actions_taken2")
-
-# class conversations_had(models.Model):
-#     STUDENT = models.ForeignKey('students', on_delete = models.CASCADE, related_name="conversations_had1")
-#     COURSE = models.ForeignKey('responses', on_delete = models.CASCADE, related_name="conversations_had2")
-#     SCENARIO = models.ForeignKey('scenarios', on_delete = models.CASCADE, related_name="conversations_had3")
-#     VERSION = models.IntegerField(default=1, editable=False)
-#     DATE_TAKEN = models.ForeignKey('responses', on_delete = models.CASCADE, related_name="conversations_had5")
-#     STAKEHOLDER = models.ForeignKey('stakeholders', on_delete = models.CASCADE, related_name="conversations_had6")
-#     SCORE = models.IntegerField()
-#     CONVERSATION = models.ForeignKey('conversations', on_delete = models.CASCADE, related_name="conversations_had7")
 
 #Updated 4/12 by Cooper (Nothing actually changed just verified)
 class REFLECTIONS_TAKEN(models.Model):

@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Body from '../GeneralPageComponents/Body';
+
+import Title from '../GeneralPageComponents/Title';
 import {
     Typography,
     Container,
@@ -37,7 +39,6 @@ export default function Consequences(props) {
     const { scenario_ID, body } = props;
 
     const classes = useStyles();
-
     //for info button
     const [open, setOpen] = React.useState(false);
     const handleClickOpen = () => {
@@ -52,21 +53,28 @@ export default function Consequences(props) {
             <Typography align="center" variant="h2">
                 Consequences
             </Typography>
-            <Grid container justify="flex-end">
+            {/* <Grid container justify="flex-end">
                 <Button color="primary" onClick={handleClickOpen}>
                     <HelpIcon />
                 </Button>
                 <GenericInfoButton
-                    description={`This page is new`}
+                    description={`Give the student an introduction to the ethical scenario. What is the problem? Think about both the positive and negative potential consequences of the technology,
+                    as well as the stakeholders who are promoting the technology and the stakeholders who will be most directly impacted.
+                    `}
                     open={open}
                     setOpen={setOpen}
                 />
             </Grid>
-
+            <Title
+                title={title}
+                setTitle={setTitle}
+                error={errorTitle}
+                errorMessage={errorTitleText}
+            />
             <Body
                 body={bodyText}
                 setBody={setBodyText}
-                // error={errorBody}
+                error={errorBody}
                 errorMessage={'Page body cannot be empty.'}
             />
             <Button
@@ -76,7 +84,8 @@ export default function Consequences(props) {
                 //onClick={savePage}
             >
                 Save
-            </Button>
+
+            </Button> */}
         </Container>
     );
 }

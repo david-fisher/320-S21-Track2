@@ -232,7 +232,7 @@ export default function Editor(props) {
             },
         ];
 
-        const endpoint = '/logistics?scenario_id=' + scenario_ID;
+        const endpoint = '/logistics?scenario=' + scenario_ID;
 
         function onSuccess(resp) {
             let p = null;

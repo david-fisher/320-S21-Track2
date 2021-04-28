@@ -53,7 +53,8 @@ export default function ErrorRadios(props)
   }, [])
 
   useEffect (() => {
-    fetch(`${BASE_URL}/action_response/?student_id=${STUDENT_ID}&page_id=${props.pageNumber}&scenario_id=${SCENARIO_ID}`)
+    //student id is the string "student" in the students api
+    fetch(`${BASE_URL}/action_response/?student_id=${STUDENT_ID}&page_id=${props.pageNumber}&scenario_id=${props.match.params.sid}`)
     .then(res => res.json())
     .then(pageData => {
       console.log(pageData)
@@ -149,7 +150,8 @@ export default function ErrorRadios(props)
             setError(true);
             const selected = choices.filter(choice => choice.text === value)[0];
             console.log(selected)
-            fetch(BASE_URL + `/action_response/?action_page_id=${selected.a_id}&student_id=${STUDENT_ID}&scenario_id=${SCENARIO_ID}&course_id=1`, {
+            //student id is the string "student" in the students api
+            fetch(BASE_URL + `/action_response/?action_page_id=${selected.a_id}&student_id=${STUDENT_ID}&scenario_id=${props.match.params.sid}&course_id=1`, {
               method: 'PUT',
               headers: {
                 'Accept': 'application/json',

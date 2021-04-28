@@ -1,0 +1,13 @@
+# rename to .env
+SERVER_NAME=<domain>
+SERVER_ADMIN=
+BUILDKIT_INLINE_CACHE=1
+DOCKER_IP=DOCKER_HOST
+DB_USER=
+DB_NAME=
+DB_HOST=
+DB_PASS=
+DB_PORT=
+ORIGIN_HOST=<same-as-server-name>
+ORIGIN_PORT=
+DJ_SK=<django-secret-key>

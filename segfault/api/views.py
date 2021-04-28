@@ -610,7 +610,7 @@ class reflection(APIView):
         try:
             response = Responses.objects.get(page= page_id, student = student_id, scenario = scenario_id)
         except Responses.DoesNotExist:
-            return DRF_response(status=status.HTTP_404_NOT_FOUND)
+            return DRF_response({"detail": "Response does not exist"}, status=status.HTTP_404_NOT_FOUND)
         
         try:
             ref = ReflectionsTaken.objects.filter(response = response.response_id).first()
@@ -623,7 +623,8 @@ class reflection(APIView):
         page_id = self.request.query_params.get('page_id') 
         student_id = self.request.query_params.get('student_id')
         scenario_id = self.request.query_params.get('scenario_id')
-        reflections = self.request.query_params.get('reflections')
+        # reflections = self.request.query_params.get('reflections')
+        reflections = request.data.get('reflection')
 
         # extra check for if the given JSON has the required fields
         if(scenario_id is None or page_id is None or student_id is None or reflections is None):
@@ -660,21 +661,27 @@ class reflection(APIView):
         page_id = self.request.query_params.get('page_id') 
         student_id = self.request.query_params.get('student_id')
         scenario_id = self.request.query_params.get('scenario_id')
-        reflections = self.request.query_params.get('reflections')
+        # reflections = self.request.query_params.get('reflections')
+        reflections = request.data.get('reflection')
+        if(request.data.get('reflections') is not None):
+            request.data.remove('reflections')
+        
         serializer = ResponseSerializer(data=request.data)
+        response_instance = None
         if serializer.is_valid():
-            serializer.save()
+            response_instance = serializer.save()
         else:
-            return DRF_response(status=status.HTTP_400_BAD_REQUEST)
+            return DRF_response({"detail": "cannot create response"}, status=status.HTTP_400_BAD_REQUEST)
         response = Responses.objects.filter(page= page_id, student = student_id, scenario = scenario_id).first()
         newref={
-                "response":response,
+                "response":response.response_id,
                 "reflections":reflections
             }
         serializer = ReflectionsTakenSerializer(data=newref)
         if serializer.is_valid():
             serializer.save()
             return DRF_response(serializer.data)
+        response_instance.delete()
         return DRF_response(status=status.HTTP_400_BAD_REQUEST)
 
 

@@ -36,8 +36,8 @@ jobs:
       - name: Remove exisitng apache files
         run: |
           if [ -e /ethisim/apache/ ]; then echo "removing /ethisim/apache/*"; rm -rf /ethisim/apache/*; fi
-          if [ -e /home/mobydock/ethisim/apache/* ]; then echo "removing /home/mobydock/ethisim/apache/*"; rm -rf /home/mobydock/ethisim/apache/*; fi
+          if [ -e /home/mobydock/ethisim/apache/ ]; then echo "removing /home/mobydock/ethisim/apache/*"; rm -rf /home/mobydock/ethisim/apache/*; fi
       - name: Copy local to root
         run: |
           if [ -e /ethisim/apache/ ]; then echo "copying to /ethisim/apache"; cp -r ./apache /ethisim/apache; fi
-          if [ -e /home/mobydock/ethisim/apache/* ]; then echo "copying to /home/mobydock/ethisim/apache/*"; cp -r ./apache /home/mobydock/ethisim/apache; fi
+          if [ -e /home/mobydock/ethisim/apache/ ]; then echo "copying to /home/mobydock/ethisim/apache/*"; cp -r ./apache /home/mobydock/ethisim/apache; fi

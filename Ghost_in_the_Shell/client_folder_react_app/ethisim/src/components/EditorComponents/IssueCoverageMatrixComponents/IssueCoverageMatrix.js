@@ -448,6 +448,10 @@ export default function IssueMatrix({ scenario_stakeHolders, scenario }) {
                 data={rows}
                 options={{
                     exportButton: true,
+                    pageSize: 10,
+                    pageSizeOptions: [10],
+                    emptyRowsWhenPaging: false,
+
                     rowStyle: (rowData) => ({
                         backgroundColor:
                             rows.length === rowData.tableData.id
@@ -504,7 +508,7 @@ export default function IssueMatrix({ scenario_stakeHolders, scenario }) {
                     // header: false,
                     headerStyle: {
                         backgroundColor: '#881c1c',
-                        color: '#000000',
+                        color: '#FFF',
                     },
                 }}
             />

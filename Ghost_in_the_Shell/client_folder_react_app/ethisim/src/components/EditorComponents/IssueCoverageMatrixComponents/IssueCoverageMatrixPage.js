@@ -128,7 +128,7 @@ export default function ICMatrix({ scenario_ID }) {
 
         var config = {
             method: 'put',
-            url: baseURL + '/multi_stake?SCENARIO=' + scenario_ID,
+            url: baseURL + '/multi_stake?SCENARIO=' + 1,
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -230,7 +230,7 @@ export default function ICMatrix({ scenario_ID }) {
         var data = { SCENARIO: { scenario_ID } };
         var config = {
             method: 'get',
-            url: baseURL + '/stakeholder?scenario_id=' + scenario_ID,
+            url: baseURL + '/stakeholder?scenario_id=' + 1,
             headers: {
                 'Content-Type': 'application/json',
             },

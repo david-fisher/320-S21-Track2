@@ -294,8 +294,8 @@ class get_page_info(APIView):
             reflection_qs = []
             for quer in reflection_queries:
                 try:
-                    question = ReflectionQuestions.objects.get(id=quer.id)
-                except Scenarios.DoesNotExist:
+                    question = ReflectionQuestions.objects.get(id=quer.reflection_question.id)
+                except:
                     return DRF_response(status=status.HTTP_404_NOT_FOUND)
                 quer_data = Reflection_questionsSerializer(quer).data
                 reflection_qs.append(quer_data)

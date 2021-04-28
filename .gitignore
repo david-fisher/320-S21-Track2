@@ -26,6 +26,17 @@ hs_err_pid*
 */__pycache__/*
 *.py[cod]
 *.pyc
+<<<<<<< .merge_file_a24640
 
 *$py.class
 
+=======
+*$py.class
+
+/apache/shib_conf/*
+/apache/apache_conf/ssl/*
+
+*.env
+
+.DS_Store
+>>>>>>> .merge_file_a29540

@@ -31,5 +31,5 @@ hs_err_pid*
 /apache/shib_conf/*
 /apache/apache_conf/ssl/*
 
-/apache/build/*
+/apache/build
 *.env

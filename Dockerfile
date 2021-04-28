@@ -7,7 +7,7 @@ RUN python3.6 -m pip install ptvsd
 COPY requirements.txt ./
 RUN python3.6 -m pip install -r requirements.txt
 COPY ./moral_kombat_backend/lead/ /var/www/backend/lead/
-COPY ./simulator/frontend/ /var/www/backend/segfault/
+COPY ./segfault/ /var/www/backend/segfault/
 COPY ./apache/shib_conf/ /etc/shibboleth/
 COPY ./apache/apache_conf/httpd.conf /etc/httpd/conf/
 COPY ./apache/apache_conf/.htaccess /var/www/html/

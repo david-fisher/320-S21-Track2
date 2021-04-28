@@ -86,15 +86,9 @@ WSGI_APPLICATION = 'segfault.wsgi.application'
 
 DATABASES = {
     'default': { 'ENGINE': 'django.db.backends.postgresql_psycopg2',
-<<<<<<< Updated upstream
         'NAME': 'backendtesting',
         'USER':'postgres',
         'PASSWORD':'Aa12345678',
-=======
-        'NAME': 'seg2',
-        'USER':'postgres',
-        'PASSWORD':'1234',
->>>>>>> Stashed changes
         'HOST':'localhost',
         'PORT':'5432'
     }

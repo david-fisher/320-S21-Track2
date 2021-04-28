@@ -219,11 +219,11 @@ export default function IssueMatrix({ scenario_stakeHolders, scenario }) {
 
             curStakeHolder.ISSUES.forEach((issue) => {
                 if (
-                    curRow['Issue' + issue.NAME.toUpperCase()] !==
+                    curRow['Issue: ' + issue.NAME.toUpperCase()] !==
                     issue.COVERAGE_SCORE
                 ) {
                     issue.COVERAGE_SCORE =
-                        curRow['Issue' + issue.NAME.toUpperCase()];
+                        curRow['Issue: ' + issue.NAME.toUpperCase()];
                     changedStakeHolder = curStakeHolder;
                 }
                 issues.push({
@@ -277,14 +277,14 @@ export default function IssueMatrix({ scenario_stakeHolders, scenario }) {
         stakeHolders.current[0].ISSUES.forEach((issue) => {
             let insertBoolean = true;
             for (let i = 0; i < cols.length; i++) {
-                if (cols[i].title === 'Issue' + issue.NAME) {
+                if (cols[i].title === 'Issue: ' + issue.NAME) {
                     insertBoolean = false;
                 }
             }
             if (insertBoolean) {
                 cols.push({
-                    title: 'Issue' + issue.NAME,
-                    field: 'Issue' + issue.NAME.toUpperCase(),
+                    title: 'Issue: ' + issue.NAME,
+                    field: 'Issue: ' + issue.NAME.toUpperCase(),
                     type: 'numeric',
                 });
             }
@@ -299,11 +299,13 @@ export default function IssueMatrix({ scenario_stakeHolders, scenario }) {
             let stakeHolder = stakeHolders.current[j];
             for (let i = 0; i < stakeHolder.ISSUES.length; i++) {
                 let curIssue = stakeHolder.ISSUES[i];
-                if (sums['Issue' + curIssue.NAME.toUpperCase()] === undefined) {
-                    sums['Issue' + curIssue.NAME.toUpperCase()] = 0;
+                if (
+                    sums['Issue: ' + curIssue.NAME.toUpperCase()] === undefined
+                ) {
+                    sums['Issue: ' + curIssue.NAME.toUpperCase()] = 0;
                 }
-                sums['Issue' + curIssue.NAME.toUpperCase()] +=
-                    rows[j]['Issue' + curIssue.NAME.toUpperCase()];
+                sums['Issue: ' + curIssue.NAME.toUpperCase()] +=
+                    rows[j]['Issue: ' + curIssue.NAME.toUpperCase()];
             }
         }
         setSums(sums);
@@ -319,12 +321,14 @@ export default function IssueMatrix({ scenario_stakeHolders, scenario }) {
                 DESCRIPTION: stakeHolder.JOB,
             };
             stakeHolder.ISSUES.forEach((curIssue) => {
-                row['Issue' + curIssue.NAME.toUpperCase()] =
+                row['Issue: ' + curIssue.NAME.toUpperCase()] =
                     curIssue.COVERAGE_SCORE;
-                if (sums['Issue' + curIssue.NAME.toUpperCase()] === undefined) {
-                    sums['Issue' + curIssue.NAME.toUpperCase()] = 0;
+                if (
+                    sums['Issue: ' + curIssue.NAME.toUpperCase()] === undefined
+                ) {
+                    sums['Issue: ' + curIssue.NAME.toUpperCase()] = 0;
                 }
-                sums['Issue' + curIssue.NAME.toUpperCase()] +=
+                sums['Issue: ' + curIssue.NAME.toUpperCase()] +=
                     curIssue.COVERAGE_SCORE;
             });
             return row;
@@ -344,8 +348,8 @@ export default function IssueMatrix({ scenario_stakeHolders, scenario }) {
             curStakeHolder.ISSUES.forEach((issue) => {
                 rows.forEach((curRow) => {
                     if (
-                        curRow['Issue' + issue.NAME.toUpperCase()] == undefined
-                    ) {
+                        curRow['Issue: ' + issue.NAME.toUpperCase()] == undefined
+                        ) {
                         deletedStakeHolder = curStakeHolder;
                         index = i;
                     }
@@ -413,22 +417,11 @@ export default function IssueMatrix({ scenario_stakeHolders, scenario }) {
             <MaterialTable /*table*/
                 icons={tableIcons} /*all the icons*/
                 title={'Issue Coverage Matrix'}
-                options={{
-                    exportButton: true,
-                }}
                 editable={{
                     isEditHidden: (rowData) =>
                         rowData.DESCRIPTION === 'Running Issue Sums',
                     isDeleteHidden: (rowData) =>
                         rowData.DESCRIPTION === 'Running Issue Sums',
-                    onRowAdd: (newData) =>
-                        new Promise((resolve, reject) => {
-                            setTimeout(() => {
-                                setRows([...rows, newData]);
-
-                                resolve();
-                            }, 1000);
-                        }),
                     onRowUpdate: (newData, oldData) =>
                         new Promise((resolve, reject) => {
                             setTimeout(() => {
@@ -452,7 +445,72 @@ export default function IssueMatrix({ scenario_stakeHolders, scenario }) {
                         }),
                 }}
                 columns={cols}
-                data={rows.concat(issueSums)}
+                data={rows}
+                options={{
+                    exportButton: true,
+                    pageSize: 10,
+                    pageSizeOptions: [10],
+                    emptyRowsWhenPaging: false,
+
+                    rowStyle: (rowData) => ({
+                        backgroundColor:
+                            rows.length === rowData.tableData.id
+                                ? '#881c1c'
+                                : '#FFF',
+                        color:
+                            rows.length === rowData.tableData.id
+                                ? '#FFF'
+                                : '#000000',
+                    }),
+                    headerStyle: {
+                        backgroundColor: '#881c1c',
+                        color: '#FFF',
+                    },
+                }}
+            />
+
+            <MaterialTable /*table*/
+                icons={tableIcons} /*all the icons*/
+                title={'Running Issue Sums'}
+                editable={{
+                    isEditHidden: (rowData) =>
+                        rowData.DESCRIPTION === 'Running Issue Sums',
+                    isDeleteHidden: (rowData) =>
+                        rowData.DESCRIPTION === 'Running Issue Sums',
+                    onRowUpdate: (newData, oldData) =>
+                        new Promise((resolve, reject) => {
+                            setTimeout(() => {
+                                resolve();
+                            }, 1000);
+                        }),
+                    onRowDelete: (oldData) =>
+                        new Promise((resolve, reject) => {
+                            setTimeout(() => {
+                                resolve();
+                            }, 1000);
+                        }),
+                }}
+                columns={[
+                    { title: 'Sums', field: 'NAME' },
+                    { title: 'Description', field: 'DESCRIPTION' },
+                ].concat(cols.slice(2))}
+                data={[issueSums]}
+                options={{
+                    // rowStyle: rowData => ({
+                    //     backgroundColor: (rows.length === rowData.tableData.id) ? '#881c1c' : '#FFF',
+                    //     color: (rows.length === rowData.tableData.id) ? '#FFF' :'#000000'
+                    // }),
+                    paging: false,
+                    search: false,
+                    sorting: false,
+                    draggable: false,
+                    // showTitle: false,
+                    // header: false,
+                    headerStyle: {
+                        backgroundColor: '#881c1c',
+                        color: '#FFF',
+                    },
+                }}
             />
         </Container>
     );

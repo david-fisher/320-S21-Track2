@@ -639,7 +639,7 @@ class reflection(APIView):
                     serializer = ReflectionsTakenSerializer(ref)
                     ref.save()
                     return DRF_response(serializer.data)
-        
+
                 return self.post(request)
         except Responses.DoesNotExist:
             return DRF_response(status=status.HTTP_404_NOT_FOUND)
@@ -663,9 +663,11 @@ class reflection(APIView):
         scenario_id = self.request.query_params.get('scenario_id')
         # reflections = self.request.query_params.get('reflections')
         reflections = request.data.get('reflection')
-        if(request.data.get('reflections') is not None):
-            request.data.remove('reflections')
         
+        responses = Responses.objects.filter(page= page_id, student = student_id, scenario = scenario_id)
+        if(len(responses) > 0):
+            return self.put(request)
+
         serializer = ResponseSerializer(data=request.data)
         response_instance = None
         if serializer.is_valid():

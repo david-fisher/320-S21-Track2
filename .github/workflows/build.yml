@@ -9,7 +9,7 @@ on:
 
 jobs:
   build:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env:
       CI: false
     strategy:
@@ -26,10 +26,29 @@ jobs:
       - name: Build Editor
         working-directory: ./Ghost_in_the_Shell/client_folder_react_app/ethisim/
         run: yarn install && yarn run build
+      - name: Upload Editor artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: editor-frontend
+          path: ./Ghost_in_the_Shell/client_folder_react_app/ethisim/build/
       - name: Build Simulator
         working-directory: ./simulator/frontend/
         run: yarn install && yarn run build
-      - name: Bundling artifact
+      - name: Upload Editor artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: sim-frontend
+          path: ./simulator/frontend/build/
+      
+  deploy:
+    runs-on: self-hosted
+    needs: build
+    
+    steps:
+      - name: Downloading artifacts
+        uses: actions/download-artifact@v2
+        
+      - name: Bundling server
         run: |
           mkdir ethisim;
           cp -r ./apache ./ethisim/;

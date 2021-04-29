@@ -283,7 +283,7 @@ class get_page_info(APIView):
     
         try:
             page = Pages.objects.get(id=page_id)
-        except Scenarios.DoesNotExist:
+        except Pages.DoesNotExist:
             return DRF_response(status=status.HTTP_404_NOT_FOUND)
         page_data = PagesSerializer(page).data
 
@@ -295,7 +295,7 @@ class get_page_info(APIView):
             for quer in reflection_queries:
                 try:
                     question = ReflectionQuestions.objects.get(id=quer.id)
-                except Scenarios.DoesNotExist:
+                except ReflectionQuestions.DoesNotExist:
                     return DRF_response(status=status.HTTP_404_NOT_FOUND)
                 quer_data = Reflection_questionsSerializer(quer).data
                 reflection_qs.append(quer_data)
@@ -410,7 +410,7 @@ class get_Issues(APIView):
                 issues_list.append(issue_data)
             # serializer = IssueSerializer(issues_list, many=True)
             return DRF_response(issues_list)
-        except Scenarios.DoesNotExist:
+        except Issues.DoesNotExist:
             return DRF_response(status=status.HTTP_404_NOT_FOUND)
 
 
@@ -594,6 +594,106 @@ class response_to_conversations(APIView):
             return DRF_response(responseToConvSerializer.data, status=status.HTTP_200_OK)
         except:
             return DRF_response({'detail': "at least one parameter not found"}, status=status.HTTP_404_NOT_FOUND)
+
+class start_scenario(APIView):
+    def put(self, request, *args, **kwargs):
+        scenario_id = self.request.query_params.get('scenario_id')
+        student_id = self.request.query_params.get('student_id')
+        course_id = self.request.query_params.get('course_id')
+        
+        try:
+            scenario = Scenarios.objects.get(scenario_id = scenario_id)
+            course = Scenarios.objects.get(course = course_id)
+            student = Students.objects.get(student = student_id)
+        except Scenarios.DoesNotExist:
+            return rest_framework.response.Response(status=status.HTTP_404_NOT_FOUND)
+        except Students.DoesNotExist:
+            return rest_framework.response.Response(status=status.HTTP_404_NOT_FOUND)
+        except Course.DoesNotExist:
+            return rest_framework.response.Response(status=status.HTTP_404_NOT_FOUND)
+        if (scenario_id not in course.scenario or student_id not in course.students):
+            return DRF_response({'detail': "Error in student to Scenario handling"}, status=status.HTTP_404_NOT_FOUND)
+
+        try:
+           studentTimeObj = StudentTimes.objects.get(student = student_id, course = course_id, scenario = scenario_id)
+           stutimeSerial = StudentTimesSerializer(studentTimeObj)
+        except:
+            stuTime = {
+                "student": student_id,
+                "course": course_id,
+                "scenario": scenario_id,
+                "page": -1,
+                "end_time": NULL,
+            }
+            stutimeSerial = StudentTimesSerializer(stuTime)
+            if not(stutimeSerial.is_valid()):
+                return DRF_response(responseSerializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+            stutimeSerial.save()
+            return DRF_response(stutimeSerial.data, status=status.HTTP_200_OK)
+
+    
+    def get(self, request, *args, **kwargs):
+        scenario_id = self.request.query_params.get('scenario_id')
+        student_id = self.request.query_params.get('student_id')
+        course_id = self.request.query_params.get('course_id')
+        
+        try:
+            scenario = Scenarios.objects.get(scenario_id = scenario_id)
+            course = Scenarios.objects.get(course = course_id)
+            student = Students.objects.get(student = student_id)
+        except Scenarios.DoesNotExist:
+            return rest_framework.response.Response(status=status.HTTP_404_NOT_FOUND)
+        except Students.DoesNotExist:
+            return rest_framework.response.Response(status=status.HTTP_404_NOT_FOUND)
+        except Course.DoesNotExist:
+            return rest_framework.response.Response(status=status.HTTP_404_NOT_FOUND)
+        if (scenario_id not in course.scenario or student_id not in course.students):
+            return DRF_response({'detail': "Error in student to Scenario handling"}, status=status.HTTP_404_NOT_FOUND)
+
+        try:
+           studentTimeObj = StudentTimes.objects.get(student = student_id, course = course_id, scenario = scenario_id)
+           stutimeSerial = StudentTimesSerializer(studentTimeObj)
+           returnData = stutimeSerial.data
+           return DRF_response(returnData)
+        except StudentTimes.DoesNotExist:
+            return DRF_response({'detail': "Student hasn't started Scenario"}, status=status.HTTP_404_NOT_FOUND)
+        
+class currentPage(ApiView):
+    def put(self, request, *args, **kwargs):
+        scenario_id = self.request.query_params.get('scenario_id')
+        student_id = self.request.query_params.get('student_id')
+        course_id = self.request.query_params.get('course_id')
+        page_id = self.request.query_params.get('page_id')
+        
+        try:
+            scenario = Scenarios.objects.get(scenario_id = scenario_id)
+            course = Scenarios.objects.get(course = course_id)
+            student = Students.objects.get(student = student_id)
+            page = Pages.objects.get(id = page_id)
+        except Scenarios.DoesNotExist:
+            return rest_framework.response.Response(status=status.HTTP_404_NOT_FOUND)
+        except Students.DoesNotExist:
+            return rest_framework.response.Response(status=status.HTTP_404_NOT_FOUND)
+        except Course.DoesNotExist:
+            return rest_framework.response.Response(status=status.HTTP_404_NOT_FOUND)
+        except Pages.DoesNotExist:
+            return rest_framework.response.Response(status=status.HTTP_404_NOT_FOUND)
+        if (scenario_id not in course.scenario or student_id not in course.students):
+            return DRF_response({'detail': "Error in student to Scenario handling"}, status=status.HTTP_404_NOT_FOUND)
+        
+        try:
+           studentTimeObj = StudentTimes.objects.get(student = student_id, course = course_id, scenario = scenario_id)
+           studentTimeObj.page = page_id
+           studentTimeObj.save()
+           stutimeSerial = StudentTimesSerializer(studentTimeObj)
+           returnData = stutimeSerial.data
+           return DRF_response(returnData)
+        except StudentTimes.DoesNotExist:
+            return DRF_response({'detail': "Student hasn't started Scenario"}, status=status.HTTP_404_NOT_FOUND)
+
+
+
 
 class reflection(APIView):
     #retrieve a reflection for a particular response from the database

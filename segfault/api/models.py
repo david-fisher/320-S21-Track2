@@ -309,14 +309,14 @@ class StudentTimes(models.Model):
     student = models.ForeignKey('Students', on_delete = models.CASCADE, db_column='student')
     course = models.ForeignKey(Courses, on_delete = models.CASCADE, db_column='course')
     scenario = models.ForeignKey(Scenarios, on_delete = models.CASCADE)
-    date_taken = models.DateField()
+    date_taken = models.DateField(auto_now = True)
     page = models.IntegerField()
-    start_time = models.DateField()
-    end_time = models.DateField()
+    start_time = models.DateField(auto_now_add = True)
+    end_time = models.DateField(null = True)
 
     class Meta:
         db_table = 'student_times'
-        unique_together = ('student', 'course', 'scenario', 'date_taken', 'page')
+        unique_together = ('student', 'course', 'scenario')
 
 
 class Students(models.Model):

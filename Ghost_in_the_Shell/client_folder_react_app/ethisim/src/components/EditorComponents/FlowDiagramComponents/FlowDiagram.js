@@ -7,6 +7,7 @@ import {
     DialogActions,
     DialogTitle,
     DialogContent,
+    Grid,
 } from '@material-ui/core';
 import ReactFlow, {
     removeElements,
@@ -33,6 +34,8 @@ import ErrorIcon from '@material-ui/icons/Error';
 import SuccessBanner from '../../Banners/SuccessBanner';
 import ErrorBanner from '../../Banners/ErrorBanner';
 import PropTypes from 'prop-types';
+import HelpIcon from '@material-ui/icons/Help';
+import GenericInfoButton from '../../InfoButtons/GenericInfoButton';
 
 const useStyles = makeStyles((theme) => ({
     errorContainer: {
@@ -103,6 +106,12 @@ export default function FlowDiagram({ scenario_ID }) {
     const [elements, setElements] = useState([]);
     const [unsaved, setUnsaved] = useState(false);
     const [errorText, setErrorText] = useState('');
+
+    //for info button
+    const [open, setOpen] = React.useState(false);
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
 
     function positionElements(elements) {
         let introductionElement = elements.filter((componentData) => {
@@ -503,6 +512,17 @@ export default function FlowDiagram({ scenario_ID }) {
     return (
         <div className={classes.container}>
             <Typography variant="h3">Order Scenario Pages</Typography>
+            <Grid container justify="flex-end">
+                <Button color="primary" onClick={handleClickOpen}>
+                    <HelpIcon />
+                </Button>
+                <GenericInfoButton
+                    description={`Here you can order the pages the student will go through in the simulation. Click and drag your cursor to move around the diagram box.
+                    Click and drag from one box to another and an arrow will appear, effectively connecting each page. It's advised to start with the introduction page.`}
+                    open={open}
+                    setOpen={setOpen}
+                />
+            </Grid>
             <Button
                 variant="contained"
                 color="primary"

@@ -115,6 +115,7 @@ class Pages(models.Model):
     page = models.IntegerField()
     page_choices = (
         ('I', 'INTRO'),
+        ('F', 'FEEDBACK'),
         ('G', 'GENERIC'),
         ('R', 'REFLECTION'),
         ('S', 'STAKEHOLDER'),

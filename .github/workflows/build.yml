@@ -25,7 +25,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Build Editor
         working-directory: ./Ghost_in_the_Shell/client_folder_react_app/ethisim/
-        run: yarn install && PUBLIC_URL=ethisim2.cs.umass.edu/se yarn run build
+        run: yarn install && PUBLIC_URL=/se yarn run build
       - name: Upload Editor artifact
         uses: actions/upload-artifact@v2
         with:
@@ -33,7 +33,7 @@ jobs:
           path: ./Ghost_in_the_Shell/client_folder_react_app/ethisim/build/
       - name: Build Simulator
         working-directory: ./simulator/frontend/
-        run: yarn install && PUBLIC_URL=ethisim2.cs.umass.edu/simulator yarn run build
+        run: yarn install && PUBLIC_URL=/simulator yarn run build
       - name: Upload Simulator artifact
         uses: actions/upload-artifact@v2
         with:

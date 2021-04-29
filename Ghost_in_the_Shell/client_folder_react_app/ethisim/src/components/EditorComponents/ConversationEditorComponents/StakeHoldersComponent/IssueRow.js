@@ -37,7 +37,7 @@ export default function IssueRow({
         setIssues(
             updatedIssues.map((i) => {
                 if (i.ISSUE === issue_number) {
-                    i.COVERAGE_SCORE = val;
+                    i.COVERAGE_SCORE = parseInt(val);
                 }
                 return i;
             })

@@ -280,6 +280,7 @@ export default function StakeHolderFields({ scenario }) {
                         job={stakeHolder.JOB}
                         bio={stakeHolder.DESCRIPTION}
                         mainConvo={stakeHolder.INTRODUCTION}
+                        version={stakeHolder.VERSION}
                         stakeHolders={stakeHolders}
                         setStakeHolders={setStakeHolders}
                     />

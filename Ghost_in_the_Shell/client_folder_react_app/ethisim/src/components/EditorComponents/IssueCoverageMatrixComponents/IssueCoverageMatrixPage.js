@@ -231,8 +231,8 @@ export default function ICMatrix({ scenario_ID }) {
         var data = { SCENARIO: { scenario_ID } };
         var config = {
             method: 'get',
-            //url: baseURL + '/stakeholder?scenario_id=' + scenario_ID,
-            url: baseURL + '/stakeholder?scenario_id=' + 1,
+            url: baseURL + '/stakeholder?scenario_id=' + scenario_ID,
+            //url: baseURL + '/stakeholder?scenario_id=' + s,
 
             headers: {
                 'Content-Type': 'application/json',

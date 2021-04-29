@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { Typography, Grid, Card, CardContent, Button } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import Tooltip from '@material-ui/core/Tooltip';
+import { ConvLimitConsumer } from '../../context/ConvContext';
 
 const useStyles = makeStyles((theme) => ({
     scenarioContainer: {
@@ -54,40 +55,41 @@ const styles = (theme) => ({
 SimScenarioCard.propTypes = {
     id: PropTypes.number,
     name: PropTypes.string,
-    description: PropTypes.string,
-    due_date: PropTypes.string,
-    onClick: PropTypes.func
+    convLimit: PropTypes.number,
 }
 
 export default function SimScenarioCard({
     id,
     name,
-    description,
-    due_date,
+    convLimit,
 }) {
 
     const classes = useStyles();
 
+    // to={http://localhost:8000/simulation/:sid}, where sid is the scenario id
     const startButton = (
         <Link to={`/simulation/${id}`}>
             <Tooltip title="Let's Begin!" arrow placement="bottom" classes={classes}>
-                <Button
-                    className={classes.buttonText}
-                    variant="contained"
-                    color="primary"
-                    className={classes.button}
-                    item
-                    fullWidth="true"
-                >
-                    <Typography variant="subtitle1" noWrap>
-                        Start
-                    </Typography>
-                </Button>
+                <ConvLimitConsumer>
+                    {(context) => 
+                        <Button
+                            className={classes.buttonText}
+                            variant="contained"
+                            color="primary"
+                            className={classes.button}
+                            item
+                            fullWidth="true"
+                            onClick={() => {context.update(convLimit)}}
+                        >
+                            <Typography variant="subtitle1" noWrap>
+                                Start
+                            </Typography>
+                        </Button>
+                    }
+                </ConvLimitConsumer>
             </Tooltip>
         </Link>
     )
-
-    const due = new Date(due_date).toString();
 
     return (
         <Grid key={id} item xs="auto">
@@ -95,16 +97,6 @@ export default function SimScenarioCard({
                 <CardContent className={classes.scenarioContainer}>
                     <Typography variant="h5" display="block" noWrap>
                         {name}
-                    </Typography>
-                    <Typography variant="h6" display="block" noWrap>
-                        {description}
-                    </Typography>
-                    <Typography
-                        variant="subtitle1"
-                        color="textSecondary"
-                        display="block"
-                    >
-                        Due: {due}
                     </Typography>
                     <nav>
                         {startButton}

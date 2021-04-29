@@ -6,11 +6,12 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import {Box, Button} from "@material-ui/core";
-import SubmitButton from "./Buttons/SubmitButton"
+import SpecialButton from "./SpecialButton"
 
 import { BASE_URL, STUDENT_ID, SCENARIO_ID } from "../../constants/config";
 import axios from 'axios';
 import { ScenariosContext } from "../../Nav";
+import { PageContext } from '../simulator_window';
 import { TrainOutlined, TrainRounded } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
@@ -25,11 +26,30 @@ const useStyles = makeStyles((theme) => ({
 export default function ErrorRadios(props) 
 {
   let nextPageTitle = "";
-  let   content_url = props.content_url;
+  let content_url = '/pages';
   const classes = useStyles();
   const [value, setValue] = React.useState('');
   const [error, setError] = React.useState(false);
   const [helperText, setHelperText] = React.useState('Choose carefully');
+  const [scenarios, setScenarios] = React.useContext(ScenariosContext);
+  const [choices, setChoices] = React.useState([]);
+
+  useEffect (() => {
+    fetch(`${BASE_URL}/get_page_info/?page_id=${props.pageId}`)
+    .then(res => res.json())
+    .then(actionData => {
+      let actionChoices = []
+      
+      actionData.body.forEach(element => {
+        let choice = {
+          text: element.choice,
+          result_page: element.result_page
+        }
+        actionChoices.push(choice)
+      });
+      setChoices(actionChoices)
+    })
+  }, [])
 
   const handleRadioChange = (event) => {
     setValue(event.target.value);
@@ -39,17 +59,14 @@ export default function ErrorRadios(props)
 
   const handleSubmit = (event) => {
     console.log("CLICKED")
+    console.log(event);
     event.preventDefault();
     if (value !== '') {
       setHelperText('Good Answer!');
       setError(true);
-      // props.pages[props.nextPageName].completed = true;
-      // props.nextPage();
-      props.handleResponse(value).then(res => {
-        console.log("LETS GO TO NEXT PAGE")
-        props.pages[props.nextPageName].completed = true;
-        props.nextPage();
-      }).catch(err => alert(err))
+      const resultPage = choices.filter(choice => choice.text === value)[0].result_page;
+      event.update(props.activePage, resultPage);
+      props.changePage(resultPage);
     } else {
       console.log("FAIL TO GO TO NEXT PAGE")
       setHelperText('Please select an option.');
@@ -57,70 +74,89 @@ export default function ErrorRadios(props)
     }
   };
 
-  const [scenarios, setScenarios] = React.useContext(ScenariosContext);
-  const [choices, setChoices] = React.useState([]);
 
-  useEffect(() => {
-    // backend call
-    console.log("base: " + BASE_URL + " scenario: " + SCENARIO_ID + " student: " + STUDENT_ID);
-    axios({
-      method: 'get',
-      url: BASE_URL + content_url,
-      headers: {
-        scenarioID: scenarios.currentScenarioID,
-        studentID: STUDENT_ID,
-      }
-    }).then(response => {
-      console.log(response);
 
-      const x = [];
-      console.log(content_url);
-      if (scenarios.currentScenarioID == 1)
-      {
-        for (var i = 0; i < response.data[0].option.length; i++)
-          x.push({value:response.data[0].option_id[i], label: response.data[0].option[i]});
-        console.log(x);
-        setChoices(choices => x);
-      }
-      if ((scenarios.currentScenarioID == 2)){
-        for (var i = 0; i < response.data[1].option.length; i++)
-          x.push({value:response.data[1].option_id[i], label: response.data[1].option[i]});
-        console.log(x);
-        setChoices(choices => x);
-      }
-    }).catch((err)=>{
-      console.log("err",err);
-      //alert(err);
-    });
-  }, [scenarios])
 
-  function getNextPageTitle(props) {
-    switch (props.nextPageName) {
-      case "gatheredInformation": nextPageTitle = "Gathered Information";
-      break;
-      case "summary": nextPageTitle = "Summary";
-      break;
-      default:
-        break;
-    }
-  }
-  getNextPageTitle(props);
+
+  // useEffect(() => {
+  //   // backend call
+  //   console.log("base: " + BASE_URL + " scenario: " + SCENARIO_ID + " student: " + STUDENT_ID);
+  //   axios({
+  //     method: 'get',
+  //     url: BASE_URL + content_url,
+  //     headers: {
+  //       scenarioID: scenarios.currentScenarioID,
+  //       studentID: STUDENT_ID,
+  //     }
+  //   }).then(response => {
+  //     console.log(response);
+
+  //     const x = [];
+  //     console.log(content_url);
+  //     if (scenarios.currentScenarioID == 1)
+  //     {
+  //       for (var i = 0; i < response.data[0].option.length; i++)
+  //         x.push({value:response.data[0].option_id[i], label: response.data[0].option[i]});
+  //       console.log(x);
+  //       setChoices(choices => x);
+  //     }
+  //     if ((scenarios.currentScenarioID == 2)){
+  //       for (var i = 0; i < response.data[1].option.length; i++)
+  //         x.push({value:response.data[1].option_id[i], label: response.data[1].option[i]});
+  //       console.log(x);
+  //       setChoices(choices => x);
+  //     }
+  //   }).catch((err)=>{
+  //     console.log("err",err);
+  //     //alert(err);
+  //   });
+  // }, [scenarios])
+
+  // function getNextPageTitle(props) {
+  //   switch (props.nextPageName) {
+  //     case "gatheredInformation": nextPageTitle = "Gathered Information";
+  //     break;
+  //     case "summary": nextPageTitle = "Summary";
+  //     break;
+  //     default:
+  //       break;
+  //   }
+  // }
+  // getNextPageTitle(props);
 
   return (
-    <form onSubmit={handleSubmit}>
-      <FormControl component="fieldset" error={error} className={classes.formControl}>
-        <RadioGroup aria-label="quiz" name="quiz" value={value} onChange={handleRadioChange}>
-          {choices.map((choice, index) => (
-              <FormControlLabel value={choice.value.toString()} key={choice.value.toString()} control={<Radio />} label={choice.label} />
-            ))
+    <PageContext.Consumer>
+      {(context) => (
+        <form onSubmit={(event) => {
+          console.log("CLICKED");
+          event.preventDefault();
+          if (value !== '') {
+            setHelperText('Good Answer!');
+            setError(true);
+            const resultPage = choices.filter(choice => choice.text === value)[0].result_page;
+            context.update(resultPage);
+            props.changePage(resultPage);
+          } else {
+            console.log("FAIL TO GO TO NEXT PAGE")
+            setHelperText('Please select an option.');
+            setError(true);
           }
-        </RadioGroup>
-        <FormHelperText>{helperText}</FormHelperText>
-        <Box width={100}>
-          <SubmitButton title={nextPageTitle}></SubmitButton>
-        </Box>
-      </FormControl>
-    </form>
+        }}>
+          <FormControl component="fieldset" error={error} className={classes.formControl}>
+            <RadioGroup aria-label="quiz" name="quiz" value={value} onChange={handleRadioChange}>
+              {choices.map((choice, index) => (
+                  <FormControlLabel value={choice.text} key={index} control={<Radio />} label={choice.text} />
+                ))
+              }
+            </RadioGroup>
+            <FormHelperText>{helperText}</FormHelperText>
+            <Box width={100}>
+              <SpecialButton type="save" title={nextPageTitle}></SpecialButton>
+            </Box>
+          </FormControl>
+        </form>
+      )}
+    </PageContext.Consumer>
   );
 }
 

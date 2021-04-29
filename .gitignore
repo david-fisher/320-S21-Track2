@@ -25,8 +25,21 @@ hs_err_pid*
 # python ignore
 */__pycache__/*
 *.py[cod]
-*.pyc
 *$py.class
+.vscode
+segfault/api/__pycache__
+segfault/segfault/__pycache__
+segfault/api/migrations
+segfault/segfault/migrations 
+segfault/segfault/settings.py
+segfault/runserver.bat
+simulator/goon-universe/queries.js
+*.pyc
 
 /apache/shib_conf/*
-/apache/apache_conf/*
+/apache/apache_conf/ssl/*
+
+/apache/build/*
+*.env
+
+.DS_Store

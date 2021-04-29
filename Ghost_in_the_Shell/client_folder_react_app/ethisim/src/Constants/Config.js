@@ -1,3 +1,3 @@
-const baseURL = process.env.REACT_APP_ENDPOINT_URL || 'http://localhost:8000';
+const baseURL = 'http://ethisim2.cs.umass.edu:8000';
 
 export { baseURL };

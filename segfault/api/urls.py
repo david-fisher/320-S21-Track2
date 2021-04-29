@@ -56,5 +56,7 @@ urlpatterns = [
     path('conversations_had/', views.response_to_conversations.as_view()), #for "response_to_conversations" endpoint
     path('reflection_response/', views.reflection.as_view()),
     path('stakeholder_conv/', views.stakeholder_conv.as_view()),
-    path('action_response/', views.response_to_action_page.as_view()) #for "response_to_action_page" get and put endpoints
+    path('action_response/', views.response_to_action_page.as_view()), #for "response_to_action_page" get and put endpoints
+    path('start_scenario/', views.start_scenario.as_view()),
+    path('current_page/', views.currentPage.as_view())
 ]

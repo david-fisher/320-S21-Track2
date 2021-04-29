@@ -576,7 +576,7 @@ class flowchart(APIView):
             #save updated choices within action pages  
             if updated_page['PAGE_TYPE'] == 'A':
                 print('action page')
-                print(updated_page['ACTION'])
+                print(update)
                 for updated_choice in updated_page['ACTION']:
                     print(updated_choice)
                     extant_choice = ACTION_PAGE.objects.get(ID=updated_choice['id']) 
@@ -1196,6 +1196,7 @@ class stakeholders_page(APIView):
         http://127.0.0.1:8000/stakeholders?scenario_id=3
         http://127.0.0.1:8000/stakeholders?stakeholder_id=0
         '''
+        # scenario not id
         SCENARIO_ID = self.request.query_params.get('scenario_id')
         STAKEHOLDER_ID = self.request.query_params.get('stakeholder_id')
         # STAKEHOLDER_ID = self.request.GET.get('stakeholder_id')

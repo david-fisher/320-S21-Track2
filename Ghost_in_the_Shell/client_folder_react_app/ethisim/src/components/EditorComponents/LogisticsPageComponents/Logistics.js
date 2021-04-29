@@ -7,7 +7,6 @@ import {
     Typography,
     Container,
     Divider,
-    Grid,
 } from '@material-ui/core';
 import put from '../../../universalHTTPRequests/put';
 import get from '../../../universalHTTPRequests/get';
@@ -20,8 +19,6 @@ import Tags from './DropDown';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import PropTypes from 'prop-types';
-import HelpIcon from '@material-ui/icons/Help';
-import GenericInfoButton from '../../InfoButtons/GenericInfoButton';
 
 const useStyles = makeStyles((theme) => ({
     textfields: {
@@ -180,12 +177,6 @@ export default function Logistics({ scenario_ID }) {
     const [numConvos, setNumConvos] = useState(0);
     const [isPublic, setIsPublic] = useState(false);
     const [isFinished, setIsFinished] = useState(false);
-
-    //for info button
-    const [open, setOpen] = React.useState(false);
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
 
     //For Banners
     useEffect(() => {
@@ -485,22 +476,6 @@ export default function Logistics({ scenario_ID }) {
                 <Typography align="center" variant="h2">
                     Logistics
                 </Typography>
-                <Grid container justify="flex-end">
-                    <Button color="primary" onClick={handleClickOpen}>
-                        <HelpIcon />
-                    </Button>
-                    <GenericInfoButton
-                        description={`If it's your first time using Ethism, you'll see in the top left an icon of three horizontal lines.
-                    This is the menu and is accessable from all pages.
-                    The page you're on is the Logistics page handles some organizational pieces of your ethical scenario. 
-                    Here, you can edit the name of your scenario, the courses associated with this scenario, etc.
-                    By default the max number of selected conversations in zero. However, you may enter the maximum number of stakeholders you would like to permit students to speak with.
-                    This will be explained more in depth later. The Public checkbox allows your scenario to be viewed publicly by all that have access to Ethism. The
-                    Is Finished checkbox puts your scenario in the Finished section, ready for student distribution.`}
-                        open={open}
-                        setOpen={setOpen}
-                    />
-                </Grid>
                 <form
                     className={classes.textfields}
                     noValidate

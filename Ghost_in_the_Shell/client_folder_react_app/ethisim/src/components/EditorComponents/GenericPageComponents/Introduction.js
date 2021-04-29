@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Body from '../GeneralPageComponents/Body';
 import Title from '../GeneralPageComponents/Title';
-import { Typography, Container, Button, Grid } from '@material-ui/core';
+import { Typography, Container, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import universalPost from '../../../universalHTTPRequests/post.js';
@@ -9,8 +9,6 @@ import universalDelete from '../../../universalHTTPRequests/delete.js';
 import SuccessBanner from '../../Banners/SuccessBanner';
 import ErrorBanner from '../../Banners/ErrorBanner';
 import LoadingSpinner from '../../LoadingSpinner';
-import HelpIcon from '@material-ui/icons/Help';
-import GenericInfoButton from '../../InfoButtons/GenericInfoButton';
 
 const useStyles = makeStyles((theme) => ({
     saveButton: {
@@ -57,12 +55,6 @@ export default function Introduction(props) {
         xCoord,
         yCoord,
     } = props;
-
-    //for info button
-    const [open, setOpen] = React.useState(false);
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
 
     // eslint-disable-next-line
     const [postValues, setPostValues] = useState({
@@ -205,18 +197,6 @@ export default function Introduction(props) {
             <Typography align="center" variant="h2">
                 Introduction Page
             </Typography>
-            <Grid container justify="flex-end">
-                <Button color="primary" onClick={handleClickOpen}>
-                    <HelpIcon />
-                </Button>
-                <GenericInfoButton
-                    description={`Give the student an introduction to the ethical scenario. What is the problem? Think about both the positive and negative potential consequences of the technology, 
-                    as well as the stakeholders who are promoting the technology and the stakeholders who will be most directly impacted.
-                    `}
-                    open={open}
-                    setOpen={setOpen}
-                />
-            </Grid>
             <Title
                 title={title}
                 setTitle={setTitle}

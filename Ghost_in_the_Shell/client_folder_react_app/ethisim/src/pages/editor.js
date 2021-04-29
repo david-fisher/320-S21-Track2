@@ -19,7 +19,6 @@ import Introduction from '../components/EditorComponents/GenericPageComponents/I
 import FlowDiagram from '../components/EditorComponents/FlowDiagramComponents/FlowDiagram';
 import AddNewSimulationScenarioPageDialog from '../components//EditorComponents/AddNewSimulationScenarioPageDialog';
 import NavSideBarList from '../components/ConfigurationSideBarComponents/NavSideBarList';
-import ToDoListDialog from '../components/EditorComponents/ToDoListDialog';
 import AddIcon from '@material-ui/icons/Add';
 import { Link } from 'react-router-dom';
 import LoadingSpinner from '../components/LoadingSpinner';
@@ -29,7 +28,6 @@ import PropTypes from 'prop-types';
 import { useLocation } from 'react-router-dom';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import ErrorIcon from '@material-ui/icons/Error';
-import ViewListIcon from '@material-ui/icons/ViewList';
 
 import universalPost from '../universalHTTPRequests/post.js';
 import universalFetch from '../universalHTTPRequests/get.js';
@@ -159,7 +157,6 @@ Editor.propTypes = {
 export default function Editor(props) {
     const [showComponent, setShowComponent] = useState(true);
     const [openPopup, setOpenPopup] = useState(false);
-    const [openToDo, setOpenToDo] = useState(false);
 
     const location = useLocation();
     const scenarioIDFromURL = location.pathname.split('/').pop();
@@ -612,10 +609,6 @@ export default function Editor(props) {
             setOpenPopup(true);
         }
 
-        function openToDoListDialog() {
-            setOpenToDo(true);
-        }
-
         return (
             <div>
                 <Drawer
@@ -652,15 +645,6 @@ export default function Editor(props) {
                         <AddIcon />
                         Add Page
                     </Button>
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={openToDoListDialog}
-                        className={classes.addPageButton}
-                    >
-                        <ViewListIcon />
-                        To Do List
-                    </Button>
                 </Drawer>
                 <AddNewSimulationScenarioPageDialog
                     openPopup={openPopup}
@@ -668,10 +652,6 @@ export default function Editor(props) {
                     setOpenPopup={setOpenPopup}
                     addPage={addNewPage}
                 ></AddNewSimulationScenarioPageDialog>
-                <ToDoListDialog
-                    openToDo={openToDo}
-                    setOpenToDo={setOpenToDo}
-                ></ToDoListDialog>
             </div>
         );
     }

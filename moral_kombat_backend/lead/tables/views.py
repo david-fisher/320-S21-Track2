@@ -117,6 +117,36 @@ class CoverageViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['STAKEHOLDER']
 
+class coverage(APIView):
+    def get(self, request, *args, **kwargs):
+        stkholder = {}
+        try: 
+            coverage_list = COVERAGE.objects.values()
+        except COVERAGE.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        issue_list = []
+        for coverages in coverage_list:
+            issues_dict = {}
+            try:
+                issue = ISSUES.objects.get(ISSUE=coverages.get('ISSUE_id'))
+            except:
+                continue
+            issues_dict.update(coverages)
+            issues_dict.update(
+                {
+                    "NAME": issue.NAME
+                })
+
+            issue_list.append(issues_dict)
+            
+        stkholder.update(
+            {
+                "ISSUES": issue_list
+            }
+        )
+
+        return Response(stkholder, status=status.HTTP_200_OK)
+
     
 
 class DemographicsViewSet(viewsets.ModelViewSet):

@@ -39,11 +39,11 @@ class PAGES(models.Model):
     BODY = models.TextField(default = "default")
     SCENARIO = models.ForeignKey('SCENARIOS', to_field='SCENARIO_ID', on_delete = models.CASCADE, related_name="pages1")
     VERSION = models.IntegerField(default=1, editable=True, unique = True)
-    NEXT_PAGE = models.ForeignKey('PAGES', to_field='PAGE', on_delete = models.CASCADE, related_name="pages2", unique= True)
+    NEXT_PAGE = models.ForeignKey('PAGES', to_field='PAGE', on_delete = models.CASCADE, related_name="pages2", unique= True, null=True)
     X_COORDINATE = models.IntegerField()
     Y_COORDINATE = models.IntegerField()
     COMPLETED = models.BooleanField(default = False)
-    NEXT_PAGE_VERSION = models.ForeignKey('PAGES', to_field='VERSION', on_delete = models.CASCADE, related_name="pages3", unique= True)
+    NEXT_PAGE_VERSION = models.ForeignKey('PAGES', to_field='VERSION', on_delete = models.CASCADE, related_name="pages3", unique= True, null=True)
 
 #updated on 4/12/2021
 class REFLECTION_QUESTIONS(models.Model):

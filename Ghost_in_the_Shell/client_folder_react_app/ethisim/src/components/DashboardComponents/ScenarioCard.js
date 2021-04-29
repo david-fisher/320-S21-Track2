@@ -89,6 +89,7 @@ const DialogContent = withStyles((theme) => ({
 
 ScenarioCard.propTypes = {
     data: PropTypes.any,
+    scenario: PropTypes.number,
     scenarioID: PropTypes.number,
     scenarioName: PropTypes.string,
     isFinished: PropTypes.bool,
@@ -99,6 +100,7 @@ ScenarioCard.propTypes = {
 
 export default function ScenarioCard({
     data,
+    scenario,
     scenarioID,
     scenarioName,
     isFinished,

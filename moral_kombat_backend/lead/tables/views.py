@@ -91,7 +91,7 @@ class multi_stake(APIView):
             serializer = StakeholdersSerializer(extant_stake, data=updated_stake)
             if serializer.is_valid():
                 serializer.save()
-        stake_query = stakeholders.objects.filter(SCENARIO_id = SCENARIO).values()
+        stake_query = STAKEHOLDERS.objects.filter(SCENARIO_id = SCENARIO).values()
         return Response(stake_query)
 
 # checked - Ed - 4/15/2021
@@ -325,7 +325,7 @@ class logistics_page(APIView):
         #TODO check that id != none
         #get all scenarios belonging to this professor
         # scenario_query = PROFESSORS_TO_SCENARIO.objects.filter(PROFESSOR = PROFESSOR_id).values()
-        scenario = SCENARIOS.objects.get(SCENARIO = SCENARIO_id)
+        scenario = SCENARIOS.objects.get(SCENARIO_ID = SCENARIO_id)
         scenario_dict = ScenariosSerializer(scenario).data
         #loop through scenarios and append required information (course, page info)
         print(scenario_dict)
@@ -386,13 +386,13 @@ class logistics_page(APIView):
     #a put request for editing scenarios. must provide scenario in url thusly: /logistics?scenario=<insert id number here>
     def put(self, request, *args, **kwargs):
         #save the scenario
-        extant_scenario = SCENARIOS.objects.get(SCENARIO = request.data['SCENARIO'])
+        extant_scenario = SCENARIOS.objects.get(SCENARIO_ID = request.data['SCENARIO_ID'])
         scenario_serializer = ScenariosSerializer(extant_scenario, data = request.data)
         if scenario_serializer.is_valid():
             scenario_serializer.save()
 
         #delete currently assocated classes
-        SCENARIOS_FOR.objects.filter(SCENARIO_ID = request.data['SCENARIO']).delete()
+        SCENARIOS_FOR.objects.filter(SCENARIO_ID = request.data['SCENARIO_ID']).delete()
         #get array of courses from frontend
         COURSES = request.data['COURSES']
         for course in COURSES:
@@ -408,7 +408,7 @@ class logistics_page(APIView):
                 for_serializer.save()
                 print('saved!')
             print(for_serializer.errors)
-        scenario_dict = ScenariosSerializer(SCENARIOS.objects.get(SCENARIO = request.data['SCENARIO'])).data
+        scenario_dict = ScenariosSerializer(SCENARIOS.objects.get(SCENARIO_ID = request.data['SCENARIO_ID'])).data
         scenario_dict['COURSES'] = request.data['COURSES']
         return Response(scenario_dict)
 
@@ -568,7 +568,7 @@ class flowchart(APIView):
 
     #update the next_page field of all page objects
     def put(self, request, *args, **kwargs):
-        SCENARIO_id = self.request.query_params.get('SCENARIO')
+        SCENARIO_id = self.request.query_params.get('SCENARIO_ID')
         if SCENARIO_id == None:
             return Response({'status': 'details'}, status=status.HTTP_404_NOT_FOUND)
   

@@ -164,10 +164,15 @@ export default function Editor(props) {
     const [openToDo, setOpenToDo] = useState(false);
 
     const location = useLocation();
+    console.log(location);
     const scenarioIDFromURL = location.pathname.split('/').pop();
+    console.log(scenarioIDFromURL);
+
     const scenario_ID = props.location.data
-        ? props.location.data.SCENARIO
+        ? props.location.data.SCENARIO_ID
         : scenarioIDFromURL;
+
+    console.log(scenario_ID);
 
     //TODO when version control is implemented
     const tempVersionID = 1;
@@ -238,7 +243,7 @@ export default function Editor(props) {
             let p = null;
             let logistics_and_pages = resp.data;
             p = {
-                scenario_ID: logistics_and_pages.SCENARIO,
+                scenario_ID: logistics_and_pages.SCENARIO_ID,
                 version_ID: logistics_and_pages.VERSION,
                 title: logistics_and_pages.NAME,
                 is_finished: logistics_and_pages.IS_FINISHED,
@@ -548,9 +553,10 @@ export default function Editor(props) {
                         PAGE_TYPE: 'G',
                         PAGE_TITLE: pageName,
                         PAGE_BODY: pageBody,
-                        SCENARIO: scenario_ID,
+                        SCENARIO_ID: scenario_ID,
                         VERSION: tempVersionID,
                         NEXT_PAGE: null,
+                        NEXT_PAGE: 0,
                         X_COORDINATE: 0,
                         Y_COORDINATE: 0,
                     };

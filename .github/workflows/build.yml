@@ -65,9 +65,11 @@ jobs:
             mkdir ./segfault; 
             cp -r ./segfault ./ethisim/;
           fi;
-      - name: Stopping current docker
+      - name: Stopping current docker container, remove any docker containers
         working-directory: /ethisim/
-        run: if [[ $(docker ps -q) ]]; then docker stop $(docker ps -q); fi
+        run: |
+            if [[ $(docker ps -q) ]]; then docker stop $(docker ps -q); fi
+            if [[ $(docker ps -aq) ]]; then docker rm $(docker ps -aq); fi
       - name: Remove exisitng apache files
         run: |
           if [ -e /ethisim/apache/build ]; then echo "removing apache build"; rm -rf /ethisim/apache/build/*; fi;

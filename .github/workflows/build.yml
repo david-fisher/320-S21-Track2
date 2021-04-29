@@ -52,6 +52,7 @@ jobs:
         run: |
           mkdir ethisim;
           cp -r ./apache ./ethisim/;
+          cp ./start.sh ./ethisim/;
           cp docker-compose-deploy.yaml ./ethisim/docker-compose.yaml;
           cp requirements.txt ./ethisim/requirements.txt;
           cp Dockerfile ./ethisim/Dockerfile;

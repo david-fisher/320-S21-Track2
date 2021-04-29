@@ -58,6 +58,8 @@ jobs:
           mkdir ./ethisim/apache/build ./ethisim/apache/build/se ./ethisim/apache/build/simulator;
           cp -r ./editor-frontend/* ./ethisim/apache/build/se;
           cp -r ./sim-frontend/* ./ethisim/apache/build/simulator;
+          cp ./apache/.htaccess ./ethisim/apache/build/se;
+          cp ./apache/.htaccess ./ethisim/apache/build/simulator;
           if [ -e ./moral_kombat_backend ]; then cp -r ./moral_kombat_backend ./ethisim/; fi;
           if [ -e ./segfault ]; then 
             cp -r ./segfault ./ethisim/; 

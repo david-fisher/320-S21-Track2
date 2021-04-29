@@ -15,7 +15,7 @@ COPY ./apache/apache_conf/conf.d/segfault.conf /etc/httpd/conf.d/
 COPY ./apache/apache_conf/conf.d/backendboys.conf /etc/httpd/conf.d/
 COPY ./ssl/ /etc/pki/tls/certs/
 COPY ./apache/build/ /var/www/html/
-COPY ./apache/edit_static_files.sh ./
-RUN bash -c "chmod +x ./edit_static_files.sh && ./edit_static_files.sh"
+COPY ./start.sh ./
+RUN bash -c "chmod +x ./start.sh"
 RUN echo "export SERVER_NAME=${SERVER_NAME}" >> /etc/environment
 RUN echo "export SERVER_NAME=${SERVER_NAME}" >> /etc/environment

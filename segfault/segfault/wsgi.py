@@ -8,7 +8,7 @@ https://docs.djangoproject.com/en/3.1/howto/deployment/wsgi/
 """
 import sys
 
-path = '/var/www/backend/lead/'
+path = '/var/www/backend/segfault/'
 if path not in sys.path:
     sys.path.append(path)
     

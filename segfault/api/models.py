@@ -248,7 +248,7 @@ class ResponsesToConversations(models.Model):
 
 
 class Scenarios(models.Model):
-    scenario_id = models.AutoField(primary_key=True, editable=False)
+    scenario_id = models.AutoField(primary_key=True)
     scenario = models.IntegerField(default=1, editable=True)
     version = models.IntegerField(default=1, editable=True)
     name = models.TextField(max_length=50, null=False)

@@ -91,7 +91,7 @@ class multi_stake(APIView):
             serializer = StakeholdersSerializer(extant_stake, data=updated_stake)
             if serializer.is_valid():
                 serializer.save()
-        stake_query = stakeholders.objects.filter(SCENARIO = SCENARIO).values()
+        stake_query = STAKEHOLDERS.objects.filter(SCENARIO = SCENARIO).values()
         return Response(stake_query)
 
 # checked - Ed - 4/15/2021

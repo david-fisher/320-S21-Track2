@@ -186,6 +186,11 @@ class DashBoard(views.APIView):
     def get(self, request, format=None):
         student_id = self.request.query_params.get('student_id', None)
         if student_id is not None:
+            if type(student_id) != type("a string"):
+                try:
+                    student_id = str(student_id)
+                except:
+                    return DRF_response(status=status.HTTP_400_BAD_REQUEST)
             try:
                 scenario_list = []
                 student_courses = Students.objects.get(

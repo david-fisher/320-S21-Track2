@@ -602,7 +602,7 @@ class response_to_conversations(APIView):
             return DRF_response({'detail': "at least one parameter not found"}, status=status.HTTP_404_NOT_FOUND)
 
 class start_scenario(APIView):
-    def posy(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         scenario_id = self.request.query_params.get('scenario_id')
         student_id = self.request.query_params.get('student_id')
         course_id = self.request.query_params.get('course_id')

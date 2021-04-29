@@ -26,10 +26,7 @@ hs_err_pid*
 */__pycache__/*
 *.py[cod]
 *.pyc
-<<<<<<< .merge_file_a21556
 
-=======
->>>>>>> .merge_file_a47436
 *$py.class
 
 /apache/shib_conf/*
@@ -37,8 +34,4 @@ hs_err_pid*
 
 *.env
 
-<<<<<<< .merge_file_a21556
 .DS_Store
-=======
-.DS_Store
->>>>>>> .merge_file_a47436

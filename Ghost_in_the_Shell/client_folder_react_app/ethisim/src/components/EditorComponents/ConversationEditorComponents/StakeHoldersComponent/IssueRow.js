@@ -34,14 +34,14 @@ export default function IssueRow({
 
     function updateIssueScore(val) {
         const updatedIssues = [...issues];
-        setIssues(
-            updatedIssues.map((i) => {
-                if (i.ISSUE === issue_number) {
-                    i.COVERAGE_SCORE = parseInt(val);
-                }
-                return i;
-            })
-        );
+        let updated = updatedIssues.map((i) => {
+            if (i.ISSUE === issue_number) {
+                i.COVERAGE_SCORE = parseInt(val);
+            }
+            return i;
+        });
+        console.log(updated);
+        setIssues(updated);
     }
 
     const onChangeScore = (e) => {

@@ -255,15 +255,18 @@ class get_pages(APIView):
         for page in page_list:
             if page.next is not None:
                 page_parent[str(page.next)] = page_parent.get(str(page.next), 0) + 1
-        
-        extra_list = []
-        for page in page_list:
-            if page_parent.get(str(page), 0) == 0:
-                extra_list.append(page)
-        
-        page_list = [x for x in page_list if x not in extra_list]
-        
-        for x in range(len(page_list)):
+            if page.page_type == 'A':
+                action_pages = ActionPage.objects.filter(page = page.id)
+                for action_page in action_pages:
+                    try:
+                        result_page = Pages.objects.get(id=action_page.result_page)
+                        page_parent[str(result_page)] = page_parent.get(str(result_page), 0) + 1
+                    except:
+                        continue
+
+        num_pages = len(page_list)
+
+        for x in range(num_pages):
             page = None
             for page1 in page_list:
                 if page_parent.get(str(page1), 0) <= 0:
@@ -275,12 +278,19 @@ class get_pages(APIView):
             sorted_list.append(page_serializer_data)
             if page.next is not None:
                 page_parent[str(page.next)] = page_parent.get(str(page.next), 0) - 1
+            if page.page_type == 'A':
+                action_pages = ActionPage.objects.filter(page = page.id)
+                for action_page in action_pages:
+                    try:
+                        result_page = Pages.objects.get(id=action_page.result_page)
+                        page_parent[str(result_page)] = page_parent.get(str(result_page), 0) - 1
+                    except:
+                        continue
             page_list.remove(page)
 
         def take_id(elem):
             return elem.id
 
-        page_list.extend(extra_list)
         if len(page_list) > 0:
             page_list.sort(key=take_id)
             for page1 in page_list:

@@ -256,7 +256,13 @@ class get_pages(APIView):
             if page.next is not None:
                 page_parent[str(page.next)] = page_parent.get(str(page.next), 0) + 1
         
-
+        extra_list = []
+        for page in page_list:
+            if page_parent.get(str(page), 0) == 0:
+                extra_list.append(page)
+        
+        page_list = [x for x in page_list if x not in extra_list]
+        
         for x in range(len(page_list)):
             page = None
             for page1 in page_list:
@@ -273,15 +279,16 @@ class get_pages(APIView):
 
         def take_id(elem):
             return elem.id
-        
+
+        page_list.extend(extra_list)
         if len(page_list) > 0:
             page_list.sort(key=take_id)
             for page1 in page_list:
                 page1 = PagesSerializer(page1).data
                 if page1 not in sorted_list:
                     sorted_list.append(page1)
-
-        return DRF_response(sorted_list, status=status.HTTP_200_OK)
+        results = {'results': sorted_list}
+        return DRF_response(results, status=status.HTTP_200_OK)
 
 class get_page_info(APIView):
     def get(self, request, *args, **kwargs):

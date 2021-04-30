@@ -3,6 +3,8 @@
 
 name: Build and Deploy
 
+concurrency: deployment
+
 on:
   push:
     branches: [ main, build-and-deploy ]

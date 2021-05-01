@@ -32,33 +32,115 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function  Reflection(props){
-  const [name, setName] = React.useState("");
-  const [data, setData] = React.useState("");
-  function  handleResponse(data){
-    const items = {
-      response: 1,
-      student: String(STUDENT_ID),
-      scenario: SCENARIO_ID,
-      version:2,
-      page:props.id,
-      course: 1,
-      choice:'none',
-      reflection:data
-    };
-    axios.post(BASE_URL + `/reflection_response/?page_id=${props.id}&student_id=${STUDENT_ID}&scenario_id=${SCENARIO_ID} `,items)
-    .then(response=>console.log(response.data.reflections))
-    .catch(e=>{console.log(e)})
+  const [userInput, setUserInput] = React.useState({});
+  const [data, setData] = React.useState([]);
+  const [isresponse,setIsresponse] = React.useState(false);
+  const [reflectionQuestion,setrefelctionQuestion] = React.useState([]);
+  function  handleResponse(userResponse){
+    for(const[key,value] of Object.entries(userResponse)){
+      const items = {
+        response: key,
+        student: String(STUDENT_ID),
+        scenario: SCENARIO_ID,
+        version:2,
+        page:props.id,
+        course: 1,
+        choice:'none',
+        reflection:value
+      };
+      axios.post(BASE_URL + `/reflection_response/?page_id=${props.id}&student_id=${STUDENT_ID}&scenario_id=${SCENARIO_ID} `,items)
+      .then(response=>{console.log(response.data.reflections)
+        setIsresponse(true)})
+      .catch(e=>{console.log(e)})
    }
+  }
    const handleChange = (event) => {
-    setName(event.target.value);
+    //  console.log("This is handle change")
+     let response_id = event.target.id
+     setUserInput({...userInput,[response_id]:document.getElementById(event.target.id).value})
+    // setUserInput(event.target.value);
   };
+  // console.log(userInput)
+  // console.log("Test end here")
   const classes = useStyles();
   
   useEffect(()=>{
     fetch(BASE_URL + `/reflection_response/?page_id=${props.id}&student_id=${STUDENT_ID}&scenario_id=${SCENARIO_ID} `)
     .then(response=>response.json())
-    .then(data=> setData(data.reflections))
-  })
+    .then(temp=> {
+       console.log("This is temp")
+       console.log(temp)
+       if(temp.detail){
+        setData([])
+       }else{
+      const mapped = temp.map(({reflections,response}) =>{
+          return [reflections,response]
+        })
+      setData(mapped);
+      }
+    })
+    fetch(BASE_URL + `/get_page_info/?page_id=${props.id}`).then(response=>response.json())
+    .then(({ body })=>{
+      setrefelctionQuestion([...reflectionQuestion, ...body])
+    })
+  },[])
+  const isDisable = (items,reflection_question_id)=>{
+    var arr = items.filter( x=>{
+      if(typeof x ==='undefined'){
+        return false
+      }
+      if(x[1]===reflection_question_id){
+        return true
+      }
+    })
+    return arr.length
+  }
+  const isempty = (items,reflection_question_id)=>{
+    var value =  items.find( x=>{
+      if(typeof x ==='undefined'){
+        return ""
+      }
+      if(x[1]===reflection_question_id){
+        console.log(x[0])
+        return x[0]
+      }
+    })
+    if(typeof value === 'undefined'){
+      return ""
+    }
+    return value[0]
+  }
+  const frams = reflectionQuestion.map(({reflection_question,reflection_question_id}) =>
+    <Grid container spacing={2}>
+         <Grid item lg={12}>
+           <Box m="2rem">
+           </Box>
+           <Box p={2} className={classes.textBox}>
+           <TextTypography variant="body1" paragraph = {true} gutterBottom>
+             {reflection_question}
+          </TextTypography>
+          </Box>
+         <Box pt={2}>
+         <Typography variant="body1" paragraph = {true} gutterBottom>
+              <TextField
+                required
+                disabled = {isDisable(data,reflection_question_id)}
+                fullWidth = {true}
+                defaultValue = {isempty(data,reflection_question_id)}
+                multiline = {true}
+                autoComplete = "off"
+                id={reflection_question_id}
+                label="Required"
+                variant="filled"
+                onChange =  {handleChange}
+                InputLabelProps = {{shrink:true}}
+              />
+          </Typography>
+         </Box>
+         </Grid>
+    </Grid>
+  );
+  // console.log(reflectionQuestion);
   return(
     <div>
     <Box mt={5}>
@@ -67,7 +149,8 @@ function  Reflection(props){
           {props.title}
         </TextTypography>
       </Grid>
-        <Grid container spacing={2}>
+        {frams}
+        {/* <Grid container spacing={2}>
          <Grid item lg={12}>
            <Box m="2rem">
            </Box>
@@ -77,14 +160,15 @@ function  Reflection(props){
           </TextTypography>
           </Box>
          </Grid>
-       </Grid>
-       <Grid container spacing={2}>
+       </Grid> */}
+       {/* <Grid container spacing={2}>
          <Grid item lg={12}>
            <Box m="2rem">
            </Box>
            <Typography variant="body1" paragraph = {true} gutterBottom>
               <TextField
                 required
+                disabled = {isresponse}
                 fullWidth
                 defaultValue = {data}
                 multiline = {true}
@@ -100,7 +184,10 @@ function  Reflection(props){
               </Box>
           </Typography>
          </Grid>
-       </Grid>
+       </Grid> */}
+       <Box pt={2}>
+                <SubmitButton title = "submit" onClick={() => handleResponse(userInput)}/>
+              </Box>
     </Box>
     </div>
   );

@@ -252,7 +252,13 @@ export default function Dashboard() {
                 loading: true,
                 error: null,
             });
-            post(setPost, endpointPost, onFailurePost, NewScenario);
+            post(
+                setPost,
+                endpointPost,
+                onFailurePost,
+                onSuccessPost,
+                NewScenario
+            );
             setOpen(false);
         }
     };

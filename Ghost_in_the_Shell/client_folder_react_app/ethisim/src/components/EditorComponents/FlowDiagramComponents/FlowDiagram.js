@@ -308,8 +308,8 @@ export default function FlowDiagram({ scenario_ID }) {
                     PAGE: currentElement.PAGE,
                     PAGE_TYPE: currentElement.PAGE_TYPE,
                     PAGE_TITLE: currentElement.PAGE_TITLE,
-                    PAGE_BODY: currentElement.PAGE_BODY,
-                    SCENARIO_ID: currentElement.SCENARIO,
+                    PAGE_BODY: currentElement.BODY,
+                    SCENARIO_ID: currentElement.SCENARIO_id,
                     VERSION: currentElement.VERSION,
                     NEXT_PAGE: null,
                     X_COORDINATE: Math.floor(currentElement.position.x),
@@ -318,8 +318,8 @@ export default function FlowDiagram({ scenario_ID }) {
                             ? Math.floor(currentElement.position.y)
                             : 0,
                 };
-                console.log('SCENARIO');
-                console.log(nodeElement['SCENARIO_ID']);
+                console.log('node');
+                console.log(currentElement);
 
                 if (currentElement.type === 'actionNode') {
                     nodeElement.ACTION = currentElement.ACTION.map(
@@ -377,7 +377,7 @@ export default function FlowDiagram({ scenario_ID }) {
             }
             return array;
         }, []);
-
+        console.log(updatedElements);
         put(
             setElementsPUT,
             endpointPUT + scenarioID,

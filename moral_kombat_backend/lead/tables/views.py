@@ -370,7 +370,7 @@ class logistics_page(APIView):
             course = COURSES.objects.get(COURSE = x)
             course_dict_array.append({"COURSE":course.COURSE, "NAME": course.NAME})
                 
-        pages_query = PAGES.objects.filter(SCENARIO=scenario_dict['SCENARIO']).values()
+        pages_query = PAGES.objects.filter(SCENARIO=SCENARIO_id).values()
         
         page_array = []
         for page in pages_query:
@@ -585,7 +585,7 @@ class multi_issue(APIView):
 class flowchart(APIView):
     #get all page objects given a scenario id
     def get(self, request, *args, **kwargs):
-        SCENARIO_id = self.request.query_params.get('SCENARIO')
+        SCENARIO_id = self.request.query_params.get('scenario')
         print(SCENARIO_id)
         pages_query = PAGES.objects.filter(SCENARIO=SCENARIO_id).values()
         print(pages_query)
@@ -598,7 +598,7 @@ class flowchart(APIView):
 
     #update the next_page field of all page objects
     def put(self, request, *args, **kwargs):
-        SCENARIO_id = self.request.query_params.get('SCENARIO_ID')
+        SCENARIO_id = self.request.query_params.get('scenario')
         if SCENARIO_id == None:
             return Response({'status': 'details'}, status=status.HTTP_404_NOT_FOUND)
   
@@ -667,7 +667,7 @@ class pages_page(APIView):
         # Convers Django Model Object into a dictionary
         page_data = PagesSerializer(page).data
         
-        page_type = PAGE.PAGE_TYPE
+        page_type = page_data['PAGE_TYPE']
         # Check page.PAGE_TYPE = 'REFLECTION'
         if (page_type == 'R'):
             reflection_query = REFLECTION_QUESTIONS.objects.filter(reflection_questions_to_page1 = PAGE_ID).values()

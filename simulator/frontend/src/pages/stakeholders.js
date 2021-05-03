@@ -144,15 +144,13 @@ function Stakeholders(props) {
    * ones for the current scenario. NEEDS TO BE CHANGED when endpoint works.
    */
   useEffect(() => {
-    fetch(BASE_URL + `/stakeholders/`)
+    fetch(`${BASE_URL}/get_stakeholders/?scenario_id=${props.match.params.sid}`)
     .then(response => response.json())
     .then(data => {
 
-      let results = data.results.slice();
+      let results = data.slice();
 
-      setStakeholders(results.filter((holder) => {
-        return holder.scenario.toString() === props.match.params.sid;
-      }));
+      setStakeholders(results);
 
     })
   }, [scenarios]);
@@ -300,49 +298,10 @@ function Stakeholders(props) {
         </div>
       }
       {!showStakeholders &&
-        <Conversation stakeholder={currentStakeholder} showStakeholders={showStakeholders} setShowStakeholders={setShowStakeholders} />
+        <Conversation page_id={props.id} match={props.match} stakeholder={currentStakeholder} showStakeholders={showStakeholders} setShowStakeholders={setShowStakeholders} />
       }
     </div>
   );
-
-  // return (
-  //   <>
-  //     {showStakeholders &&
-  //       <div>
-  //       <Grid container direction="row" justify="center" alignItems="center">
-  //         <Box mt={5}>
-  //           <TextTypography variant="h4" align="center" gutterBottom>
-  //             Stakeholders
-  //           </TextTypography>
-  //         </Box>
-  //       </Grid>
-  //       <Grid container direction="row" justify="space-between">
-  //         <Grid item style={{ marginRight: "0rem", marginTop: "-3rem" }}>
-  //           <BackButton title="Gathered Information" onClick={goToGatheredInformation}></BackButton>
-  //         </Grid>
-  //         <Grid item style={{ marginRight: "0rem", marginTop: "-3rem" }}>
-  //         <NextButton title="Middle Reflection" onClick={goToMiddleReflection}></NextButton>
-  //         </Grid>
-  //       </Grid>
-  //       <Grid container spacing={2}>
-          // <Grid item lg={12} md={12} sm={12}>
-          //   <Box m="1rem" align={'center'}>
-          //     <TextTypography>
-          //       You've spoken to <b>{numStakeholderTalkedTo} out of {conversationLimit}</b> stakeholders</TextTypography>
-          //   </Box>
-          //   <TextTypography variant="body1" align="center">
-          //     {introText}
-          //   </TextTypography>
-          // </Grid>
-          // {stakeholdersGrid}
-  //       </Grid>
-  //     </div>
-  //     }
-  //     {!showStakeholders &&
-  //       <Conversation stakeholder={currentStakeholder} showStakeholders={showStakeholders} setShowStakeholders={setShowStakeholders}/>
-  //     }
-  //   </>
-  // );
 }
 
 export default Stakeholders;

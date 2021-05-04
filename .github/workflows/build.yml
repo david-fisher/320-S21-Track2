@@ -64,7 +64,7 @@ jobs:
           cp ./apache/.htaccess ./ethisim/apache/build/se;
           cp ./apache/.htaccess ./ethisim/apache/build/simulator;
           if [ -e ./moral_kombat_backend ]; then cp -r ./moral_kombat_backend ./ethisim/; fi;
-          if [ -e ./segfault ]; then cp -r ./segfault ./ethisim/ fi; 
+          if [ -e ./segfault ]; then cp -r ./segfault ./ethisim/; fi; 
       - name: Stopping current docker container, remove any docker containers
         working-directory: /ethisim/
         run: |

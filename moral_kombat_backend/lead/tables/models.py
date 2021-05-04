@@ -5,7 +5,8 @@ from django.core.validators import MinValueValidator
 ######################################### new models ########################
 class ACTION_PAGE(models.Model):
     ACTION_PAGE_ID = models.IntegerField()
-    PAGE = models.ForeignKey('Pages', on_delete = models.CASCADE, db_column='page')
+    ID = models.IntegerField(primary_key = True)
+    PAGE = models.ForeignKey('PAGES', to_field='ID', on_delete = models.CASCADE, related_name="action_page1")
     VERSION = models.IntegerField()
     CHOICE = models.TextField()
     RESULT_PAGE = models.IntegerField()
@@ -53,7 +54,7 @@ class COVERAGE(models.Model):
 
 class DEMOGRAPHICS(models.Model):
     STUDENT = models.ForeignKey('STUDENTS', to_field = 'STUDENT', on_delete = models.CASCADE, related_name = "demographics", unique = True)
-    AGE = models.IntegerField(validators=[MaxValueValidator(100), MinValueValidator(0)])
+    AGE = models.SmallIntegerField()
     GRADE_CHOICES = (('0', 'Other'),
                      ('1', 'Freshmen'),
                      ('2', 'Sophomore'),
@@ -90,7 +91,7 @@ class ISSUES(models.Model):
 
 
 class PAGES(models.Model):
-    PAGE = models.IntegerField()
+    PAGE = models.IntegerField(unique = True)
     PAGE_CHOICES = (
         ('I', 'INTRO'),
         ('F', 'FEEDBACK'),
@@ -99,11 +100,12 @@ class PAGES(models.Model):
         ('S', 'STAKEHOLDER'),
         ('A', 'ACTION'),
     )
-    PAGE_TYPE = models.CharField(max_length=2, choices=page_choices)
+    PAGE_TYPE = models.CharField(max_length=2, choices=PAGE_CHOICES)
     PAGE_TITLE = models.CharField(max_length=1000)
     SCENARIO = models.ForeignKey('SCENARIOS', to_field='SCENARIO_ID', on_delete = models.CASCADE, related_name="pages1")
     VERSION = models.IntegerField(default=1, editable=True)
     BODY = models.TextField(blank=True, null=True)
+    ID = models.IntegerField(primary_key = True)
     NEXT_ID = models.ForeignKey('PAGES', to_field='ID', on_delete = models.CASCADE, related_name="pages2")
     X_COORDINATE = models.IntegerField()
     Y_COORDINATE = models.IntegerField()
@@ -118,7 +120,7 @@ class PAGES_TO_SCENARIO(models.Model):
     SCENARIO_ID = models.ForeignKey('SCENARIOS', to_field = 'SCENARIO_ID', on_delete = models.CASCADE, related_name="stakeholder_page2")
 
     class Meta:
-        unique_together = ('PAGE', 'SCENARIO')
+        unique_together = ('PAGE_ID', 'SCENARIO_ID')
 
 
 class PROFESSORS(models.Model):
@@ -198,7 +200,7 @@ class RESPONSE_TO_ACTION_PAGE(models.Model):
     ACTION_PAGE = models.ForeignKey(ACTION_PAGE, on_delete = models.CASCADE, db_column='action_page', )
 
     class Meta:
-        unique_together = ('RESPONSE', 'ACTION_PAGE')
+        unique_together = ('RESPONSE_ID', 'ACTION_PAGE')
 
 class RESPONSES_TO_CONVERSATIONS(models.Model):
     RESPONSE_ID = models.ForeignKey(RESPONSES, on_delete = models.CASCADE)
@@ -208,7 +210,7 @@ class RESPONSES_TO_CONVERSATIONS(models.Model):
     CONVERSATION = models.ForeignKey(CONVERSATIONS, on_delete = models.CASCADE, db_column='conversation')
 
     class Meta:
-        unique_together = ('RESPONSE', 'CONVERSATION')
+        unique_together = ('RESPONSE_ID', 'CONVERSATION')
 
 
 class SCENARIOS(models.Model):
@@ -243,7 +245,7 @@ class STAKEHOLDER_TO_PAGE(models.Model):
 
 
 class STAKEHOLDERS(models.Model):
-    STAKEHOLDER = models.IntegerField()
+    STAKEHOLDER = models.IntegerField(unique = True)
     SCENARIO = models.ForeignKey(SCENARIOS, on_delete = models.CASCADE, db_column='scenario')
     VERSION = models.IntegerField()
     NAME = models.TextField()
@@ -274,7 +276,7 @@ class STUDENT_TIMES(models.Model):
     END_TIME = models.DateField(null = True, blank=True)
 
     class Meta:
-        unique_together = ('STUDENT', 'COURSE', 'SCENARIO')
+        unique_together = ('STUDENT', 'COURSE', 'SCENARIO_ID')
 
 
 class STUDENTS(models.Model):

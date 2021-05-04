@@ -35,7 +35,10 @@ class ReturnIdentifierView(APIView):
         if ('title' in request.META):
             return Response({"id":"Professor"})
         else:
-            return Response({"id":"Student"})
+            if(len(SCENARIOS.objects.filter(professors_to_scenario2 = request.META['displayName']).values()) != 0):
+                return Response({"id":"Editor"})
+            else:
+                return Response({"id":"Student"})
 
         # if (credentials.get("title") == "Lecturer"):
         #     return Response({"id":"Professor"})
@@ -268,11 +271,11 @@ class ResponsesViewSet(viewsets.ModelViewSet):
     serializer_class = ResponsesSerializer
 
 #this allows for filerting scenarios by professor_id
-class allScenariosViewSet(generics.ListAPIView):
-    serializer_class = allScenariosSerializer
-    queryset = SCENARIOS.objects.all()
-    filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['PROFESSOR', 'IS_FINISHED']
+# class allScenariosViewSet(generics.ListAPIView):
+#     serializer_class = allScenariosSerializer
+#     queryset = SCENARIOS.objects.all()
+#     filter_backends = [DjangoFilterBackend]
+#     filterset_fields = ['PROFESSOR', 'IS_FINISHED']
     
 # Scenarios_for ViewSet
 class Scenarios_forViewSet(viewsets.ModelViewSet):
@@ -442,7 +445,12 @@ class dashboard_page(APIView):
     def get(self, request, *args, **kwargs):
         
         #take professor_id as input from URL by adding ?professor=<the id #> to the end of the url.
-        PROFESSOR_id = self.request.query_params.get('professor')
+        
+        #--old schema
+        #PROFESSOR_id = self.request.query_params.get('professor')
+        
+        #new, CHANGED THE ENDPOINT REQUEST
+        PROFESSOR_id = request.META['uid']
         #TODO check that id != none
         #get all scenarios belonging to this professor
         scenario_query = SCENARIOS.objects.filter(professors_to_scenario2 = PROFESSOR_id).values()
@@ -626,7 +634,7 @@ class flowchart(APIView):
 
 
 
-# Pages viewset
+#Pages viewset
 class Page_reflectionViewSet(generics.CreateAPIView):
     model = PAGES
     serializer_class = Pages_reflectionSerializer

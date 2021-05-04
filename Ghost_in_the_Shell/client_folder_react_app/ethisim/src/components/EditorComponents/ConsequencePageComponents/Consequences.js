@@ -18,6 +18,7 @@ import ErrorBanner from '../../Banners/ErrorBanner';
 import LoadingSpinner from '../../LoadingSpinner';
 import HelpIcon from '@material-ui/icons/Help';
 import GenericInfoButton from '../../InfoButtons/GenericInfoButton';
+import InformationItemList from '../GenericPageComponents/InformationItemList';
 const useStyles = makeStyles((theme) => ({
     saveButton: {
         margin: theme.spacing(2),
@@ -49,11 +50,11 @@ export default function Consequences(props) {
     const [bodyText, setBodyText] = useState(body);
 
     return (
-        <Container component="main">
+        /*<Container component="main">
             <Typography align="center" variant="h2">
                 Consequences
             </Typography>
-            {/* <Grid container justify="flex-end">
+            {<Grid container justify="flex-end">
                 <Button color="primary" onClick={handleClickOpen}>
                     <HelpIcon />
                 </Button>
@@ -84,8 +85,20 @@ export default function Consequences(props) {
                 //onClick={savePage}
             >
                 Save
-
-            </Button> */}
+    </Button> }
         </Container>
-    );
+    );*/
+    <div>
+            <Typography align="center" variant="h2">
+                Consequences
+            </Typography>
+            <Title />
+            <Body />
+           
+            <Button variant="contained" color="grey">
+                Save Consequence
+            </Button>
+           
+        </div>
+    )
 }

@@ -77,6 +77,7 @@ StakeHolder.propTypes = {
     id: PropTypes.number,
     removeStakeHolder: PropTypes.any,
     job: PropTypes.string,
+    version: PropTypes.number,
     stakeHolders: PropTypes.any,
     setStakeHolders: PropTypes.func,
 };
@@ -88,6 +89,7 @@ export default function StakeHolder({
     id,
     removeStakeHolder,
     job,
+    version,
     stakeHolders,
     setStakeHolders,
 }) {
@@ -261,6 +263,7 @@ export default function StakeHolder({
 
         axios(config)
             .then(function (response) {
+                console.log(response.data);
                 setIssues(response.data.ISSUES);
                 setLoading(false);
                 setOpenPointSelection(true);
@@ -721,7 +724,11 @@ export default function StakeHolder({
                         <h2 className="questions-header">Questions</h2>
                     </DialogTitle>
                     <DialogContent>
-                        <QuestionFields qrs={qRData} stakeholder_id={id} />
+                        <QuestionFields
+                            qrs={qRData}
+                            stakeholder_id={id}
+                            stakeVersion={version}
+                        />
                     </DialogContent>
                 </div>
             </Dialog>

@@ -252,7 +252,13 @@ export default function Dashboard() {
                 loading: true,
                 error: null,
             });
-            post(setPost, endpointPost, onFailurePost, NewScenario);
+            post(
+                setPost,
+                endpointPost,
+                onFailurePost,
+                onSuccessPost,
+                NewScenario
+            );
             setOpen(false);
         }
     };
@@ -361,9 +367,10 @@ export default function Dashboard() {
             );
             finishedScenarios = finishedScenarios.map((data) => (
                 <ScenarioCard
-                    key={data.SCENARIO}
+                    key={data.SCENARIO_ID}
                     data={data}
-                    scenarioID={data.SCENARIO}
+                    scenario={data.SCENARIO}
+                    scenarioID={data.SCENARIO_ID}
                     scenarioName={data.NAME}
                     dateCreated={data.DATE_CREATED}
                     isFinished={data.IS_FINISHED}
@@ -373,9 +380,10 @@ export default function Dashboard() {
             ));
             unfinishedScenarios = unfinishedScenarios.map((data) => (
                 <ScenarioCard
-                    key={data.SCENARIO}
+                    key={data.SCENARIO_ID}
                     data={data}
-                    scenarioID={data.SCENARIO}
+                    scenario={data.SCENARIO}
+                    scenarioID={data.SCENARIO_ID}
                     scenarioName={data.NAME}
                     dateCreated={data.DATE_CREATED}
                     finished={data.IS_FINISHED}

@@ -26,6 +26,11 @@ hs_err_pid*
 */__pycache__/*
 *.py[cod]
 *.pyc
-
 *$py.class
 
+/apache/shib_conf/*
+/apache/apache_conf/ssl/*
+
+*.env
+
+.DS_Store

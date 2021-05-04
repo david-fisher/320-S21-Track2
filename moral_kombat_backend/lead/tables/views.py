@@ -91,7 +91,7 @@ class multi_stake(APIView):
             serializer = StakeholdersSerializer(extant_stake, data=updated_stake)
             if serializer.is_valid():
                 serializer.save()
-        stake_query = stakeholders.objects.filter(SCENARIO_id = SCENARIO).values()
+        stake_query = STAKEHOLDERS.objects.filter(SCENARIO = SCENARIO).values()
         return Response(stake_query)
 
 # checked - Ed - 4/15/2021
@@ -101,7 +101,7 @@ class multi_coverage(APIView):
         if STAKEHOLDER == None:
             return Response({'status': 'details'}, status=status.HTTP_404_NOT_FOUND)
         for updated_coverage in request.data:
-            extant_coverage = COVERAGE.objects.get(STAKEHOLDER = STAKEHOLDER, ISSUE = updated_coverage['ISSUE'])
+            extant_coverage = COVERAGE.objects.get(STAKEHOLDER = STAKEHOLDER, ISSUE = updated_coverage['ISSUE_id'])
             serializer = coverageSerializer(extant_coverage, data=updated_coverage)
             if serializer.is_valid(): 
                 serializer.save()
@@ -116,6 +116,36 @@ class CoverageViewSet(viewsets.ModelViewSet):
     serializer_class = coverageSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['STAKEHOLDER']
+
+class coverage(APIView):
+    def get(self, request, *args, **kwargs):
+        stkholder = {}
+        try: 
+            coverage_list = COVERAGE.objects.values()
+        except COVERAGE.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        issue_list = []
+        for coverages in coverage_list:
+            issues_dict = {}
+            try:
+                issue = ISSUES.objects.get(ISSUE=coverages.get('ISSUE_id'))
+            except:
+                continue
+            issues_dict.update(coverages)
+            issues_dict.update(
+                {
+                    "NAME": issue.NAME
+                })
+
+            issue_list.append(issues_dict)
+            
+        stkholder.update(
+            {
+                "ISSUES": issue_list
+            }
+        )
+
+        return Response(stkholder, status=status.HTTP_200_OK)
 
     
 
@@ -325,7 +355,7 @@ class logistics_page(APIView):
         #TODO check that id != none
         #get all scenarios belonging to this professor
         # scenario_query = PROFESSORS_TO_SCENARIO.objects.filter(PROFESSOR = PROFESSOR_id).values()
-        scenario = SCENARIOS.objects.get(SCENARIO = SCENARIO_id)
+        scenario = SCENARIOS.objects.get(SCENARIO_ID = SCENARIO_id)
         scenario_dict = ScenariosSerializer(scenario).data
         #loop through scenarios and append required information (course, page info)
         print(scenario_dict)
@@ -340,7 +370,7 @@ class logistics_page(APIView):
             course = COURSES.objects.get(COURSE = x)
             course_dict_array.append({"COURSE":course.COURSE, "NAME": course.NAME})
                 
-        pages_query = PAGES.objects.filter(SCENARIO=scenario_dict['SCENARIO']).values()
+        pages_query = PAGES.objects.filter(SCENARIO=SCENARIO_id).values()
         
         page_array = []
         for page in pages_query:
@@ -386,13 +416,13 @@ class logistics_page(APIView):
     #a put request for editing scenarios. must provide scenario in url thusly: /logistics?scenario=<insert id number here>
     def put(self, request, *args, **kwargs):
         #save the scenario
-        extant_scenario = SCENARIOS.objects.get(SCENARIO = request.data['SCENARIO'])
+        extant_scenario = SCENARIOS.objects.get(SCENARIO_ID = request.data['SCENARIO_ID'])
         scenario_serializer = ScenariosSerializer(extant_scenario, data = request.data)
         if scenario_serializer.is_valid():
             scenario_serializer.save()
 
         #delete currently assocated classes
-        SCENARIOS_FOR.objects.filter(SCENARIO_ID = request.data['SCENARIO']).delete()
+        SCENARIOS_FOR.objects.filter(SCENARIO_ID = request.data['SCENARIO_ID']).delete()
         #get array of courses from frontend
         COURSES = request.data['COURSES']
         for course in COURSES:
@@ -408,7 +438,7 @@ class logistics_page(APIView):
                 for_serializer.save()
                 print('saved!')
             print(for_serializer.errors)
-        scenario_dict = ScenariosSerializer(SCENARIOS.objects.get(SCENARIO = request.data['SCENARIO'])).data
+        scenario_dict = ScenariosSerializer(SCENARIOS.objects.get(SCENARIO_ID = request.data['SCENARIO_ID'])).data
         scenario_dict['COURSES'] = request.data['COURSES']
         return Response(scenario_dict)
 
@@ -555,8 +585,10 @@ class multi_issue(APIView):
 class flowchart(APIView):
     #get all page objects given a scenario id
     def get(self, request, *args, **kwargs):
-        SCENARIO_id = self.request.query_params.get('SCENARIO')
+        SCENARIO_id = self.request.query_params.get('scenario')
+        print(SCENARIO_id)
         pages_query = PAGES.objects.filter(SCENARIO=SCENARIO_id).values()
+        print(pages_query)
         for page in pages_query:
             if page['PAGE_TYPE'] == 'A':
                 page['ACTION'] = ACTION_PAGE.objects.filter(PAGE=page['PAGE']).values()
@@ -566,14 +598,17 @@ class flowchart(APIView):
 
     #update the next_page field of all page objects
     def put(self, request, *args, **kwargs):
-        SCENARIO_id = self.request.query_params.get('SCENARIO')
+        SCENARIO_id = self.request.query_params.get('scenario')
         if SCENARIO_id == None:
             return Response({'status': 'details'}, status=status.HTTP_404_NOT_FOUND)
   
         for updated_page in request.data:
             #save updated choices within action pages  
             if updated_page['PAGE_TYPE'] == 'A':
+                print('action page')
+                print(updated_page['ACTION'])
                 for updated_choice in updated_page['ACTION']:
+                    print(updated_choice)
                     extant_choice = ACTION_PAGE.objects.get(ID=updated_choice['id']) 
                     action_serializer = Action_pageSerializer(extant_choice, updated_choice)
                     if not action_serializer.is_valid():
@@ -632,7 +667,7 @@ class pages_page(APIView):
         # Convers Django Model Object into a dictionary
         page_data = PagesSerializer(page).data
         
-        page_type = PAGE.PAGE_TYPE
+        page_type = page_data['PAGE_TYPE']
         # Check page.PAGE_TYPE = 'REFLECTION'
         if (page_type == 'R'):
             reflection_query = REFLECTION_QUESTIONS.objects.filter(reflection_questions_to_page1 = PAGE_ID).values()
@@ -1016,11 +1051,12 @@ class student_info(APIView):
 # seems like no change required - Chirag - 4/15
 class coverages_page(APIView):
     def get(self, request, *args, **kwargs):
-        stakeholder_id = self.request.query_params.get('STAKEHOLDER')
-
+        stakeholder_id = self.request.query_params.get('stakeholder_id')
         stkholder = {}
+        # print(stakeholder_id)
         try: 
             coverage_list = COVERAGE.objects.filter(STAKEHOLDER=stakeholder_id).values()
+            # print("coverage List:", coverage_list)
         except COVERAGE.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -1032,7 +1068,7 @@ class coverages_page(APIView):
                 # issueList.update({"NAME": IssuesSerializer(Issues.objects.get(ISSUE=issueID)).data['NAME']})
                 # Getting the issue for the coverage dictionary associated with the stakeholder_id
             try:
-                issue = ISSUES.objects.get(ISSUE=coverages.get('ISSUE'))
+                issue = ISSUES.objects.get(ISSUE=coverages.get('ISSUE_id'))
             except:
                 continue
             issues_dict.update(coverages)
@@ -1067,7 +1103,7 @@ class coverages_page(APIView):
             for item in data:
                 stkholderid = item['STAKEHOLDER']
                 issueid = item['ISSUE']
-                updatingItem = coverage.objects.get(
+                updatingItem = COVERAGE.objects.get(
                     STAKEHOLDER=stkholderid, ISSUE=issueid)
                 serializer = coverageSerializer(
                     updatingItem, data=item)
@@ -1081,7 +1117,7 @@ class coverages_page(APIView):
         else:
             stkholderid = data['STAKEHOLDER']
             issueid = data['ISSUE']
-            updatingItem = coverage.objects.get(
+            updatingItem = COVERAGE.objects.get(
                 STAKEHOLDER=stkholderid, ISSUE=issueid)
             serializer = coverageSerializer(
                 updatingItem, data=data)

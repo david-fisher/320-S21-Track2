@@ -29,12 +29,22 @@ jobs:
       - name: Build Simulator
         working-directory: ./simulator/frontend/
         run: yarn install && yarn run build
-      - name: Copy build to workspace apache
+      - name: Bundling artifact
         run: |
-          cp -r ./Ghost_in_the_Shell/client_folder_react_app/ethisim/build ./apache/build/se
-          cp -r ./simulator/frontend/build ./apache/build/simulator
-      - run: rm -rf /ethisim/apache/* || rm -rf /home/mobydock/ethisim/apache/*
-      - name: Copy local to root
+          mkdir ethisim;
+          cp -r ./apache ./ethisim/;
+          mkdir ./ethisim/apache/build;
+          cp -r ./Ghost_in_the_Shell/client_folder_react_app/ethisim/build ./ethisim/apache/build/se;
+          cp -r ./simulator/frontend/build ./ethisim/apache/build/simulator;
+          cp -r ./moral_kombat_backend ./ethisim/;
+          cp -r ./segfault ./ethisim/;
+      - name: Stopping current docker
+        run: docker-compose -f /ethisim/docker-compose-deploy.yml down
+      - name: Remove exisitng apache files
         run: |
-          cp -r ./apache /ethisim/apache
-          cp -r ./apache /home/mobydock/ethisim/apache
+          if [ -e /ethisim/apache/ ]; then echo "removing /ethisim/apache/*"; rm -rf /ethisim/apache/*; fi
+      - name: Copy artifact to server
+        run: |
+          if [ -e /ethisim/ ]; then echo "copying to /ethisim"; cp -r ./ethisim/* /ethisim/; fi
+      - name: Starting new server
+        run: docker-compose -f /ethisim/docker-compose-deploy.yaml up --build -d --remove-orphans

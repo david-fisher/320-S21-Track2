@@ -12,7 +12,7 @@ COPY ./shib_conf/ /etc/shibboleth/
 COPY ./apache/apache_conf/httpd.conf /etc/httpd/conf/
 COPY ./apache/apache_conf/.htaccess /var/www/html/
 COPY ./apache/apache_conf/ethisim.conf /etc/httpd/conf.d/
-COPY /etc/pki/tls/certs/ /etc/pki/tls/certs/
+COPY ./ssl /etc/pki/tls/certs/
 COPY ./apache/build/ /var/www/html/
 COPY ./start.sh ./
 RUN bash -c "chmod +x ./start.sh"

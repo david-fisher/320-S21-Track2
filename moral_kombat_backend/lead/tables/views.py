@@ -30,6 +30,7 @@ def getCredentials(request):
     credentials.update({"intID": credentials.get("intID").split("@")[0]})
     return credentials
 
+
 class ReturnIdentifierView(APIView):
     def get(self, request, *args, **kwargs):
         if ('title' in request.META):

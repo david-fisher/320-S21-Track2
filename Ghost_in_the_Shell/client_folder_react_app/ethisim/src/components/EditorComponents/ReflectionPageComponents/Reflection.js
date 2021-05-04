@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Body from '../GeneralPageComponents/Body';
 import Title from '../GeneralPageComponents/Title';
-import { Typography, Container, Button } from '@material-ui/core';
+import { Typography, Container, Button, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import QuestionFields from './QuestionComponent/questions';
 import PropTypes from 'prop-types';
@@ -10,6 +10,8 @@ import universalDelete from '../../../universalHTTPRequests/delete.js';
 import SuccessBanner from '../../Banners/SuccessBanner';
 import ErrorBanner from '../../Banners/ErrorBanner';
 import LoadingSpinner from '../../LoadingSpinner';
+import HelpIcon from '@material-ui/icons/Help';
+import GenericInfoButton from '../../InfoButtons/GenericInfoButton';
 
 Reflection.propTypes = {
     scenarioComponents: PropTypes.any,
@@ -66,6 +68,13 @@ export default function Reflection(props) {
         loading: false,
         error: null,
     });
+
+    //for info button
+    const [open, setOpen] = React.useState(false);
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
     // eslint-disable-next-line
     const [deleteValues, setDeleteValues] = useState({
         data: null,
@@ -250,6 +259,16 @@ export default function Reflection(props) {
             <Typography align="center" variant="h2">
                 Reflection Component
             </Typography>
+            <Grid container justify="flex-end">
+                <Button color="primary" onClick={handleClickOpen}>
+                    <HelpIcon />
+                </Button>
+                <GenericInfoButton
+                    description={`on this page`}
+                    open={open}
+                    setOpen={setOpen}
+                />
+            </Grid>
             <Title
                 title={title}
                 setTitle={setTitle}

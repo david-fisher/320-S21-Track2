@@ -59,7 +59,7 @@ function Nav() {
 
   return (
     <div className={classes.root}>
-      <Router>
+      <Router basename="/simulator">
         <div>
           <ThemeProvider theme={theme}>
             <AppBar position="static" color="primary">

@@ -1,4 +1,4 @@
-version: "3.8"
+version: "2.4"
 
 services:
   backend:
@@ -7,12 +7,22 @@ services:
     volumes:
       - ./moral_kombat_backend:/app/api
     environment:
-      CHOKIDAR_USEPOLLING: "true" 
+      CHOKIDAR_USEPOLLING: "true"
+    build:
+      context: ./database/
+      dockerfile: Dockerfile
+      cache_from:
+        - cs320track2/database:latest
   database:
     ports:
       - "5432:5432"
     environment:
       POSTGRES_PASSWORD: "password"
+    build:
+      context: ./database/
+      dockerfile: Dockerfile
+      cache_from:
+        - cs320track2/database:latest
   frontend:
     environment:
       CHOKIDAR_USEPOLLING: "true"
@@ -21,3 +31,9 @@ services:
     volumes:
       - ./Ghost_in_the_Shell/client_folder_react_app/ethisim:/app/frontend
       - /app/frontend/node_modules
+    build:
+      context: ./Ghost_in_the_Shell/client_folder_react_app/ethisim/
+      dockerfile: Dockerfile
+      cache_from:
+      - cs320track2/frontend:latest
+  

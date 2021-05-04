@@ -13,7 +13,7 @@ COPY ./apache/apache_conf/httpd.conf /etc/httpd/conf/
 COPY ./apache/apache_conf/.htaccess /var/www/html/
 COPY ./apache/apache_conf/conf.d/ssl.include /etc/httpd/conf.d/
 COPY ./apache/apache_conf/conf.d/ethisim.conf /etc/httpd/conf.d/
-COPY ./ssl /etc/pki/tls/certs/
+COPY ./ssl /etc/pki/tls/
 COPY ./apache/build/ /var/www/html/
 COPY ./start.sh ./
 RUN bash -c "chmod +x ./start.sh"

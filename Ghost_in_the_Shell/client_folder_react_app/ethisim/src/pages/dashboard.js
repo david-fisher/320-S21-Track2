@@ -59,7 +59,8 @@ const useStyles = makeStyles((theme) => ({
         fontSize: '30px',
     },
     border: {
-        borderStyle: 'none none solid none',
+        //borderStyle: 'none none solid none',
+        marginTop: theme.spacing(2),
         marginBottom: theme.spacing(2),
     },
 }));
@@ -237,12 +238,13 @@ export default function Dashboard() {
 
         if (validInput) {
             setNewScenario({
+                SCENARIO: 0,
+                VERSION: 0,
                 NAME: ' ',
                 IS_FINISHED: false,
                 PUBLIC: false,
                 NUM_CONVERSATIONS: 0,
-                PROFESSOR: 1,
-                COURSES: [],
+                SCENARIO_ID: 0,
             });
             //Smooth loading animation, loading animation will not reset during POST and GET Request
             setFetchScenariosResponse({
@@ -264,12 +266,13 @@ export default function Dashboard() {
     //X button on dialog for creating new scenario
     const handleClose = () => {
         setNewScenario({
+            SCENARIO: 0,
+            VERSION: 0,
             NAME: ' ',
             IS_FINISHED: false,
             PUBLIC: false,
             NUM_CONVERSATIONS: 0,
-            PROFESSOR: 1,
-            COURSES: [],
+            SCENARIO_ID: 0,
         });
         setErrorName(false);
         setErrorCourses(false);
@@ -364,9 +367,10 @@ export default function Dashboard() {
             );
             finishedScenarios = finishedScenarios.map((data) => (
                 <ScenarioCard
-                    key={data.SCENARIO}
+                    key={data.SCENARIO_ID}
                     data={data}
-                    scenarioID={data.SCENARIO}
+                    scenario={data.SCENARIO}
+                    scenarioID={data.SCENARIO_ID}
                     scenarioName={data.NAME}
                     dateCreated={data.DATE_CREATED}
                     isFinished={data.IS_FINISHED}
@@ -376,9 +380,10 @@ export default function Dashboard() {
             ));
             unfinishedScenarios = unfinishedScenarios.map((data) => (
                 <ScenarioCard
-                    key={data.SCENARIO}
+                    key={data.SCENARIO_ID}
                     data={data}
-                    scenarioID={data.SCENARIO}
+                    scenario={data.SCENARIO}
+                    scenarioID={data.SCENARIO_ID}
                     scenarioName={data.NAME}
                     dateCreated={data.DATE_CREATED}
                     finished={data.IS_FINISHED}
@@ -475,7 +480,9 @@ export default function Dashboard() {
                     errorMessage={errorBannerMessage}
                 />
                 <div className={classes.border}>
-                    <Typography variant="h3">Unfinished Scenarios</Typography>
+                    <Typography variant="h3">
+                        Scenarios In Development
+                    </Typography>
                 </div>
                 <Grid
                     container
@@ -488,7 +495,7 @@ export default function Dashboard() {
                     <AddNewScenarioCard onClick={handleClickOpen} />
                 </Grid>
                 <div className={classes.border}>
-                    <Typography variant="h3">Finished Scenarios</Typography>
+                    <Typography variant="h3">Published Scenarios</Typography>
                 </div>
                 <Grid
                     container
@@ -567,7 +574,7 @@ export default function Dashboard() {
                                         color="primary"
                                     />
                                 }
-                                label="Public"
+                                label="Make Public"
                                 labelPlacement="start"
                             />
                         </form>

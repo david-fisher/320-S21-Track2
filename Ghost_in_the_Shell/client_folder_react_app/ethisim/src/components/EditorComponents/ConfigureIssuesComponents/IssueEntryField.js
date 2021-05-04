@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
         margin: theme.spacing(0.5),
         marginTop: theme.spacing(0),
         width: '100%',
-        textTransform: 'unset',
+        //textTransform: 'unset',
     },
 }));
 
@@ -242,7 +242,7 @@ export default function IssueEntryField({
                         />
                     ) : (
                         <TextField
-                            style={{ width: '65%' }}
+                            style={{ width: '60%' }}
                             id="outlined-text"
                             label="Issue"
                             value={issueName}
@@ -256,7 +256,7 @@ export default function IssueEntryField({
                         <TextField
                             error
                             helperText={errorScoreText}
-                            style={{ width: '35%' }}
+                            style={{ width: '40%' }}
                             margin="normal"
                             id="outlined-number"
                             label="Importance Factor"
@@ -268,7 +268,7 @@ export default function IssueEntryField({
                         />
                     ) : (
                         <TextField
-                            style={{ width: '35%' }}
+                            style={{ width: '40%' }}
                             margin="normal"
                             id="outlined-number"
                             label="Importance Factor"

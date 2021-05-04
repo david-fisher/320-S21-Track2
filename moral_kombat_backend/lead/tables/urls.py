@@ -45,11 +45,12 @@ urlpatterns = [
     path('flowchart', flowchart.as_view()),
     path('student_info',student_info.as_view()),
     path('student_responses',student_responses.as_view()),
-    path('coverage', coverage.as_view()),
+    # path('coverage', coverage.as_view()),
 
     path('coverages', coverages_page.as_view()),
     path('stakeholder', stakeholders_page.as_view()),
     path('page', pages_page.as_view()),
+    path('identifier', ReturnIdentifierView.as_view())
 
 ] 
 

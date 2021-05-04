@@ -43,19 +43,19 @@ class PagesSerializer(serializers.ModelSerializer):
     class Meta:
         model = PAGES
         fields = ('PAGE', 'PAGE_TYPE', 'PAGE_TITLE', 'BODY', 'SCENARIO',
-                  'VERSION', 'NEXT_PAGE', 'X_COORDINATE', 'Y_COORDINATE', 'COMPLETED','NEXT_PAGE_VERSION')
+                  'VERSION', 'X_COORDINATE', 'Y_COORDINATE', 'COMPLETED', 'ID', 'NEXT_ID')
 
 
 class Stakeholder_to_pageSerializer(serializers.ModelSerializer):
     class Meta:
         model = STAKEHOLDER_TO_PAGE
-        fields = ('PAGE', 'PAGE_VERSION', 'STAKEHOLDER', 'STAKEHOLDER_VERSION')
+        fields = ('PAGE', 'STAKEHOLDER')
 
 
 class Reflection_questionsSerializer(serializers.ModelSerializer):
     class Meta:
         model = REFLECTION_QUESTIONS
-        fields = ('REFLECTION_QUESTION', 'ID', 'VERSION')
+        fields = ('REFLECTION_QUESTION', 'REFLECTION_QUESTION_ID', 'VERSION')
 
 class Reflection_questions_to_pageSerializer(serializers.ModelSerializer):
     class Meta:
@@ -72,7 +72,7 @@ class StakeholdersSerializer(serializers.ModelSerializer):
 class ConversationsSerializer(serializers.ModelSerializer):
     class Meta:
         model = CONVERSATIONS
-        fields = ('STAKEHOLDER', 'STAKEHOLDER_VERSION', 'CONVERSATION', 'QUESTION', 'RESPONSE')
+        fields = ('STAKEHOLDER', 'CONVERSATION', 'QUESTION', 'RESPONSE')
 
 class Courses_to_ScenarioSerializer(serializers.ModelSerializer):
     class Meta:
@@ -100,20 +100,20 @@ class StudentsToCourseSerializer(serializers.ModelSerializer):
 class CoursesSerializer(serializers.ModelSerializer):
     class Meta:
         model = COURSES
-        fields = ('COURSE', 'NAME')
+        fields = ('COURSE', 'NAME', 'STUDENTS', 'PROFESSORS', 'SCENARIOS')
 
 
 class ResponsesSerializer(serializers.ModelSerializer):
     class Meta:
         model = RESPONSES
-        fields = ('RESPONSE'), ('STUDENT'), ('SCENARIO'), ('PAGE'), (
-            'COURSE'), ('DATE_TAKEN'), ('CHOICE'), ('VERSION'), ('RESPONSE_ID')
+        fields = ('RESPONSE', 'STUDENT', 'SCENARIO', 'PAGE', 
+            'COURSE', 'DATE_TAKEN', 'CHOICE', 'VERSION', 'RESPONSE_ID')
 
 
 class PagesToScenarioSerializer(serializers.ModelSerializer):
     class Meta:
         model = PAGES_TO_SCENARIO
-        fields = ('PAGE_ID'), ('SCENARIO_ID'), ('PAGE_VERSION'), ('SCENARIO_VERSION')
+        fields = ('PAGE_ID', 'SCENARIO_ID')
 
 
 class allScenariosSerializer(serializers.ModelSerializer):

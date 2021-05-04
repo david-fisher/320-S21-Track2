@@ -27,9 +27,9 @@ class COURSES(models.Model):
     NAME = models.TextField()
     STUDENTS = models.ManyToManyField(
         'STUDENTS', related_name='COURSES', through='STUDENTS_TO_COURSE')
-    professors = models.ManyToManyField(
+    PROFESSORS = models.ManyToManyField(
         'PROFESSORS', related_name='COURSES', through='PROFESSORS_TO_COURSES')
-    scenarios = models.ManyToManyField(
+    SCENARIOS = models.ManyToManyField(
         'SCENARIOS', related_name='COURSES',  through='SCENARIOS_FOR')
 
 

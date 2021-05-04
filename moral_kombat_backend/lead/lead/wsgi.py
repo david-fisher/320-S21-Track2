@@ -11,7 +11,7 @@ import sys
 path = '/var/www/backend/lead/'
 if path not in sys.path:
     sys.path.append(path)
-
+    
 import os
 
 from django.core.wsgi import get_wsgi_application

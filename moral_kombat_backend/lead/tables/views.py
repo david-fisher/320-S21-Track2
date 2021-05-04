@@ -201,6 +201,23 @@ class SingleScenarioViewSet(viewsets.ModelViewSet):
         serializer = ScenariosSerializer(scenarios)
         return Response(serializer.data)
 
+# class professors_to_scenarioViewSet(viewsets.ModelViewSet):
+#     def get(self, request):
+#         scenario = SCENARIOS.objects.all()
+#         serializer = ScenariosSerializer(scenarios)
+#         return Response(serializer.data)
+    
+#     def delete(self, request, pk, format=None):
+#         snippet = self.get_object(pk)
+#         snippet.delete()
+#         return Response(status=status.HTTP_204_NO_CONTENT)
+
+class professors_to_scenarioViewSet(viewsets.ModelViewSet):
+    queryset = PROFESSORS_TO_SCENARIO.objects.all()
+    permission_classes = [
+        permissions.AllowAny
+    ]
+    serializer_class = Professors_to_scenarioSerializer
 
 class PagesViewSet(viewsets.ModelViewSet):
     queryset = PAGES.objects.all()
@@ -271,11 +288,11 @@ class ResponsesViewSet(viewsets.ModelViewSet):
     serializer_class = ResponsesSerializer
 
 #this allows for filerting scenarios by professor_id
-# class allScenariosViewSet(generics.ListAPIView):
-#     serializer_class = allScenariosSerializer
-#     queryset = SCENARIOS.objects.all()
-#     filter_backends = [DjangoFilterBackend]
-#     filterset_fields = ['PROFESSOR', 'IS_FINISHED']
+class allScenariosViewSet(generics.ListAPIView):
+    serializer_class = allScenariosSerializer
+    queryset = SCENARIOS.objects.all()
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['PROFESSOR', 'IS_FINISHED']
     
 # Scenarios_for ViewSet
 class Scenarios_forViewSet(viewsets.ModelViewSet):
@@ -333,12 +350,6 @@ class response_to_action_pageViewSet(viewsets.ModelViewSet):
     ]
     serializer_class = Response_to_action_pageSerializer
 
-class professors_to_scenarioViewSet(viewsets.ModelViewSet):
-    queryset = PROFESSORS_TO_SCENARIO.objects.all()
-    permission_classes = [
-        permissions.AllowAny
-    ]
-    serializer_class = Professors_to_scenarioSerializer
 
 # Checked - Ed - 4/15/21
 #for getting/editing scenarios in dashboard

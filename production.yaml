@@ -1,0 +1,34 @@
+# run with "docker-compose -f docker-compose.yaml -f production.yaml up -d"
+version: "3.8"
+
+services:
+  backend:
+    ports:
+      - "8000:8000"
+    environment:
+      PRODUCTION: "true"
+
+  database:
+    environment:
+      PRODUCTION: "true"
+    ports:
+      - "5432:5432"
+
+  frontend:
+    ports:
+      - "3000:3000"
+    environment:
+      PRODUCTION: "true"
+
+  shibboleth:
+    ports:
+      - "80:80"
+    environment:
+      PRODUCTION: "true"
+
+networks:
+  default-net:
+    driver: bridge
+
+volumes:
+  postgres_data:

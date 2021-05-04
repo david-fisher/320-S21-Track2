@@ -134,7 +134,6 @@ class PROFESSORS_TO_COURSES(models.Model):
     COURSE = models.ForeignKey(COURSES, on_delete = models.CASCADE, db_column='course')
 
     class Meta:
-        db_table = 'professors_to_courses'
         unique_together = ('PROFESSOR', 'COURSE')
 
 
@@ -144,7 +143,6 @@ class PROFESSORS_TO_SCENARIO(models.Model):
     PERMISSION = models.IntegerField()
 
     class Meta:
-        db_table = 'professors_to_scenario'
         unique_together = ('PROFESSOR', 'SCENARIO')
 
 
@@ -156,7 +154,6 @@ class QUESTIONS(models.Model):
     QUESTION_SUMMARY = models.TextField(blank=True)
 
     class Meta:
-        db_table = 'questions'
         unique_together = ('QUESTION', 'VERSION')
 
 
@@ -165,7 +162,6 @@ class REFLECTION_QUESTION_TO_PAGE(models.Model):
     PAGE = models.ForeignKey(PAGES, on_delete = models.CASCADE)
 
     class Meta:
-        db_table = 'reflection_question_to_page'
         unique_together = ('REFLECTION_QUESTION_ID', 'PAGE')
 
 
@@ -175,7 +171,6 @@ class REFLECTION_QUESTIONS(models.Model):
     VERSION = models.IntegerField()
 
     class Meta:
-        db_table = 'reflection_questions'
         unique_together = ('REFLECTION_QUESTION_ID', 'VERSION')
 
 
@@ -196,7 +191,6 @@ class RESPONSES(models.Model):
     CHOICE = models.TextField()
 
     class Meta:
-        db_table = 'responses'
         unique_together = ('RESPONSE', 'STUDENT', 'SCENARIO', 'PAGE', 'COURSE', 'DATE_TAKEN')
 
 class RESPONSE_TO_ACTION_PAGE(models.Model):
@@ -204,7 +198,6 @@ class RESPONSE_TO_ACTION_PAGE(models.Model):
     ACTION_PAGE = models.ForeignKey(ACTION_PAGE, on_delete = models.CASCADE, db_column='action_page', )
 
     class Meta:
-        db_table = 'response_to_action_page'
         unique_together = ('RESPONSE', 'ACTION_PAGE')
 
 class RESPONSES_TO_CONVERSATIONS(models.Model):
@@ -215,7 +208,6 @@ class RESPONSES_TO_CONVERSATIONS(models.Model):
     CONVERSATION = models.ForeignKey(CONVERSATIONS, on_delete = models.CASCADE, db_column='conversation')
 
     class Meta:
-        db_table = 'responses_to_conversations'
         unique_together = ('RESPONSE', 'CONVERSATION')
 
 
@@ -230,7 +222,6 @@ class SCENARIOS(models.Model):
     DATE_CREATED = models.DateField(auto_now_add=True)
 
     class Meta:
-        db_table = 'scenarios'
         unique_together = ('SCENARIO', 'VERSION')
 
 
@@ -240,7 +231,6 @@ class SCENARIOS_FOR(models.Model):
     COURSE = models.ForeignKey(COURSES, on_delete = models.CASCADE, db_column='course')
 
     class Meta:
-        db_table = 'scenarios_for'
         unique_together = ('SCENARIO', 'COURSE')
 
 
@@ -249,7 +239,6 @@ class STAKEHOLDER_TO_PAGE(models.Model):
     STAKEHOLDER = models.ForeignKey('STAKEHOLDERS', on_delete = models.CASCADE, db_column='stakeholder')
 
     class Meta:
-        db_table = 'stakeholder_to_page'
         unique_together = ('PAGE', 'STAKEHOLDER')
 
 
@@ -264,7 +253,6 @@ class STAKEHOLDERS(models.Model):
     ENABLE_MULTI_CONVO = models.BooleanField()
 
     class Meta:
-        db_table = 'stakeholders'
         unique_together = ('STAKEHOLDER', 'VERSION')
 
 
@@ -273,7 +261,6 @@ class STAKEHOLDERS_TO_QUESTIONS(models.Model):
     QUESTION = models.ForeignKey(QUESTIONS, on_delete = models.CASCADE, db_column='question')
 
     class Meta:
-        db_table = 'stakeholders_to_questions'
         unique_together = ('STAKEHOLDER', 'QUESTION')
 
 
@@ -287,7 +274,6 @@ class STUDENT_TIMES(models.Model):
     END_TIME = models.DateField(null = True, blank=True)
 
     class Meta:
-        db_table = 'student_times'
         unique_together = ('STUDENT', 'COURSE', 'SCENARIO')
 
 
@@ -302,5 +288,4 @@ class STUDENTS_TO_COURSE(models.Model):
     COURSE = models.ForeignKey(COURSES, on_delete = models.CASCADE, db_column='course')
 
     class Meta:
-        db_table = 'students_to_course'
         unique_together = ('STUDENT', 'COURSE')

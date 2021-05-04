@@ -1,0 +1,86 @@
+# This workflow will do a clean install of node dependencies, build the source code
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: Build and Deploy
+
+on:
+  push:
+    branches: [ main, build-and-deploy ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      CI: false
+    strategy:
+      matrix:
+        node-version: [15.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Build Editor
+        working-directory: ./Ghost_in_the_Shell/client_folder_react_app/ethisim/
+        run: yarn install && PUBLIC_URL=/se yarn run build
+      - name: Upload Editor artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: editor-frontend
+          path: ./Ghost_in_the_Shell/client_folder_react_app/ethisim/build/
+      - name: Build Simulator
+        working-directory: ./simulator/frontend/
+        run: yarn install && PUBLIC_URL=/simulator yarn run build
+      - name: Upload Simulator artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: sim-frontend
+          path: ./simulator/frontend/build/
+      
+  deploy:
+    runs-on: self-hosted
+    needs: build
+    
+    steps:
+      - uses: actions/checkout@v2
+      - name: Downloading artifacts
+        uses: actions/download-artifact@v2  
+      - name: Bundling server
+        run: |
+          mkdir ethisim;
+          cp -r ./apache ./ethisim/;
+          cp ./start.sh ./ethisim/;
+          cp docker-compose-deploy.yaml ./ethisim/docker-compose.yaml;
+          cp requirements.txt ./ethisim/requirements.txt;
+          cp Dockerfile ./ethisim/Dockerfile;
+          mkdir ./ethisim/apache/build ./ethisim/apache/build/se ./ethisim/apache/build/simulator;
+          cp -r ./editor-frontend/* ./ethisim/apache/build/se;
+          cp -r ./sim-frontend/* ./ethisim/apache/build/simulator;
+          cp ./apache/.htaccess ./ethisim/apache/build/se;
+          cp ./apache/.htaccess ./ethisim/apache/build/simulator;
+          if [ -e ./moral_kombat_backend ]; then cp -r ./moral_kombat_backend ./ethisim/; fi;
+          if [ -e ./segfault ]; then 
+            cp -r ./segfault ./ethisim/; 
+          else 
+            mkdir ./segfault; 
+            cp -r ./segfault ./ethisim/;
+          fi;
+      - name: Stopping current docker container, remove any docker containers
+        working-directory: /ethisim/
+        run: |
+            if [[ $(docker ps -q) ]]; then docker stop $(docker ps -q); fi
+            if [[ $(docker ps -aq) ]]; then docker rm $(docker ps -aq); fi
+      - name: Remove exisitng apache files
+        run: |
+          if [ -e /ethisim/apache/build ]; then echo "removing apache build"; rm -rf /ethisim/apache/build/*; fi;
+          if [ -e /ethisim/moral_kombat_backend ]; then echo "removing moral_kombat_backend"; rm -rf /ethisim/moral_kombat_backend; fi;
+          if [ -e /ethisim/segfault ]; then echo "removing segfault"; rm -rf /ethisim/segfault; fi;
+      - name: Copy artifact to server
+        run: |
+          if [ -e /ethisim/ ]; then echo "copying to /ethisim"; cp -r ./ethisim/* /ethisim/; fi
+      - name: Starting new server
+        working-directory: /ethisim/
+        run: docker-compose up --build -d --remove-orphans

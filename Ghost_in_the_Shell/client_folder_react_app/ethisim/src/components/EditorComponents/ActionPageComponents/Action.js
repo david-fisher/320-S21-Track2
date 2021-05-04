@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Button, TextField, Typography, Container } from '@material-ui/core';
+import {
+    Button,
+    TextField,
+    Typography,
+    Container,
+    Grid,
+} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Body from '../GeneralPageComponents/Body';
 import Title from '../GeneralPageComponents/Title';
@@ -9,6 +15,8 @@ import universalDelete from '../../../universalHTTPRequests/delete.js';
 import SuccessBanner from '../../Banners/SuccessBanner';
 import ErrorBanner from '../../Banners/ErrorBanner';
 import LoadingSpinner from '../../LoadingSpinner';
+import HelpIcon from '@material-ui/icons/Help';
+import GenericInfoButton from '../../InfoButtons/GenericInfoButton';
 
 Action.propTypes = {
     scenarioComponents: PropTypes.any,
@@ -77,6 +85,12 @@ export default function Action(props) {
         xCoord,
         yCoord,
     } = props;
+
+    //for info button
+    const [open, setOpen] = React.useState(false);
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
 
     const [postValues, setPostValues] = useState({
         data: null,
@@ -265,6 +279,16 @@ export default function Action(props) {
             <Typography align="center" variant="h2">
                 Action Component
             </Typography>
+            <Grid container justify="flex-end">
+                <Button color="primary" onClick={handleClickOpen}>
+                    <HelpIcon />
+                </Button>
+                <GenericInfoButton
+                    description={`on this page`}
+                    open={open}
+                    setOpen={setOpen}
+                />
+            </Grid>
             <Title
                 title={title}
                 setTitle={setTitle}

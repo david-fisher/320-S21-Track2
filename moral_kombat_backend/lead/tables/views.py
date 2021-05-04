@@ -18,6 +18,30 @@ from rest_framework import mixins
 # DemographicsSerializer, StudentSerializer, ProfessorSerializer, ScenariosSerializer, allScenariosSerializer, Stakeholder_pageSerializer, StakeholdersSerializer, ConversationsSerializer
 
 
+def getCredentials(request):
+    credentials = {
+        "UID": request.META['uid'],
+        "name": request.META['displayName'],
+        "affiliation": request.META['eduPersonPrimaryAffiliation'],
+        "email": request.META['mail'],
+        #"title": request.META['title'],
+        "intID": request.META['fcIdNumber']
+    }
+    credentials.update({"intID": credentials.get("intID").split("@")[0]})
+    return credentials
+
+class ReturnIdentifierView(APIView):
+    def get(self, request, *args, **kwargs):
+        if ('title' in request.META):
+            return Response({"id":"Professor"})
+        else:
+            return Response({"id":"Student"})
+
+        # if (credentials.get("title") == "Lecturer"):
+        #     return Response({"id":"Professor"})
+        # else:
+        #     return Response({"id":"Student"})
+        #return Response({"id":"Student"})
 
 
 # Stakeholders ViewSet - Chirag - 4/14

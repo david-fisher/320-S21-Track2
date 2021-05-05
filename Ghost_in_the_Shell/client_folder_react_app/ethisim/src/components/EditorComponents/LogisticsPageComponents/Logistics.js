@@ -7,6 +7,7 @@ import {
     Typography,
     Container,
     Divider,
+    Grid,
 } from '@material-ui/core';
 import put from '../../../universalHTTPRequests/put';
 import get from '../../../universalHTTPRequests/get';
@@ -19,6 +20,8 @@ import Tags from './DropDown';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import PropTypes from 'prop-types';
+import HelpIcon from '@material-ui/icons/Help';
+import GenericInfoButton from '../../InfoButtons/GenericInfoButton';
 
 const useStyles = makeStyles((theme) => ({
     textfields: {
@@ -32,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
             margin: theme.spacing(1),
             marginBottom: theme.spacing(1),
             width: '100%',
-            textTransform: 'unset',
+            //textTransform: 'unset',
         },
     },
     authorButtons: {
@@ -84,10 +87,11 @@ Logistics.propTypes = {
 
 export default function Logistics({ scenario_ID }) {
     //Need scenario id
-    const endpointGetLogistics = '/logistics?scenario_id=';
+    const endpointGetLogistics = '/logistics?scenario=';
     const endpointGetCourses = '/api/courses/';
     const endPointPut = '/logistics';
-
+    console.log('Logistics');
+    console.log(scenario_ID);
     const classes = useStyles();
     //temporary until backend implements id's
     const [fetchCourseResponse, setFetchCourseResponse] = useState({
@@ -178,6 +182,12 @@ export default function Logistics({ scenario_ID }) {
     const [isPublic, setIsPublic] = useState(false);
     const [isFinished, setIsFinished] = useState(false);
 
+    //for info button
+    const [open, setOpen] = React.useState(false);
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
     //For Banners
     useEffect(() => {
         const timeout = setTimeout(() => {
@@ -233,9 +243,9 @@ export default function Logistics({ scenario_ID }) {
         NAME: '',
         PUBLIC: false,
         NUM_CONVERSATION: 0,
-        PROFESSOR: 0,
         IS_FINISHED: false,
         DATE_CREATED: ' ',
+        SCENARIO_ID: 0,
         COURSES: [],
     });
 
@@ -246,10 +256,11 @@ export default function Logistics({ scenario_ID }) {
             NewScenario.NAME = response.data.NAME;
             NewScenario.PUBLIC = response.data.PUBLIC;
             NewScenario.NUM_CONVERSATION = response.data.NUM_CONVERSATION;
-            NewScenario.PROFESSOR = response.data.PROFESSOR;
             NewScenario.IS_FINISHED = response.data.IS_FINISHED;
             NewScenario.DATE_CREATED = response.data.DATA_CREATED;
             NewScenario.COURSES = response.data.COURSES;
+            NewScenario.SCENARIO_ID = response.data.SCENARIO_ID;
+
             setScenarioName(response.data.NAME);
             setIsFinished(response.data.IS_FINISHED);
             setIsPublic(response.data.PUBLIC);
@@ -373,7 +384,7 @@ export default function Logistics({ scenario_ID }) {
         if (validInput) {
             put(
                 setResponseSave,
-                endPointPut,
+                endPointPut + '?scenario=' + id,
                 onFailureLogistic,
                 onSuccessLogistic,
                 NewScenario
@@ -476,12 +487,28 @@ export default function Logistics({ scenario_ID }) {
                 <Typography align="center" variant="h2">
                     Logistics
                 </Typography>
+                <Grid container justify="flex-end">
+                    <Button color="primary" onClick={handleClickOpen}>
+                        <HelpIcon />
+                    </Button>
+                    <GenericInfoButton
+                        description={`If it's your first time using Ethism, you'll see in the top left of the screen an icon of three horizontal lines. 
+                        This is the menu and is accessible from all pages.
+                        The page you're on is the Logistics page and handles some organizational pieces of your ethical scenario.
+                         Here, you can edit the name of your scenario, the courses associated with this scenario, and max number of selected conversations. 
+                         By default the max number of selected conversations is zero. However, you may enter the maximum number of stakeholders you would like to permit students to speak with. This will be explained more in depth on the Conversation Editor page.
+                          Clicking the “Public” box allows your scenario to be viewed publicly by others. Clicking the “Is Finished” box puts your scenario in the Finished section of the Dashboard, 
+                        ready for student distribution. Don’t forget to click “Save” before leaving the page.`}
+                        open={open}
+                        setOpen={setOpen}
+                    />
+                </Grid>
                 <form
                     className={classes.textfields}
                     noValidate
                     autoComplete="off"
                 >
-                    Simulation Title
+                    Scenario Title
                     {errorName ? (
                         <TextField
                             error
@@ -515,7 +542,7 @@ export default function Logistics({ scenario_ID }) {
                             At least one course must be selected
                         </Typography>
                     ) : null}
-                    Max Number Of Selected Conversations
+                    Maximum Number of Conversations Allowed
                     {errorNumConvos ? (
                         <TextField
                             error
@@ -543,7 +570,7 @@ export default function Logistics({ scenario_ID }) {
                                 color="primary"
                             />
                         }
-                        label="Public"
+                        label="Make Public"
                         labelPlacement="start"
                     />
 
@@ -555,17 +582,10 @@ export default function Logistics({ scenario_ID }) {
                                 color="primary"
                             />
                         }
-                        label="Is Finished"
+                        label="Publish"
                         labelPlacement="start"
                     />
                 </form>
-                <div className={classes.subdiv}>
-                    <form
-                        className={classes.buttons}
-                        noValidate
-                        autoComplete="off"
-                    ></form>
-                </div>
 
                 <div className={classes.subdiv}>
                     <form

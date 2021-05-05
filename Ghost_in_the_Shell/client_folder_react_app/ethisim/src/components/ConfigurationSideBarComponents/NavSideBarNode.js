@@ -4,6 +4,7 @@ import { Button, Grid } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import GenericDeleteWarning from '../DeleteWarnings/GenericDeleteWarning';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import Checkbox from '@material-ui/core/Checkbox';
 
 const useStyles = makeStyles((theme) => ({
     pageButton: {
@@ -54,7 +55,16 @@ export default function NavSideBarNode(props) {
     };
 
     function pageType(title) {
-        if (id === -1 || id === -2 || id === -3 || id === -4 || isIntroPage) {
+        if (
+            id === -1 ||
+            id === -2 ||
+            id === -3 ||
+            id === -4 ||
+            id === -5 ||
+            id === -6 ||
+            isIntroPage
+        ) {
+            //logistics to introduction pages
             return (
                 <Grid container direction="row" justify="flex-start">
                     <Grid item xs={10}>
@@ -70,6 +80,7 @@ export default function NavSideBarNode(props) {
                 </Grid>
             );
         } else {
+            //additional created pages
             return (
                 <Grid container direction="row" justify="flex-start">
                     <Grid item xs={10}>

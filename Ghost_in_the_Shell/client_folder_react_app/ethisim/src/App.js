@@ -9,7 +9,7 @@ import Homepage from './pages/homepage';
 
 export default function App() {
     return (
-        <Router>
+        <Router basename="/se">
             <Route exact path="/">
                 <Redirect to="/home" />
             </Route>
@@ -25,3 +25,9 @@ export default function App() {
         </Router>
     );
 }
+
+/*
+            <Route path="/login" component={Login}>
+                <Redirect to="https://ethisim2.cs.umass.edu/Shibboleth.sso/Login?target=http://localhost:3000/login" />
+            </Route>
+*/

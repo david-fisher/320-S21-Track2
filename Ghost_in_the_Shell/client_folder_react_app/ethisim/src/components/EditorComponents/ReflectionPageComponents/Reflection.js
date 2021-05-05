@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Body from '../GeneralPageComponents/Body';
 import Title from '../GeneralPageComponents/Title';
-import { Typography, Container, Button } from '@material-ui/core';
+import { Typography, Container, Button, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import QuestionFields from './QuestionComponent/questions';
 import PropTypes from 'prop-types';
@@ -10,6 +10,8 @@ import universalDelete from '../../../universalHTTPRequests/delete.js';
 import SuccessBanner from '../../Banners/SuccessBanner';
 import ErrorBanner from '../../Banners/ErrorBanner';
 import LoadingSpinner from '../../LoadingSpinner';
+import HelpIcon from '@material-ui/icons/Help';
+import GenericInfoButton from '../../InfoButtons/GenericInfoButton';
 
 Reflection.propTypes = {
     scenarioComponents: PropTypes.any,
@@ -66,6 +68,13 @@ export default function Reflection(props) {
         loading: false,
         error: null,
     });
+
+    //for info button
+    const [open, setOpen] = React.useState(false);
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
     // eslint-disable-next-line
     const [deleteValues, setDeleteValues] = useState({
         data: null,
@@ -250,6 +259,20 @@ export default function Reflection(props) {
             <Typography align="center" variant="h2">
                 Reflection Component
             </Typography>
+            <Grid container justify="flex-end">
+                <Button color="primary" onClick={handleClickOpen}>
+                    <HelpIcon />
+                </Button>
+                <GenericInfoButton
+                    description={`Creation of Reflection pages is for stopping students in the scenario and making them reflect. Give this page a title and description. 
+                    Then at the bottom you can see an “Add Question” button. Create as many questions as you deem necessary. 
+                    These questions will be shown to the student and they will have to respond to them before continuing in the simulation.  The student will not be allowed to return to revisit and revise their answers to these questions.
+                      A common use for these pages is to have an initial reflection after introducing the ethical quandary, a middle reflection after stakeholder conversations, and a final reflection after a consequences page. 
+                    These pages are added to your menu and can be edited and deleted at your discretion.`}
+                    open={open}
+                    setOpen={setOpen}
+                />
+            </Grid>
             <Title
                 title={title}
                 setTitle={setTitle}

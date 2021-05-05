@@ -44,6 +44,8 @@ ToDoListDialog.propTypes = {
     openToDo: PropTypes.any.isRequired,
 };
 
+//REQUIRES GET ENDPOINT
+
 export default function ToDoListDialog(props) {
     const classes = useStyles();
     ToDoListDialog.propTypes = props.data;
@@ -76,7 +78,7 @@ export default function ToDoListDialog(props) {
                         alignItems="center"
                         className={classes.root}
                     >
-                        <Typography>Unfinished</Typography>
+                        <Typography>Not Started</Typography>
                         <Divider orientation="vertical" flexItem />
                         <Typography>In Progress</Typography>
                         <Divider orientation="vertical" flexItem />

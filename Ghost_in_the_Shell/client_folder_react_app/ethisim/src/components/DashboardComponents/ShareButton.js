@@ -111,7 +111,7 @@ export default function ShareDialog(props) {
                 <DialogTitle onClose={handleClose}></DialogTitle>
                 <DialogContent dividers>
                     <Typography align="left" variant="h6">
-                        Select User Role
+                        Select User Permission
                     </Typography>
                     <Autocomplete
                         id="User_Role"
@@ -121,7 +121,7 @@ export default function ShareDialog(props) {
                         renderInput={(params) => (
                             <TextField
                                 {...params}
-                                label="User Role Options"
+                                label="User Permission Options"
                                 variant="outlined"
                             />
                         )}

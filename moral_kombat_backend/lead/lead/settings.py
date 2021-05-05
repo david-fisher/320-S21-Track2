@@ -84,8 +84,8 @@ MIDDLEWARE = [
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_ALLOW_ALL = False # If this is used then `CORS_ORIGIN_WHITELIST` will not have any effect
 CORS_ORIGIN_WHITELIST = [
-    'http://localhost:3000',
-    f'http://{ORIGIN_HOST}:{ORIGIN_PORT}'
+    'https://localhost:3000',
+    f'https://{ORIGIN_HOST}:{ORIGIN_PORT}'
 ] # If this is used, then not need to use `CORS_ORIGIN_ALLOW_ALL = True`
 CORS_ORIGIN_REGEX_WHITELIST = [
     r"^http(s|)://[^/]*umass\.edu" # should allow any umass domain in the cors origin

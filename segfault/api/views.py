@@ -255,9 +255,18 @@ class get_pages(APIView):
         for page in page_list:
             if page.next is not None:
                 page_parent[str(page.next)] = page_parent.get(str(page.next), 0) + 1
-        
+            if page.page_type == 'A':
+                action_pages = ActionPage.objects.filter(page = page.id)
+                for action_page in action_pages:
+                    try:
+                        result_page = Pages.objects.get(id=action_page.result_page)
+                        page_parent[str(result_page)] = page_parent.get(str(result_page), 0) + 1
+                    except:
+                        continue
 
-        for x in range(len(page_list)):
+        num_pages = len(page_list)
+
+        for x in range(num_pages):
             page = None
             for page1 in page_list:
                 if page_parent.get(str(page1), 0) <= 0:
@@ -269,19 +278,27 @@ class get_pages(APIView):
             sorted_list.append(page_serializer_data)
             if page.next is not None:
                 page_parent[str(page.next)] = page_parent.get(str(page.next), 0) - 1
+            if page.page_type == 'A':
+                action_pages = ActionPage.objects.filter(page = page.id)
+                for action_page in action_pages:
+                    try:
+                        result_page = Pages.objects.get(id=action_page.result_page)
+                        page_parent[str(result_page)] = page_parent.get(str(result_page), 0) - 1
+                    except:
+                        continue
             page_list.remove(page)
 
         def take_id(elem):
             return elem.id
-        
+
         if len(page_list) > 0:
             page_list.sort(key=take_id)
             for page1 in page_list:
                 page1 = PagesSerializer(page1).data
                 if page1 not in sorted_list:
                     sorted_list.append(page1)
-
-        return DRF_response(sorted_list, status=status.HTTP_200_OK)
+        results = {'results': sorted_list}
+        return DRF_response(results, status=status.HTTP_200_OK)
 
 class get_page_info(APIView):
     def get(self, request, *args, **kwargs):
@@ -463,9 +480,10 @@ class issueScoreAggregateForStudent(APIView):
             stakeholderSet = set()
             for response in AllResponses:
                 response_id = response.response_id
-                responseToConvo = ResponsesToConversations.objects.filter(response=response_id).first()
-                if responseToConvo is not None:
-                    stakeholderSet.add(responseToConvo.stakeholder.stakeholder)
+                responseToConvo = ResponsesToConversations.objects.filter(response=response_id)
+                if len(responseToConvo) > 0:
+                    for respToConv in responseToConvo:
+                        stakeholderSet.add(respToConv.stakeholder.stakeholder)
             for stakeholder in stakeholderSet:
                 coverages = Coverage.objects.filter(stakeholder=stakeholder)
                 for coverage in coverages:
@@ -962,3 +980,31 @@ class response_to_action_page(APIView):
         resp_to_action_serializer.save()
 
         return DRF_response(resp_to_action_serializer.data, status=status.HTTP_200_OK)
+
+
+class stakeholders_had(APIView):
+    def get(self, request):
+        scenario_id1 = self.request.query_params.get('scenario_id')
+        student_id = self.request.query_params.get('student_id')
+        try:
+            scenario = Scenarios.objects.get(scenario_id=scenario_id1)
+        except Scenarios.DoesNotExist:
+            return DRF_response(status=status.HTTP_404_NOT_FOUND)
+        if(scenario_id1 == None):
+            return DRF_response(status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            AllResponses = Responses.objects.filter(student=student_id,scenario = scenario_id1) 
+            stakeholderSet = set()
+            for response in AllResponses:
+                response_id = response.response_id
+                responseToConvo = ResponsesToConversations.objects.filter(response=response_id)
+                if len(responseToConvo) > 0:
+                    for respToConv in responseToConvo:
+                        stakeholderSet.add(respToConv.stakeholder)
+            result = []
+            for stakeholder in stakeholderSet:
+                result.append(StakeholderSerializer(stakeholder).data['id'])
+            return DRF_response(result)
+        except Scenarios.DoesNotExist:
+            return DRF_response(status=status.HTTP_404_NOT_FOUND)

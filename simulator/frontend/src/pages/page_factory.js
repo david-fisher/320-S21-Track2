@@ -27,12 +27,16 @@ function Page(props) {
         "R": (
             <Reflection
                 {...props}
+<<<<<<< HEAD
             />),
         "F": (
             <Feedback
                 {...props}
             />)
 
+=======
+            />)    
+>>>>>>> e750d7280b83782e898a54b613175ec1506114f9
     };
 
     const { state, setState } = React.useState({

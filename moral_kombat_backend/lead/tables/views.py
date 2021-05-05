@@ -36,7 +36,7 @@ class ReturnIdentifierView(APIView):
         if ('title' in request.META):
             return Response({"id":"Professor"})
         else:
-            if(len(SCENARIOS.objects.filter(professors_to_scenario2 = request.META['displayName']).values()) != 0):
+            if(len(SCENARIOS.objects.filter(professors_to_scenario = request.META['displayName']).values()) != 0):
                 return Response({"id":"Editor"})
             else:
                 return Response({"id":"Student"})
@@ -465,7 +465,7 @@ class dashboard_page(APIView):
         PROFESSOR_id = request.META['uid']
         #TODO check that id != none
         #get all scenarios belonging to this professor
-        scenario_query = SCENARIOS.objects.filter(professors_to_scenario2 = PROFESSOR_id).values()
+        scenario_query = SCENARIOS.objects.filter(professors_to_scenario = PROFESSOR_id).values()
         #loop through scenarios and append required information (course, page info)
         logistics = []
         print(scenario_query)

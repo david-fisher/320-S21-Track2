@@ -278,7 +278,7 @@ class ReflectionsTakenViewSet(viewsets.ModelViewSet):
 
 
 class CoursesViewSet(viewsets.ModelViewSet):
-    queryset = COURSES.objects.all()
+    queryset = Courses.objects.all()
     permission_classes = [permissions.AllowAny]
     serializer_class = CoursesSerializer
 
@@ -1054,17 +1054,6 @@ class student_info(APIView):
             dem['NAME'] = name
             dem['DATE_TAKEN'] = date_taken
             data.append(dem)
-
-                
-
-
-        # for demographic in demographics_query:
-        #     student_query = students.objects.filter(STUDENT = demographic['STUDENT_id']).values()
-        #     for x in student_query:
-        #         name = x['NAME']
-
-        #     demographic['NAME'] = name
-        #     data.append(demographic)
         return Response(data)
 
 

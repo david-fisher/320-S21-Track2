@@ -9,5 +9,5 @@ DB_HOST=
 DB_PASS=
 DB_PORT=
 ORIGIN_HOST=<same-as-server-name>
-ORIGIN_PORT=
+ORIGIN_PORT=443
 DJ_SK=<django-secret-key>

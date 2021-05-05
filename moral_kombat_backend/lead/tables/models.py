@@ -217,7 +217,7 @@ class RESPONSES(models.Model):
 
     class Meta:
         unique_together = ('RESPONSE', 'STUDENT', 'SCENARIO', 'PAGE', 'COURSE', 'DATE_TAKEN')
-        db_table = 'RESPONSES'
+        db_table = 'responses'
 
 class RESPONSE_TO_ACTION_PAGE(models.Model):
     RESPONSE_ID = models.ForeignKey('RESPONSES', on_delete = models.CASCADE, )
@@ -225,7 +225,7 @@ class RESPONSE_TO_ACTION_PAGE(models.Model):
 
     class Meta:
         unique_together = ('RESPONSE_ID', 'ACTION_PAGE')
-        db_table = 'RESPONSE_TO_ACTION_PAGE'
+        db_table = 'response_to_action_page'
 
 class RESPONSES_TO_CONVERSATIONS(models.Model):
     RESPONSE_ID = models.ForeignKey(RESPONSES, on_delete = models.CASCADE)
@@ -236,7 +236,7 @@ class RESPONSES_TO_CONVERSATIONS(models.Model):
 
     class Meta:
         unique_together = ('RESPONSE_ID', 'CONVERSATION')
-        db_table = 'RESPONSES_TO_CONVERSATIONS'
+        db_table = 'responses_to_conversations'
 
 
 class SCENARIOS(models.Model):
@@ -251,7 +251,7 @@ class SCENARIOS(models.Model):
 
     class Meta:
         unique_together = ('SCENARIO', 'VERSION')
-        db_table = 'SCENARIOS'
+        db_table = 'scenarios'
 
 
 class SCENARIOS_FOR(models.Model):
@@ -261,7 +261,7 @@ class SCENARIOS_FOR(models.Model):
 
     class Meta:
         unique_together = ('SCENARIO', 'COURSE')
-        db_table = 'SCENARIOS_FOR'
+        db_table = 'scenarios_for'
 
 
 class STAKEHOLDER_TO_PAGE(models.Model):
@@ -270,7 +270,7 @@ class STAKEHOLDER_TO_PAGE(models.Model):
 
     class Meta:
         unique_together = ('PAGE', 'STAKEHOLDER')
-        db_table = 'STAKEHOLDER_TO_PAGE'
+        db_table = 'stakeholder_to_page'
 
 
 class STAKEHOLDERS(models.Model):
@@ -285,7 +285,7 @@ class STAKEHOLDERS(models.Model):
 
     class Meta:
         unique_together = ('STAKEHOLDER', 'VERSION')
-        db_table = 'STAKEHOLDERS'
+        db_table = 'stakeholders'
 
 
 class STAKEHOLDERS_TO_QUESTIONS(models.Model):
@@ -294,7 +294,7 @@ class STAKEHOLDERS_TO_QUESTIONS(models.Model):
 
     class Meta:
         unique_together = ('STAKEHOLDER', 'QUESTION')
-        db_table = 'STAKEHOLDERS_TO_QUESTIONS'
+        db_table = 'stakeholders_to_questions'
 
 
 class STUDENT_TIMES(models.Model):
@@ -308,7 +308,7 @@ class STUDENT_TIMES(models.Model):
 
     class Meta:
         unique_together = ('STUDENT', 'COURSE', 'SCENARIO_ID')
-        db_table = 'STUDENT_TIMES'
+        db_table = 'student_times'
 
 
 class STUDENTS(models.Model):
@@ -317,7 +317,7 @@ class STUDENTS(models.Model):
     LNAME = models.TextField()
 
     class Meta:
-        db_table = 'STUDENTS'
+        db_table = 'students'
 
 
 class STUDENTS_TO_COURSE(models.Model):
@@ -326,4 +326,4 @@ class STUDENTS_TO_COURSE(models.Model):
 
     class Meta:
         unique_together = ('STUDENT', 'COURSE')
-        db_table = 'STUDENTS_TO_COURSE'
+        db_table = 'students_to_course'

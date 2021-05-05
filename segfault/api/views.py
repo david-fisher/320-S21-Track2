@@ -480,9 +480,10 @@ class issueScoreAggregateForStudent(APIView):
             stakeholderSet = set()
             for response in AllResponses:
                 response_id = response.response_id
-                responseToConvo = ResponsesToConversations.objects.filter(response=response_id).first()
-                if responseToConvo is not None:
-                    stakeholderSet.add(responseToConvo.stakeholder.stakeholder)
+                responseToConvo = ResponsesToConversations.objects.filter(response=response_id)
+                if len(responseToConvo) > 0:
+                    for respToConv in responseToConvo:
+                        stakeholderSet.add(respToConv.stakeholder.stakeholder)
             for stakeholder in stakeholderSet:
                 coverages = Coverage.objects.filter(stakeholder=stakeholder)
                 for coverage in coverages:

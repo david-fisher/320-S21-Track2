@@ -6,7 +6,7 @@ from django.core.validators import MinValueValidator
 class ACTION_PAGE(models.Model):
     ACTION_PAGE_ID = models.IntegerField()
     ID = models.IntegerField(primary_key = True)
-    PAGE = models.ForeignKey('PAGES', to_field='ID', on_delete = models.CASCADE, related_name="action_page1")
+    PAGE = models.ForeignKey('PAGES', to_field='ID', on_delete = models.CASCADE, related_name='action_page1')
     VERSION = models.IntegerField()
     CHOICE = models.TextField()
     RESULT_PAGE = models.IntegerField()
@@ -18,7 +18,7 @@ class ACTION_PAGE(models.Model):
 
 class CONVERSATIONS(models.Model):
     CONVERSATION = models.AutoField(primary_key=True)
-    STAKEHOLDER = models.ForeignKey('STAKEHOLDERS', to_field = 'STAKEHOLDER', on_delete = models.CASCADE, related_name="conversations1")
+    STAKEHOLDER = models.ForeignKey('STAKEHOLDERS', to_field = 'STAKEHOLDER', on_delete = models.CASCADE, related_name='conversations1')
     QUESTION = models.TextField()
     RESPONSE = models.TextField()
     class Meta:
@@ -49,8 +49,8 @@ class COURSES_TO_SCENARIO(models.Model):
 
 
 class COVERAGE(models.Model):
-    STAKEHOLDER = models.ForeignKey('STAKEHOLDERS', to_field = 'STAKEHOLDER', on_delete = models.CASCADE, related_name = "coverage2")
-    ISSUE = models.ForeignKey('ISSUES', to_field = 'ISSUE', on_delete = models.CASCADE, related_name = "coverage1")
+    STAKEHOLDER = models.ForeignKey('STAKEHOLDERS', to_field = 'STAKEHOLDER', on_delete = models.CASCADE, related_name = 'coverage2')
+    ISSUE = models.ForeignKey('ISSUES', to_field = 'ISSUE', on_delete = models.CASCADE, related_name = 'coverage1')
     COVERAGE_SCORE = models.DecimalField(max_digits=5, decimal_places=2)
 
     class Meta:
@@ -59,7 +59,7 @@ class COVERAGE(models.Model):
 
 
 class DEMOGRAPHICS(models.Model):
-    STUDENT = models.ForeignKey('STUDENTS', to_field = 'STUDENT', on_delete = models.CASCADE, related_name = "demographics", unique = True)
+    STUDENT = models.ForeignKey('STUDENTS', to_field = 'STUDENT', on_delete = models.CASCADE, related_name = 'demographics', unique = True)
     AGE = models.SmallIntegerField()
     GRADE_CHOICES = (('0', 'Other'),
                      ('1', 'Freshmen'),
@@ -84,7 +84,7 @@ class DEMOGRAPHICS(models.Model):
 
 class GENERIC_PAGE(models.Model):
     GENERIC_PAGE_ID = models.IntegerField()
-    PAGE = models.ForeignKey('PAGES', to_field= 'PAGE', on_delete = models.CASCADE, related_name="generic_page1")
+    PAGE = models.ForeignKey('PAGES', to_field= 'PAGE', on_delete = models.CASCADE, related_name='generic_page1')
     BODY = models.TextField()
     VERSION = models.IntegerField()
 
@@ -93,7 +93,7 @@ class GENERIC_PAGE(models.Model):
         db_table = 'generic_page'
 
 class ISSUES(models.Model):
-    SCENARIO_ID = models.ForeignKey('SCENARIOS', to_field= 'SCENARIO_ID', on_delete = models.CASCADE, related_name = "scenario_id1", default = None)
+    SCENARIO_ID = models.ForeignKey('SCENARIOS', to_field= 'SCENARIO_ID', on_delete = models.CASCADE, related_name = 'scenario_id1', default = None)
     ISSUE = models.AutoField(default = None, primary_key = True, editable = False)
     NAME = models.CharField(max_length = 1000)
     IMPORTANCE_SCORE = models.IntegerField(validators = [MinValueValidator(0.0)])
@@ -113,11 +113,11 @@ class PAGES(models.Model):
     )
     PAGE_TYPE = models.CharField(max_length=2, choices=PAGE_CHOICES)
     PAGE_TITLE = models.CharField(max_length=1000)
-    SCENARIO = models.ForeignKey('SCENARIOS', to_field='SCENARIO_ID', on_delete = models.CASCADE, related_name="pages1")
+    SCENARIO = models.ForeignKey('SCENARIOS', to_field='SCENARIO_ID', on_delete = models.CASCADE, related_name='pages1')
     VERSION = models.IntegerField(default=1, editable=True)
     BODY = models.TextField(blank=True, null=True)
     ID = models.IntegerField(primary_key = True)
-    NEXT_ID = models.ForeignKey('PAGES', to_field='ID', on_delete = models.CASCADE, related_name="pages2")
+    NEXT_ID = models.ForeignKey('PAGES', to_field='ID', on_delete = models.CASCADE, related_name='pages2')
     X_COORDINATE = models.IntegerField()
     Y_COORDINATE = models.IntegerField()
     COMPLETED = models.BooleanField(default= False)
@@ -128,8 +128,8 @@ class PAGES(models.Model):
 
 
 class PAGES_TO_SCENARIO(models.Model):
-    PAGE_ID = models.ForeignKey('PAGES', to_field = 'PAGE', on_delete = models.CASCADE, related_name="stakeholder_page1")
-    SCENARIO_ID = models.ForeignKey('SCENARIOS', to_field = 'SCENARIO_ID', on_delete = models.CASCADE, related_name="stakeholder_page2")
+    PAGE_ID = models.ForeignKey('PAGES', to_field = 'PAGE', on_delete = models.CASCADE, related_name='stakeholder_page1')
+    SCENARIO_ID = models.ForeignKey('SCENARIOS', to_field = 'SCENARIO_ID', on_delete = models.CASCADE, related_name='stakeholder_page2')
 
     class Meta:
         unique_together = ('PAGE_ID', 'SCENARIO_ID')

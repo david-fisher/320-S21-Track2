@@ -52,6 +52,7 @@ class COVERAGE(models.Model):
     STAKEHOLDER = models.ForeignKey('STAKEHOLDERS', to_field = 'STAKEHOLDER', on_delete = models.CASCADE, related_name = 'coverage2')
     ISSUE = models.ForeignKey('ISSUES', to_field = 'ISSUE', on_delete = models.CASCADE, related_name = 'coverage1')
     COVERAGE_SCORE = models.DecimalField(max_digits=5, decimal_places=2)
+    ID = models.IntegerField(primary_key = True)
 
     class Meta:
         unique_together = ('STAKEHOLDER', 'ISSUE')

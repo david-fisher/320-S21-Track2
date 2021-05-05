@@ -2,6 +2,8 @@ import React from "react";
 import { withStyles,Typography, Box, Grid, Button} from "@material-ui/core";
 import Radar from "./chart/chart";
 import ScrollableTabsButtonAuto from "./components/feedback_tabs";
+import NextButton from "./components/Buttons/NextButton"
+import BackButton from "./components/Buttons/BackButton"
 
 const TextTypography = withStyles({
   root: {
@@ -45,10 +47,10 @@ function Feedback({pages, setPages, activePage, setActivePage}) {
       </Grid>
       <Grid container direction="row" justify="space-between">
         <Grid item style={{ marginRight: "0rem", marginTop: "-3rem" }}>
-          <Button variant="contained" disableElevation onClick={goToSummary}>Back</Button>
+          <BackButton title="Summary" onClick={goToSummary}></BackButton>
         </Grid>
         <Grid item style={{ marginRight: "0rem", marginTop: "-3rem" }}>
-          <Button variant="contained" disableElevation color="primary" onClick={goToFinalReflection}>Next</Button>
+          <NextButton title="Final Reflection" onClick={goToFinalReflection}></NextButton>
         </Grid>
       </Grid>
       <Grid container spacing={2}>

@@ -18,7 +18,8 @@ StakeHolderFields.propTypes = {
 
 export default function StakeHolderFields({ scenario }) {
     const [didGetSHs, setDidGetSHs] = useState(false);
-
+    console.log('stakeholders');
+    console.log(scenario);
     /*
      * This section is code that is essentially the middleware between the frontend and backend
      * Handles API calls between frontend and backend
@@ -70,7 +71,7 @@ export default function StakeHolderFields({ scenario }) {
         var data = { SCENARIO: { scenario } };
         var config = {
             method: 'get',
-            url: baseURL + '/api/stakeholders/?SCENARIO=' + 1,
+            url: baseURL + '/api/stakeholders/?SCENARIO=' + scenario,
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -279,6 +280,7 @@ export default function StakeHolderFields({ scenario }) {
                         job={stakeHolder.JOB}
                         bio={stakeHolder.DESCRIPTION}
                         mainConvo={stakeHolder.INTRODUCTION}
+                        version={stakeHolder.VERSION}
                         stakeHolders={stakeHolders}
                         setStakeHolders={setStakeHolders}
                     />

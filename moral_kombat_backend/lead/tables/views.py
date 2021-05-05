@@ -30,12 +30,16 @@ def getCredentials(request):
     credentials.update({"intID": credentials.get("intID").split("@")[0]})
     return credentials
 
+
 class ReturnIdentifierView(APIView):
     def get(self, request, *args, **kwargs):
         if ('title' in request.META):
             return Response({"id":"Professor"})
         else:
-            return Response({"id":"Student"})
+            if(len(SCENARIOS.objects.filter(professors_to_scenario2 = request.META['displayName']).values()) != 0):
+                return Response({"id":"Editor"})
+            else:
+                return Response({"id":"Student"})
 
         # if (credentials.get("title") == "Lecturer"):
         #     return Response({"id":"Professor"})
@@ -111,7 +115,7 @@ class multi_stake(APIView):
         if SCENARIO == None:
             return Response({'status': 'details'}, status=status.HTTP_404_NOT_FOUND)
         for updated_stake in request.data:
-            extant_stake = STAKEHOLDERS.objects.get(SCENARIO = SCENARIO, STAKEHOLDER = updated_stake['STAKEHOLDER'])
+            extant_stake = STAKEHOLDERS.objects.get(SCENARIO_id = SCENARIO, STAKEHOLDER = updated_stake['STAKEHOLDER'])
             serializer = StakeholdersSerializer(extant_stake, data=updated_stake)
             if serializer.is_valid():
                 serializer.save()
@@ -125,7 +129,7 @@ class multi_coverage(APIView):
         if STAKEHOLDER == None:
             return Response({'status': 'details'}, status=status.HTTP_404_NOT_FOUND)
         for updated_coverage in request.data:
-            extant_coverage = COVERAGE.objects.get(STAKEHOLDER = STAKEHOLDER, ISSUE = updated_coverage['ISSUE'])
+            extant_coverage = COVERAGE.objects.get(STAKEHOLDER = STAKEHOLDER, ISSUE = updated_coverage['ISSUE_id'])
             serializer = coverageSerializer(extant_coverage, data=updated_coverage)
             if serializer.is_valid(): 
                 serializer.save()
@@ -198,6 +202,23 @@ class SingleScenarioViewSet(viewsets.ModelViewSet):
         serializer = ScenariosSerializer(scenarios)
         return Response(serializer.data)
 
+# class professors_to_scenarioViewSet(viewsets.ModelViewSet):
+#     def get(self, request):
+#         scenario = SCENARIOS.objects.all()
+#         serializer = ScenariosSerializer(scenarios)
+#         return Response(serializer.data)
+    
+#     def delete(self, request, pk, format=None):
+#         snippet = self.get_object(pk)
+#         snippet.delete()
+#         return Response(status=status.HTTP_204_NO_CONTENT)
+
+class professors_to_scenarioViewSet(viewsets.ModelViewSet):
+    queryset = PROFESSORS_TO_SCENARIO.objects.all()
+    permission_classes = [
+        permissions.AllowAny
+    ]
+    serializer_class = Professors_to_scenarioSerializer
 
 class PagesViewSet(viewsets.ModelViewSet):
     queryset = PAGES.objects.all()
@@ -330,12 +351,6 @@ class response_to_action_pageViewSet(viewsets.ModelViewSet):
     ]
     serializer_class = Response_to_action_pageSerializer
 
-class professors_to_scenarioViewSet(viewsets.ModelViewSet):
-    queryset = PROFESSORS_TO_SCENARIO.objects.all()
-    permission_classes = [
-        permissions.AllowAny
-    ]
-    serializer_class = Professors_to_scenarioSerializer
 
 # Checked - Ed - 4/15/21
 #for getting/editing scenarios in dashboard
@@ -410,13 +425,13 @@ class logistics_page(APIView):
     #a put request for editing scenarios. must provide scenario in url thusly: /logistics?scenario=<insert id number here>
     def put(self, request, *args, **kwargs):
         #save the scenario
-        extant_scenario = SCENARIOS.objects.get(SCENARIO = request.data['SCENARIO'])
+        extant_scenario = SCENARIOS.objects.get(SCENARIO_ID = request.data['SCENARIO_ID'])
         scenario_serializer = ScenariosSerializer(extant_scenario, data = request.data)
         if scenario_serializer.is_valid():
             scenario_serializer.save()
 
         #delete currently assocated classes
-        SCENARIOS_FOR.objects.filter(SCENARIO_ID = request.data['SCENARIO']).delete()
+        SCENARIOS_FOR.objects.filter(SCENARIO_ID = request.data['SCENARIO_ID']).delete()
         #get array of courses from frontend
         COURSES = request.data['COURSES']
         for course in COURSES:
@@ -432,7 +447,7 @@ class logistics_page(APIView):
                 for_serializer.save()
                 print('saved!')
             print(for_serializer.errors)
-        scenario_dict = ScenariosSerializer(SCENARIOS.objects.get(SCENARIO = request.data['SCENARIO'])).data
+        scenario_dict = ScenariosSerializer(SCENARIOS.objects.get(SCENARIO_ID = request.data['SCENARIO_ID'])).data
         scenario_dict['COURSES'] = request.data['COURSES']
         return Response(scenario_dict)
 
@@ -442,7 +457,12 @@ class dashboard_page(APIView):
     def get(self, request, *args, **kwargs):
         
         #take professor_id as input from URL by adding ?professor=<the id #> to the end of the url.
-        PROFESSOR_id = self.request.query_params.get('professor')
+        
+        #--old schema
+        #PROFESSOR_id = self.request.query_params.get('professor')
+        
+        #new, CHANGED THE ENDPOINT REQUEST
+        PROFESSOR_id = request.META['uid']
         #TODO check that id != none
         #get all scenarios belonging to this professor
         scenario_query = SCENARIOS.objects.filter(professors_to_scenario2 = PROFESSOR_id).values()
@@ -626,7 +646,7 @@ class flowchart(APIView):
 
 
 
-# Pages viewset
+#Pages viewset
 class Page_reflectionViewSet(generics.CreateAPIView):
     model = PAGES
     serializer_class = Pages_reflectionSerializer

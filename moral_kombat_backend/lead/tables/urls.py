@@ -50,6 +50,7 @@ urlpatterns = [
     path('coverages', coverages_page.as_view()),
     path('stakeholder', stakeholders_page.as_view()),
     path('page', pages_page.as_view()),
+    path('identifier', ReturnIdentifierView.as_view())
 
 ] 
 

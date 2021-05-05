@@ -66,7 +66,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 //TODO when Shibboleth gets implemented
-const endpointGet = '/dashboard?professor_id=1';
+const endpointGet = '/dashboard';
 const endpointGetCourses = '/api/courses/';
 const endpointPost = '/dashboard';
 const endpointDelete = '/api/scenarios/';
@@ -238,12 +238,13 @@ export default function Dashboard() {
 
         if (validInput) {
             setNewScenario({
+                SCENARIO: 0,
+                VERSION: 0,
                 NAME: ' ',
                 IS_FINISHED: false,
                 PUBLIC: false,
                 NUM_CONVERSATIONS: 0,
-                PROFESSOR: 1,
-                COURSES: [],
+                SCENARIO_ID: 0,
             });
             //Smooth loading animation, loading animation will not reset during POST and GET Request
             setFetchScenariosResponse({
@@ -265,12 +266,13 @@ export default function Dashboard() {
     //X button on dialog for creating new scenario
     const handleClose = () => {
         setNewScenario({
+            SCENARIO: 0,
+            VERSION: 0,
             NAME: ' ',
             IS_FINISHED: false,
             PUBLIC: false,
             NUM_CONVERSATIONS: 0,
-            PROFESSOR: 1,
-            COURSES: [],
+            SCENARIO_ID: 0,
         });
         setErrorName(false);
         setErrorCourses(false);
@@ -365,9 +367,10 @@ export default function Dashboard() {
             );
             finishedScenarios = finishedScenarios.map((data) => (
                 <ScenarioCard
-                    key={data.SCENARIO}
+                    key={data.SCENARIO_ID}
                     data={data}
-                    scenarioID={data.SCENARIO}
+                    scenario={data.SCENARIO}
+                    scenarioID={data.SCENARIO_ID}
                     scenarioName={data.NAME}
                     dateCreated={data.DATE_CREATED}
                     isFinished={data.IS_FINISHED}
@@ -377,9 +380,10 @@ export default function Dashboard() {
             ));
             unfinishedScenarios = unfinishedScenarios.map((data) => (
                 <ScenarioCard
-                    key={data.SCENARIO}
+                    key={data.SCENARIO_ID}
                     data={data}
-                    scenarioID={data.SCENARIO}
+                    scenario={data.SCENARIO}
+                    scenarioID={data.SCENARIO_ID}
                     scenarioName={data.NAME}
                     dateCreated={data.DATE_CREATED}
                     finished={data.IS_FINISHED}

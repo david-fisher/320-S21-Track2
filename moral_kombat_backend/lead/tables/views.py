@@ -18,6 +18,34 @@ from rest_framework import mixins
 # DemographicsSerializer, StudentSerializer, ProfessorSerializer, ScenariosSerializer, allScenariosSerializer, Stakeholder_pageSerializer, StakeholdersSerializer, ConversationsSerializer
 
 
+def getCredentials(request):
+    credentials = {
+        "UID": request.META['uid'],
+        "name": request.META['displayName'],
+        "affiliation": request.META['eduPersonPrimaryAffiliation'],
+        "email": request.META['mail'],
+        #"title": request.META['title'],
+        "intID": request.META['fcIdNumber']
+    }
+    credentials.update({"intID": credentials.get("intID").split("@")[0]})
+    return credentials
+
+
+class ReturnIdentifierView(APIView):
+    def get(self, request, *args, **kwargs):
+        if ('title' in request.META):
+            return Response({"id":"Professor"})
+        else:
+            if(len(SCENARIOS.objects.filter(professors_to_scenario2 = request.META['displayName']).values()) != 0):
+                return Response({"id":"Editor"})
+            else:
+                return Response({"id":"Student"})
+
+        # if (credentials.get("title") == "Lecturer"):
+        #     return Response({"id":"Professor"})
+        # else:
+        #     return Response({"id":"Student"})
+        #return Response({"id":"Student"})
 
 
 # Stakeholders ViewSet - Chirag - 4/14
@@ -87,7 +115,7 @@ class multi_stake(APIView):
         if SCENARIO == None:
             return Response({'status': 'details'}, status=status.HTTP_404_NOT_FOUND)
         for updated_stake in request.data:
-            extant_stake = STAKEHOLDERS.objects.get(SCENARIO = SCENARIO, STAKEHOLDER = updated_stake['STAKEHOLDER'])
+            extant_stake = STAKEHOLDERS.objects.get(SCENARIO_id = SCENARIO, STAKEHOLDER = updated_stake['STAKEHOLDER'])
             serializer = StakeholdersSerializer(extant_stake, data=updated_stake)
             if serializer.is_valid():
                 serializer.save()
@@ -101,7 +129,7 @@ class multi_coverage(APIView):
         if STAKEHOLDER == None:
             return Response({'status': 'details'}, status=status.HTTP_404_NOT_FOUND)
         for updated_coverage in request.data:
-            extant_coverage = COVERAGE.objects.get(STAKEHOLDER = STAKEHOLDER, ISSUE = updated_coverage['ISSUE'])
+            extant_coverage = COVERAGE.objects.get(STAKEHOLDER = STAKEHOLDER, ISSUE = updated_coverage['ISSUE_id'])
             serializer = coverageSerializer(extant_coverage, data=updated_coverage)
             if serializer.is_valid(): 
                 serializer.save()
@@ -116,36 +144,6 @@ class CoverageViewSet(viewsets.ModelViewSet):
     serializer_class = coverageSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['STAKEHOLDER']
-
-class coverage(APIView):
-    def get(self, request, *args, **kwargs):
-        stkholder = {}
-        try: 
-            coverage_list = COVERAGE.objects.values()
-        except COVERAGE.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-        issue_list = []
-        for coverages in coverage_list:
-            issues_dict = {}
-            try:
-                issue = ISSUES.objects.get(ISSUE=coverages.get('ISSUE_id'))
-            except:
-                continue
-            issues_dict.update(coverages)
-            issues_dict.update(
-                {
-                    "NAME": issue.NAME
-                })
-
-            issue_list.append(issues_dict)
-            
-        stkholder.update(
-            {
-                "ISSUES": issue_list
-            }
-        )
-
-        return Response(stkholder, status=status.HTTP_200_OK)
 
     
 
@@ -204,6 +202,23 @@ class SingleScenarioViewSet(viewsets.ModelViewSet):
         serializer = ScenariosSerializer(scenarios)
         return Response(serializer.data)
 
+# class professors_to_scenarioViewSet(viewsets.ModelViewSet):
+#     def get(self, request):
+#         scenario = SCENARIOS.objects.all()
+#         serializer = ScenariosSerializer(scenarios)
+#         return Response(serializer.data)
+    
+#     def delete(self, request, pk, format=None):
+#         snippet = self.get_object(pk)
+#         snippet.delete()
+#         return Response(status=status.HTTP_204_NO_CONTENT)
+
+class professors_to_scenarioViewSet(viewsets.ModelViewSet):
+    queryset = PROFESSORS_TO_SCENARIO.objects.all()
+    permission_classes = [
+        permissions.AllowAny
+    ]
+    serializer_class = Professors_to_scenarioSerializer
 
 class PagesViewSet(viewsets.ModelViewSet):
     queryset = PAGES.objects.all()
@@ -366,12 +381,6 @@ class response_to_action_pageViewSet(viewsets.ModelViewSet):
     ]
     serializer_class = Response_to_action_pageSerializer
 
-class professors_to_scenarioViewSet(viewsets.ModelViewSet):
-    queryset = PROFESSORS_TO_SCENARIO.objects.all()
-    permission_classes = [
-        permissions.AllowAny
-    ]
-    serializer_class = Professors_to_scenarioSerializer
 
 # Checked - Ed - 4/15/21
 #for getting/editing scenarios in dashboard
@@ -385,14 +394,14 @@ class logistics_page(APIView):
         #TODO check that id != none
         #get all scenarios belonging to this professor
         # scenario_query = PROFESSORS_TO_SCENARIO.objects.filter(PROFESSOR = PROFESSOR_id).values()
-        scenario = SCENARIOS.objects.get(SCENARIO = SCENARIO_id)
+        scenario = SCENARIOS.objects.get(SCENARIO_ID = SCENARIO_id)
         scenario_dict = ScenariosSerializer(scenario).data
         #loop through scenarios and append required information (course, page info)
-        print(scenario_dict)
+        # print(scenario_dict)
         scenarios_for_query = SCENARIOS_FOR.objects.filter(SCENARIO_ID=scenario_dict['SCENARIO_ID']).values()
         course_id_array = []
         for x in scenarios_for_query:
-            print(x)
+            # print(x)
             course_id_array.append(x['COURSE'])
 
         course_dict_array = []
@@ -400,8 +409,8 @@ class logistics_page(APIView):
             course = COURSES.objects.get(COURSE = x)
             course_dict_array.append({"COURSE":course.COURSE, "NAME": course.NAME})
                 
-        pages_query = PAGES.objects.filter(SCENARIO=scenario_dict['SCENARIO']).values()
-        
+        pages_query = PAGES.objects.filter(SCENARIO=SCENARIO_id).values()
+        # print("pages: ", pages_query)
         page_array = []
         for page in pages_query:
             cropped_page = {}
@@ -418,7 +427,7 @@ class logistics_page(APIView):
 
         
         logistics = scenario_dict
-        print(logistics)
+        # print(logistics)
         return Response(logistics)
     
     """format:
@@ -446,13 +455,13 @@ class logistics_page(APIView):
     #a put request for editing scenarios. must provide scenario in url thusly: /logistics?scenario=<insert id number here>
     def put(self, request, *args, **kwargs):
         #save the scenario
-        extant_scenario = SCENARIOS.objects.get(SCENARIO = request.data['SCENARIO'])
+        extant_scenario = SCENARIOS.objects.get(SCENARIO_ID = request.data['SCENARIO_ID'])
         scenario_serializer = ScenariosSerializer(extant_scenario, data = request.data)
         if scenario_serializer.is_valid():
             scenario_serializer.save()
 
         #delete currently assocated classes
-        SCENARIOS_FOR.objects.filter(SCENARIO_ID = request.data['SCENARIO']).delete()
+        SCENARIOS_FOR.objects.filter(SCENARIO_ID = request.data['SCENARIO_ID']).delete()
         #get array of courses from frontend
         COURSES = request.data['COURSES']
         for course in COURSES:
@@ -468,7 +477,7 @@ class logistics_page(APIView):
                 for_serializer.save()
                 print('saved!')
             print(for_serializer.errors)
-        scenario_dict = ScenariosSerializer(SCENARIOS.objects.get(SCENARIO = request.data['SCENARIO'])).data
+        scenario_dict = ScenariosSerializer(SCENARIOS.objects.get(SCENARIO_ID = request.data['SCENARIO_ID'])).data
         scenario_dict['COURSES'] = request.data['COURSES']
         return Response(scenario_dict)
 
@@ -478,7 +487,12 @@ class dashboard_page(APIView):
     def get(self, request, *args, **kwargs):
         
         #take professor_id as input from URL by adding ?professor=<the id #> to the end of the url.
-        PROFESSOR_id = self.request.query_params.get('professor')
+        
+        #--old schema
+        #PROFESSOR_id = self.request.query_params.get('professor')
+        
+        #new, CHANGED THE ENDPOINT REQUEST
+        PROFESSOR_id = request.META['uid']
         #TODO check that id != none
         #get all scenarios belonging to this professor
         scenario_query = SCENARIOS.objects.filter(professors_to_scenario2 = PROFESSOR_id).values()
@@ -559,6 +573,7 @@ class dashboard_page(APIView):
         intro_page_serializer = PagesSerializer(data=intro_page)
         if intro_page_serializer.is_valid():
             intro_page_serializer.save()
+            print("intro page saved")
         else:
             print("intro page saved incorrectly")
             return Response(intro_page_serializer.errors)
@@ -615,7 +630,7 @@ class multi_issue(APIView):
 class flowchart(APIView):
     #get all page objects given a scenario id
     def get(self, request, *args, **kwargs):
-        SCENARIO_id = self.request.query_params.get('SCENARIO')
+        SCENARIO_id = self.request.query_params.get('scenario')
         print(SCENARIO_id)
         pages_query = PAGES.objects.filter(SCENARIO=SCENARIO_id).values()
         print(pages_query)
@@ -628,7 +643,7 @@ class flowchart(APIView):
 
     #update the next_page field of all page objects
     def put(self, request, *args, **kwargs):
-        SCENARIO_id = self.request.query_params.get('SCENARIO')
+        SCENARIO_id = self.request.query_params.get('scenario')
         if SCENARIO_id == None:
             return Response({'status': 'details'}, status=status.HTTP_404_NOT_FOUND)
   
@@ -636,7 +651,7 @@ class flowchart(APIView):
             #save updated choices within action pages  
             if updated_page['PAGE_TYPE'] == 'A':
                 print('action page')
-                print(updated_page['ACTION'])
+                print(update)
                 for updated_choice in updated_page['ACTION']:
                     print(updated_choice)
                     extant_choice = ACTION_PAGE.objects.get(ID=updated_choice['id']) 
@@ -661,7 +676,7 @@ class flowchart(APIView):
 
 
 
-# Pages viewset
+#Pages viewset
 class Page_reflectionViewSet(generics.CreateAPIView):
     model = PAGES
     serializer_class = Pages_reflectionSerializer
@@ -694,10 +709,12 @@ class pages_page(APIView):
         except PAGES.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
         
+        # print(page)
         # Convers Django Model Object into a dictionary
         page_data = PagesSerializer(page).data
-        
-        page_type = PAGE.PAGE_TYPE
+        # print(page_data)
+        page_type = page_data['PAGE_TYPE']
+        # print("page type: ", page_type)
         # Check page.PAGE_TYPE = 'REFLECTION'
         if (page_type == 'R'):
             reflection_query = REFLECTION_QUESTIONS.objects.filter(reflection_questions_to_page1 = PAGE_ID).values()
@@ -859,11 +876,12 @@ class pages_page(APIView):
             return Response(status=status.HTTP_404_NOT_FOUND)
 
         # PLEASE DON'T MODIFY THE SCENARIO
-        request.data["SCENARIO"] = PagesSerializer(page).data['SCENARIO']
+        print(request.data)
+        request.data["SCENARIO_ID"] = PagesSerializer(page).data['SCENARIO']
 
         if request.method == "PUT": 
         
-            page_type = PAGE.PAGE_TYPE
+            page_type = request.data["PAGE_TYPE"]
 
             # Check page.PAGE_TYPE = 'REFLECTION'
             if (page_type == 'R'):
@@ -1256,6 +1274,7 @@ class stakeholders_page(APIView):
         http://127.0.0.1:8000/stakeholders?scenario_id=3
         http://127.0.0.1:8000/stakeholders?stakeholder_id=0
         '''
+        # scenario not id
         SCENARIO_ID = self.request.query_params.get('scenario_id')
         STAKEHOLDER_ID = self.request.query_params.get('stakeholder_id')
         # STAKEHOLDER_ID = self.request.GET.get('stakeholder_id')

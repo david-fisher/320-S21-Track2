@@ -164,10 +164,15 @@ export default function Editor(props) {
     const [openToDo, setOpenToDo] = useState(false);
 
     const location = useLocation();
+    console.log(location);
     const scenarioIDFromURL = location.pathname.split('/').pop();
+    console.log(scenarioIDFromURL);
+
     const scenario_ID = props.location.data
-        ? props.location.data.SCENARIO
+        ? props.location.data.SCENARIO_ID
         : scenarioIDFromURL;
+
+    console.log(scenario_ID);
 
     //TODO when version control is implemented
     const tempVersionID = 1;
@@ -238,7 +243,7 @@ export default function Editor(props) {
             let p = null;
             let logistics_and_pages = resp.data;
             p = {
-                scenario_ID: logistics_and_pages.SCENARIO,
+                scenario_ID: logistics_and_pages.SCENARIO_ID,
                 version_ID: logistics_and_pages.VERSION,
                 title: logistics_and_pages.NAME,
                 is_finished: logistics_and_pages.IS_FINISHED,
@@ -349,7 +354,8 @@ export default function Editor(props) {
                     page_title: currPageInfo.PAGE_TITLE,
                     scenario_ID: currPageInfo.SCENARIO,
                     version_ID: tempVersionID,
-                    next_page_id: currPageInfo.NEXT_PAGE,
+                    next_page: currPageInfo.NEXT_PAGE,
+                    next_page_version: 0,
                     body: currPageInfo.PAGE_BODY,
                     bodies: currPageInfo.BODIES,
                     xCoord: currPageInfo.X_COORDINATE,
@@ -367,7 +373,8 @@ export default function Editor(props) {
                     page_title: currPageInfo.PAGE_TITLE,
                     scenario_ID: currPageInfo.SCENARIO,
                     version_ID: tempVersionID,
-                    next_page_id: currPageInfo.NEXT_PAGE,
+                    next_page: currPageInfo.NEXT_PAGE,
+                    next_page_version: 0,
                     body: currPageInfo.PAGE_BODY,
                     bodies: currPageInfo.BODIES,
                     xCoord: currPageInfo.X_COORDINATE,
@@ -384,7 +391,8 @@ export default function Editor(props) {
                     page_type: currPageInfo.PAGE_TYPE,
                     page_title: currPageInfo.PAGE_TITLE,
                     scenario_ID: currPageInfo.SCENARIO,
-                    next_page_id: currPageInfo.NEXT_PAGE,
+                    next_page: currPageInfo.NEXT_PAGE,
+                    next_page_version: 0,
                     version_ID: tempVersionID,
                     body: currPageInfo.PAGE_BODY,
                     choice1: currPageInfo.CHOICES[0]
@@ -414,7 +422,8 @@ export default function Editor(props) {
                     page_title: currPageInfo.PAGE_TITLE,
                     scenario_ID: currPageInfo.SCENARIO,
                     version_ID: tempVersionID,
-                    next_page_id: currPageInfo.NEXT_PAGE,
+                    next_page: currPageInfo.NEXT_PAGE,
+                    next_page_version: 0,
                     body: currPageInfo.PAGE_BODY,
                     reflection_questions: currPageInfo.REFLECTION_QUESTIONS,
                     xCoord: currPageInfo.X_COORDINATE,
@@ -549,8 +558,9 @@ export default function Editor(props) {
                         PAGE_TITLE: pageName,
                         PAGE_BODY: pageBody,
                         SCENARIO: scenario_ID,
-                        VERSION: tempVersionID,
+                        VERSION: 70, //
                         NEXT_PAGE: null,
+                        NEXT_PAGE_VERSION: null,
                         X_COORDINATE: 0,
                         Y_COORDINATE: 0,
                     };
@@ -559,11 +569,12 @@ export default function Editor(props) {
                         setScenarioComponents: setScenarioComponents,
                         page_type: 'G',
                         page_title: pageName,
-                        scenario_ID: scenario_ID,
+                        scenario: scenario_ID,
                         body: pageBody,
                         bodies: [],
-                        version_ID: tempVersionID,
-                        next_page_id: null,
+                        version_ID: 70,
+                        next_page: null,
+                        next_page_version: null,
                         created: true,
                         xCoord: 0,
                         yCoord: 0,
@@ -575,8 +586,9 @@ export default function Editor(props) {
                         PAGE_TITLE: pageName,
                         PAGE_BODY: pageBody,
                         SCENARIO: scenario_ID,
-                        VERSION: tempVersionID,
+                        VERSION: 80,
                         NEXT_PAGE: null,
+                        NEXT_PAGE_VERSION: null,
                         X_COORDINATE: 0,
                         Y_COORDINATE: 0,
                     };
@@ -585,8 +597,9 @@ export default function Editor(props) {
                         page_type: 'R',
                         page_title: pageName,
                         scenario_ID: scenario_ID,
-                        version_ID: tempVersionID,
-                        next_page_id: null,
+                        version_ID: 80,
+                        next_page: null,
+                        next_page_version: null,
                         body: pageBody,
                         reflection_questions: [],
                         created: true,
@@ -600,8 +613,9 @@ export default function Editor(props) {
                         PAGE_TITLE: pageName,
                         PAGE_BODY: pageBody,
                         SCENARIO: scenario_ID,
-                        VERSION: tempVersionID,
+                        VERSION: 90,
                         NEXT_PAGE: null,
+                        NEXT_PAGE_VERSION: null,
                         X_COORDINATE: 0,
                         Y_COORDINATE: 0,
                     };
@@ -610,8 +624,9 @@ export default function Editor(props) {
                         page_type: 'A',
                         page_title: pageName,
                         scenario_ID: scenario_ID,
-                        version_ID: tempVersionID,
-                        next_page_id: null,
+                        version_ID: 90,
+                        next_page: null,
+                        next_page_version: null,
                         body: pageBody,
                         choice1: '',
                         r1: null,

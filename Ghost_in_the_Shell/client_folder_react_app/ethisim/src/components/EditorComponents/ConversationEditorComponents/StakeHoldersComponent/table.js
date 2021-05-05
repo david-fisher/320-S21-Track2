@@ -68,6 +68,7 @@ export default function BasicTable({ stakeholder_id, passed_issues }) {
         var axios = require('axios');
 
         var data = [...issues];
+        console.log(data);
         data = data.map((i) => {
             delete i.NAME;
             return i;

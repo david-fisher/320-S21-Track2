@@ -220,7 +220,8 @@ export default function IssueMatrix({ scenario_stakeHolders, scenario }) {
             curStakeHolder.ISSUES.forEach((issue) => {
                 if (
                     curRow['Issue: ' + issue.NAME.toUpperCase()] !==
-                    issue.COVERAGE_SCORE
+                        issue.COVERAGE_SCORE &&
+                    curRow['Decription'] !== 'Total Running Sums'
                 ) {
                     issue.COVERAGE_SCORE =
                         curRow['Issue: ' + issue.NAME.toUpperCase()];
@@ -294,7 +295,7 @@ export default function IssueMatrix({ scenario_stakeHolders, scenario }) {
     }
 
     function onStakeHolderIssueChange() {
-        let sums = { NAME: '', DESCRIPTION: 'Running Issue Sums' };
+        let sums = { NAME: '', DESCRIPTION: 'Total Issue Sums' };
         for (let j = 0; j < stakeHolders.current.length; j++) {
             let stakeHolder = stakeHolders.current[j];
             for (let i = 0; i < stakeHolder.ISSUES.length; i++) {
@@ -314,7 +315,7 @@ export default function IssueMatrix({ scenario_stakeHolders, scenario }) {
 
     function setRowData() {
         setLoading(true);
-        let sums = { NAME: '', DESCRIPTION: 'Running Issue Sums' };
+        let sums = { NAME: '', DESCRIPTION: 'Total Issue Sums' };
         let data = stakeHolders.current.map((stakeHolder) => {
             let row = {
                 NAME: stakeHolder.NAME,
@@ -333,29 +334,43 @@ export default function IssueMatrix({ scenario_stakeHolders, scenario }) {
             });
             return row;
         });
+
+        let numPages = Math.ceil(data.length / 10);
+        let sumsSpliced = 0;
+        for (let i = 0; i < data.length; i++) {
+            //always puts a sum row at the ninth index of each page
+            if ((i % 10) % 9 == 0 && i !== 0) {
+                //gets last digit of i and then checks if ninth index
+                data.splice(i, 0, sums);
+                sumsSpliced++;
+            }
+        }
+        if (sumsSpliced < numPages) {
+            data.push(sums);
+        }
         setSums(sums);
         setRows(data);
         setLoading(false);
     }
 
+    function restructureRows(index) {
+        for (let i = index; i < rows.length; i++) {
+            if (rows[i]['Description'] === 'Total Issue Sums') {
+                let temp = rows[i];
+                rows[i] = rows[i] + 1;
+                rows[i + 1] = temp;
+            }
+        }
+    }
+
     function deleteStakeHolder(index) {
         setLoading(true);
-
-        var deletedStakeHolder = stakeHolders.current[index];
-        //var index;
-        /*for (let i = 0; i < stakeHolders.current.length; i++) {
-            let curStakeHolder = stakeHolders.current[i];
-            curStakeHolder.ISSUES.forEach((issue) => {
-                rows.forEach((curRow) => {
-                    if (
-                        curRow['Issue: ' + issue.NAME.toUpperCase()] == undefined
-                        ) {
-                        deletedStakeHolder = curStakeHolder;
-                        index = i;
-                    }
-                });
-            });
-        }*/
+        let whichPage = 0;
+        if (index > 9) {
+            whichPage = Math.ceil(index.length + 1 / 10);
+        }
+        var deletedStakeHolder = stakeHolders.current[index - whichPage - 1];
+        restructureRows(index);
 
         if (deletedStakeHolder !== undefined) {
             stakeHolders.current.splice(index, 1);
@@ -396,21 +411,6 @@ export default function IssueMatrix({ scenario_stakeHolders, scenario }) {
     if (isLoading) {
         return <LoadingSpinner />;
     }
-
-    /*if (!didSetData && stakeHolders.current !== undefined && stakeHolders.current.length > 0) {
-        //if stakeholders have alreasdy been loaded, don't do it again
-        setColData()
-        setRowData()
-    }*/
-    /*if (didGetSHs && !didGetIssues) {
-        setDidGetIssues(true);
-        //getIssues();
-    }
-    if (didGetIssues && !didSetData) {
-        setDidSetData(true);
-        setColData();
-        setRowData();
-    }*/
 
     return (
         <Container component="main" className={classes.container}>
@@ -469,8 +469,8 @@ export default function IssueMatrix({ scenario_stakeHolders, scenario }) {
                 }}
             />
 
-            <MaterialTable /*table*/
-                icons={tableIcons} /*all the icons*/
+            {/* <MaterialTable 
+                icons={tableIcons} 
                 title={'Running Issue Sums'}
                 editable={{
                     isEditHidden: (rowData) =>
@@ -511,7 +511,7 @@ export default function IssueMatrix({ scenario_stakeHolders, scenario }) {
                         color: '#FFF',
                     },
                 }}
-            />
+            /> */}
         </Container>
     );
 }

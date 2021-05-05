@@ -66,7 +66,7 @@ QuestionField.propTypes = {
     summary: PropTypes.string,
     QRs: PropTypes.any,
     setQRs: PropTypes.any,
-    //StakeHolders: PropTypes.any,
+    StakeHolder_Id: PropTypes.any,
 };
 
 export default function QuestionField({
@@ -78,7 +78,7 @@ export default function QuestionField({
     summary,
     QRs,
     setQRs,
-    //StakeHolders,
+    StakeHolder_Id,
 }) {
     const [questionValue, setQuestionValue] = useState(question);
     const [responseValue, setResponseValue] = useState(response);

@@ -1,7 +1,5 @@
 name: Build Script test
 
-concurrency: deployment
-
 on:
   pull_request:
     branches:

@@ -53,7 +53,12 @@ jobs:
       - name: Bundling server
         run: |
           mkdir ethisim;
+          mkdir ./ethisim/ssl
+          mkdir ./ethisim/ssl/certs
+          mkdir ./ethisim/ssl/private
+          mkdir ./ethisim/shib_config
           cp -r ./apache ./ethisim/;
+          cp -r ./env-template ./ethisim/;
           cp ./start.sh ./ethisim/;
           cp docker-compose-deploy.yaml ./ethisim/docker-compose.yaml;
           cp requirements.txt ./ethisim/requirements.txt;

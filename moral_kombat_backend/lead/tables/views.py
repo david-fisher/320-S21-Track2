@@ -131,7 +131,7 @@ class multi_coverage(APIView):
         for updated_coverage in request.data:
             extant_coverage = COVERAGE.objects.get(STAKEHOLDER = STAKEHOLDER, ISSUE = updated_coverage['ISSUE_id'])
             serializer = coverageSerializer(extant_coverage, data=updated_coverage)
-            if serializer.is_valid(): 
+            if serializer.is_valid():
                 serializer.save()
         coverage_query = COVERAGE.objects.filter(STAKEHOLDER = STAKEHOLDER).values()
         return Response(coverage_query)
@@ -466,6 +466,8 @@ class dashboard_page(APIView):
         #TODO check that id != none
         #get all scenarios belonging to this professor
         scenario_query = SCENARIOS.objects.filter(professors_to_scenario = PROFESSOR_id).values()
+        if(len(scenario_query) == 0):
+            return Response({"Error": "You are not associated with any scenarios"})
         #loop through scenarios and append required information (course, page info)
         logistics = []
         print(scenario_query)

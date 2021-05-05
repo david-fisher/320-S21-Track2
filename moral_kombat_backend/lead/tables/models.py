@@ -13,6 +13,7 @@ class ACTION_PAGE(models.Model):
 
     class Meta:
         unique_together = ('ACTION_PAGE_ID', 'VERSION')
+        db_table = 'ACTION_PAGE'
 
 
 class CONVERSATIONS(models.Model):
@@ -20,6 +21,8 @@ class CONVERSATIONS(models.Model):
     STAKEHOLDER = models.ForeignKey('STAKEHOLDERS', to_field = 'STAKEHOLDER', on_delete = models.CASCADE, related_name="conversations1")
     QUESTION = models.TextField()
     RESPONSE = models.TextField()
+    class Meta:
+        db_table = 'CONVERSATIONS'
 
 
 class COURSES(models.Model):
@@ -31,7 +34,8 @@ class COURSES(models.Model):
         'PROFESSORS', related_name='COURSES', through='PROFESSORS_TO_COURSES')
     scenarios = models.ManyToManyField(
         'SCENARIOS', related_name='COURSES',  through='SCENARIOS_FOR')
-
+    class Meta:
+        db_table = 'COURSES'
 
 
 class COURSES_TO_SCENARIO(models.Model):
@@ -41,6 +45,7 @@ class COURSES_TO_SCENARIO(models.Model):
 
     class Meta:
         unique_together = ('COURSE', 'SCENARIO')
+        db_table = 'COURSES_TO_SCENARIO'
 
 
 class COVERAGE(models.Model):
@@ -50,6 +55,7 @@ class COVERAGE(models.Model):
 
     class Meta:
         unique_together = ('STAKEHOLDER', 'ISSUE')
+        db_table = 'COVERAGE'
 
 
 class DEMOGRAPHICS(models.Model):
@@ -72,6 +78,9 @@ class DEMOGRAPHICS(models.Model):
     RACE = models.CharField(max_length=30)
     MAJOR = models.CharField(max_length=30)
 
+    class Meta:
+        db_table = 'DEMOGRAPHICS'
+
 
 class GENERIC_PAGE(models.Model):
     GENERIC_PAGE_ID = models.IntegerField()
@@ -81,13 +90,15 @@ class GENERIC_PAGE(models.Model):
 
     class Meta:
         unique_together = ('GENERIC_PAGE_ID', 'VERSION')
-
+        db_table = 'GENERIC_PAGE'
 
 class ISSUES(models.Model):
     SCENARIO_ID = models.ForeignKey('SCENARIOS', to_field= 'SCENARIO_ID', on_delete = models.CASCADE, related_name = "scenario_id1", default = None)
     ISSUE = models.AutoField(default = None, primary_key = True, editable = False)
     NAME = models.CharField(max_length = 1000)
     IMPORTANCE_SCORE = models.IntegerField(validators = [MinValueValidator(0.0)])
+    class Meta:
+        db_table = 'ISSUES'
 
 
 class PAGES(models.Model):
@@ -113,6 +124,7 @@ class PAGES(models.Model):
 
     class Meta:
         unique_together = ('PAGE', 'VERSION')
+        db_table = 'PAGES'
 
 
 class PAGES_TO_SCENARIO(models.Model):
@@ -121,12 +133,15 @@ class PAGES_TO_SCENARIO(models.Model):
 
     class Meta:
         unique_together = ('PAGE_ID', 'SCENARIO_ID')
+        db_table = 'PAGES_TO_SCENARIO'
 
 
 class PROFESSORS(models.Model):
     PROFESSOR = models.TextField(primary_key=True)
     FNAME = models.TextField()
     LNAME = models.TextField(blank=True)
+    class Meta:
+        db_table = 'PROFESSORS'
     # courses = models.ManyToManyField( Courses, related_name='professor',  through='ProfessorsToCourses')
 
 
@@ -137,6 +152,7 @@ class PROFESSORS_TO_COURSES(models.Model):
 
     class Meta:
         unique_together = ('PROFESSOR', 'COURSE')
+        db_table = 'PROFESSORS_TO_COURSES'
 
 
 class PROFESSORS_TO_SCENARIO(models.Model):
@@ -146,6 +162,7 @@ class PROFESSORS_TO_SCENARIO(models.Model):
 
     class Meta:
         unique_together = ('PROFESSOR', 'SCENARIO')
+        db_table = 'PROFESSORS_TO_SCENARIO'
 
 
 class QUESTIONS(models.Model):

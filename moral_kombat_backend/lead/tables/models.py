@@ -157,6 +157,7 @@ class QUESTIONS(models.Model):
 
     class Meta:
         unique_together = ('QUESTION', 'VERSION')
+        db_table = 'QUESTIONS'
 
 
 class REFLECTION_QUESTION_TO_PAGE(models.Model):
@@ -165,6 +166,7 @@ class REFLECTION_QUESTION_TO_PAGE(models.Model):
 
     class Meta:
         unique_together = ('REFLECTION_QUESTION_ID', 'PAGE')
+        db_table = 'REFLECTION_QUESTION_TO_PAGE'
 
 
 class REFLECTION_QUESTIONS(models.Model):
@@ -174,11 +176,15 @@ class REFLECTION_QUESTIONS(models.Model):
 
     class Meta:
         unique_together = ('REFLECTION_QUESTION_ID', 'VERSION')
+        db_table = 'REFLECTION_QUESTIONS'
 
 
 class REFLECTIONS_TAKEN(models.Model):
     REFLECTIONS = models.TextField(blank=True)
     RESPONSE_ID = models.OneToOneField('RESPONSES', on_delete = models.CASCADE, primary_key=True)
+
+    class Meta:
+        db_table = 'REFLECTIONS_TAKEN'
 
 
 class RESPONSES(models.Model):
@@ -194,6 +200,7 @@ class RESPONSES(models.Model):
 
     class Meta:
         unique_together = ('RESPONSE', 'STUDENT', 'SCENARIO', 'PAGE', 'COURSE', 'DATE_TAKEN')
+        db_table = 'RESPONSES'
 
 class RESPONSE_TO_ACTION_PAGE(models.Model):
     RESPONSE_ID = models.ForeignKey('RESPONSES', on_delete = models.CASCADE, )
@@ -201,6 +208,7 @@ class RESPONSE_TO_ACTION_PAGE(models.Model):
 
     class Meta:
         unique_together = ('RESPONSE_ID', 'ACTION_PAGE')
+        db_table = 'RESPONSE_TO_ACTION_PAGE'
 
 class RESPONSES_TO_CONVERSATIONS(models.Model):
     RESPONSE_ID = models.ForeignKey(RESPONSES, on_delete = models.CASCADE)
@@ -211,6 +219,7 @@ class RESPONSES_TO_CONVERSATIONS(models.Model):
 
     class Meta:
         unique_together = ('RESPONSE_ID', 'CONVERSATION')
+        db_table = 'RESPONSES_TO_CONVERSATIONS'
 
 
 class SCENARIOS(models.Model):
@@ -225,6 +234,7 @@ class SCENARIOS(models.Model):
 
     class Meta:
         unique_together = ('SCENARIO', 'VERSION')
+        db_table = 'SCENARIOS'
 
 
 class SCENARIOS_FOR(models.Model):
@@ -234,6 +244,7 @@ class SCENARIOS_FOR(models.Model):
 
     class Meta:
         unique_together = ('SCENARIO', 'COURSE')
+        db_table = 'SCENARIOS_FOR'
 
 
 class STAKEHOLDER_TO_PAGE(models.Model):
@@ -242,6 +253,7 @@ class STAKEHOLDER_TO_PAGE(models.Model):
 
     class Meta:
         unique_together = ('PAGE', 'STAKEHOLDER')
+        db_table = 'STAKEHOLDER_TO_PAGE'
 
 
 class STAKEHOLDERS(models.Model):
@@ -256,6 +268,7 @@ class STAKEHOLDERS(models.Model):
 
     class Meta:
         unique_together = ('STAKEHOLDER', 'VERSION')
+        db_table = 'STAKEHOLDERS'
 
 
 class STAKEHOLDERS_TO_QUESTIONS(models.Model):
@@ -264,6 +277,7 @@ class STAKEHOLDERS_TO_QUESTIONS(models.Model):
 
     class Meta:
         unique_together = ('STAKEHOLDER', 'QUESTION')
+        db_table = 'STAKEHOLDERS_TO_QUESTIONS'
 
 
 class STUDENT_TIMES(models.Model):
@@ -277,12 +291,16 @@ class STUDENT_TIMES(models.Model):
 
     class Meta:
         unique_together = ('STUDENT', 'COURSE', 'SCENARIO_ID')
+        db_table = 'STUDENT_TIMES'
 
 
 class STUDENTS(models.Model):
     STUDENT = models.TextField(primary_key=True)
     FNAME = models.TextField()
     LNAME = models.TextField()
+
+    class Meta:
+        db_table = 'STUDENTS'
 
 
 class STUDENTS_TO_COURSE(models.Model):
@@ -291,3 +309,4 @@ class STUDENTS_TO_COURSE(models.Model):
 
     class Meta:
         unique_together = ('STUDENT', 'COURSE')
+        db_table = 'STUDENTS_TO_COURSE'

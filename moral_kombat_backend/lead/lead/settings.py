@@ -16,6 +16,12 @@ from corsheaders.defaults import default_headers
 # Copy database info from envrionment variables
 # used by docker containers to set database info 
 try:  
+    # DB_USER="qelfnxes"
+    # DB_NAME="qelfnxes"
+    # DB_HOST="queenie.db.elephantsql.com"
+    # DB_PASS="MV7YEGQjB5A9FijyB-IcUZ1wP9xSvxp-"
+    # DB_PORT=5432
+
    DB_USER = environ["DB_USER"]
    DB_NAME = environ["DB_NAME"]
    DB_HOST = environ["DB_HOST"]

@@ -244,7 +244,7 @@ export default function QuestionFields({ qrs, stakeholder_id, stakeVersion }) {
                         summary={data.SUMMARY}
                         QRs={QRs}
                         setQRs={setQRs}
-                        //StakeHolders={StakeHolders}
+                        StakeHolder_Id={stakeholder_id}
                     />
                 ))}
             </form>

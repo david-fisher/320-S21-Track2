@@ -30,11 +30,11 @@ def getCredentials(request):
     credentials.update({"intID": credentials.get("intID").split("@")[0]})
     return credentials
 
-#{'status': 'details'}, status=status.HTTP_404_NOT_FOUND
+
 class ReturnIdentifierView(APIView):
     def get(self, request, *args, **kwargs):
         if ('title' in request.META):
-            return Response({"id":"Professor"}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"id":"Professor"})
         else:
             if(len(SCENARIOS.objects.filter(professors_to_scenario2 = request.META['displayName']).values()) != 0):
                 return Response({"id":"Editor"})

@@ -131,8 +131,8 @@ class PagesToScenarioSerializer(serializers.ModelSerializer):
 
 class allScenariosSerializer(serializers.ModelSerializer):
     class Meta:
-       model = SCENARIOS
-       fields = ('SCENARIO', 'NAME', 'IS_FINISHED', 'PROFESSOR')
+        model = SCENARIOS
+        fields = ('SCENARIO', 'NAME', 'IS_FINISHED', 'PROFESSOR')
 
 #updated 05/04/21
 class Scenarios_forSerializer(serializers.ModelSerializer):
@@ -194,24 +194,24 @@ class Pages_actionSerializer(serializers.ModelSerializer):
     action_page = Action_pageSerializer()
 
     class Meta:
-       model = PAGES
-       fields = '__all__'
+        model = PAGES
+        fields = '__all__'
 
 
 class Pages_genericSerializer(serializers.ModelSerializer):
     generic_page = Generic_pageSerializer()
 
     class Meta:
-       model = PAGES
-       fields = '__all__'
+        model = PAGES
+        fields = '__all__'
 
 
 class Pages_stakeholderSerializer(serializers.ModelSerializer):
     stakeholder_page = Stakeholder_to_pageSerializer()
 
     class Meta:
-       model = PAGES
-       fields = '__all__'
+        model = PAGES
+        fields = '__all__'
 
 #updated 05/04/21
 class coverageSerializer(serializers.ModelSerializer):

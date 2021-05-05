@@ -73,7 +73,7 @@ jobs:
           zip -r ethisim.zip ./ethisim/;
           cp ethisim.zip ./ethisim/;
       - name: Upload zip as prerelease
-      - uses: "marvinpinto/action-automatic-releases@latest"
+        uses: "marvinpinto/action-automatic-releases@latest"
         with:
             repo_token: "${{ secrets.GITHUB_TOKEN }}"
             prerelease: true

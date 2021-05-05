@@ -36,10 +36,10 @@ class ReturnIdentifierView(APIView):
         if ('title' in request.META):
             return Response({"id":"Professor"})
         else:
-            if(len(SCENARIOS.objects.filter(professors_to_scenario = request.META['displayName']).values()) != 0):
-                return Response({"id":"Editor"})
-            else:
-                return Response({"id":"Student"})
+            # if(len(SCENARIOS.objects.filter(professors_to_scenario = request.META['displayName']).values()) != 0):
+            #     return Response({"id":"Editor"})
+            # else:
+            return Response({"id":"Student"})
 
         # if (credentials.get("title") == "Lecturer"):
         #     return Response({"id":"Professor"})

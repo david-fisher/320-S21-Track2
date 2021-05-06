@@ -221,7 +221,7 @@ class responses(models.Model):
 
 class reflections_taken(models.Model):
     reflections = models.TextField(blank=True)
-    response_id = models.OneToOneField('responses', on_delete = models.CASCADE, primary_key=True, db_column = 'response')
+    response_id = models.OneToOneField('responses', on_delete = models.CASCADE, primary_key=True, db_column='response_id')
 
     class Meta:
         db_table = 'reflections_taken'
@@ -240,7 +240,7 @@ class responses_to_conversations(models.Model):
     stakeholder = models.ForeignKey('stakeholders', on_delete = models.CASCADE, db_column='stakeholder')
     stakeholder_version = models.IntegerField()
     score = models.DecimalField(max_digits=5, decimal_places=2)
-    conversation = models.ForeignKey(conversations, on_delete = models.CASCADE, to_field='conversation')
+    conversation = models.ForeignKey(conversations, on_delete = models.CASCADE, db_column='conversation')
 
     class Meta:
         unique_together = ('response_id', 'conversation')

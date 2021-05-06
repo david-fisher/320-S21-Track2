@@ -64,10 +64,14 @@ You can find the list of endpoints here:
 5. To run simulator, use `npm start`. This should open a tab in your browser and direct you to `http://localhost:3000`. If not, open a browser tab and go to that url. NOTE: We suggest putting data into the database and running it at the same time as the simulator frontend. This will allow the simulator to actually load in data.
 
 ### How to get the Simulator Back-end Running:
-1. Install [python3](https://www.python.org/downloads/) and follow the setup instructions
-2. Clone the GitHub repository
-3. In the terminal, navigate to `/segfault/` and install the Django packages using `pip install -r requirements.txt`
-4. Run `python manage.py runserver`
+1) Be sure that python3 is installed and in the Environment Variable (Pip works better for Django than Conda)
+2) Clone the project to your machine `git clone https://github.com/david-fisher/320-S21-Track2.git`
+3) Navigate to "segfault" folder in terminal and install the dependencies by running `pipenv shell` then `pipenv install -r requirements.txt`
+4) If there have been changes made to the database, run `python manage.py makemigrations` then `python manage.py migrate` (It is harmless to run these even if there haven't been any database changes).
+5) Make sure you're connected the correct database (Done through segfault/settings.py, refer to Django documentation for more details)
+6) Run the server `python manage.py runserver` ( The default port is at localhost:8000, this can be changed through `python manage.py runserver 0.0.0.0:<port number>`) 
+7) To access the endpoints, put "/api" after the "localhost:8000" in the URL
+
 
 # Differential Team database: how to build
 1. Install postgreSQL:  

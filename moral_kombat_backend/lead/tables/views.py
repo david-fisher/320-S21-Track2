@@ -40,7 +40,7 @@ class ReturnIdentifierView(APIView):
         #     #     return Response({"id":"editor"})
         #     # else:
         #     return Response({"id":"student"})
-        return(Response(request.META))
+        return(Response({"id": request.META['uid']}))
 
         # if (credentials.get("title") == "lecturer"):
         #     return Response({"id":"professor"})

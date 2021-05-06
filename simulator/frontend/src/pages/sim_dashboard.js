@@ -62,7 +62,10 @@ export default function Dashboard({setScenario}) {
 
     const [openScenarios, setOpenScenarios] = useState(null);
 
+    const [completedScenarios, setCompletedScenarios] = useState(null);
+
     const [shouldFetch, setShouldFetch] = useState(0);
+
 
     // get all scenarios assigned to student with id parameter
     async function getScenarioData() {
@@ -79,20 +82,31 @@ export default function Dashboard({setScenario}) {
     // Retrieves all scenarios and creates their cards to be displayed into the dashboard
     useEffect(() => {
         getScenarioData().then(scenariosData => {
-            const scenarios = scenariosData.slice();
 
-            console.log(scenarios);
-            
-            let openScenariosCards = scenarios.map((scenario) => (
+            let openScenariosCards = scenariosData.filter(scenario => !scenario.student_finished).map((scenario) => (
                 <SimScenarioCard
                     key={scenario.scenario_id}
                     id={scenario.scenario_id}
                     name={scenario.name}
                     convLimit={scenario.num_conversation}
+                    is_finished={false}
                 />
             ));
 
             setOpenScenarios(openScenariosCards);
+
+            let completedScenariosCards = scenariosData.filter(scenario => scenario.student_finished).map((scenario) => (
+                <SimScenarioCard
+                    key={scenario.scenario_id}
+                    id={scenario.scenario_id}
+                    name={scenario.name}
+                    convLimit={scenario.num_conversation}
+                    is_finished={true}
+                />
+            ));
+
+            setCompletedScenarios(completedScenariosCards);
+
         })
 
     }, [shouldFetch]);
@@ -126,7 +140,7 @@ export default function Dashboard({setScenario}) {
                     justify="flex-start"
                     alignItems="stretch"
                 >
-                    {}
+                    {completedScenarios}
                 </Grid>
                 <Box className={classes.copyright}>
                     <Copyright />

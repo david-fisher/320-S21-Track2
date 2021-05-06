@@ -5,6 +5,7 @@ import { Typography, Grid, Card, CardContent, Button } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import Tooltip from '@material-ui/core/Tooltip';
 import { ConvLimitConsumer } from '../../context/ConvContext';
+import { STUDENT_ID, BASE_URL } from '../../../constants/config';
 
 const useStyles = makeStyles((theme) => ({
     scenarioContainer: {
@@ -56,15 +57,35 @@ SimScenarioCard.propTypes = {
     id: PropTypes.number,
     name: PropTypes.string,
     convLimit: PropTypes.number,
+    is_finished: PropTypes.bool,
 }
 
 export default function SimScenarioCard({
     id,
     name,
     convLimit,
+    is_finished,
 }) {
 
     const classes = useStyles();
+
+    const start_scenario = () => {
+        fetch(`${BASE_URL}/start_scenario/?scenario_id=${id}&student_id=${STUDENT_ID}&course_id=1`, {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+            },
+            body: undefined
+          })
+          .then(res => res.json())
+          .then(data => {
+            console.log('Success:', data);
+          })
+          .catch((err) => {
+            console.error("Error: ", err)
+          })
+    }
 
     // to={http://localhost:8000/simulation/:sid}, where sid is the scenario id
     const startButton = (
@@ -79,10 +100,15 @@ export default function SimScenarioCard({
                             className={classes.button}
                             item
                             fullWidth="true"
-                            onClick={() => {context.update(convLimit)}}
+                            onClick={() => {
+                                context.update(convLimit)
+                                if (!is_finished) {
+                                    start_scenario()
+                                }
+                            }}
                         >
                             <Typography variant="subtitle1" noWrap>
-                                Start
+                                {is_finished ? "Review" : "Start" }
                             </Typography>
                         </Button>
                     }

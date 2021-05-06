@@ -197,9 +197,18 @@ class DashBoard(views.APIView):
                     student=student_id).courses.all()
                 for course in student_courses:
                     scenario_list.extend(course.scenarios.all())
+                
+                scenario_data_list = ScenarioSerializer(scenario_list, many=True).data
 
-                serializer = ScenarioSerializer(scenario_list, many=True)
-                return DRF_response(serializer.data)
+                for scenario in scenario_data_list:
+                    try:
+                        stuTime = StudentTimes.objects.get(student = student_id, scenario = scenario['scenario_id'])
+                        result = stuTime.end_time != None
+                    except:
+                        result = False
+                    scenario['student_finished'] = result
+
+                return DRF_response(scenario_data_list)
             except Students.DoesNotExist:
                 raise Http404
             """  
@@ -654,10 +663,12 @@ class start_scenario(APIView):
                 "end_time": None,
             }
             stutimeSerial = StudentTimesSerializer(data = stuTime)
+            
             if not stutimeSerial.is_valid():
                 return DRF_response(stutimeSerial.errors, status=status.HTTP_400_BAD_REQUEST)
 
             stutimeSerial.save()
+            # return DRF_response(stuTime, status=status.HTTP_400_BAD_REQUEST)
             return DRF_response(stutimeSerial.data, status=status.HTTP_200_OK)
         
 
@@ -758,10 +769,10 @@ class student_finish_scenario(APIView):
            studentTimeObj = StudentTimes.objects.get(student = student_id, course = course_id, scenario = scenario_id)
            stutimeSerial = StudentTimesSerializer(studentTimeObj)
            if (studentTimeObj.end_time is None):
-               return DRF_response({'finished': "false"}, status=status.HTTP_200_OK)
-           return DRF_response({'finished': "true"}, status=status.HTTP_200_OK)
+               return DRF_response({'finished': False}, status=status.HTTP_200_OK)
+           return DRF_response({'finished': True}, status=status.HTTP_200_OK)
         except StudentTimes.DoesNotExist:
-            return DRF_response({'detail': "Student hasn't started Scenario"}, status=status.HTTP_404_NOT_FOUND)
+            return DRF_response({'detail': "Student hasn't started Scenario", 'finished': False}, status=status.HTTP_404_NOT_FOUND)
 
     def put(self, request, *args, **kwargs):
         scenario_id = self.request.query_params.get('scenario_id')

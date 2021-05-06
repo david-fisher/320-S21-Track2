@@ -176,11 +176,11 @@ class questions(models.Model):
         unique_together = ('question', 'version')
         db_table = 'questions'
 
-
+#pretty broken
 class reflection_question_to_page(models.Model):
     reflection_question_id = models.ForeignKey('reflection_questions', on_delete = models.CASCADE)
-    page = models.ForeignKey(pages, on_delete = models.CASCADE, related_name = 'reflection_questions_to_page1', db_column = 'id')
-
+    #page = models.ForeignKey(pages, on_delete = models.CASCADE, related_name = 'reflection_questions_to_page1', db_column = 'id')
+    page = models.ForeignKey(pages, to_field = 'id', on_delete = models.CASCADE, related_name = 'reflection_questions_to_page1')
     class Meta:
         unique_together = ('reflection_question_id', 'page')
         db_table = 'reflection_question_to_page'

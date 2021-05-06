@@ -6,7 +6,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from .models import *
 from .serializer import *
 from django.core import serializers
-from rest_framework import status  
+from rest_framework import status 
 import json
 from django.db import connection
 from rest_framework.parsers import JSONParser

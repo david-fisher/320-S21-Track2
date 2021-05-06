@@ -16,7 +16,7 @@ import {
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 
-import { BrowserRouter as Router, Switch, Route, Link, Redirect } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import SimulationWindow from './pages/simulator_window';
 import { ConvLimitProvider } from './pages/context/ConvContext';
 

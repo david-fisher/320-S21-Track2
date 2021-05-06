@@ -1,11 +1,6 @@
-import React, { useEffect, useState, useRef } from "react";
-import { withStyles,Typography, Box, Grid, Button} from "@material-ui/core";
-import Radar from "./chart/chart"
-import ScrollableTabsButtonAuto from "./components/feedback_tabs";
-import NextButton from "./components/Buttons/NextButton"
-import BackButton from "./components/Buttons/BackButton"
-import { BASE_URL, STUDENT_ID } from '../constants/config';
-//import { useFetch } from "react-async"
+import React from "react";
+import { withStyles,Typography, Box, Grid } from "@material-ui/core";
+import Radar from "./chart/chart";
 
 const TextTypography = withStyles({
   root: {

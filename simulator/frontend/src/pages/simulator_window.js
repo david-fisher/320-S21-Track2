@@ -2,13 +2,12 @@ import React, {
     useState, 
     useEffect, 
     createContext,
-    useContext,
 } from 'react';
 
 import { makeStyles } from '@material-ui/core/styles'
 
-import { Grid, Typography, Box, Button } from '@material-ui/core';
-import { STUDENT_ID, BASE_URL } from '../constants/config';
+import { Grid } from '@material-ui/core';
+import { BASE_URL } from '../constants/config';
 import Page from './page_factory';
 import SpecialButton from './components/SpecialButton';
 import {Link} from 'react-router-dom';

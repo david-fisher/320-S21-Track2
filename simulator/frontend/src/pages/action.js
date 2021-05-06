@@ -1,11 +1,9 @@
-import React,{useEffect} from "react";
-import { makeStyles, withStyles, Typography, Box, Button, Grid } from "@material-ui/core";
+import React from "react";
+import { withStyles, Typography, Box, Grid } from "@material-ui/core";
 import Checkbox from "./components/checkbox";
-import { BASE_URL, STUDENT_ID, SCENARIO_ID } from "../constants/config";
-import axios from 'axios';
-import { ScenariosContext } from "../Nav";
+//import { BASE_URL, STUDENT_ID, SCENARIO_ID } from "../constants/config";
+//import { ScenariosContext } from "../Nav";
 import HTMLRenderer from "./components/htmlRenderer";
-import SpecialButton from "./components/SpecialButton"
 
 // const useStyles = makeStyles((theme) => ({
 //   root: {

@@ -244,7 +244,6 @@ export default function Dashboard() {
                 is_finished: false,
                 public: false,
                 num_conversations: 0,
-                scenario_id: 0,
             });
             //Smooth loading animation, loading animation will not reset during POST and GET Request
             setFetchScenariosResponse({
@@ -272,7 +271,6 @@ export default function Dashboard() {
             is_finished: false,
             public: false,
             num_conversations: 0,
-            scenario_id: 0,
         });
         setErrorName(false);
         setErrorCourses(false);

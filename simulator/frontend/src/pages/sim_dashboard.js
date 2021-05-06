@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Container, Box, Typography, Grid, Divider } from '@material-ui/core';
+import { Container, Box, Typography, Grid } from '@material-ui/core';
 import SimScenarioCard from './components/DashboardComponents/SimScenarioCard';
 import Copyright from './components/Copyright';
 import { BASE_URL, STUDENT_ID } from '../constants/config';
@@ -78,22 +78,11 @@ export default function Dashboard({setScenario}) {
 
         return scenarios;
     }
-    
-    // async function getFinished(sid) {
-    //     let result = false
-    //     fetch(`${BASE_URL}/student_finished/?scenario_id=${sid}&student_id=${STUDENT_ID}&course_id=1`)
-    //     .then(res => res.json())
-    //     .then(resData => {
-    //         result = resData.finished;
-    //         console.log(result)
-    //     })
-    //     return result;
-    // }
 
     // Retrieves all scenarios and creates their cards to be displayed into the dashboard
     useEffect(() => {
         getScenarioData().then(scenariosData => {
-            console.log(scenariosData[0].student_finished)
+
             let openScenariosCards = scenariosData.filter(scenario => !scenario.student_finished).map((scenario) => (
                 <SimScenarioCard
                     key={scenario.scenario_id}

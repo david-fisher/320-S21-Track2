@@ -87,7 +87,7 @@ export default function Reflection(props) {
     const [questions, setQuestions] = useState(reflection_questions);
     const [questionsForReqBody, setQuestionsForReqBody] = useState(
         questions.map(function (a) {
-            return { REFLECTION_QUESTION: a.REFLECTION_QUESTION };
+            return { reflection_question: a.reflection_question };
         })
     );
 
@@ -98,16 +98,16 @@ export default function Reflection(props) {
     const [errorQuestionsMessage, setErrorQuestionsMessage] = useState('');
 
     let postReqBody = {
-        PAGE: pageID,
-        PAGE_TYPE: page_type,
-        PAGE_TITLE: title,
-        PAGE_BODY: bodyText,
-        SCENARIO: scenario_ID,
-        VERSION: version_ID,
-        NEXT_PAGE: next_page_id,
-        REFLECTION_QUESTIONS: questionsForReqBody,
-        X_COORDINATE: xCoord,
-        Y_COORDINATE: yCoord,
+        page: pageID,
+        page_type: page_type,
+        page_title: title,
+        page_body: bodyText,
+        scenario: scenario_ID,
+        version: version_ID,
+        next_page: next_page_id,
+        reflection_questions: questionsForReqBody,
+        x_coordinate: xCoord,
+        y_coordinate: yCoord,
     };
 
     function handlePost(setPostValues, postReqBody, s_id, first_time) {
@@ -115,19 +115,19 @@ export default function Reflection(props) {
 
         function onSuccess(resp) {
             const deleteEndPoint = '/page?page_id=' + pageID;
-            postReqBody.PAGE = resp.data.PAGE;
+            postReqBody.page = resp.data.page;
             let newScenarioComponents = [...scenarioComponents];
             let component = newScenarioComponents.find((x) => x.id === pageID);
-            component.id = resp.data.PAGE;
+            component.id = resp.data.page;
             component.title = title;
 
-            setPageID(resp.data.PAGE);
-            setCurrentPageID(resp.data.PAGE);
+            setPageID(resp.data.page);
+            setCurrentPageID(resp.data.page);
             setScenarioComponents(newScenarioComponents);
             setSuccessBannerFade(true);
             setSuccessBannerMessage('Successfully saved page!');
             universalDelete(setDeleteValues, deleteEndPoint, null, null, {
-                PAGE: pageID,
+                page: pageID,
             });
         }
 
@@ -160,8 +160,8 @@ export default function Reflection(props) {
         let error = false;
         for (let i = 0; i < questions.length; i++) {
             if (
-                !questions[i].REFLECTION_QUESTION ||
-                !questions[i].REFLECTION_QUESTION.trim()
+                !questions[i].reflection_question ||
+                !questions[i].reflection_question.trim()
             ) {
                 setErrorQuestions(true);
                 setErrorQuestionsMessage(
@@ -177,7 +177,7 @@ export default function Reflection(props) {
 
         if (validInput) {
             let trimmedQuestions = questions.map((obj) =>
-                obj.REFLECTION_QUESTION.trim()
+                obj.reflection_question.trim()
             );
             let questionSet = new Set(trimmedQuestions);
             if (trimmedQuestions.length > questionSet.size) {
@@ -208,7 +208,7 @@ export default function Reflection(props) {
     const setReqBodyNew = (qs) => {
         let qsrb = [];
         for (let i = 0; i < qs.length; i++) {
-            qsrb.push({ REFLECTION_QUESTION: qs[i] });
+            qsrb.push({ reflection_question: qs[i] });
         }
 
         setQuestionsForReqBody(qsrb);
@@ -264,7 +264,11 @@ export default function Reflection(props) {
                     <HelpIcon />
                 </Button>
                 <GenericInfoButton
-                    description={`on this page`}
+                    description={`Creation of Reflection pages is for stopping students in the scenario and making them reflect. Give this page a title and description. 
+                    Then at the bottom you can see an “Add Question” button. Create as many questions as you deem necessary. 
+                    These questions will be shown to the student and they will have to respond to them before continuing in the simulation.  The student will not be allowed to return to revisit and revise their answers to these questions.
+                      A common use for these pages is to have an initial reflection after introducing the ethical quandary, a middle reflection after stakeholder conversations, and a final reflection after a consequences page. 
+                    These pages are added to your menu and can be edited and deleted at your discretion.`}
                     open={open}
                     setOpen={setOpen}
                 />

@@ -1,14 +1,11 @@
 import React, { useContext, useEffect } from "react";
 import { makeStyles, withStyles, Typography, Box, Grid, Button,
-  Card, CardContent, Modal, Dialog, DialogContent, DialogContentText } from "@material-ui/core";
+  Card, CardContent, Dialog, DialogContent, DialogContentText } from "@material-ui/core";
 import { useTheme } from "@material-ui/core/styles";
 import { GatheredInfoContext } from './simulator_window';
-import { BASE_URL, STUDENT_ID, SCENARIO_ID } from "../constants/config";
-import axios from 'axios';
+import { BASE_URL, STUDENT_ID } from "../constants/config";
 import Conversation from './conversation';
 import { ScenariosContext } from "../Nav";
-import NextButton from "./components/Buttons/NextButton";
-import BackButton from "./components/Buttons/BackButton";
 import { ConvLimitConsumer } from './context/ConvContext';
 
 const TextTypography = withStyles({
@@ -16,10 +13,6 @@ const TextTypography = withStyles({
     color: "#373a3c"
   }
 })(Typography);
-
-const introText = "Please select the Stakeholder you would like to interact with...";
-
-
 
 function ellipses(str, cutoff) {
   let newStr = str;

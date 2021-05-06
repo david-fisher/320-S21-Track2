@@ -6,8 +6,27 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
-
+from os import environ
 from pathlib import Path
+from corsheaders.defaults import default_headers
+
+# Copy database info from envrionment variables
+# used by docker containers to set database info 
+
+try:  
+   DB_USER = environ["DB_USER"]
+   DB_NAME = environ["DB_NAME"]
+   DB_HOST = environ["DB_HOST"]
+   DB_PASS = environ["DB_PASS"]
+   DB_PORT = environ["DB_PORT"]
+except KeyError: 
+   # defaults to containerdb
+   DB_USER = 'postgres'
+   DB_NAME = 'db'
+   DB_HOST = 'db'
+   DB_PASS = 'password'
+   DB_PORT = '5432'
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -17,12 +36,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '=g&lb)i%445$wze+u3$--*35v6rr437)9fvg5nme!zb!%i3_1j'
+SECRET_KEY = environ["DJ_SK"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+try:
+    ORIGIN_HOST = environ["ORIGIN_HOST"]
+    ORIGIN_PORT = environ["ORIGIN_PORT"]
+except KeyError:
+    ORIGIN_HOST = '127.0.0.1'
+    ORIGIN_PORT = '3000'
+
+ALLOWED_HOSTS = ['localhost','127.0.0.1', ORIGIN_HOST]
 
 
 # Application definition
@@ -74,7 +100,17 @@ TEMPLATES = [
     },
 ]
 
-CORS_ORIGIN_ALLOW_ALL = True
+# don't change the ordering of these parameters, idk why but they seem to only work in this orientation
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_ALLOW_ALL = True # If this is used then `CORS_ORIGIN_WHITELIST` will not have any effect
+CORS_ORIGIN_WHITELIST = [
+    'https://localhost:3000',
+    f'https://{ORIGIN_HOST}:{ORIGIN_PORT}'
+] # If this is used, then not need to use `CORS_ORIGIN_ALLOW_ALL = True`
+CORS_ORIGIN_REGEX_WHITELIST = [
+    r"^http(s|)://[^/]*umass\.edu" # should allow any umass domain in the cors origin
+]
+
 WSGI_APPLICATION = 'segfault.wsgi.application'
 
 
@@ -82,12 +118,15 @@ WSGI_APPLICATION = 'segfault.wsgi.application'
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 DATABASES = {
-    'default': { 'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'backendtesting',
-        'USER':'postgres',
-        'PASSWORD':'Aa12345678',
-        'HOST':'localhost',
-        'PORT':'5432'
+    'default': {
+        # 'ENGINE': 'django.db.backends.sqlite3',
+        # 'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': DB_NAME,
+        'USER': DB_USER,
+        'PASSWORD': DB_PASS,
+        'HOST': DB_HOST,
+        'PORT': DB_PORT,
     }
 }
 # DATABASES = {

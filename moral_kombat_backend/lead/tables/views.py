@@ -51,16 +51,16 @@ class ReturnIdentifierView(APIView):
 # Stakeholders ViewSet - Chirag - 4/14
 class StakeholdersViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
-        queryset = STAKEHOLDERS.objects.all()
+        queryset = stakeholders.objects.all()
         return queryset
-    queryset = STAKEHOLDERS.objects.all()
+    queryset = stakeholders.objects.all()
     permissions_classes = [
         permissions.AllowAny
     ]
     serializer_class = StakeholdersSerializer
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['SCENARIO']
-    lookup_field = "STAKEHOLDER"
+    filterset_fields = ['scenario']
+    lookup_field = "stakeholder"
 
 # class StakeholdersViewSet(viewsets.ModelViewSet):
 #     queryset = STAKEHOLDERS.objects.all()

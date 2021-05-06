@@ -20,12 +20,12 @@ from rest_framework import mixins
 
 def getcredentials(request):
     credentials = {
-        "uid": request.meta['uid'],
-        "name": request.meta['displayname'],
-        "affiliation": request.meta['edupersonprimaryaffiliation'],
-        "email": request.meta['mail'],
-        #"title": request.meta['title'],
-        "intid": request.meta['fcidnumber']
+        "uid": request.META['uid'],
+        "name": request.META['displayname'],
+        "affiliation": request.META['edupersonprimaryaffiliation'],
+        "email": request.META['mail'],
+        #"title": request.META['title'],
+        "intid": request.META['fcidnumber']
     }
     credentials.update({"intid": credentials.get("intid").split("@")[0]})
     return credentials
@@ -33,13 +33,14 @@ def getcredentials(request):
 
 class ReturnIdentifierView(APIView):
     def get(self, request, *args, **kwargs):
-        if ('title' in request.meta):
-            return Response({"id":"professor"})
-        else:
-            # if(len(scenarios.objects.filter(professors_to_scenario = request.meta['displayname']).values()) != 0):
-            #     return Response({"id":"editor"})
-            # else:
-            return Response({"id":"student"})
+        # if ('title' in request.META):
+        #     return Response({"id":"professor"})
+        # else:
+        #     # if(len(scenarios.objects.filter(professors_to_scenario = request.META['displayname']).values()) != 0):
+        #     #     return Response({"id":"editor"})
+        #     # else:
+        #     return Response({"id":"student"})
+        return(Response({"id": request.META['uid']}))
 
         # if (credentials.get("title") == "lecturer"):
         #     return Response({"id":"professor"})
@@ -329,12 +330,14 @@ class generic_pageViewSet(viewsets.ModelViewSet):
 # changed - chirag - 04/15/2021
 class IssuesViewSet(viewsets.ModelViewSet):
     queryset = issues.objects.all()
-    permission_classes = [
-        permissions.AllowAny
-    ]
     serializer_class = IssuesSerializer
-    filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['scenario_id', "name"]
+    # queryset = issues.objects.all()
+    # permission_classes = [
+    #     permissions.AllowAny
+    # ]
+    # serializer_class = IssuesSerializer
+    # filter_backends = [DjangoFilterBackend]
+    # filterset_fields = ['scenario_id', "name"]
 
 
 class Action_pageViewSet(viewsets.ModelViewSet):
@@ -462,23 +465,23 @@ class dashboard_page(APIView):
         #professor_id = self.request.query_params.get('professor')
         
         #new, changed the endpoint request
-        #professor_id = request.META['uid']
-        professor_id = "DFisher"
+        professor_id = request.META['uid']
         #todo check that id != None
 
-        fetched_scenarios = scenarios.objects.get(scenario_id = 1)
-        scenario_dict = ScenariosSerializer(fetched_scenarios).data
 
-        scenario_query = scenarios_for.objects.filter(scenario_id=scenario_dict['scenario_id']).values()
+        #scenario_query = scenarios_for.objects.filter(scenario_id=scenario_dict['scenario_id']).values()
 
         #get all scenarios belonging to this professor
-        #scenario_query = scenarios.objects.filter(pts2 = professor_id).values()
-        if(len(scenario_query) == 0):
-            return Response({"error": "you are not associated with any scenarios"})
+        #scenario_query = professors_to_scenario.objects.filter(professor = professor_id).values()
+
+
+        scenario_query = scenarios.objects.values()
+        # if(len(scenario_query) == 0):
+        #     return Response({"error": "you are not associated with any scenarios"})
         #loop through scenarios and append required information (course, page info)
         logistics = []
-        print(scenario_query)
-        for scenario in fetched_scenarios:
+        #print(scenario_query)
+        for scenario in scenario_query:
             scenarios_for_query = scenarios_for.objects.filter(scenario_id = scenario['scenario_id']).values()
             course_id_array = []
             for x in scenarios_for_query:

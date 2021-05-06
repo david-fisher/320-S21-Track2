@@ -213,11 +213,11 @@ export default function StakeHolder({
         const updatedStakeHolders = [...stakeHolders];
         setStakeHolders(
             updatedStakeHolders.map((sh) => {
-                if (sh.STAKEHOLDER === id) {
-                    sh.NAME = shname;
-                    sh.JOB = shjob;
-                    sh.DESCRIPTION = shbio;
-                    sh.INTRODUCTION = shconvo;
+                if (sh.stakeholder === id) {
+                    sh.name = shname;
+                    sh.job = shjob;
+                    sh.description = shbio;
+                    sh.introduction = shconvo;
                 }
                 return sh;
             })
@@ -264,7 +264,7 @@ export default function StakeHolder({
         axios(config)
             .then(function (response) {
                 console.log(response.data);
-                setIssues(response.data.ISSUES);
+                setIssues(response.data.issues);
                 setLoading(false);
                 setOpenPointSelection(true);
             })

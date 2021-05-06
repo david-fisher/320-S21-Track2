@@ -95,16 +95,17 @@ class generic_page(models.Model):
         db_table = 'generic_page'
 
 class issues(models.Model):
+    issue = models.AutoField(primary_key=True)
     scenario_id = models.ForeignKey('scenarios', on_delete = models.CASCADE, related_name = 'issues1', default = None, db_column='scenario_id')
-    issue = models.IntegerField(default = None, primary_key = True, editable = False)
     name = models.CharField(max_length = 1000)
     importance_score = models.IntegerField(validators = [MinValueValidator(0.0)])
+
     class Meta:
         db_table = 'issues'
 
 
 class pages(models.Model):
-    page = models.IntegerField(unique = True)
+    page = models.IntegerField()
     page_choices = (
         ('I', 'INTRO'),
         ('F', 'FEEDBACK'),
@@ -118,8 +119,7 @@ class pages(models.Model):
     scenario = models.ForeignKey('scenarios', on_delete = models.CASCADE, related_name='pages1', db_column='scenario')
     version = models.IntegerField(default=1, editable=True)
     body = models.TextField(blank=True, null=True)
-    id = models.AutoField(primary_key = True)
-    next_id = models.ForeignKey('pages', on_delete = models.CASCADE, related_name='pages2', db_column='page')
+    next_id = models.ForeignKey('self', on_delete = models.CASCADE, related_name='pages2', null=True, db_column='page')
     x_coordinate = models.IntegerField()
     y_coordinate = models.IntegerField()
     completed = models.BooleanField(default= False)

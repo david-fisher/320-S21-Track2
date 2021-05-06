@@ -474,7 +474,7 @@ class dashboard_page(APIView):
         logistics = []
         print(scenario_query)
         for scenario in scenario_query:
-            scenarios_for_query = scenarios_for.objects.filter(scenario_id = scenario['scenario']).values()
+            scenarios_for_query = scenarios_for.objects.filter(scenario_id = scenario['scenario_id']).values()
             course_id_array = []
             for x in scenarios_for_query:
                 course_id_array.append(x['course'])

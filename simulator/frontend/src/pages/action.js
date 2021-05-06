@@ -1,12 +1,9 @@
-import React,{useEffect} from "react";
-import { makeStyles, withStyles, Typography, Box, Button, Grid } from "@material-ui/core";
+import React from "react";
+import { withStyles, Typography, Box, Grid } from "@material-ui/core";
 import Checkbox from "./components/checkbox";
-import { BASE_URL, STUDENT_ID, SCENARIO_ID } from "../constants/config";
-import axios from 'axios';
-import { ScenariosContext } from "../Nav";
+//import { BASE_URL, STUDENT_ID, SCENARIO_ID } from "../constants/config";
+//import { ScenariosContext } from "../Nav";
 import HTMLRenderer from "./components/htmlRenderer";
-import BackButton from "./components/Buttons/BackButton"
-import SubmitButton from "./components/Buttons/SubmitButton"
 
 // const useStyles = makeStyles((theme) => ({
 //   root: {
@@ -128,8 +125,8 @@ function Action(props) {
       {/*       
       <Grid container direction="row" justify="space-between">
         <Grid item style={{ marginRight: "0rem", marginTop: "-3rem" }}>
-          <BackButton title={prevPageTitle} onClick={() => goToPage(prevPageID)}>
-          </BackButton>
+          <SpecialButton type="back" title={prevPageTitle} onClick={() => goToPage(prevPageID)}>
+          </SpecialButton>
         </Grid>
         <Grid item style={{ marginRight: "0rem", marginTop: "-3rem" }}>
       addtional comment was on this line  <Button variant="contained" disableElevation color="primary" onClick={() => goToPage(nextPageID)} >Next</Button>

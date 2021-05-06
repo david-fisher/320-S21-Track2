@@ -480,9 +480,10 @@ class issueScoreAggregateForStudent(APIView):
             stakeholderSet = set()
             for response in AllResponses:
                 response_id = response.response_id
-                responseToConvo = ResponsesToConversations.objects.filter(response=response_id).first()
-                if responseToConvo is not None:
-                    stakeholderSet.add(responseToConvo.stakeholder.stakeholder)
+                responseToConvo = ResponsesToConversations.objects.filter(response=response_id)
+                if len(responseToConvo) > 0:
+                    for respToConv in responseToConvo:
+                        stakeholderSet.add(respToConv.stakeholder.stakeholder)
             for stakeholder in stakeholderSet:
                 coverages = Coverage.objects.filter(stakeholder=stakeholder)
                 for coverage in coverages:
@@ -979,3 +980,31 @@ class response_to_action_page(APIView):
         resp_to_action_serializer.save()
 
         return DRF_response(resp_to_action_serializer.data, status=status.HTTP_200_OK)
+
+
+class stakeholders_had(APIView):
+    def get(self, request):
+        scenario_id1 = self.request.query_params.get('scenario_id')
+        student_id = self.request.query_params.get('student_id')
+        try:
+            scenario = Scenarios.objects.get(scenario_id=scenario_id1)
+        except Scenarios.DoesNotExist:
+            return DRF_response(status=status.HTTP_404_NOT_FOUND)
+        if(scenario_id1 == None):
+            return DRF_response(status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            AllResponses = Responses.objects.filter(student=student_id,scenario = scenario_id1) 
+            stakeholderSet = set()
+            for response in AllResponses:
+                response_id = response.response_id
+                responseToConvo = ResponsesToConversations.objects.filter(response=response_id)
+                if len(responseToConvo) > 0:
+                    for respToConv in responseToConvo:
+                        stakeholderSet.add(respToConv.stakeholder)
+            result = []
+            for stakeholder in stakeholderSet:
+                result.append(StakeholderSerializer(stakeholder).data['id'])
+            return DRF_response(result)
+        except Scenarios.DoesNotExist:
+            return DRF_response(status=status.HTTP_404_NOT_FOUND)

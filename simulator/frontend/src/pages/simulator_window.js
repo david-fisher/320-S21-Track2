@@ -32,6 +32,7 @@ function SimulationWindow(props) {
     const [ activePage, setActivePage ] = useState(0);
     const [ pages, setPages ] = useState({});
     const [ isLoading, setIsLoading ] = useState(true);
+    const [ finalPageIndex, setFinalPageIndex ] = useState(0);
 
     const stepChange = (change) => {
         let index = parseInt(activePage) + change;
@@ -72,7 +73,7 @@ function SimulationWindow(props) {
 
             let newPages = {};
             let allPages = pagesData.results.slice();
-            
+            let finalIndex = 0;
             allPages
             .forEach((page, index) => {
 
@@ -94,13 +95,16 @@ function SimulationWindow(props) {
                     pageNumber: page.page,
                     component: (<Page {...commonProps} />)
                 };
+
+                finalIndex = index
             });
 
             setPages(newPages);
             setIsLoading(false);
+            setFinalPageIndex(finalIndex)
         })
     }, []);
-
+    console.log("activePage: " + activePage + " last index: " + finalPageIndex)
     return (
         <div className={classes.root}>
             <Grid className={classes.simulator} item container direction={"row"} justify="center">
@@ -139,7 +143,8 @@ function SimulationWindow(props) {
                     </Grid>
                     <Grid item container direction={"column"} md={2}>
                         {
-                            (activePage !== Object.keys(pages).length-1) ?
+                            
+                            (activePage < finalPageIndex) ?
                             (<SpecialButton 
                                 type={"next"}
                                 onClick={() => stepChange(1)}

@@ -42,7 +42,7 @@ class ReturnIdentifierView(APIView):
         #     return Response({"id":"student"})
         #return(Response({"id": request.META['uid']}))
 
-        if(len(professors.objects.filter(professor = request.META['uid']).values() != 0)):
+        if(len(professors.objects.filter(professor = request.META['uid']).values()) != 0):
             #data = "You are prof " + request.META['uid']
 
             return(Response({"id": "You are prof "}))
@@ -346,6 +346,35 @@ class IssuesViewSet(viewsets.ModelViewSet):
     # filter_backends = [DjangoFilterBackend]
     # filterset_fields = ['scenario_id', "name"]
 
+    # def create(self, request, *args, **kwargs):
+        
+    #     serializer = IssuesSerializer(data=request.data)
+
+    #     if serializer.is_valid():
+
+    #         serializer.save()
+
+    #         scenarioID = serializer.data['scenario_id']
+    #         issueID = serializer.data['issue']
+
+    #         stakeholders = stakeholders.objects.filter(scenario=scenarioID).values()
+
+    #         for stakeholder in stakeholders:
+    #             newCoverage = {}
+    #             newCoverage['stakeholder'] = stakeholder['stakeholder']
+    #             newCoverage['issue'] = issueID
+    #             newCoverage['coverage_score'] = 0
+
+    #             coverageSerial = coverageSerializer(data=newCoverage)
+    #             if coverageSerial.is_valid():
+    #                 coverageSerial.save()
+    #             else:
+    #                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    #         return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
+    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class Action_pageViewSet(viewsets.ModelViewSet):
     queryset = action_page.objects.all()
@@ -382,7 +411,7 @@ class logistics_page(APIView):
         course_id_array = []
         for x in scenarios_for_query:
             # print(x)
-            course_id_array.append(x['course'])
+            course_id_array.append(x['course_id'])
 
         course_dict_array = []
         for x in course_id_array:
@@ -492,7 +521,7 @@ class dashboard_page(APIView):
             scenarios_for_query = scenarios_for.objects.filter(scenario_id = scenario['scenario_id']).values()
             course_id_array = []
             for x in scenarios_for_query:
-                course_id_array.append(x['course'])
+                course_id_array.append(x['course_id'])
 
             course_dict_array = []
             for x in course_id_array:

@@ -228,9 +228,9 @@ export default function IssueMatrix({ scenario_stakeHolders, scenario }) {
                     changedStakeHolder = curStakeHolder;
                 }
                 issues.push({
-                    COVERAGE_SCORE: issue.coverage_score,
-                    ISSUE: issue.issue,
-                    STAKEHOLDER: issue.stakeholder,
+                    coverage_score: issue.coverage_score,
+                    issue: issue.issue,
+                    stakeholder: issue.stakeholder,
                 });
             });
         }
@@ -242,7 +242,7 @@ export default function IssueMatrix({ scenario_stakeHolders, scenario }) {
                 method: 'put',
                 url:
                     baseURL +
-                    '/multi_coverage?STAKEHOLDER=' +
+                    '/multi_coverage?stakeholder=' +
                     changedStakeHolder.stakeholder,
                 headers: {
                     'Content-Type': 'application/json',
@@ -419,9 +419,9 @@ export default function IssueMatrix({ scenario_stakeHolders, scenario }) {
                 title={'Issue Coverage Matrix'}
                 editable={{
                     isEditHidden: (rowData) =>
-                        rowData.description === 'Running Issue Sums',
+                        rowData.description === 'Total Issue Sums',
                     isDeleteHidden: (rowData) =>
-                        rowData.description === 'Running Issue Sums',
+                        rowData.description === 'Total Issue Sums',
                     onRowUpdate: (newData, oldData) =>
                         new Promise((resolve, reject) => {
                             setTimeout(() => {

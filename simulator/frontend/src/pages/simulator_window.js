@@ -7,10 +7,11 @@ import React, {
 import { makeStyles } from '@material-ui/core/styles'
 
 import { Grid } from '@material-ui/core';
-import { BASE_URL } from '../constants/config';
+import { BASE_URL, STUDENT_ID } from '../constants/config';
 import Page from './page_factory';
 import SpecialButton from './components/SpecialButton';
 import {Link} from 'react-router-dom';
+
 
 export const GatheredInfoContext = createContext();
 export const PageContext = createContext();
@@ -40,6 +41,7 @@ function SimulationWindow(props) {
             index = index + change;
             console.log(index);
         }
+        
         setActivePage(index);
     }
 
@@ -63,6 +65,26 @@ function SimulationWindow(props) {
         });
 
         return nextPageKey;
+    }
+
+    const finish = () => {
+        fetch(BASE_URL + `/student_finished/?scenario_id=${props.match.params.sid}&student_id=${STUDENT_ID}&course_id=1`, {
+            method: 'PUT',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              finish: true
+            })
+          })
+          .then(res => res.json())
+          .then(data => {
+            console.log('Success:', data);
+          })
+          .catch((err) => {
+            console.error("Error: ", err)
+          })
     }
 
     useEffect(() => {
@@ -146,12 +168,17 @@ function SimulationWindow(props) {
                             (activePage < finalPageIndex) ?
                             (<SpecialButton 
                                 type={"next"}
-                                onClick={() => stepChange(1)}
+                                onClick={() => {
+                                    stepChange(1)
+                                }}
                             />)
                             :
                             (<Link to="/">
                                 <SpecialButton
                                     type={"finish"}
+                                    onClick={() => {
+                                        finish()
+                                    }}
                                 />
                             </Link>)
                         }

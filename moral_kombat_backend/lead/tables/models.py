@@ -265,7 +265,7 @@ class scenarios_for(models.Model):
     scenario_id = models.ForeignKey('scenarios', on_delete = models.CASCADE, db_column='scenario_id')
     version = models.IntegerField()
     course = models.ForeignKey('courses', on_delete = models.CASCADE, db_column='course')
-    id = models.AutoField(primary_key = True)
+    #id = models.AutoField(primary_key = True)
 
     class Meta:
         unique_together = ('scenario_id', 'course')
@@ -282,14 +282,14 @@ class stakeholder_to_page(models.Model):
 
 
 class stakeholders(models.Model):
-    stakeholder = models.IntegerField()
+    stakeholder = models.IntegerField(default=0)
     scenario = models.ForeignKey('scenarios', on_delete = models.CASCADE, db_column='scenario')
-    version = models.IntegerField()
-    name = models.TextField()
-    description = models.TextField()
-    job = models.TextField()
-    introduction = models.TextField()
-    enable_multi_convo = models.BooleanField()
+    version = models.IntegerField(default=0)
+    name = models.TextField(default='default')
+    description = models.TextField(default='default')
+    job = models.TextField(default='default')
+    introduction = models.TextField(default='default')
+    enable_multi_convo = models.BooleanField(default=False)
     id = models.AutoField(primary_key = True)
 
     class Meta:

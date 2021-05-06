@@ -197,9 +197,18 @@ class DashBoard(views.APIView):
                     student=student_id).courses.all()
                 for course in student_courses:
                     scenario_list.extend(course.scenarios.all())
+                
+                scenario_data_list = ScenarioSerializer(scenario_list, many=True).data
 
-                serializer = ScenarioSerializer(scenario_list, many=True)
-                return DRF_response(serializer.data)
+                for scenario in scenario_data_list:
+                    try:
+                        stuTime = StudentTimes.objects.get(student_id = student_id, scenario = scenario['id'])
+                        result = stuTime.end_time != None
+                    except:
+                        result = False
+                    scenario['student_finished'] = result
+
+                return DRF_response(scenario_data_list)
             except Students.DoesNotExist:
                 raise Http404
             """  

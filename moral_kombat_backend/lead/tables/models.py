@@ -115,7 +115,7 @@ class pages(models.Model):
     )
     page_type = models.CharField(max_length=2, choices=page_choices)
     page_title = models.CharField(max_length=1000)
-    scenario = models.ForeignKey('scenarios', on_delete = models.CASCADE, related_name='pages1', db_column='scenario_id')
+    scenario = models.ForeignKey('scenarios', on_delete = models.CASCADE, related_name='pages1', db_column='scenario')
     version = models.IntegerField(default=1, editable=True)
     body = models.TextField(blank=True, null=True)
     id = models.AutoField(primary_key = True)

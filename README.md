@@ -61,4 +61,7 @@ Follow instructions in the [Shibboleth Install Guide](shib_install.md)
 [Schema Diagram](https://github.com/david-fisher/320-S21-Track2/blob/main/ZOOMba/Zoomba_Schema.sql)
 
 ## API Endpoints and Rest Documentation:
-You can find the list of endpoints [here](https://docs.google.com/document/d/1QSiUe21Z_TgT5XZKyR0twevRM864_AswxzVdYLwqW1I/edit?usp=sharing)
+You can find the list of endpoints here:
+[Editor Backend](https://docs.google.com/document/d/1QSiUe21Z_TgT5XZKyR0twevRM864_AswxzVdYLwqW1I/edit?usp=sharing),
+[Simulator Backend](https://docs.google.com/document/d/1iL5RgbVrZR_w7PUNcr92rXpdHn7GSKCuI8v04Ba1xGY/edit?usp=sharing)
+

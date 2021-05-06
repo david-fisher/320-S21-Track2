@@ -898,7 +898,7 @@ class pages_page(APIView):
                         except:
                             # if the subpage does not exist, then you create that new page and post it and continue to the next component
                             action['page'] = page_id
-                            nested_serializer = action_pageserializer(data=action)
+                            nested_serializer = Action_pageSerializer(data=action)
                             if nested_serializer.is_valid():
                                 nested_serializer.save()
                             else:
@@ -906,7 +906,7 @@ class pages_page(APIView):
                             continue
 
                         action['page'] = page_id
-                        nested_serializer = action_pageserializer(choices_page, data=action)
+                        nested_serializer = Action_pageSerializer(choices_page, data=action)
                         if nested_serializer.is_valid():
                             nested_serializer.save()
                         else:
@@ -917,7 +917,7 @@ class pages_page(APIView):
             
             # check page.page_type = 'generic'
             if (page_type == 'g' or page_type == 'i'):
-                pages_serializer = pagesserializer(page, data=request.data)
+                pages_serializer = PagesSerializer(page, data=request.data)
                 if pages_serializer.is_valid():
                     pages_serializer.save()
                     
@@ -928,7 +928,7 @@ class pages_page(APIView):
                         except:
                             # if the subpage does not exist, then you create that new page and post it and continue to the next component
                             body['page'] = page_id
-                            nested_serializer = generic_pageserializer(data=body)
+                            nested_serializer = Generic_pageSerializer(data=body)
                             if nested_serializer.is_valid():
                                 nested_serializer.save()
                             else:
@@ -936,7 +936,7 @@ class pages_page(APIView):
                             continue
 
                         body['page'] = page_id
-                        nested_serializer = generic_pageserializer(body_page, data=body)
+                        nested_serializer = Generic_pageSerializer(body_page, data=body)
                         if nested_serializer.is_valid():
                             nested_serializer.save()
                         else:
@@ -947,7 +947,7 @@ class pages_page(APIView):
 
             # check page.page_type = 'stakeholders'
             if (page_type == 's'):
-                pages_serializer = pagesserializer(page, data=request.data)
+                pages_serializer = PagesSerializer(page, data=request.data)
                 if pages_serializer.is_valid():
                     pages_serializer.save()
                     
@@ -958,7 +958,7 @@ class pages_page(APIView):
                         except:
                             # if the subpage does not exist, then you create that new page and post it and continue to the next component
                             stakeholder['page'] = page_id
-                            nested_serializer = stakeholder_pageserializer(data=stakeholder)
+                            nested_serializer = Stakeholder_pageSerializer(data=stakeholder)
                             if nested_serializer.is_valid():
                                 nested_serializer.save()
                             else:
@@ -966,7 +966,7 @@ class pages_page(APIView):
                             continue
 
                         stakeholder['page'] = page_id
-                        nested_serializer = stakeholder_pageserializer(page_stakeholder, data=stakeholder)
+                        nested_serializer = Stakeholder_pageSerializer(page_stakeholder, data=stakeholder)
                         if nested_serializer.is_valid():
                             nested_serializer.save()
                         else:
@@ -1000,8 +1000,8 @@ class pages_page(APIView):
             for updated_page in next_pages:
                 extant_page = updated_page
                 updated_page.next_page = none
-                updated_page_dict = pagesserializer(updated_page).data
-                pages_serializer = pagesserializer(extant_page, data=updated_page_dict)
+                updated_page_dict = PagesSerializer(updated_page).data
+                pages_serializer = PagesSerializer(extant_page, data=updated_page_dict)
                 if pages_serializer.is_valid():
                     pages_serializer.save()
                 else:
@@ -1013,8 +1013,8 @@ class pages_page(APIView):
             for updated_page in action_pages:
                 extant_page = updated_page
                 updated_page.result_page = none
-                updated_page_dict = action_pageserializer(updated_page).data
-                action_pages_serializer = action_pageserializer(extant_page, data=updated_page_dict)
+                updated_page_dict = Action_pageSerializer(updated_page).data
+                action_pages_serializer = Action_pageSerializer(extant_page, data=updated_page_dict)
                 if action_pages_serializer.is_valid():
                     action_pages_serializer.save()
                 else:

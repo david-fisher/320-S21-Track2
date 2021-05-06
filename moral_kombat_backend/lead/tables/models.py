@@ -235,7 +235,7 @@ class response_to_action_page(models.Model):
         db_table = 'response_to_action_page'
 
 class responses_to_conversations(models.Model):
-    response_id = models.ForeignKey('responses', on_delete = models.CASCADE, db_column='response')
+    response_id = models.ForeignKey('responses', on_delete = models.CASCADE, db_column='response_id')
     stakeholder = models.ForeignKey('stakeholders', on_delete = models.CASCADE, db_column='stakeholder')
     stakeholder_version = models.IntegerField()
     score = models.DecimalField(max_digits=5, decimal_places=2)

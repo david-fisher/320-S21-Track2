@@ -634,7 +634,7 @@ class flowchart(APIView):
                     action_serializer.save()
             #save the page itself    
             extant_page = pages.objects.get(scenario = scenario_id, page = updated_page['page'])
-            serializer = pagesserializer(extant_page, data=updated_page)
+            serializer = PagesSerializer(extant_page, data=updated_page)
             if not serializer.is_valid():
                 print("error with puting pages")
                 return Response(serializer.errors)
@@ -649,21 +649,25 @@ class flowchart(APIView):
 
 
 #pages viewset
-class page_reflectionviewset(generics.createAPIView):
+#Cooper 05/05/2021
+class Page_reflectionViewSet(generics.createAPIView):
     model = pages
-    serializer_class = pages_reflectionserializer
+    serializer_class = Pages_reflectionSerializer
 
-class page_actionviewset(generics.createAPIView):
+#Cooper 05/05/2021
+class Page_actionViewSet(generics.createAPIView):
     model = pages
-    serializer_class = pages_actionserializer   
+    serializer_class = Pages_actionSerializer  
 
-class page_genericviewset(generics.createAPIView):
+#Cooper 05/05/2021
+class Page_genericViewSet(generics.createAPIView):
     model = pages
-    serializer_class = pages_genericserializer
+    serializer_class = Pages_genericSerializer
 
-class page_stakeholderviewset(generics.createAPIView):
+#Cooper 05/05/2021
+class Page_StakeholderViewSet(generics.createAPIView):
     model = pages
-    serializer_class = pages_stakeholderserializer
+    serializer_class = Pages_stakeholderSerializer
     
 
 
@@ -683,7 +687,7 @@ class pages_page(APIView):
         
         # print(page)
         # convers django model object into a dictionary
-        page_data = pagesserializer(page).data
+        page_data = PagesSerializer(page).data
         # print(page_data)
         page_type = page_data['page_type']
         # print("page type: ", page_type)
@@ -746,13 +750,13 @@ class pages_page(APIView):
 
         # if the request is a reflection page  
         if (page_type == 'r'):
-            pages_serializer = pagesserializer(data=request.data)
+            pages_serializer = PagesSerializer(data=request.data)
             if pages_serializer.is_valid():
                 pages_serializer.save()
                 page_id = pages_serializer.data["page"]
                 for question in request.data['reflection_questions']:
                     question['page'] = page_id
-                    nested_serializer = reflection_questionsserializer(data=question)
+                    nested_serializer = Reflection_questionsSerializer(data=question)
                     if  nested_serializer.is_valid():
                         nested_serializer.save()
                     # if the nested page is not valid it deletes the wrapper page created above
@@ -768,13 +772,13 @@ class pages_page(APIView):
         
         # if the request is an action page  
         if (page_type == 'a'):
-            pages_serializer = pagesserializer(data=request.data)
+            pages_serializer = PagesSerializer(data=request.data)
             if pages_serializer.is_valid():
                 pages_serializer.save()
                 page_id = pages_serializer.data["page"]
                 for choice in request.data['page_choices']:
                     choice['page'] = page_id
-                    nested_serializer = action_pageserializer(data=choice)
+                    nested_serializer = Action_pageSerializer(data=choice)
                     if  nested_serializer.is_valid():
                         nested_serializer.save()
                     # if the nested page is not valid it deletes the wrapper page created above
@@ -790,13 +794,13 @@ class pages_page(APIView):
             
         # if the request is a generic page  
         if (page_type == 'g' or page_type == 'i'):
-            pages_serializer = pagesserializer(data=request.data)
+            pages_serializer = PagesSerializer(data=request.data)
             if pages_serializer.is_valid():
                 pages_serializer.save()
                 page_id = pages_serializer.data["page"]
                 for body in request.data['body']:
                     body['page'] = page_id
-                    nested_serializer = generic_pageserializer(data=body)
+                    nested_serializer = Generic_pageSerializer(data=body)
                     if  nested_serializer.is_valid():
                         nested_serializer.save()
                     # if the nested page is not valid it deletes the wrapper page created above
@@ -812,13 +816,13 @@ class pages_page(APIView):
         
         # if the request is a stakeholder page 
         if (page_type == 's'):
-            pages_serializer = pagesserializer(data=request.data)
+            pages_serializer = PagesSerializer(data=request.data)
             if pages_serializer.is_valid():
                 pages_serializer.save()
                 page_id = pages_serializer.data["page"]
                 for stakeholder in request.data['stakeholders']:
                     stakeholder['page'] = page_id
-                    nested_serializer = stakeholder_pageserializer(data=stakeholder)
+                    nested_serializer = Stakeholder_pageSerializer(data=stakeholder)
                     if  nested_serializer.is_valid():
                         nested_serializer.save()
                     # if the nested page is not valid it deletes the wrapper page created above
@@ -849,7 +853,7 @@ class pages_page(APIView):
 
         # please don't modify the scenario
         print(request.data)
-        request.data["scenario_id"] = pagesserializer(page).data['scenario']
+        request.data["scenario_id"] = PagesSerializer(page).data['scenario']
 
         if request.method == "put": 
         
@@ -857,7 +861,7 @@ class pages_page(APIView):
 
             # check page.page_type = 'reflection'
             if (page_type == 'r'):
-                pages_serializer = pagesserializer(page, data=request.data)
+                pages_serializer = PagesSerializer(page, data=request.data)
                 if pages_serializer.is_valid():
                     pages_serializer.save()
                     
@@ -868,7 +872,7 @@ class pages_page(APIView):
                         except:
                             # if the subpage does not exist, then you create that new page and post it and continue to the next component
                             question['page'] = page_id
-                            nested_serializer = reflection_questionsserializer(data=question)
+                            nested_serializer = Reflection_questionsSerializer(data=question)
                             if nested_serializer.is_valid():
                                 nested_serializer.save()
                             else:
@@ -876,7 +880,7 @@ class pages_page(APIView):
                             continue
 
                         question['page'] = page_id
-                        nested_serializer = reflection_questionsserializer(reflection_page, data=question)
+                        nested_serializer = Reflection_questionsSerializer(reflection_page, data=question)
                         if nested_serializer.is_valid():
                             nested_serializer.save()
                         else:
@@ -887,7 +891,7 @@ class pages_page(APIView):
             
             # check page.page_type = 'action'
             if (page_type == 'a'):
-                pages_serializer = pagesserializer(page, data=request.data)
+                pages_serializer = PagesSerializer(page, data=request.data)
                 if pages_serializer.is_valid():
                     pages_serializer.save()
                     
@@ -1279,7 +1283,7 @@ class stakeholders_page(APIView):
 
     def post(self, request, *args, **kwargs):
     
-        serializer = stakeholdersserializer(data=request.data)
+        serializer = StakeholdersSerializer(data=request.data)
 
         if serializer.is_valid():
             serializer.save()
@@ -1296,11 +1300,11 @@ class stakeholders_page(APIView):
                 itemdict['name'] = item['name']
                 itemdict['coverage_score'] = 0
                 print(itemdict)
-                itemserializer = coverageserializer(data=itemdict)
+                itemserializer = coverageSerializer(data=itemdict)
                 if itemserializer.is_valid():
                     itemserializer.save()
                 else:
-                    return Response(itemserializer.errors,
+                    return Response(itemSerializer.errors,
                                     status=status.HTTP_400_BAD_REQUEST)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
@@ -1363,7 +1367,7 @@ class stakeholders_page(APIView):
             for item in data:
                 id = item['stakeholder']
                 updatingitem = stakeholders.objects.get(stakeholder=id)
-                stkholderserializer = stakeholdersserializer(
+                stkholderserializer = StakeholdersSerializer(
                     updatingitem, data=item)
                 if stkholderserializer.is_valid():
                     stkholderserializer.save()
@@ -1375,7 +1379,7 @@ class stakeholders_page(APIView):
         else:
             id = data['stakeholder']
             updatingitem = stakeholders.objects.get(stakeholder=id)
-            stkholderserializer = stakeholdersserializer(
+            stkholderserializer = StakeholdersSerializer(
                 updatingitem, data=data)
             if stkholderserializer.is_valid():
                 stkholderserializer.save()

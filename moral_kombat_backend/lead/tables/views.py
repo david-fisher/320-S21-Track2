@@ -1064,7 +1064,7 @@ class student_info(APIView):
 # seems like no change required - chirag - 4/15
 class coverages_page(APIView):
     def get(self, request, *args, **kwargs):
-        stakeholder_id = self.request.query_params.get('stakeholder_id')
+        stakeholder_id = self.request.query_params.get('stakeholder')
         stkholder = {}
         # print(stakeholder_id)
         try: 
@@ -1089,7 +1089,7 @@ class coverages_page(APIView):
             # issues_dict['issue'] = issues_dict['issue_id']
             # del issues_dict['issue_id']
             # issues_dict['stakeholder'] = issues_dict['stakeholder_id']
-            # del issues_dict['stakeholder_id']
+            # del issues_dict['stakeholder']
             issues_dict.update(
                 {
                     "name": issue.name

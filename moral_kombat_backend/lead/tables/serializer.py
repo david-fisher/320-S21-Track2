@@ -218,7 +218,7 @@ class Pages_stakeholderSerializer(serializers.ModelSerializer):
 class coverageSerializer(serializers.ModelSerializer):
     class Meta:
         model = coverage
-        fields = ('stakeholder', 'id', 'issue', 'coverage_score')
+        fields = '__all__'
 
 
 # class Actions_takenSerializer(serializers.ModelSerializer):

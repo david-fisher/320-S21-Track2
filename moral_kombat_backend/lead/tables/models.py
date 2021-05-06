@@ -183,7 +183,7 @@ class questions(models.Model):
 #pretty broken
 # changed by judge may 6 idk
 class reflection_question_to_page(models.Model):
-    reflection_question_id = models.ForeignKey('reflection_questions', on_delete = models.CASCADE, db_column='reflection_question')
+    reflection_question_id = models.ForeignKey('reflection_questions', on_delete = models.CASCADE, db_column='reflection_question_id')
     #page = models.ForeignKey(pages, on_delete = models.CASCADE, related_name = 'reflection_questions_to_page1', db_column = 'id')
     page_id = models.ForeignKey('pages', on_delete = models.CASCADE, related_name = 'reflection_questions_to_page1', db_column='page')
     class Meta:
@@ -235,8 +235,8 @@ class response_to_action_page(models.Model):
         db_table = 'response_to_action_page'
 
 class responses_to_conversations(models.Model):
-    response_id = models.ForeignKey('responses', to_field = 'response_id', on_delete = models.CASCADE)
-    stakeholder = models.ForeignKey('stakeholders', to_field = 'id', on_delete = models.CASCADE, db_column='stakeholder')
+    response_id = models.ForeignKey('responses', on_delete = models.CASCADE, db_column='response')
+    stakeholder = models.ForeignKey('stakeholders', on_delete = models.CASCADE, db_column='stakeholder')
     stakeholder_version = models.IntegerField()
     score = models.DecimalField(max_digits=5, decimal_places=2)
     conversation = models.ForeignKey(conversations, on_delete = models.CASCADE, to_field='conversation')

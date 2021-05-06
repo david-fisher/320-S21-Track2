@@ -71,7 +71,7 @@ export default function StakeHolderFields({ scenario }) {
         var data = { scenario: { scenario } };
         var config = {
             method: 'get',
-            url: baseURL + '/api/stakeholders/?SCENARIO=' + scenario,
+            url: baseURL + '/api/stakeholders/?scenario=' + scenario,
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -143,7 +143,14 @@ export default function StakeHolderFields({ scenario }) {
         setLoading(true);
 
         var data = JSON.stringify({
-            scenario: scenario,
+            stakeholder: null,
+            version: null,
+            name: '',
+            description: '',
+            job: '',
+            introduction: '',
+            enable_multi_convo: false,
+            scenario: null,
         });
 
         var config = {
@@ -178,7 +185,7 @@ export default function StakeHolderFields({ scenario }) {
 
         var config = {
             method: 'put',
-            url: baseURL + '/multi_stake?SCENARIO=' + scenario,
+            url: baseURL + '/multi_stake?scenario=' + scenario,
             headers: {
                 'Content-Type': 'application/json',
             },

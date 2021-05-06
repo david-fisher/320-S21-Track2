@@ -62,12 +62,15 @@ export default function Dashboard({setScenario}) {
 
     const [openScenarios, setOpenScenarios] = useState(null);
 
+    const [completedScenarios, setCompletedScenarios] = useState(null);
+
     const [shouldFetch, setShouldFetch] = useState(0);
+
 
     // get all scenarios assigned to student with id parameter
     async function getScenarioData() {
 
-        const response = await fetch(`${BASE_URL}/scenarios/?student_id=${STUDENT_ID}`, {
+        const response = await fetch(`${BASE_URL}/dashboard/?student_id=${STUDENT_ID}`, {
             "method": "GET",
         });
         
@@ -75,24 +78,46 @@ export default function Dashboard({setScenario}) {
 
         return scenarios;
     }
+    
+    // async function getFinished(sid) {
+    //     let result = false
+    //     fetch(`${BASE_URL}/student_finished/?scenario_id=${sid}&student_id=${STUDENT_ID}&course_id=1`)
+    //     .then(res => res.json())
+    //     .then(resData => {
+    //         result = resData.finished;
+    //         console.log(result)
+    //     })
+    //     return result;
+    // }
 
     // Retrieves all scenarios and creates their cards to be displayed into the dashboard
     useEffect(() => {
         getScenarioData().then(scenariosData => {
-            const scenarios = scenariosData.results.slice();
-
-            console.log(scenarios);
-            
-            let openScenariosCards = scenarios.map((scenario) => (
+            console.log(scenariosData[0].student_finished)
+            let openScenariosCards = scenariosData.filter(scenario => !scenario.student_finished).map((scenario) => (
                 <SimScenarioCard
                     key={scenario.scenario_id}
                     id={scenario.scenario_id}
                     name={scenario.name}
                     convLimit={scenario.num_conversation}
+                    is_finished={false}
                 />
             ));
 
             setOpenScenarios(openScenariosCards);
+
+            let completedScenariosCards = scenariosData.filter(scenario => scenario.student_finished).map((scenario) => (
+                <SimScenarioCard
+                    key={scenario.scenario_id}
+                    id={scenario.scenario_id}
+                    name={scenario.name}
+                    convLimit={scenario.num_conversation}
+                    is_finished={true}
+                />
+            ));
+
+            setCompletedScenarios(completedScenariosCards);
+
         })
 
     }, [shouldFetch]);
@@ -126,7 +151,7 @@ export default function Dashboard({setScenario}) {
                     justify="flex-start"
                     alignItems="stretch"
                 >
-                    {}
+                    {completedScenarios}
                 </Grid>
                 <Box className={classes.copyright}>
                     <Copyright />

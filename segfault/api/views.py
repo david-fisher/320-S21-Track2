@@ -663,10 +663,12 @@ class start_scenario(APIView):
                 "end_time": None,
             }
             stutimeSerial = StudentTimesSerializer(data = stuTime)
+            
             if not stutimeSerial.is_valid():
                 return DRF_response(stutimeSerial.errors, status=status.HTTP_400_BAD_REQUEST)
 
             stutimeSerial.save()
+            # return DRF_response(stuTime, status=status.HTTP_400_BAD_REQUEST)
             return DRF_response(stutimeSerial.data, status=status.HTTP_200_OK)
         
 

@@ -41,6 +41,7 @@ function SimulationWindow(props) {
             index = index + change;
             console.log(index);
         }
+        
         setActivePage(index);
     }
 
@@ -64,6 +65,26 @@ function SimulationWindow(props) {
         });
 
         return nextPageKey;
+    }
+
+    const finish = () => {
+        fetch(BASE_URL + `/student_finished/?scenario_id=${props.match.params.sid}&student_id=${STUDENT_ID}&course_id=1`, {
+            method: 'PUT',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              finish: true
+            })
+          })
+          .then(res => res.json())
+          .then(data => {
+            console.log('Success:', data);
+          })
+          .catch((err) => {
+            console.error("Error: ", err)
+          })
     }
 
     useEffect(() => {
@@ -147,12 +168,17 @@ function SimulationWindow(props) {
                             (activePage < finalPageIndex) ?
                             (<SpecialButton 
                                 type={"next"}
-                                onClick={() => stepChange(1)}
+                                onClick={() => {
+                                    stepChange(1)
+                                }}
                             />)
                             :
                             (<Link to="/">
                                 <SpecialButton
                                     type={"finish"}
+                                    onClick={() => {
+                                        finish()
+                                    }}
                                 />
                             </Link>)
                         }

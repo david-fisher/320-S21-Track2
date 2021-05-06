@@ -44,10 +44,11 @@ class ReturnIdentifierView(APIView):
 
         if(len(professor.objects.filter(professors = request.META['uid']).values() != 0)):
             #data = "You are prof " + request.META['uid']
-            return(Response({"id": "You are prof " + request.META['uid']}))
+
+            return(Response({"id": "You are prof "}))
         else:
             #data = "You are student " + request.META['uid']
-            return(Response({"id": "You are student " + request.META['uid']}))
+            return(Response({"id": "You are student "}))
         # if (credentials.get("title") == "lecturer"):
         #     return Response({"id":"professor"})
         # else:

@@ -103,6 +103,14 @@ class issues(models.Model):
 
 class pages(models.Model):
     page = models.IntegerField(unique = True)
+    page_choices = (
+        ('I', 'INTRO'),
+        ('F', 'FEEDBACK'),
+        ('G', 'GENERIC'),
+        ('R', 'REFLECTION'),
+        ('S', 'STAKEHOLDER'),
+        ('A', 'ACTION'),
+    )
     page_type = models.CharField(max_length=2, choices=page_choices)
     page_title = models.CharField(max_length=1000)
     scenario = models.ForeignKey('scenarios', to_field='scenario_id', on_delete = models.CASCADE, related_name='pages1')

@@ -148,11 +148,14 @@ class CoverageViewSet(viewsets.ModelViewSet):
     
 
 class DemographicsViewSet(viewsets.ModelViewSet):
-    queryset = demographics.objects.all()
+    # print(demographics.objects.all())
+    serializer_class = DemographicsSerializer
+    queryset = demographics.objects.only('student', 'age', 'gender', 'race', 'major')
+    # print(queryset)
     permission_classes = [
         permissions.AllowAny
     ]
-    serializer_class = DemographicsSerializer
+    
 
 class StudentsViewSet(viewsets.ModelViewSet):
     queryset = students.objects.all()
@@ -222,9 +225,6 @@ class professors_to_scenarioViewSet(viewsets.ModelViewSet):
 
 class PagesViewSet(viewsets.ModelViewSet):
     queryset = pages.objects.all()
-    permissions_classes = [
-        permissions.AllowAny
-    ]
     serializer_class = PagesSerializer
 
 # stakeholder_page viewset

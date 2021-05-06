@@ -14,7 +14,8 @@ class StakeholdersToQuestionsSerializer(serializers.ModelSerializer):
 class DemographicsSerializer(serializers.ModelSerializer):
     class Meta:
         model = demographics
-        fields = ('student', 'age', 'grade', 'gender', 'race', 'major')
+        fields = '__all__'
+        # fields = ('student', 'age', 'grade', 'gender', 'race', 'major')
 
 #updated 05/04/21
 class StudentSerializer(serializers.ModelSerializer):

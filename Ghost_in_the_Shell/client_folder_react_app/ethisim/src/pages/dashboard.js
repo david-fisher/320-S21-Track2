@@ -189,7 +189,7 @@ export default function Dashboard() {
     //For create new scenario dialogue box
     const handleClickOpen = () => {
         setOpen(true);
-        NewScenario.PUBLIC = false;
+        NewScenario.public = false;
         setNewScenario(NewScenario);
         getCourses();
     };
@@ -215,11 +215,11 @@ export default function Dashboard() {
 
         let validInput = true;
 
-        if (!NewScenario.NAME || !NewScenario.NAME.trim()) {
+        if (!NewScenario.name || !NewScenario.name.trim()) {
             setErrorName(true);
             setErrorNameText('Scenario name cannot be empty');
             validInput = false;
-        } else if (NewScenario.NAME.length >= 1000) {
+        } else if (NewScenario.name.length >= 1000) {
             setErrorName(true);
             setErrorNameText(
                 'Scenario name must have less than 1000 characters'
@@ -229,7 +229,7 @@ export default function Dashboard() {
             setErrorName(false);
         }
 
-        if (NewScenario.COURSES.length === 0) {
+        if (NewScenario.courses.length === 0) {
             setErrorCourses(true);
             validInput = false;
         } else {

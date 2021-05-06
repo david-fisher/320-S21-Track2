@@ -8,9 +8,9 @@ concurrency: deployment
 on:
   push:
     paths:
-        - '*'
-        - '!Ghost_in_the_Shell/*'
-        - '!simulator/*'
+        - '**'
+        - '!Ghost_in_the_Shell/**'
+        - '!simulator/**'
     branches: [ main, build-and-deploy ]
 
 jobs:

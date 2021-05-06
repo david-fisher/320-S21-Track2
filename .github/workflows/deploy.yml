@@ -48,7 +48,6 @@ jobs:
             if [[ $(docker ps -aq) ]]; then docker rm $(docker ps -aq); fi
       - name: Remove exisitng apache files
         run: |
-          if [ -e /ethisim/apache/build ]; then echo "removing apache build"; rm -rf /ethisim/apache/build/*; fi;
           if [ -e /ethisim/moral_kombat_backend ]; then echo "removing moral_kombat_backend"; rm -rf /ethisim/moral_kombat_backend; fi;
           if [ -e /ethisim/segfault ]; then echo "removing segfault"; rm -rf /ethisim/segfault; fi;
       - name: Copy artifact to server

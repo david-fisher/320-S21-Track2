@@ -109,6 +109,8 @@ BELOW IS THE README FOR SIMULATOR SETUP
 
 # 320-F20-Track-II
 
+Everything in the DB is functional. Frontend was unable to complete their work.
+
 # Differential Team database: how to build
 1. Install postgreSQL:  
 https://www.postgresql.org/download/

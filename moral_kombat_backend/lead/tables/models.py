@@ -220,7 +220,7 @@ class responses(models.Model):
 
 class reflections_taken(models.Model):
     reflections = models.TextField(blank=True)
-    response_id = models.OneToOneField('responses', on_delete = models.CASCADE, primary_key=True, to_field='response')
+    response_id = models.OneToOneField('responses', on_delete = models.CASCADE, primary_key=True, db_column='response_id')
 
     class Meta:
         db_table = 'reflections_taken'

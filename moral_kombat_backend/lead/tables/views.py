@@ -329,8 +329,8 @@ class generic_pageViewSet(viewsets.ModelViewSet):
 
 # changed - chirag - 04/15/2021
 class IssuesViewSet(viewsets.ModelViewSet):
-    queryset = Issues.objects.all()
-    serializer_class = IssueSerializer
+    queryset = issues.objects.all()
+    serializer_class = IssuesSerializer
     # queryset = issues.objects.all()
     # permission_classes = [
     #     permissions.AllowAny

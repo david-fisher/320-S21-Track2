@@ -10,4 +10,6 @@ DB_PASS=
 DB_PORT=
 ORIGIN_HOST=<same-as-server-name>
 ORIGIN_PORT=443
+#    make a secure Django Secret Key with https://miniwebtool.com/django-secret-key-generator/
+#    you must escape any $ in the key ... change $ to $$
 DJ_SK=<django-secret-key>

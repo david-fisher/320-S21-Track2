@@ -11,7 +11,7 @@ develop them further into longer discussions for class.
 
 This is Track III's repository containing code for both the front-end and back-end of Ethisim. This README provides instruction on how to install and setup both the front-end and back-end in order to get the software running.
 
-## How to get the Front-end Running
+## How to get the Editor Front-end Running
 1. Download node.js version 12.18.4 and npm https://www.npmjs.com/get-npm
 2. Clone the Github repository
 3. cd into the ethisim folder

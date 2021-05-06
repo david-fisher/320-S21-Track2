@@ -45,10 +45,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = environ["DJ_SK"]
+SECRET_KEY = "@!6b5hzk8m7y+gdyeq$$8&@g!c%0m+8hhaquat0=ml80biwz)kg"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 try:
     ORIGIN_HOST = environ["ORIGIN_HOST"]
@@ -125,12 +125,34 @@ DATABASES = {
     'default': {
         # 'ENGINE': 'django.db.backends.sqlite3',
         # 'NAME': BASE_DIR / 'db.sqlite3',
+
+        #  'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        #  'NAME': 'hkjdggmf',
+        #  'USER': 'hkjdggmf',
+        #  'PASSWORD': 'Siw8DtLM7Zg5FaP6lQbj9vyvuQ9C2ghB',
+        #  'HOST': 'queenie.db.elephantsql.com',
+        #  'PORT': '5432',
+
+        # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        # 'NAME': 'qelfnxes',
+        # 'USER': 'qelfnxes',
+        # 'PASSWORD': 'MV7YEGQjB5A9FijyB-IcUZ1wP9xSvxp-',
+        # 'HOST': 'queenie.db.elephantsql.com',
+        # 'PORT': '5432',
+
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': DB_NAME,
-        'USER': DB_USER,
-        'PASSWORD': DB_PASS,
-        'HOST': DB_HOST,
-        'PORT': DB_PORT,
+        'NAME': 'zoomba',
+        'USER': 'backendboys',
+        'PASSWORD': 'youwishyouwerezoomba',
+        'HOST': 'ethisim-db.cs.umass.edu',
+        'PORT': '5432'
+
+        # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        # 'NAME': DB_NAME,
+        # 'USER': DB_USER,
+        # 'PASSWORD': DB_PASS,
+        # 'HOST': DB_HOST,
+        # 'PORT': DB_PORT,
     }
 }
 

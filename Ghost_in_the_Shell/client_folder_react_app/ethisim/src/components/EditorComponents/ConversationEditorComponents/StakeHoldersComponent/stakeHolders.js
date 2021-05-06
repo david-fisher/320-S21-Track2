@@ -281,7 +281,7 @@ export default function StakeHolderFields({ scenario }) {
                         bio={stakeHolder.description}
                         mainConvo={stakeHolder.introduction}
                         version={stakeHolder.version}
-                        stakeHolders={stakeholders}
+                        stakeHolders={stakeHolders}
                         setStakeHolders={setStakeHolders}
                     />
                 ))}

@@ -40,7 +40,7 @@ router.register(r'professor_to_scenarios', views.ProfessorsToScenarioViewSet)
 router.register(r'student_to_course', views.StudentToCourseViewSet)
 router.register(r'professors_to_courses', views.ProfessorsToCoursesViewSet)
 
-#TODO: register apiviews to api_root view(there are only viewsets now)
+#TODO: register APIViews to api_root view(there are only viewsets now)
 
 # The API URLs are now determined automatically by the router.
 urlpatterns = [

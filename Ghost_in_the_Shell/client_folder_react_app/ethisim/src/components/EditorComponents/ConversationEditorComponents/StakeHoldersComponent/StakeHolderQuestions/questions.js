@@ -83,8 +83,8 @@ export default function QuestionFields({ qrs, stakeholder_id, stakeVersion }) {
         setLoading(true);
 
         var data = JSON.stringify({
-            STAKEHOLDER: stakeholder_id,
-            STAKEHOLDER_VERSION: stakeVersion,
+            stakeholder: stakeholder_id,
+            stakeholder_version: stakeVersion,
         }); // TODO change version to something else
 
         var config = {
@@ -119,7 +119,7 @@ export default function QuestionFields({ qrs, stakeholder_id, stakeVersion }) {
         }
         setLoading(true);
 
-        const leftQuestions = QRs.filter((q) => q.CONVERSATION !== questionID);
+        const leftQuestions = QRs.filter((q) => q.conversation !== questionID);
         setQRs(leftQuestions);
 
         var data = JSON.stringify({});
@@ -236,12 +236,12 @@ export default function QuestionFields({ qrs, stakeholder_id, stakeVersion }) {
             <form id="form" style={{ marginTop: -30 }}>
                 {QRs.map((data) => (
                     <QuestionField
-                        key={data.STAKEHOLDER}
-                        id={data.CONVERSATION}
+                        key={data.stakeholder}
+                        id={data.conversation}
                         removeQuestion={removeQuestion}
-                        question={data.QUESTION}
-                        response={data.RESPONSE}
-                        summary={data.SUMMARY}
+                        question={data.question}
+                        response={data.response}
+                        summary={data.summary}
                         QRs={QRs}
                         setQRs={setQRs}
                         StakeHolder_Id={stakeholder_id}

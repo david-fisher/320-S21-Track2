@@ -163,10 +163,10 @@ export default function QuestionField({
         const updatedQRs = [...QRs];
         setQRs(
             updatedQRs.map((qr) => {
-                if (qr.CONVERSATION === id) {
-                    qr.QUESTION = shq;
-                    qr.RESPONSE = shr;
-                    qr.SUMMARY = shs;
+                if (qr.conversation === id) {
+                    qr.question = shq;
+                    qr.response = shr;
+                    qr.summary = shs;
                 }
                 return qr;
             })
@@ -242,14 +242,14 @@ export default function QuestionField({
 
     const onChange = (e, row) => {
         //TODO CHANGE TO MATCH
-        if (!previous[row[ISSUE]]) {
-            setPrevious((state) => ({ ...state, [row[ISSUE]]: row }));
+        if (!previous[row[issue]]) {
+            setPrevious((state) => ({ ...state, [row[issue]]: row }));
         }
         const value = e.target.value;
         const name = e.target.name;
-        const { id } = row[ISSUE];
+        const { id } = row[issue];
         const newRows = rows.map((row) => {
-            if (row[ISSUE] === id) {
+            if (row[issue] === id) {
                 return { ...row, [name]: value };
             }
             return row;
@@ -260,7 +260,7 @@ export default function QuestionField({
     const onRevert = (id) => {
         //TODO CHANGE TO MATCH
         const newRows = rows.map((row) => {
-            if (row[ISSUE] === id) {
+            if (row[issue] === id) {
                 return previous[id] ? previous[id] : row;
             }
             return row;

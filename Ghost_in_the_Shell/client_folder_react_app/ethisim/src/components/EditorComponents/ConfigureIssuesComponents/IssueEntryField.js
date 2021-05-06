@@ -135,7 +135,7 @@ export default function IssueEntryField({
                     //if newly created issue, replace fake ID with new ID
                     if (resp.data) {
                         setUnsaved(false);
-                        setIssueID(resp.data.ISSUE);
+                        setIssueID(resp.data.issue);
                         setSuccessBannerFade(true);
                         setSuccessBannerMessage('Successfully created issue!');
                         setNewIssue(false);
@@ -146,10 +146,10 @@ export default function IssueEntryField({
                     setErrorBannerFade(true);
                 }
                 post(setPost, endpointPOST, onFailure, onSuccess, {
-                    SCENARIO: scenarioID,
-                    VERSION: versionID,
-                    IMPORTANCE_SCORE: score,
-                    NAME: issueName,
+                    scenario: scenarioID,
+                    version: versionID,
+                    importance_score: score,
+                    name: issueName,
                 });
             } else {
                 function onSuccess() {
@@ -162,11 +162,11 @@ export default function IssueEntryField({
                     setErrorBannerFade(true);
                 }
                 put(setPut, endpointPUT + issueID + '/', onFailure, onSuccess, {
-                    SCENARIO: scenarioID,
-                    VERSION: versionID,
-                    IMPORTANCE_SCORE: score,
-                    NAME: issueName,
-                    ISSUE: id,
+                    scenario: scenarioID,
+                    version: versionID,
+                    importance_score: score,
+                    name: issueName,
+                    issue: id,
                 });
             }
         }
@@ -178,7 +178,7 @@ export default function IssueEntryField({
         //ID in the array will remain the fake id, so that is why we compare with 'id' rather than 'issueID'
         if (newIssue) {
             let newData = issueEntryFieldList.data.filter(
-                (entry) => entry.ISSUE !== id
+                (entry) => entry.issue !== id
             );
             setIssueEntryFieldList({ ...issueEntryFieldList, data: newData });
         } else {
@@ -187,7 +187,7 @@ export default function IssueEntryField({
                 setSuccessBannerFade(true);
                 setSuccessBannerMessage('Successfully deleted issue!');
                 let newData = issueEntryFieldList.data.filter(
-                    (entry) => entry.ISSUE !== id
+                    (entry) => entry.issue !== id
                 );
                 setIssueEntryFieldList({
                     ...issueEntryFieldList,
@@ -205,8 +205,8 @@ export default function IssueEntryField({
                 onFailure,
                 successfullySaved,
                 {
-                    SCENARIO: scenarioID,
-                    ISSUE: issueID,
+                    scenario: scenarioID,
+                    issue: issueID,
                 }
             );
         }

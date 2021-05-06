@@ -91,7 +91,7 @@ export default function ICMatrix({ scenario_ID }) {
         // setLoading(true);
 
         var data = JSON.stringify({
-            SCENARIO: scenario_ID,
+            scenario: scenario_ID,
         });
 
         var config = {
@@ -105,10 +105,10 @@ export default function ICMatrix({ scenario_ID }) {
         axios(config)
             .then(function (response) {
                 //console.log(values)
-                response.data['NAME'] = values['NAME'];
-                response.data['DESCRIPTION'] = values['DESCRIPTION'];
-                response.data['INTRODUCTION'] = values['INTRODUCTION'];
-                response.data['JOB'] = values['JOB'];
+                response.data['name'] = values['name'];
+                response.data['description'] = values['description'];
+                response.data['introduction'] = values['introduction'];
+                response.data['job'] = values['job'];
                 saveStakeHolders(response.data);
                 // setStakeHolders([...stakeHolders, response.data]);
                 // setSuccessBannerMessage(
@@ -228,7 +228,7 @@ export default function ICMatrix({ scenario_ID }) {
     function getExistingStakeHolders() {
         setLoading(true); //starts loading icon
 
-        var data = { SCENARIO: { scenario_ID } };
+        var data = { scenario: { scenario_ID } };
         var config = {
             method: 'get',
             url: baseURL + '/stakeholder?scenario_id=' + scenario_ID,
@@ -261,31 +261,31 @@ export default function ICMatrix({ scenario_ID }) {
 
     let issueValues = {};
     let values = {
-        STAKEHOLDER: 1,
-        NAME: '',
-        DESCRIPTION: '',
-        INTRODUCTION: '',
-        SCENARIO: scenario_ID,
-        VERSION: 1,
-        JOB: '',
+        stakeholder: 1,
+        name: '',
+        description: '',
+        introduction: '',
+        scenario: scenario_ID,
+        version: 1,
+        job: '',
     };
     const getName = (e) => {
-        values['NAME'] = e.target.value;
+        values['name'] = e.target.value;
     };
     const getDes = (e) => {
-        values['DESCRIPTION'] = e.target.value;
+        values['description'] = e.target.value;
     };
     const getIntro = (e) => {
-        values['INTRODUCTION'] = e.target.value;
+        values['introduction'] = e.target.value;
     };
     const getJob = (e) => {
-        values['JOB'] = e.target.value;
+        values['job'] = e.target.value;
     };
     const getIssueName = (e) => {
-        issueValues['NAME'] = e.target.value;
+        issueValues['name'] = e.target.value;
     };
     const getImportance = (e) => {
-        issueValues['IMPORTANCE_SCORE'] = e.target.value;
+        issueValues['importance_score'] = e.target.value;
     };
 
     return (

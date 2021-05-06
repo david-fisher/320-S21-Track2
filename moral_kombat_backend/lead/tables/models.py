@@ -281,7 +281,7 @@ class stakeholder_to_page(models.Model):
 
 class stakeholders(models.Model):
     stakeholder = models.IntegerField()
-    scenario = models.ForeignKey('scenarios', to_field = 'scenario_id', on_delete = models.CASCADE)
+    scenario = models.ForeignKey('scenarios', on_delete = models.CASCADE, db_column='scenario')
     version = models.IntegerField()
     name = models.TextField()
     description = models.TextField()

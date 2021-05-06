@@ -58,7 +58,7 @@ class PagesSerializer(serializers.ModelSerializer):
 #updated 05/04/21
 class Stakeholder_to_pageSerializer(serializers.ModelSerializer):
     class Meta:
-        model = stakeholders_to_page
+        model = stakeholder_to_page
         fields = ('page', 'stakeholder', 'id')
 
 #updated 05/04/21
@@ -70,7 +70,7 @@ class Reflection_questionsSerializer(serializers.ModelSerializer):
 #updated 05/04/21 -- didnt do anything fields = all
 class Reflection_questions_to_pageSerializer(serializers.ModelSerializer):
     class Meta:
-        model = reflection_questions_to_page
+        model = reflection_question_to_page
         fields = '__all__'
 
 #updated 05/04/21 --- didnt do anything since fileds = all
@@ -129,10 +129,10 @@ class PagesToScenarioSerializer(serializers.ModelSerializer):
         fields = ('page_id', 'scenario_id', 'id')
 
 
-#class allScenariosSerializer(serializers.ModelSerializer):
-    #class Meta:
-       # model = SCENARIOS
-        #fields = ('SCENARIO', 'NAME', 'IS_FINISHED', 'PROFESSOR')
+class allScenariosSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = scenarios
+        fields = ('SCENARIO', 'NAME', 'IS_FINISHED', 'PROFESSOR')
 
 #updated 05/04/21
 class Scenarios_forSerializer(serializers.ModelSerializer):
@@ -183,35 +183,35 @@ class Response_to_action_pageSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 # Serializers for page types
-#class Pages_reflectionSerializer(serializers.ModelSerializer):
-    #reflection_question = Reflection_questionsSerializer()
-    #class Meta:
-       # model = PAGES
-        #fields = '__all__'
+class Pages_reflectionSerializer(serializers.ModelSerializer):
+    reflection_question = Reflection_questionsSerializer()
+    class Meta:
+        model = pages
+        fields = '__all__'
 
 
-#class Pages_actionSerializer(serializers.ModelSerializer):
-    #action_page = Action_pageSerializer()
+class Pages_actionSerializer(serializers.ModelSerializer):
+    action_page = Action_pageSerializer()
 
-    #class Meta:
-       # model = PAGES
-       # fields = '__all__'
-
-
-#class Pages_genericSerializer(serializers.ModelSerializer):
-    #generic_page = Generic_pageSerializer()
-
-    #class Meta:
-       # model = PAGES
-        #fields = '__all__'
+    class Meta:
+       model = pages
+       fields = '__all__'
 
 
-#class Pages_stakeholderSerializer(serializers.ModelSerializer):
-    #stakeholder_page = Stakeholder_to_pageSerializer()
+class Pages_genericSerializer(serializers.ModelSerializer):
+    generic_page = Generic_pageSerializer()
 
-    #class Meta:
-       # model = PAGES
-        #fields = '__all__'
+    class Meta:
+        model = pages
+        fields = '__all__'
+
+
+class Pages_stakeholderSerializer(serializers.ModelSerializer):
+    stakeholder_page = Stakeholder_to_pageSerializer()
+
+    class Meta:
+        model = pages
+        fields = '__all__'
 
 #updated 05/04/21
 class coverageSerializer(serializers.ModelSerializer):

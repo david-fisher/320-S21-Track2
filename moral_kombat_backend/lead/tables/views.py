@@ -6,7 +6,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from .models import *
 from .serializer import *
 from django.core import serializers
-from rest_framework import status  
+from rest_framework import status 
 import json
 from django.db import connection
 from rest_framework.parsers import JSONParser
@@ -55,7 +55,7 @@ class StakeholdersViewSet(viewsets.ModelViewSet):
         return queryset
     queryset = stakeholders.objects.all()
     permissions_classes = [
-        permissions.allowany
+        permissions.AllowAny
     ]
     serializer_class = StakeholdersSerializer
     filter_backends = [DjangoFilterBackend]
@@ -65,14 +65,14 @@ class StakeholdersViewSet(viewsets.ModelViewSet):
 # class stakeholdersviewset(viewsets.ModelViewSet):
 #     queryset = stakeholders.objects.all()
 #     permissions_classes = [
-#         permissions.allowany
+#         permissions.AllowAny
 #     ]
 #     serializer_class = stakeholdersserializer
 
 class QuestionsViewset(viewsets.ModelViewSet):
     queryset = questions.objects.all()
     permissions_classes = [
-        permissions.allowany
+        permissions.AllowAny
     ]
     serializer_class = QuestionsSerializer
 
@@ -81,7 +81,7 @@ class QuestionsViewset(viewsets.ModelViewSet):
 class ConversationsViewSet(viewsets.ModelViewSet):
     queryset = conversations.objects.all()
     permissions_classes = [
-        permissions.allowany
+        permissions.AllowAny
     ]
     serializer_class = ConversationsSerializer
     filter_backends = [DjangoFilterBackend]
@@ -90,7 +90,7 @@ class ConversationsViewSet(viewsets.ModelViewSet):
 class Responses_to_ConversationsViewSet(viewsets.ModelViewSet):
     queryset = responses_to_conversations.objects.all()
     permissions_classes = [
-        permissions.allowany
+        permissions.AllowAny
     ]
     serializer_class = Responses_to_ConversationsSerializer
 
@@ -98,7 +98,7 @@ class Responses_to_ConversationsViewSet(viewsets.ModelViewSet):
 class multi_conv(APIView):
     def put(self, request, *args, **kwargs):
         stakeholder = self.request.query_params.get('stakeholder')
-        if stakeholder == none:
+        if stakeholder == None:
             return Response({'status': 'details'}, status=status.HTTP_404_NOT_FOUND)
         for updated_conv in request.data:
             extant_conv = conversations.objects.get(stakeholder = stakeholder, conversation = updated_conv['conversation'])
@@ -112,7 +112,7 @@ class multi_conv(APIView):
 class multi_stake(APIView):
     def put(self, request, *args, **kwargs):
         scenario = self.request.query_params.get('scenario')
-        if scenario == none:
+        if scenario == None:
             return Response({'status': 'details'}, status=status.HTTP_404_NOT_FOUND)
         for updated_stake in request.data:
             extant_stake = stakeholders.objects.get(scenario_id = scenario, stakeholder = updated_stake['stakeholder'])
@@ -126,7 +126,7 @@ class multi_stake(APIView):
 class multi_coverage(APIView):
     def put(self, request, *args, **kwargs):
         stakeholder = self.request.query_params.get('stakeholder')
-        if stakeholder == none:
+        if stakeholder == None:
             return Response({'status': 'details'}, status=status.HTTP_404_NOT_FOUND)
         for updated_coverage in request.data:
             extant_coverage = coverage.objects.get(stakeholder = stakeholder, issue = updated_coverage['issue_id'])
@@ -140,7 +140,7 @@ class multi_coverage(APIView):
 # done - chirag - 04/15/2021
 class CoverageViewSet(viewsets.ModelViewSet):
     queryset = coverage.objects.all()
-    permission_classe = [permissions.allowany]
+    permission_classe = [permissions.AllowAny]
     serializer_class = coverageSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['stakeholder']
@@ -150,35 +150,35 @@ class CoverageViewSet(viewsets.ModelViewSet):
 class DemographicsViewSet(viewsets.ModelViewSet):
     queryset = demographics.objects.all()
     permission_classes = [
-        permissions.allowany
+        permissions.AllowAny
     ]
     serializer_class = DemographicsSerializer
 
 class StudentsViewSet(viewsets.ModelViewSet):
     queryset = students.objects.all()
     permission_classes = [
-        permissions.allowany
+        permissions.AllowAny
     ]
     serializer_class = StudentSerializer
 
 class PagesToScenarioViewSet(viewsets.ModelViewSet):
     queryset = pages_to_scenario.objects.all()
     permission_classes = [
-        permissions.allowany
+        permissions.AllowAny
     ]
     serializer_class = PagesToScenarioSerializer
 
 class ProfessorsViewSet(viewsets.ModelViewSet):
     queryset = professors.objects.all()
     permission_classes = [
-        permissions.allowany
+        permissions.AllowAny
     ]
     serializer_class = ProfessorSerializer
 
 class StudentTimesViewSet(viewsets.ModelViewSet):
     queryset = student_times.objects.all()
     permission_classes = [
-        permissions.allowany
+        permissions.AllowAny
     ]
     serializer_class = StudentTimesSerializer
 
@@ -186,12 +186,12 @@ class StudentTimesViewSet(viewsets.ModelViewSet):
 class ScenariosViewSet(viewsets.ModelViewSet):
     queryset = scenarios.objects.all()
     permissions_classes = [
-        permissions.allowany
+        permissions.AllowAny
     ]
     serializer_class = ScenariosSerializer
 
     # uncommeented cuz main - chirag - 04/15/2021
-    def delete(self, request, pk, format=none):
+    def delete(self, request, pk, format=None):
         snippet = self.get_object(pk)
         snippet.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
@@ -208,7 +208,7 @@ class SingleScenarioViewSet(viewsets.ModelViewSet):
 #         serializer = scenariosserializer(scenarios)
 #         return Response(serializer.data)
     
-#     def delete(self, request, pk, format=none):
+#     def delete(self, request, pk, format=None):
 #         snippet = self.get_object(pk)
 #         snippet.delete()
 #         return Response(status=status.HTTP_204_NO_CONTENT)
@@ -216,14 +216,14 @@ class SingleScenarioViewSet(viewsets.ModelViewSet):
 class professors_to_scenarioViewSet(viewsets.ModelViewSet):
     queryset = professors_to_scenario.objects.all()
     permission_classes = [
-        permissions.allowany
+        permissions.AllowAny
     ]
     serializer_class = Professors_to_scenarioSerializer
 
 class PagesViewSet(viewsets.ModelViewSet):
     queryset = pages.objects.all()
     permissions_classes = [
-        permissions.allowany
+        permissions.AllowAny
     ]
     serializer_class = PagesSerializer
 
@@ -231,7 +231,7 @@ class PagesViewSet(viewsets.ModelViewSet):
 class Stakeholder_pageViewSet(viewsets.ModelViewSet):
     queryset = stakeholder_to_page.objects.all()
     permissions_classes = [
-        permissions.allowany
+        permissions.AllowAny
     ]
     serializer_class = Stakeholder_to_pageSerializer
 
@@ -239,57 +239,57 @@ class Stakeholder_pageViewSet(viewsets.ModelViewSet):
 class Reflection_QuestionsViewSet(viewsets.ModelViewSet):
     queryset = reflection_questions.objects.all()
     permissions_classes = [
-        permissions.allowany
+        permissions.AllowAny
     ]
     serializer_class = Reflection_questionsSerializer
 
 class Reflection_Question_to_pageViewSet(viewsets.ModelViewSet):
     queryset = reflection_question_to_page.objects.all()
     permissions_classes = [
-        permissions.allowany
+        permissions.AllowAny
     ]
     serializer_class = Reflection_questions_to_pageSerializer
 
 class ReflectionsTakenViewSet(viewsets.ModelViewSet):
     queryset = reflections_taken.objects.all()
     permission_class = [
-        permissions.allowany
+        permissions.AllowAny
     ]
     serializer_class = ReflectionsTakenSerializer
 
 # class actionstakenviewset(viewsets.ModelViewSet):
 #     queryset = actions_taken.objects.all()
 #     permission_class = [
-#         permissions.allowany
+#         permissions.AllowAny
 #     ]
 #     serializer_class = actions_takenserializer
 # class conversationshadviewset(viewsets.ModelViewSet):
 #     queryset = conversations_had.objects.all()
 #     permission_class = [
-#         permissions.allowany
+#         permissions.AllowAny
 #     ]
 #     serializer_class = conversationshadserializer
 
 
 # class studentsinviewset(viewsets.ModelViewSet):
 #     queryset = students_in.objects.all()
-#     permission_class = [permissions.allowany]
+#     permission_class = [permissions.AllowAny]
 #     serializer_class = studentsinserializer
 
 
 class CoursesViewSet(viewsets.ModelViewSet):
     queryset = courses.objects.all()
-    permission_classes = [permissions.allowany]
+    permission_classes = [permissions.AllowAny]
     serializer_class = CoursesSerializer
 
 
 class ResponsesViewSet(viewsets.ModelViewSet):
     queryset = responses.objects.all()
-    permission_classe = [permissions.allowany]
+    permission_classe = [permissions.AllowAny]
     serializer_class = ResponsesSerializer
 
 #this allows for filerting scenarios by professor_id
-class allScenariosViewSet(generics.listAPIView):
+class allScenariosViewSet(generics.ListAPIView):
     serializer_class = allScenariosSerializer
     queryset = scenarios.objects.all()
     filter_backends = [DjangoFilterBackend]
@@ -299,14 +299,14 @@ class allScenariosViewSet(generics.listAPIView):
 class Scenarios_forViewSet(viewsets.ModelViewSet):
     queryset = scenarios_for.objects.all()
     permissions_class = [
-        permissions.allowany
+        permissions.AllowAny
     ]
     serializer_class = Scenarios_forSerializer
 
 class courses_to_scenarioViewset(viewsets.ModelViewSet):
     queryset = courses_to_scenario.objects.all()
     permissions_class = [
-        permissions.allowany
+        permissions.AllowAny
     ]
     serializer_class = Courses_to_ScenarioSerializer
 
@@ -314,7 +314,7 @@ class courses_to_scenarioViewset(viewsets.ModelViewSet):
 class generic_pageViewSet(viewsets.ModelViewSet):
     queryset = generic_page.objects.all()
     permissions_class = [
-        permissions.allowany
+        permissions.AllowAny
     ]
     serializer_class = Generic_pageSerializer
 
@@ -322,7 +322,7 @@ class generic_pageViewSet(viewsets.ModelViewSet):
 # class professors_teachviewset(viewsets.ModelViewSet):
 #     queryset = professors_teach.objects.all()
 #     permissions_class = [
-#         permissions.allowany
+#         permissions.AllowAny
 #     ]
 #     serializer_class = professors_teachserializer
 
@@ -330,7 +330,7 @@ class generic_pageViewSet(viewsets.ModelViewSet):
 class IssuesViewSet(viewsets.ModelViewSet):
     queryset = issues.objects.all()
     permission_classes = [
-        permissions.allowany
+        permissions.AllowAny
     ]
     serializer_class = IssuesSerializer
     filter_backends = [DjangoFilterBackend]
@@ -340,14 +340,14 @@ class IssuesViewSet(viewsets.ModelViewSet):
 class Action_pageViewSet(viewsets.ModelViewSet):
     queryset = action_page.objects.all()
     permission_classes = [
-        permissions.allowany
+        permissions.AllowAny
     ]
     serializer_class = Action_pageSerializer
 
 class response_to_action_pageViewSet(viewsets.ModelViewSet):
     queryset = response_to_action_page.objects.all()
     permission_classes = [
-        permissions.allowany
+        permissions.AllowAny
     ]
     serializer_class = Response_to_action_pageSerializer
 
@@ -361,7 +361,7 @@ class logistics_page(APIView):
         
         #take professor_id as input from url by adding ?professor_id=<the id #> to the end of the url.
         scenario_id = self.request.query_params.get('scenario')
-        #todo check that id != none
+        #todo check that id != None
         #get all scenarios belonging to this professor
         # scenario_query = professors_to_scenario.objects.filter(professor = professor_id).values()
         scenario = scenarios.objects.get(scenario_id = scenario_id)
@@ -463,7 +463,7 @@ class dashboard_page(APIView):
         
         #new, changed the endpoint request
         professor_id = request.META['uid']
-        #todo check that id != none
+        #todo check that id != None
         #get all scenarios belonging to this professor
         scenario_query = scenarios.objects.filter(pts2 = professor_id).values()
         if(len(scenario_query) == 0):
@@ -536,10 +536,10 @@ class dashboard_page(APIView):
         "page_title": "introduction",
         "page_body": "page body",
         "scenario": scenario_dict['scenario'],
-        "next_page": none,
+        "next_page": None,
         "x_coordinate": 0,
         "y_coordinate": 0,
-        "next_page_version": none
+        "next_page_version": None
         }
 
         intro_page_serializer = PagesSerializer(data=intro_page)
@@ -557,10 +557,10 @@ class dashboard_page(APIView):
         "page_title": "stakeholders",
         "page_body": "page of stakeholders",
         "scenario": scenario_dict['scenario'],
-        "next_page": none,
+        "next_page": None,
         "x_coordinate": 0,
         "y_coordinate": 0,
-        "next_page_version": none
+        "next_page_version": None
         }
 
         stakeholder_page_serializer = PagesSerializer(data=stakeholder_page)
@@ -583,7 +583,7 @@ class dashboard_page(APIView):
 class multi_issue(APIView):
     def put(self, request, *args, **kwargs):
         scenario = self.request.query_params.get('scenario')
-        if scenario == none:
+        if scenario == None:
             return Response({'status': 'details'}, status=status.HTTP_404_NOT_FOUND)
         for updated_issue in request.data:
             extant_issue = issues.objects.get(scenario_id = scenario, issue = updated_issue['issue'])
@@ -616,7 +616,7 @@ class flowchart(APIView):
     #update the next_page field of all page objects
     def put(self, request, *args, **kwargs):
         scenario_id = self.request.query_params.get('scenario')
-        if scenario_id == none:
+        if scenario_id == None:
             return Response({'status': 'details'}, status=status.HTTP_404_NOT_FOUND)
   
         for updated_page in request.data:
@@ -650,22 +650,22 @@ class flowchart(APIView):
 
 #pages viewset
 #Cooper 05/05/2021
-class Page_reflectionViewSet(generics.createAPIView):
+class Page_reflectionViewSet(generics.CreateAPIView):
     model = pages
     serializer_class = Pages_reflectionSerializer
 
 #Cooper 05/05/2021
-class Page_actionViewSet(generics.createAPIView):
+class Page_actionViewSet(generics.CreateAPIView):
     model = pages
     serializer_class = Pages_actionSerializer  
 
 #Cooper 05/05/2021
-class Page_genericViewSet(generics.createAPIView):
+class Page_genericViewSet(generics.CreateAPIView):
     model = pages
     serializer_class = Pages_genericSerializer
 
 #Cooper 05/05/2021
-class Page_StakeholderViewSet(generics.createAPIView):
+class Page_StakeholderViewSet(generics.CreateAPIView):
     model = pages
     serializer_class = Pages_stakeholderSerializer
     
@@ -999,11 +999,11 @@ class pages_page(APIView):
         # delete the page
         if (request.method == "delete"):
 
-            #set next page field of pages pointing to the deleted page to be none/null
+            #set next page field of pages pointing to the deleted page to be None/null
             next_pages = pages.objects.filter(next_page = page_id)
             for updated_page in next_pages:
                 extant_page = updated_page
-                updated_page.next_page = none
+                updated_page.next_page = None
                 updated_page_dict = PagesSerializer(updated_page).data
                 pages_serializer = PagesSerializer(extant_page, data=updated_page_dict)
                 if pages_serializer.is_valid():
@@ -1016,7 +1016,7 @@ class pages_page(APIView):
             action_pages = action_page.objects.filter(result_page = page_id)
             for updated_page in action_pages:
                 extant_page = updated_page
-                updated_page.result_page = none
+                updated_page.result_page = None
                 updated_page_dict = Action_pageSerializer(updated_page).data
                 action_pages_serializer = Action_pageSerializer(extant_page, data=updated_page_dict)
                 if action_pages_serializer.is_valid():
@@ -1246,7 +1246,7 @@ class stakeholders_page(APIView):
 
         # handle request for scenario_id
         # get all stakeholder in scenario with id = scenario_id
-        if scenario_id != none:
+        if scenario_id != None:
             # checking valid scenario id
             try:
                 # return empty if scenario doesn't have any stakeholder
@@ -1265,7 +1265,7 @@ class stakeholders_page(APIView):
 
         # handle request for stakeholder_id
         # get the stakeholder id = stakeholder_id
-        if stakeholder_id != none:
+        if stakeholder_id != None:
             try:
                 queryset = stakeholders.objects.filter(
                     stakeholder=stakeholder_id)
@@ -1314,7 +1314,7 @@ class stakeholders_page(APIView):
 
         stakeholder_id = self.request.query_params.get('stakeholder_id')
 
-        if stakeholder_id != none:
+        if stakeholder_id != None:
             try:
                 response = stakeholders.objects.get(
                     stakeholder =stakeholder_id)

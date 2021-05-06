@@ -156,8 +156,8 @@ class professors_to_courses(models.Model):
 
 
 class professors_to_scenario(models.Model):
-    professor = models.ForeignKey(professors, on_delete = models.CASCADE, db_column='professor')
-    scenario = models.ForeignKey('scenarios', on_delete = models.CASCADE, db_column='scenario')
+    professor = models.ForeignKey('professors', on_delete = models.CASCADE, db_column='professor', related_name = "pts1")
+    scenario = models.ForeignKey('scenarios', on_delete = models.CASCADE, db_column='scenario', related_name = "pts2")
     permission = models.IntegerField()
 
     class Meta:
@@ -176,11 +176,11 @@ class questions(models.Model):
         unique_together = ('question', 'version')
         db_table = 'questions'
 
-
+#pretty broken
 class reflection_question_to_page(models.Model):
     reflection_question_id = models.ForeignKey('reflection_questions', on_delete = models.CASCADE)
-    page = models.ForeignKey(pages, on_delete = models.CASCADE)
-
+    #page = models.ForeignKey(pages, on_delete = models.CASCADE, related_name = 'reflection_questions_to_page1', db_column = 'id')
+    page = models.ForeignKey(pages, to_field = 'id', on_delete = models.CASCADE, related_name = 'reflection_questions_to_page1')
     class Meta:
         unique_together = ('reflection_question_id', 'page')
         db_table = 'reflection_question_to_page'
@@ -196,19 +196,11 @@ class reflection_questions(models.Model):
         db_table = 'reflection_questions'
 
 
-class reflections_taken(models.Model):
-    reflections = models.TextField(blank=True)
-    response_id = models.OneToOneField(responses, on_delete = models.CASCADE, primary_key=True)
-
-    class Meta:
-        db_table = 'reflections_taken'
-
-
 class responses(models.Model):
     response_id = models.AutoField(primary_key=True)
     response = models.IntegerField()
-    student = models.ForeignKey(students, on_delete = models.CASCADE, db_column='student', )
-    scenario = models.ForeignKey(scenarios, on_delete = models.CASCADE, db_column='scenario', )
+    student = models.ForeignKey('students', on_delete = models.CASCADE, db_column='student', )
+    scenario = models.ForeignKey('scenarios', on_delete = models.CASCADE, db_column='scenario', )
     version = models.IntegerField()
     page = models.ForeignKey(pages, on_delete = models.CASCADE, db_column='page', )
     course = models.ForeignKey(courses, on_delete = models.CASCADE, db_column='course', )
@@ -219,17 +211,26 @@ class responses(models.Model):
         unique_together = ('response', 'student', 'scenario', 'page', 'course', 'date_taken')
         db_table = 'responses'
 
+
+class reflections_taken(models.Model):
+    reflections = models.TextField(blank=True)
+    response_id = models.OneToOneField('responses', on_delete = models.CASCADE, primary_key=True, db_column = 'response_id')
+
+    class Meta:
+        db_table = 'reflections_taken'
+
+
 class response_to_action_page(models.Model):
-    response_id = models.ForeignKey(responses, on_delete = models.CASCADE, )
-    action_page = models.ForeignKey(action_page, on_delete = models.CASCADE, db_column='action_page', )
+    response_id = models.ForeignKey('responses', on_delete = models.CASCADE, )
+    action_page = models.ForeignKey('action_page', on_delete = models.CASCADE, db_column='action_page', )
 
     class Meta:
         unique_together = ('response_id', 'action_page')
         db_table = 'response_to_action_page'
 
 class responses_to_conversations(models.Model):
-    response_id = models.ForeignKey(responses, on_delete = models.CASCADE)
-    stakeholder = models.ForeignKey(stakeholders, on_delete = models.CASCADE, db_column='stakeholder')
+    response_id = models.ForeignKey('responses', on_delete = models.CASCADE)
+    stakeholder = models.ForeignKey('stakeholders', on_delete = models.CASCADE, db_column='stakeholder')
     stakeholder_version = models.IntegerField()
     score = models.DecimalField(max_digits=5, decimal_places=2)
     conversation = models.ForeignKey(conversations, on_delete = models.CASCADE, db_column='conversation')
@@ -255,9 +256,9 @@ class scenarios(models.Model):
 
 
 class scenarios_for(models.Model):
-    scenario = models.ForeignKey(scenarios, on_delete = models.CASCADE)
+    scenario = models.ForeignKey('scenarios', on_delete = models.CASCADE)
     version = models.IntegerField()
-    course = models.ForeignKey(courses, on_delete = models.CASCADE, db_column='course')
+    course = models.ForeignKey('courses', on_delete = models.CASCADE, db_column='course')
 
     class Meta:
         unique_together = ('scenario', 'course')
@@ -265,8 +266,8 @@ class scenarios_for(models.Model):
 
 
 class stakeholder_to_page(models.Model):
-    page = models.ForeignKey(pages, on_delete = models.CASCADE, db_column='page')
-    stakeholder = models.ForeignKey(stakeholders, on_delete = models.CASCADE, db_column='stakeholder')
+    page = models.ForeignKey('pages', on_delete = models.CASCADE, db_column='page')
+    stakeholder = models.ForeignKey('stakeholders', on_delete = models.CASCADE, db_column='stakeholder')
 
     class Meta:
         unique_together = ('page', 'stakeholder')
@@ -275,7 +276,7 @@ class stakeholder_to_page(models.Model):
 
 class stakeholders(models.Model):
     stakeholder = models.IntegerField(unique = True)
-    scenario = models.ForeignKey(scenarios, on_delete = models.CASCADE, db_column='scenario')
+    scenario = models.ForeignKey('scenarios', on_delete = models.CASCADE, db_column='scenario')
     version = models.IntegerField()
     name = models.TextField()
     description = models.TextField()
@@ -289,8 +290,8 @@ class stakeholders(models.Model):
 
 
 class stakeholders_to_questions(models.Model):
-    stakeholder = models.ForeignKey(stakeholders, on_delete = models.CASCADE, db_column='stakeholder')
-    question = models.ForeignKey(questions, on_delete = models.CASCADE, db_column='question')
+    stakeholder = models.ForeignKey('stakeholders', on_delete = models.CASCADE, db_column='stakeholder')
+    question = models.ForeignKey('questions', on_delete = models.CASCADE, db_column='question')
 
     class Meta:
         unique_together = ('stakeholder', 'question')
@@ -298,9 +299,9 @@ class stakeholders_to_questions(models.Model):
 
 
 class student_times(models.Model):
-    student = models.ForeignKey(students, on_delete = models.CASCADE, db_column='student')
-    course = models.ForeignKey(courses, on_delete = models.CASCADE, db_column='course')
-    scenario_id = models.ForeignKey(scenarios, on_delete = models.CASCADE)
+    student = models.ForeignKey('students', on_delete = models.CASCADE, db_column='student')
+    course = models.ForeignKey('courses', on_delete = models.CASCADE, db_column='course')
+    scenario_id = models.ForeignKey('scenarios', on_delete = models.CASCADE)
     date_taken = models.DateField(auto_now = True)
     page = models.IntegerField()
     start_time = models.DateField(auto_now_add = True)
@@ -321,8 +322,8 @@ class students(models.Model):
 
 
 class students_to_course(models.Model):
-    student = models.ForeignKey(students, on_delete = models.CASCADE, db_column='student')
-    course = models.ForeignKey(courses, on_delete = models.CASCADE, db_column='course')
+    student = models.ForeignKey('students', on_delete = models.CASCADE, db_column='student')
+    course = models.ForeignKey('courses', on_delete = models.CASCADE, db_column='course')
 
     class Meta:
         unique_together = ('student', 'course')

@@ -131,7 +131,7 @@ class pages(models.Model):
 
 class pages_to_scenario(models.Model):
     page_id = models.ForeignKey('pages', on_delete = models.CASCADE, related_name='stakeholder_page1', db_column='page')
-    scenario_id = models.ForeignKey('scenarios', on_delete = models.CASCADE, related_name='stakeholder_page2', db_column='scenario_id')
+    scenario_id = models.ForeignKey('scenarios', on_delete = models.CASCADE, related_name='stakeholder_page2', db_column='scenario')
 
     class Meta:
         unique_together = ('page_id', 'scenario_id')

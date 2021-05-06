@@ -161,6 +161,7 @@ class professors_to_scenario(models.Model):
     professor = models.ForeignKey('professors', on_delete = models.CASCADE, db_column='professor', related_name = "pts1")
     scenario = models.ForeignKey('scenarios', on_delete = models.CASCADE, db_column='scenario', related_name = "pts2")
     permission = models.IntegerField()
+    id = models.AutoField(primary_key = True)
 
     class Meta:
         unique_together = ('professor', 'scenario')

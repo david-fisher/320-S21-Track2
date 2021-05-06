@@ -9,7 +9,7 @@ import Homepage from './pages/homepage';
 
 export default function App() {
     return (
-        <Router>
+        <Router basename="/se">
             <Route exact path="/">
                 <Redirect to="/home" />
             </Route>

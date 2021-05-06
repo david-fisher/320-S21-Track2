@@ -115,6 +115,7 @@ class Pages(models.Model):
     page = models.IntegerField()
     page_choices = (
         ('I', 'INTRO'),
+        ('F', 'FEEDBACK'),
         ('G', 'GENERIC'),
         ('R', 'REFLECTION'),
         ('S', 'STAKEHOLDER'),
@@ -248,7 +249,7 @@ class ResponsesToConversations(models.Model):
 
 
 class Scenarios(models.Model):
-    scenario_id = models.AutoField(primary_key=True, editable=False)
+    scenario_id = models.AutoField(primary_key=True)
     scenario = models.IntegerField(default=1, editable=True)
     version = models.IntegerField(default=1, editable=True)
     name = models.TextField(max_length=50, null=False)
@@ -309,14 +310,14 @@ class StudentTimes(models.Model):
     student = models.ForeignKey('Students', on_delete = models.CASCADE, db_column='student')
     course = models.ForeignKey(Courses, on_delete = models.CASCADE, db_column='course')
     scenario = models.ForeignKey(Scenarios, on_delete = models.CASCADE)
-    date_taken = models.DateField()
+    date_taken = models.DateField(auto_now = True)
     page = models.IntegerField()
-    start_time = models.DateField()
-    end_time = models.DateField()
+    start_time = models.DateField(auto_now_add = True)
+    end_time = models.DateField(null = True, blank=True)
 
     class Meta:
         db_table = 'student_times'
-        unique_together = ('student', 'course', 'scenario', 'date_taken', 'page')
+        unique_together = ('student', 'course', 'scenario')
 
 
 class Students(models.Model):

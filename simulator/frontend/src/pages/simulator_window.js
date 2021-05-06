@@ -66,20 +66,14 @@ function SimulationWindow(props) {
     }
 
     useEffect(() => {
-        fetch(BASE_URL + `/pages/?student_id=${STUDENT_ID}&scenario_id=${props.match.params.sid}`)
+        fetch(BASE_URL + `/get_pages/?scenario_id=${props.match.params.sid}`)
         .then(response => response.json())
         .then( (pagesData) => {
 
             let newPages = {};
-
             let allPages = pagesData.results.slice();
             
-            allPages.filter((page) => {
-                return page.scenario.toString() === props.match.params.sid;
-            })
-            .sort((a, b) => {
-                return a.id - b.id;
-            })
+            allPages
             .forEach((page, index) => {
 
                 const commonProps = {

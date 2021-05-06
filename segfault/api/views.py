@@ -758,10 +758,10 @@ class student_finish_scenario(APIView):
            studentTimeObj = StudentTimes.objects.get(student = student_id, course = course_id, scenario = scenario_id)
            stutimeSerial = StudentTimesSerializer(studentTimeObj)
            if (studentTimeObj.end_time is None):
-               return DRF_response({'finished': "false"}, status=status.HTTP_200_OK)
-           return DRF_response({'finished': "true"}, status=status.HTTP_200_OK)
+               return DRF_response({'finished': False}, status=status.HTTP_200_OK)
+           return DRF_response({'finished': True}, status=status.HTTP_200_OK)
         except StudentTimes.DoesNotExist:
-            return DRF_response({'detail': "Student hasn't started Scenario"}, status=status.HTTP_404_NOT_FOUND)
+            return DRF_response({'detail': "Student hasn't started Scenario", 'finished': False}, status=status.HTTP_404_NOT_FOUND)
 
     def put(self, request, *args, **kwargs):
         scenario_id = self.request.query_params.get('scenario_id')

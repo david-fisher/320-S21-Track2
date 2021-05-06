@@ -11,7 +11,7 @@ on:
         - '**'
         - '!Ghost_in_the_Shell/**'
         - '!simulator/**'
-    branches: [ main, build-and-deploy, MergeSchemaFix1 ]
+    branches: [ main, build-and-deploy ]
 
 jobs:
   deploy:

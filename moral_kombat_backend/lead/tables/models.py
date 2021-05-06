@@ -115,7 +115,7 @@ class pages(models.Model):
     )
     page_type = models.CharField(max_length=2, choices=page_choices)
     page_title = models.CharField(max_length=1000)
-    scenario = models.ForeignKey('scenarios', on_delete = models.CASCADE, related_name='pages1', db_column='scenarios_id')
+    scenario = models.ForeignKey('scenarios', on_delete = models.CASCADE, related_name='pages1', db_column='scenario_id')
     version = models.IntegerField(default=1, editable=True)
     body = models.TextField(blank=True, null=True)
     id = models.AutoField(primary_key = True)
@@ -130,8 +130,8 @@ class pages(models.Model):
 
 
 class pages_to_scenario(models.Model):
-    page_id = models.ForeignKey('pages', to_field = 'page', on_delete = models.CASCADE, related_name='stakeholder_page1')
-    scenario_id = models.ForeignKey('scenarios', to_field = 'scenario_id', on_delete = models.CASCADE, related_name='stakeholder_page2')
+    page_id = models.ForeignKey('pages', on_delete = models.CASCADE, related_name='stakeholder_page1', db_column='page')
+    scenario_id = models.ForeignKey('scenarios', on_delete = models.CASCADE, related_name='stakeholder_page2', db_column='scenario_id')
 
     class Meta:
         unique_together = ('page_id', 'scenario_id')
@@ -180,10 +180,11 @@ class questions(models.Model):
         db_table = 'questions'
 
 #pretty broken
+# changed by judge may 6 idk
 class reflection_question_to_page(models.Model):
-    reflection_question_id = models.ForeignKey('reflection_questions', to_field = 'id', on_delete = models.CASCADE)
+    reflection_question_id = models.ForeignKey('reflection_questions', on_delete = models.CASCADE, db_column='reflection_question_id')
     #page = models.ForeignKey(pages, on_delete = models.CASCADE, related_name = 'reflection_questions_to_page1', db_column = 'id')
-    page_id = models.ForeignKey(pages, to_field = 'id', on_delete = models.CASCADE, related_name = 'reflection_questions_to_page1')
+    page_id = models.ForeignKey('pages', on_delete = models.CASCADE, related_name = 'reflection_questions_to_page1', db_column='page')
     class Meta:
         unique_together = ('reflection_question_id', 'page_id')
         db_table = 'reflection_question_to_page'
@@ -203,11 +204,11 @@ class reflection_questions(models.Model):
 class responses(models.Model):
     response_id = models.AutoField(primary_key=True)
     response = models.IntegerField()
-    student = models.ForeignKey('students', on_delete = models.CASCADE, db_column='student', )
-    scenario = models.ForeignKey('scenarios', on_delete = models.CASCADE, db_column='scenario', )
+    student = models.ForeignKey('students', on_delete = models.CASCADE, db_column='student')
+    scenario = models.ForeignKey('scenarios', on_delete = models.CASCADE, db_column='scenario')
     version = models.IntegerField()
-    page = models.ForeignKey(pages, on_delete = models.CASCADE, db_column='page', )
-    course = models.ForeignKey(courses, on_delete = models.CASCADE, db_column='course', )
+    page = models.ForeignKey(pages, on_delete = models.CASCADE, db_column='page')
+    course = models.ForeignKey(courses, on_delete = models.CASCADE, db_column='course')
     date_taken = models.DateField(auto_now_add=True)
     choice = models.TextField()
 
@@ -218,15 +219,15 @@ class responses(models.Model):
 
 class reflections_taken(models.Model):
     reflections = models.TextField(blank=True)
-    response_id = models.OneToOneField('responses', on_delete = models.CASCADE, primary_key=True, db_column = 'response_id')
+    response_id = models.OneToOneField('responses', on_delete = models.CASCADE, primary_key=True, db_column = 'response')
 
     class Meta:
         db_table = 'reflections_taken'
 
 
 class response_to_action_page(models.Model):
-    response_id = models.ForeignKey('responses', to_field = 'response_id', on_delete = models.CASCADE, )
-    action_page = models.ForeignKey('action_page', to_field='id', on_delete = models.CASCADE )
+    response_id = models.ForeignKey('responses', on_delete = models.CASCADE, db_column='response')
+    action_page = models.ForeignKey('action_page', on_delete = models.CASCADE, db_column='action_page')
 
     class Meta:
         unique_together = ('response_id', 'action_page')

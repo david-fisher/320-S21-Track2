@@ -59,10 +59,12 @@ function Stakeholders(props) {
   const [modalOpenToggles, setModalOpenToggles] = React.useState({});
   const [gatheredInfo, setGatheredInfo] = useContext(GatheredInfoContext);
   const [showStakeholders, setShowStakeholders] = React.useState(true);
+  const [numStakeholderTalkedTo, setNumStakeholderTalkedTo] = React.useState(0)
   const [currentStakeholder, setCurrentStakeholder] = React.useState({});
-  const [numStakeholderTalkedTo, setNumStakeholderTalkedTo] = React.useState(0);
+  const [stakeholders_had, setStakeholders_had] = React.useState([]);
   const createdCardStyles = cardStyles();
   const stakeholdersGrid = getStakeholdersGrid(stakeholders);
+  const [limit, setLimit] = React.useState(0);
 
 
   /** 
@@ -155,6 +157,41 @@ function Stakeholders(props) {
     })
   }, [scenarios]);
  
+  useEffect(() => {
+    fetch(`${BASE_URL}/get_scenario/?scenario_id=${props.match.params.sid}`)
+    .then(response => response.json())
+    .then(data => {
+      let newLimit = data.num_conversation
+      setLimit(newLimit)
+    })
+  }, []);
+
+  useEffect(() => {
+    fetch(`${BASE_URL}/stakeholders_had/?scenario_id=${props.match.params.sid}&student_id=${STUDENT_ID}`)
+    .then(response => response.json())
+    .then(data => {
+      console.log("limit: " + limit)
+      console.log("nstt: " + numStakeholderTalkedTo)
+      console.log(stakeholders)
+      setNumStakeholderTalkedTo(data.length)
+      let newDisabled = {}
+      if (numStakeholderTalkedTo < limit) {
+        data.forEach(ele => {
+          newDisabled[ele] = true
+        });
+      }
+      else {
+        stakeholders.forEach(ele => {
+          newDisabled[ele.id] = true
+        });
+      }
+      setStakeholdersDisabled(newDisabled)
+    })
+    .catch(err => {
+      console.log(err)
+    })
+  }, [limit, stakeholders])
+
 
   function getStakeholderCards(id, name, isMultipart, designation, description, styles) {
     const PAGE_ID_OF_PAGE_BEFORE_CONVERSATIONS = 'gatheredInformation';
@@ -200,7 +237,7 @@ function Stakeholders(props) {
           <DialogContent>
             <DialogContentText color = "#000000">{description}</DialogContentText>
               <ConvLimitConsumer>
-                {(context) => (
+              {(context) => (
                   <Button variant="contained" onClick={() => {
                       setCurrentStakeholder(prev => ({
                         name: name,
@@ -209,7 +246,7 @@ function Stakeholders(props) {
                       }));
                       setStakeholdersDisabled(prev => {
                         let newStakeholdersDisabled = {};
-                        if (numStakeholderTalkedTo + 1 >= context.state.convLimit) {
+                        if (numStakeholderTalkedTo + 1 >= limit) {
                           for (let i=0; i<stakeholders.length; ++i) {
                             newStakeholdersDisabled[stakeholders[i].id] = true;
                           }
@@ -284,7 +321,7 @@ function Stakeholders(props) {
               <ConvLimitConsumer>
                 {(context) => (
                   <TextTypography>
-                    You've spoken to <b>{numStakeholderTalkedTo} out of {context.state.convLimit}</b> stakeholders
+                    You've spoken to <b>{numStakeholderTalkedTo} out of {limit}</b> stakeholders
                   </TextTypography>
                 )}
               </ConvLimitConsumer>

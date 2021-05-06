@@ -7,7 +7,9 @@ function Radar(props) {
     const chartContainer = useRef(null);
     const [chartInstance, setChartInstance] = useState(null);
     const [sName, setSName] = useState("");
-    const [coverage, setCoverage] = useState({});
+    const [importance, setImportance] = useState({});
+    const [score, setScore] = useState({});
+    const [total, setTotal] = useState({});
     // state for input
 
     const chartConfig = onChartChange()
@@ -30,12 +32,12 @@ function Radar(props) {
         .then(res => res.json())
         .then(issueData => {
             console.log(issueData)
-            let newCoverage = {}
+            let newImportance = {}
             issueData
             .forEach(issue => {
-            newCoverage[issue.name] = issue.importance_score
+            newImportance[issue.name] = issue.importance_score
             })
-            setCoverage(newCoverage)
+            setImportance(newImportance)
             
         })
         .catch(err => {
@@ -44,16 +46,32 @@ function Radar(props) {
     }, [])
 
     useEffect(() => {
+        fetch(`${BASE_URL}/get_issueRadarPlotTotal/?scenario_id=${props.match.params.sid}`)
+        .then(res => res.json())
+        .then(totalData => {
+            setTotal(totalData)
+        })
+    }, [])
+
+    useEffect(() => {
+        fetch(`${BASE_URL}/get_issuesScores/?student_id=${STUDENT_ID}&scenario_id=${props.match.params.sid}`)
+        .then(res => res.json())
+        .then(scoreData => {
+            setScore(scoreData)
+        })
+    }, [total])
+
+    useEffect(() => {
         // if (chartContainer && chartContainer.current) {
         const newChartInstance = new Chart(chartContainer.current, chartConfig);
         setChartInstance(newChartInstance);
          //}
-     }, [coverage, sName]);
+     }, [importance, sName, score, total]);
 
     return (
         <canvas
             ref={chartContainer}
-            id="coverage-plot"
+            id="importance-plot"
         />
     )
     
@@ -71,18 +89,14 @@ function Radar(props) {
     // }
 
     function onChartChange() {
-        let Coverage = coverage //{ Safety: 0.5, Salary: 0.667, Reputation: 2.0, Privacy: 0.8 };
-        console.log("Name: " + sName)
-        console.log(coverage)
         return {
             type: 'radar',
             data: {
-                //labels: coverage.keys,
-                labels: Object.keys(coverage).map(x => x + "(importance score: " + coverage[x] + ")"),
+                labels: Object.keys(total).map(x => x + "(importance score: " + importance[x] + ")"),
                 datasets: [{
                     label: sName,
                     backgroundColor: "rgba(255, 255, 0, 0.2)",
-                    data: Object.values(coverage)
+                    data: Object.keys(total).map(x => ((score[x]/total[x]).toFixed(2))*100)
                 }]
             },
             options: {
@@ -90,7 +104,10 @@ function Radar(props) {
                     ticks: {
                         beginAtZero: true,
                         min: 0,
-                        display: false
+                        max: 100,
+                        callback: function(value, index, values) {
+                            return value + '%';
+                        }
                     },
                     pointLabels: {
                         fontSize: 15,

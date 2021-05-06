@@ -37,8 +37,6 @@ function Feedback(props) {
   //   setActivePage(prevPage => 'finalReflection')
   // }
 
-  // let Summary_Value = 2.03;
-  let Coverage = { Safety: 0.5, Salary: 0.667, Reputation: 2.0, Privacy: 0.8 };
   return (
     <div>
       <Grid container direction="row" justify="center" alignItems="center">

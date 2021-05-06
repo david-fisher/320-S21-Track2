@@ -84,7 +84,7 @@ export default function ICMatrix({ scenario_ID }) {
     const [errorBannerMessage, setErrorBannerMessage] = useState(''); //error banner
     const [errorBannerFade, setErrorBannerFade] = useState(false);
 
-    const addStakeHolders = () => {
+    /*const addStakeHolders = (data) => {
         // if (!checkTime(setCurrentTime, currentTime)) {
         //     return;
         // }
@@ -129,7 +129,7 @@ export default function ICMatrix({ scenario_ID }) {
                 // );
                 // setErrorBannerFade(true);
             });
-    };
+    };*/
     const saveStakeHolders = (data) => {
         //var data = [...values]
 
@@ -146,7 +146,7 @@ export default function ICMatrix({ scenario_ID }) {
         axios(config)
             .then(function (response) {
                 getExistingStakeHolders();
-                // setSuccessBannerMessage('Successfully saved the stakeholders!');
+                // setSuccessBannerMessage('Successfully add and saved the stakeholders!');
                 // setSuccessBannerFade(true);
             })
             .catch(function (error) {
@@ -164,7 +164,7 @@ export default function ICMatrix({ scenario_ID }) {
         setOpen(true);
     };
     const handleClose = () => {
-        addStakeHolders();
+        saveStakeHolders(values);
         setOpen(false);
     };
     const handleClickOpen2 = () => {
@@ -269,12 +269,13 @@ export default function ICMatrix({ scenario_ID }) {
     let issueValues = {};
     let values = {
         stakeholder: 1,
+        version: 1,
         name: '',
         description: '',
-        introduction: '',
-        scenario: scenario_ID,
-        version: 1,
         job: '',
+        introduction: '',
+        enable_multi_convo: false,
+        scenario: scenario_ID,
     };
     const getName = (e) => {
         values['name'] = e.target.value;

@@ -91,7 +91,14 @@ export default function ICMatrix({ scenario_ID }) {
         // setLoading(true);
 
         var data = JSON.stringify({
-            scenario: scenario_ID,
+            stakeholder: null,
+            version: null,
+            name: '',
+            description: '',
+            job: '',
+            introduction: '',
+            enable_multi_convo: false,
+            scenario: null,
         });
 
         var config = {
@@ -128,8 +135,8 @@ export default function ICMatrix({ scenario_ID }) {
 
         var config = {
             method: 'put',
-            //url: baseURL + '/multi_stake?SCENARIO=' + scenario_ID,
-            url: baseURL + '/multi_stake?SCENARIO=' + 1,
+            //url: baseURL + '/multi_stake?scenario=' + scenario_ID,
+            url: baseURL + '/multi_stake?scenario=' + scenario_ID,
             headers: {
                 'Content-Type': 'application/json',
             },

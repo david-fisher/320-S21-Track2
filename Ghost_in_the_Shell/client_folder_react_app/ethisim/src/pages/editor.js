@@ -554,46 +554,53 @@ export default function Editor(props) {
             switch (pageType) {
                 case 'Generic':
                     postReqBody = {
+                        page: null,
                         page_type: 'G',
                         page_title: pageName,
-                        page_body: pageBody,
+                        body: pageBody,
                         scenario: scenario_ID,
                         version: 70, //
-                        next_page: null,
+                        //next_page: null,
                         //next_page_version: null,
                         x_coordinate: 0,
                         y_coordinate: 0,
+                        completed: false,
                     };
 
                     p = {
                         setScenarioComponents: setScenarioComponents,
+                        page: null,
                         page_type: 'G',
                         page_title: pageName,
                         scenario: scenario_ID,
                         body: pageBody,
                         bodies: [],
                         version_ID: 70,
-                        next_page: null,
+                        //next_page: null,
                         //next_page_version: null,
                         created: true,
                         xCoord: 0,
                         yCoord: 0,
+                        completed: false,
                     };
                     break;
                 case 'Reflection':
                     postReqBody = {
+                        page: null,
                         page_type: 'R',
                         page_title: pageName,
-                        page_body: pageBody,
+                        body: pageBody,
                         scenario: scenario_ID,
                         version: 80,
-                        next_page: null,
+                        // next_page: null,
                         //next_page_version: null,
                         x_coordinate: 0,
                         y_coordinate: 0,
+                        completed: false,
                     };
                     p = {
                         setScenarioComponents: setScenarioComponents,
+                        page: null,
                         page_type: 'R',
                         page_title: pageName,
                         scenario_ID: scenario_ID,
@@ -605,27 +612,31 @@ export default function Editor(props) {
                         created: true,
                         xCoord: 0,
                         yCoord: 0,
+                        completed: false,
                     };
                     break;
                 case 'Action':
                     postReqBody = {
+                        page: null,
                         page_type: 'A',
                         page_title: pageName,
-                        page_body: pageBody,
+                        body: pageBody,
                         scenario: scenario_ID,
                         version: 90,
-                        next_page: null,
+                        //next_page: null,
                         //next_page_version: null,
                         x_coordinate: 0,
                         y_coordinate: 0,
+                        completed: false,
                     };
                     p = {
                         setScenarioComponents: setScenarioComponents,
+                        page: null,
                         page_type: 'A',
                         page_title: pageName,
                         scenario_ID: scenario_ID,
                         version_ID: 90,
-                        next_page: null,
+                        //next_page: null,
                         //next_page_version: null,
                         body: pageBody,
                         choice1: '',
@@ -635,6 +646,7 @@ export default function Editor(props) {
                         created: true,
                         xCoord: 0,
                         yCoord: 0,
+                        completed: false,
                     };
                     break;
                 default:

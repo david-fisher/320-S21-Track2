@@ -76,7 +76,7 @@ export default function BasicTable({ stakeholder_id, passed_issues }) {
 
         var config = {
             method: 'put',
-            url: baseURL + '/multi_coverage?STAKEHOLDER=' + stakeholder_id,
+            url: baseURL + '/multi_coverage?stakeholder=' + stakeholder_id,
             headers: {
                 'Content-Type': 'application/json',
             },

@@ -60,50 +60,50 @@ class coverage(models.Model):
 
 class demographics(models.Model):
     student = models.ForeignKey('students', to_field = 'student', on_delete = models.CASCADE, related_name = 'demographics', unique = True)
-    AGE = models.SmallIntegerField()
-    GRADE_CHOICES = (('0', 'Other'),
+    age = models.SmallIntegerField()
+    grade_choices = (('0', 'Other'),
                      ('1', 'Freshmen'),
                      ('2', 'Sophomore'),
                      ('3', 'Junior'),
                      ('4', 'Senior'))
-    GRADE = models.CharField(
-        max_length=1, choices=GRADE_CHOICES)
-    GENDER_CHOICES = (
+    grade = models.CharField(
+        max_length=1, choices=grade_choices)
+    gender_choices = (
         ('M', 'Male'),
         ('F', 'Female'),
         ('OT', 'Other'),
     )
-    GENDER = models.CharField(
-        max_length=2, choices=GENDER_CHOICES)
-    RACE = models.CharField(max_length=30)
-    MAJOR = models.CharField(max_length=30)
+    gender = models.CharField(
+        max_length=2, choices=gender_choices)
+    race = models.CharField(max_length=30)
+    major = models.CharField(max_length=30)
 
     class Meta:
         db_table = 'demographics'
 
 
-class GENERIC_PAGE(models.Model):
-    GENERIC_PAGE_ID = models.IntegerField()
-    PAGE = models.ForeignKey('PAGES', to_field= 'PAGE', on_delete = models.CASCADE, related_name='generic_page1')
-    BODY = models.TextField()
-    VERSION = models.IntegerField()
+class generic_page(models.Model):
+    generic_page_id = models.IntegerField()
+    page = models.ForeignKey('pages', to_field= 'page', on_delete = models.CASCADE, related_name='generic_page1')
+    body = models.TextField()
+    version = models.IntegerField()
 
     class Meta:
-        unique_together = ('GENERIC_PAGE_ID', 'VERSION')
+        unique_together = ('generic_page_id', 'version')
         db_table = 'generic_page'
 
-class ISSUES(models.Model):
-    SCENARIO_ID = models.ForeignKey('SCENARIOS', to_field= 'SCENARIO_ID', on_delete = models.CASCADE, related_name = 'scenario_id1', default = None)
-    ISSUE = models.AutoField(default = None, primary_key = True, editable = False)
-    NAME = models.CharField(max_length = 1000)
-    IMPORTANCE_SCORE = models.IntegerField(validators = [MinValueValidator(0.0)])
+class issues(models.Model):
+    scenario_id = models.ForeignKey('scenarios', to_field= 'scenario_id', on_delete = models.CASCADE, related_name = 'scenario_id1', default = None)
+    issue = models.AutoField(default = None, primary_key = True, editable = False)
+    name = models.CharField(max_length = 1000)
+    importance_score = models.IntegerField(validators = [MinValueValidator(0.0)])
     class Meta:
         db_table = 'issues'
 
 
-class PAGES(models.Model):
-    PAGE = models.IntegerField(unique = True)
-    PAGE_CHOICES = (
+class pages(models.Model):
+    page = models.IntegerField(unique = True)
+    page_choices = (
         ('I', 'INTRO'),
         ('F', 'FEEDBACK'),
         ('G', 'GENERIC'),
@@ -111,78 +111,78 @@ class PAGES(models.Model):
         ('S', 'STAKEHOLDER'),
         ('A', 'ACTION'),
     )
-    PAGE_TYPE = models.CharField(max_length=2, choices=PAGE_CHOICES)
-    PAGE_TITLE = models.CharField(max_length=1000)
-    SCENARIO = models.ForeignKey('SCENARIOS', to_field='SCENARIO_ID', on_delete = models.CASCADE, related_name='pages1')
-    VERSION = models.IntegerField(default=1, editable=True)
-    BODY = models.TextField(blank=True, null=True)
-    ID = models.IntegerField(primary_key = True)
-    NEXT_ID = models.ForeignKey('PAGES', to_field='ID', on_delete = models.CASCADE, related_name='pages2')
-    X_COORDINATE = models.IntegerField()
-    Y_COORDINATE = models.IntegerField()
-    COMPLETED = models.BooleanField(default= False)
+    page_type = models.CharField(max_length=2, choices=PAGE_CHOICES)
+    page_title = models.CharField(max_length=1000)
+    scenario = models.ForeignKey('scenarios', to_field='scenario_id', on_delete = models.CASCADE, related_name='pages1')
+    version = models.IntegerField(default=1, editable=True)
+    body = models.TextField(blank=True, null=True)
+    id = models.IntegerField(primary_key = True)
+    next_id = models.ForeignKey('pages', to_field='id', on_delete = models.CASCADE, related_name='pages2')
+    x_coordinate = models.IntegerField()
+    y_coordinate = models.IntegerField()
+    completed = models.BooleanField(default= False)
 
     class Meta:
-        unique_together = ('PAGE', 'VERSION')
+        unique_together = ('page', 'version')
         db_table = 'pages'
 
 
-class PAGES_TO_SCENARIO(models.Model):
-    PAGE_ID = models.ForeignKey('PAGES', to_field = 'PAGE', on_delete = models.CASCADE, related_name='stakeholder_page1')
-    SCENARIO_ID = models.ForeignKey('SCENARIOS', to_field = 'SCENARIO_ID', on_delete = models.CASCADE, related_name='stakeholder_page2')
+class pages_to_scenario(models.Model):
+    page_id = models.ForeignKey('pages', to_field = 'page', on_delete = models.CASCADE, related_name='stakeholder_page1')
+    scenario_id = models.ForeignKey('scenarios', to_field = 'scenario_id', on_delete = models.CASCADE, related_name='stakeholder_page2')
 
     class Meta:
-        unique_together = ('PAGE_ID', 'SCENARIO_ID')
+        unique_together = ('page_id', 'scenario_id')
         db_table = 'pages_to_scenario'
 
 
-class PROFESSORS(models.Model):
-    PROFESSOR = models.TextField(primary_key=True)
-    FNAME = models.TextField()
-    LNAME = models.TextField(blank=True)
+class professors(models.Model):
+    professor = models.TextField(primary_key=True)
+    fname = models.TextField()
+    lname = models.TextField(blank=True)
     class Meta:
         db_table = 'professors'
     # courses = models.ManyToManyField( Courses, related_name='professor',  through='ProfessorsToCourses')
 
 
 
-class PROFESSORS_TO_COURSES(models.Model):
-    PROFESSOR = models.ForeignKey(PROFESSORS, on_delete = models.CASCADE, db_column='professor')
-    COURSE = models.ForeignKey(COURSES, on_delete = models.CASCADE, db_column='course')
+class professors_to_courses(models.Model):
+    professor = models.ForeignKey(professors, on_delete = models.CASCADE, db_column='professor')
+    course = models.ForeignKey(courses, on_delete = models.CASCADE, db_column='course')
 
     class Meta:
-        unique_together = ('PROFESSOR', 'COURSE')
+        unique_together = ('professor', 'course')
         db_table = 'professors_to_courses'
 
 
-class PROFESSORS_TO_SCENARIO(models.Model):
-    PROFESSOR = models.ForeignKey(PROFESSORS, on_delete = models.CASCADE, db_column='professor')
-    SCENARIO = models.ForeignKey('SCENARIOS', on_delete = models.CASCADE, db_column='scenario')
-    PERMISSION = models.IntegerField()
+class professors_to_scenario(models.Model):
+    professor = models.ForeignKey(professors, on_delete = models.CASCADE, db_column='professor')
+    scenario = models.ForeignKey('scenarios', on_delete = models.CASCADE, db_column='scenario')
+    permission = models.IntegerField()
 
     class Meta:
-        unique_together = ('PROFESSOR', 'SCENARIO')
+        unique_together = ('professor', 'scenario')
         db_table = 'professors_to_scenario'
 
 
-class QUESTIONS(models.Model):
-    QUESTION = models.IntegerField()
-    VERSION = models.IntegerField()
-    POINTS = models.IntegerField()
-    QUESTION_TEXT = models.TextField(blank=True)
-    QUESTION_SUMMARY = models.TextField(blank=True)
+class questions(models.Model):
+    question = models.IntegerField()
+    version = models.IntegerField()
+    points = models.IntegerField()
+    question_text = models.TextField(blank=True)
+    question_summary = models.TextField(blank=True)
 
     class Meta:
-        unique_together = ('QUESTION', 'VERSION')
+        unique_together = ('question', 'version')
         db_table = 'questions'
 
 
-class REFLECTION_QUESTION_TO_PAGE(models.Model):
-    REFLECTION_QUESTION_ID = models.ForeignKey('REFLECTION_QUESTIONS', on_delete = models.CASCADE)
-    PAGE = models.ForeignKey(PAGES, on_delete = models.CASCADE)
+class reflection_question_to_page(models.Model):
+    reflection_question_id = models.ForeignKey('reflection_questions', on_delete = models.CASCADE)
+    page = models.ForeignKey(pages, on_delete = models.CASCADE)
 
     class Meta:
-        unique_together = ('REFLECTION_QUESTION_ID', 'PAGE')
+        unique_together = ('reflection_question_id', 'page')
         db_table = 'reflection_question_to_page'
 
 

@@ -466,7 +466,7 @@ class dashboard_page(APIView):
         professor_id = "DFisher"
         #todo check that id != None
 
-        fetched_scenarios = scenarios.objects.all()
+        scenario = scenarios.objects.get(scenario_id = 1)
         scenario_dict = ScenariosSerializer(fetched_scenarios).data
 
         scenario_query = scenarios_for.objects.filter(scenario_id=scenario_dict['scenario_id']).values()

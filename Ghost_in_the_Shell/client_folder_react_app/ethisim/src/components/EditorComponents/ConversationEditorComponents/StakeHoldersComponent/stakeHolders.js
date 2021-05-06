@@ -143,14 +143,14 @@ export default function StakeHolderFields({ scenario }) {
         setLoading(true);
 
         var data = JSON.stringify({
-            stakeholder: null,
-            version: null,
-            name: '',
-            description: '',
-            job: '',
-            introduction: '',
+            stakeholder: 0,
+            version: 0,
+            name: 'default',
+            description: 'default',
+            job: 'default',
+            introduction: 'default',
             enable_multi_convo: false,
-            scenario: null,
+            scenario: scenario,
         });
 
         var config = {

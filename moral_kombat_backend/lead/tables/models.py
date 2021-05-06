@@ -239,7 +239,7 @@ class responses_to_conversations(models.Model):
     stakeholder = models.ForeignKey('stakeholders', on_delete = models.CASCADE, db_column='stakeholder')
     stakeholder_version = models.IntegerField()
     score = models.DecimalField(max_digits=5, decimal_places=2)
-    conversation = models.ForeignKey(conversations, on_delete = models.CASCADE, to_field='conversation')
+    conversation = models.ForeignKey(conversations, on_delete = models.CASCADE, db_column='conversation')
 
     class Meta:
         unique_together = ('response_id', 'conversation')
@@ -273,8 +273,8 @@ class scenarios_for(models.Model):
 
 
 class stakeholder_to_page(models.Model):
-    page = models.ForeignKey('pages', to_field = 'id', on_delete = models.CASCADE)
-    stakeholder = models.ForeignKey('stakeholders', to_field = 'id', on_delete = models.CASCADE)
+    page = models.ForeignKey('pages', on_delete = models.CASCADE, db_column= 'id')
+    stakeholder = models.ForeignKey('stakeholders', db_column='id', on_delete = models.CASCADE)
 
     class Meta:
         unique_together = ('page', 'stakeholder')
@@ -298,8 +298,8 @@ class stakeholders(models.Model):
 
 
 class stakeholders_to_questions(models.Model):
-    stakeholder = models.ForeignKey('stakeholders', to_field ='id', on_delete = models.CASCADE)
-    question = models.ForeignKey('questions', to_field ='id', on_delete = models.CASCADE)
+    stakeholder = models.ForeignKey('stakeholders', db_column='stakeholder', on_delete = models.CASCADE)
+    question = models.ForeignKey('questions', db_column='question', on_delete = models.CASCADE)
 
     class Meta:
         unique_together = ('stakeholder', 'question')

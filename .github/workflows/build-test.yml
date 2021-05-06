@@ -2,6 +2,9 @@ name: Build Script test
 
 on:
   pull_request:
+    paths:
+    - 'Ghost_in_the_Shell/*'
+    - 'simulator/*'
     branches:
       - main
 

@@ -20,12 +20,12 @@ from rest_framework import mixins
 
 def getcredentials(request):
     credentials = {
-        "uid": request.meta['uid'],
-        "name": request.meta['displayname'],
-        "affiliation": request.meta['edupersonprimaryaffiliation'],
-        "email": request.meta['mail'],
-        #"title": request.meta['title'],
-        "intid": request.meta['fcidnumber']
+        "uid": request.META['uid'],
+        "name": request.META['displayname'],
+        "affiliation": request.META['edupersonprimaryaffiliation'],
+        "email": request.META['mail'],
+        #"title": request.META['title'],
+        "intid": request.META['fcidnumber']
     }
     credentials.update({"intid": credentials.get("intid").split("@")[0]})
     return credentials
@@ -33,13 +33,14 @@ def getcredentials(request):
 
 class ReturnIdentifierView(APIView):
     def get(self, request, *args, **kwargs):
-        if ('title' in request.meta):
-            return Response({"id":"professor"})
-        else:
-            # if(len(scenarios.objects.filter(professors_to_scenario = request.meta['displayname']).values()) != 0):
-            #     return Response({"id":"editor"})
-            # else:
-            return Response({"id":"student"})
+        # if ('title' in request.META):
+        #     return Response({"id":"professor"})
+        # else:
+        #     # if(len(scenarios.objects.filter(professors_to_scenario = request.META['displayname']).values()) != 0):
+        #     #     return Response({"id":"editor"})
+        #     # else:
+        #     return Response({"id":"student"})
+        return(Response(request.META))
 
         # if (credentials.get("title") == "lecturer"):
         #     return Response({"id":"professor"})

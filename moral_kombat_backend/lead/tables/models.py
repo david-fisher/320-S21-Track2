@@ -78,7 +78,7 @@ class demographics(models.Model):
         max_length=2, choices=gender_choices)
     race = models.CharField(max_length=30)
     major = models.CharField(max_length=30)
-    id = models.AutoField(primary_key = True)
+    # id = models.AutoField(primary_key = True)
 
     class Meta:
         db_table = 'demographics'

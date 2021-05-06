@@ -148,11 +148,14 @@ class CoverageViewSet(viewsets.ModelViewSet):
     
 
 class DemographicsViewSet(viewsets.ModelViewSet):
+    # print(demographics.objects.all())
+    serializer_class = DemographicsSerializer
     queryset = demographics.objects.all()
+    # print(queryset)
     permission_classes = [
         permissions.AllowAny
     ]
-    serializer_class = DemographicsSerializer
+    
 
 class StudentsViewSet(viewsets.ModelViewSet):
     queryset = students.objects.all()

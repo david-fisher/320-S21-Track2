@@ -70,13 +70,13 @@ export default function BasicTable({ stakeholder_id, passed_issues }) {
         var data = [...issues];
         console.log(data);
         data = data.map((i) => {
-            delete i.NAME;
+            delete i.name;
             return i;
         });
 
         var config = {
             method: 'put',
-            url: baseURL + '/multi_coverage?STAKEHOLDER=' + stakeholder_id,
+            url: baseURL + '/multi_coverage?stakeholder=' + stakeholder_id,
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -153,11 +153,11 @@ export default function BasicTable({ stakeholder_id, passed_issues }) {
                     </TableHead>
                     <TableBody>
                         {issues.map((i) => (
-                            <TableRow key={i.ISSUE}>
+                            <TableRow key={i.issue}>
                                 <IssueRow
-                                    name={i.NAME}
-                                    score={i.COVERAGE_SCORE}
-                                    issue_number={i.ISSUE}
+                                    name={i.name}
+                                    score={i.coverage_score}
+                                    issue_number={i.issue}
                                     issues={issues}
                                     setIssues={setIssues}
                                 />

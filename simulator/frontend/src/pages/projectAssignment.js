@@ -11,6 +11,8 @@ import {
 } from "@material-ui/core";
 import HTMLRenderer from './components/htmlRenderer';
 import { ScenariosContext } from "../Nav";
+import SpecialButton from "./components/SpecialButton"
+
 
 const TextTypography = withStyles({
   root: {
@@ -130,23 +132,10 @@ function ProjectAssignment({ pages, setPages, activePage, setActivePage }) {
       </Grid>
       <Grid container direction="row" justify="space-between">
         <Grid item style={{ marginRight: "0rem", marginTop: "-3rem" }}>
-          <Button
-            variant="contained"
-            disableElevation
-            onClick={goToIntroduction}
-          >
-            Back
-          </Button>
+          <SpecialButton type="back" title="Introduction" onClick={goToIntroduction}></SpecialButton>
         </Grid>
         <Grid item style={{ marginRight: "0rem", marginTop: "-3rem" }}>
-          <Button
-            variant="contained"
-            disableElevation
-            color="primary"
-            onClick={goToInitialReflection}
-          >
-            Next
-          </Button>
+          <SpecialButton type="next" title="Initial Reflection" onClick={goToInitialReflection}></SpecialButton>
         </Grid>
       </Grid>
       <Grid container spacing={2}>

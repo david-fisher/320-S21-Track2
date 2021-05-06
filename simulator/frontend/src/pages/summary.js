@@ -1,9 +1,7 @@
 import React from "react";
-import Radar from "./chart/chart";
-import { withStyles, Typography, Box, Grid, Button } from "@material-ui/core";
-import { BASE_URL, STUDENT_ID, SCENARIO_ID } from "../constants/config";
-import axios from 'axios'
+import { withStyles, Typography, Box, Grid } from "@material-ui/core";
 import ScrollableTabsButtonAuto from "./components/tabs"
+import SpecialButton from "./components/SpecialButton"
 
 const TextTypography = withStyles({
   root: {
@@ -32,8 +30,7 @@ function Summary({pages, setPages, activePage, setActivePage}) {
     }
     setActivePage(prevPage => 'feedback');
   }
-  let Summary_Value = 2.03;
-  let Coverage = { Safety: 0.5, Salary: 0.667, Reputation: 1.0, Privacy: 0.8 };
+  
   return (
     <div>
       <Grid container direction="row" justify="center" alignItems="center">
@@ -45,10 +42,10 @@ function Summary({pages, setPages, activePage, setActivePage}) {
       </Grid>
       <Grid container direction="row" justify="space-between">
         <Grid item style={{ marginRight: "0rem", marginTop: "-3rem" }}>
-          <Button variant="contained" disableElevation onClick={goToFinalAction}>Back</Button>
+          <SpecialButton type="back" title="Final Action" onClick={goToFinalAction}></SpecialButton>
         </Grid>
         <Grid item style={{ marginRight: "0rem", marginTop: "-3rem" }}>
-          <Button variant="contained" disableElevation color="primary" onClick={goToFeedback}>Next</Button>
+          <SpecialButton type="next" title="Feedback" onClick={goToFeedback}></SpecialButton>
         </Grid>
       </Grid>
       <Grid container spacing={2}>

@@ -1,10 +1,5 @@
 import React from "react";
 
-import Summary from "./pages/summary";
-import Home from "./pages/home";
-import RadarTest from "./pages/chartTest";
-import Dashboard from "./pages/sim_dashboard";
-
 import {
   ThemeProvider,
   createMuiTheme,
@@ -18,7 +13,9 @@ import {
 import MenuIcon from "@material-ui/icons/Menu";
 
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import SimulationWindow from "./pages/simulationWindow";
+import SimulationWindow from './pages/simulator_window';
+import Dashboard from "./pages/sim_dashboard";
+import { ConvLimitProvider } from './pages/context/ConvContext';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -33,9 +30,9 @@ const useStyles = makeStyles((theme) => ({
     color: "#FFF",
   },
   link: {
+    textDecoration: "none",
     "&:hover": {
-      color: "#000000",
-      textDecoration: "none",
+      color: "#000000"
     },
   },
 }));
@@ -51,34 +48,19 @@ const theme = createMuiTheme({
   }
 });
 
-const menuItems = [
-  {
-    listText: "Home",
-    listPath: "/",
-  },
-  {
-    listText: "Summary",
-    listPath: "/summary",
-  },
-  {
-    listText: "Simulation Window",
-    listPath: "/simulation",
-  },
-  {
-    listText: "Chart",
-    listPath: "/chartTest",
-  },
-];
-
 export const ScenariosContext = React.createContext();
 
 function Nav() {
   const classes = useStyles();
   const scenariosState = React.useState({});
 
+  const handleLogout = () => {
+    window.location.href = "https://ethisim2.cs.umass.edu/Shibboleth.sso/Logout?return=https://webauth.umass.edu/Logout";
+  };
+
   return (
     <div className={classes.root}>
-      <Router>
+      <Router basename="/simulator">
         <div>
           <ThemeProvider theme={theme}>
             <AppBar position="static" color="primary">
@@ -97,44 +79,20 @@ function Nav() {
                       Home
                     </Button>
                   </Link>
-                  {/* <Link className={classes.link} to="/summary">
-                    <Button className={classes.title} color="inherit">
-                    Summary
-                    </Button>
-                  </Link> */}
-                  <Link className={classes.link} to="/simulation">
-                    <Button className={classes.title} color="inherit">
-                      Simulation Window
-                    </Button>
-                  </Link>
-                  {/* <Link className={classes.link} to="/chartTest">
-                    <Button className={classes.title} color="inherit">
-                      Chart
-                    </Button>
-                  </Link> */}
                 </Typography>
-                <Button color="inherit">LogOut</Button>
+                <Button color="inherit" onClick={handleLogout}>LogOut</Button>
               </Toolbar>
             </AppBar>
-
           {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
-          <Switch>
-            <Route path="/" exact>
-              <Home />
-            </Route>
-            <Route path="/summary" exact>
-              <Summary />
-            </Route>
-            <Route path="/simulation" exact>
-              <ScenariosContext.Provider value={scenariosState}>
-                <SimulationWindow />
-              </ScenariosContext.Provider>
-            </Route>
-            <Route path="/chartTest" exact>
-              <RadarTest />
-            </Route>
-          </Switch>
+            <Switch>
+              <ConvLimitProvider>
+                <Route exact path="/" component={Dashboard} />
+                <ScenariosContext.Provider value={scenariosState}>
+                  <Route path="/simulation/:sid([0-9]+)" component={SimulationWindow} />
+                </ScenariosContext.Provider>
+              </ConvLimitProvider>
+            </Switch>
           </ThemeProvider>
         </div>
       </Router>

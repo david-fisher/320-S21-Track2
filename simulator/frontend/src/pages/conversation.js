@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   withStyles,
   Typography,
@@ -7,10 +7,9 @@ import {
   Button,
   makeStyles,
 } from "@material-ui/core";
-import { BASE_URL, STUDENT_ID, SCENARIO_ID } from "../constants/config";
-import axios from 'axios';
-import HTMLRenderer from "./components/htmlRenderer";
+import { BASE_URL } from "../constants/config";
 import { ScenariosContext } from "../Nav";
+import MultipartConvo from './multipart_conversation';
 
 const TextTypography = withStyles({
   root: {
@@ -29,76 +28,99 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Conversation({ showStakeholders, setShowStakeholders, stakeholder }) {
-    function goToStakeholders() {
-        setShowStakeholders(true);
+function Conversation(props) {
+
+  function goToStakeholders() {
+    props.setShowStakeholders(true);
+  }
+
+  const [ dialogue, setDialogue ] = useState({});
+  const [ isLoading, setIsLoading ] = useState(true);
+  const [scenarios, setScenarios] = useContext(ScenariosContext);
+
+  const getConversationData = async () => {
+
+    const response = await fetch(`${BASE_URL}/stakeholder_conv/?stakeholder_id=${props.stakeholder.id}`);
+
+    if(!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    const [monologue, setMonologue] = React.useState('');
-    const [scenarios, setScenarios] = React.useContext(ScenariosContext);
+    const data = await response.json();
+    return data;
+  };
 
-    React.useEffect(() => {
-      axios({
-        method: "get",
-        url: BASE_URL + "/scenarios/stakeholders/conversation",
-        headers: {
-          scenarioID: scenarios.currentScenarioID,
-          studentID: STUDENT_ID,
-          stakeholderID: stakeholder.id
-        },
-      })
-      .then((response) => {
-        console.log(response.data[0].conversation_text)
-        setMonologue(prev => response.data[0].conversation_text);
-        console.log(monologue)
-      })
-      .catch((err) => {
-        console.log("err", err);
-        alert(err);
-      });
-    }, [scenarios]);
-  
-    const classes = useStyles();
-  
-    return (
-      <div>
-        <Box mt={5}>
-          <Grid container direction="row" justify="center" alignItems="center">
-            <TextTypography variant="h4" align="center" gutterBottom>
-              {stakeholder.name}
-            </TextTypography>
-          </Grid>
-        </Box>
-        <Grid item style={{ marginLeft: "0rem", marginTop: "-3rem" }}>
-            <Button
-              variant="contained"
-              disableElevation
-              color="primary"
-              onClick={goToStakeholders}
-            >
-              Return
-            </Button>
-          </Grid>
-        <Grid container direction="row" justify="space-between">
-          <Grid
-            item
-            style={{
-              marginLeft: "0rem",
-              marginRight: "0rem",
-              marginTop: "-3rem",
-            }}
+  const setConversation = (conversation) => {
+
+    let data = conversation.map((convo) => {
+      return {
+        conversation: convo.conversation,
+        question: convo.question,
+        response: convo.response
+      };
+    });
+
+    setDialogue(data);
+
+  };
+
+  useEffect(() => {
+
+    getConversationData().then(conversationData => {
+
+      setConversation(conversationData);
+      setIsLoading(false)
+
+    })
+    .catch(err => {
+      alert(err);
+    });
+
+  }, [scenarios]);
+
+  const classes = useStyles();
+
+  return (
+    <div>
+      <Box mt={5}>
+        <Grid container direction="row" justify="center" alignItems="center">
+          <TextTypography variant="h4" align="center" gutterBottom>
+            {props.stakeholder.name}
+          </TextTypography>
+        </Grid>
+      </Box>
+      <Grid item style={{ marginLeft: "0rem", marginTop: "-3rem" }}>
+        <Button
+          variant="contained"
+          disableElevation
+          color="primary"
+          onClick={goToStakeholders}
           >
-          </Grid>
+          Return
+            </Button>
+      </Grid>
+      <Grid container direction="row" justify="space-between">
+        <Grid
+          item
+          style={{
+            marginLeft: "0rem",
+            marginRight: "0rem",
+            marginTop: "-3rem",
+          }}
+        >
         </Grid>
-        <Grid container spacing={2}>
-          <Grid item lg={12}>
-            <Box p={2} className={classes.textBox}>
-              <HTMLRenderer html={monologue}/>
-            </Box>
-          </Grid>
+      </Grid>
+      <Grid container spacing={2}>
+        <Grid item lg={12}>
+          <Box p={10} className={classes.textBox}>
+              {!isLoading ?
+              <MultipartConvo dialogue={dialogue} page_id={props.page_id} match={props.match} stakeholder={props.stakeholder}/> 
+              : <Typography>One second while things are loading...</Typography> }
+          </Box>
         </Grid>
-      </div>
-    );
-  }
-  
+      </Grid>
+    </div>
+  );
+}
+
 export default Conversation;

@@ -217,19 +217,20 @@ export default function IssueMatrix({ scenario_stakeHolders, scenario }) {
             let curStakeHolder = stakeHolders.current[i];
             let curRow = rows[i];
 
-            curStakeHolder.ISSUES.forEach((issue) => {
+            curStakeHolder.issues.forEach((issue) => {
                 if (
-                    curRow['Issue: ' + issue.NAME.toUpperCase()] !==
-                    issue.COVERAGE_SCORE
+                    curRow['Issue: ' + issue.name.toUpperCase()] !==
+                        issue.coverage_score &&
+                    curRow['Decription'] !== 'Total Running Sums'
                 ) {
-                    issue.COVERAGE_SCORE =
-                        curRow['Issue: ' + issue.NAME.toUpperCase()];
+                    issue.coverage_score =
+                        curRow['Issue: ' + issue.name.toUpperCase()];
                     changedStakeHolder = curStakeHolder;
                 }
                 issues.push({
-                    COVERAGE_SCORE: issue.COVERAGE_SCORE,
-                    ISSUE: issue.ISSUE,
-                    STAKEHOLDER: issue.STAKEHOLDER,
+                    coverage_score: issue.coverage_score,
+                    issue: issue.issue,
+                    stakeholder: issue.stakeholder,
                 });
             });
         }
@@ -241,8 +242,8 @@ export default function IssueMatrix({ scenario_stakeHolders, scenario }) {
                 method: 'put',
                 url:
                     baseURL +
-                    '/multi_coverage?STAKEHOLDER=' +
-                    changedStakeHolder.STAKEHOLDER,
+                    '/multi_coverage?stakeholder=' +
+                    changedStakeHolder.stakeholder,
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -274,17 +275,17 @@ export default function IssueMatrix({ scenario_stakeHolders, scenario }) {
             { title: 'Name', field: 'NAME' },
             { title: 'Description', field: 'DESCRIPTION' },
         ];
-        stakeHolders.current[0].ISSUES.forEach((issue) => {
+        stakeHolders.current[0].issues.forEach((issue) => {
             let insertBoolean = true;
             for (let i = 0; i < cols.length; i++) {
-                if (cols[i].title === 'Issue: ' + issue.NAME) {
+                if (cols[i].title === 'Issue: ' + issue.name) {
                     insertBoolean = false;
                 }
             }
             if (insertBoolean) {
                 cols.push({
-                    title: 'Issue: ' + issue.NAME,
-                    field: 'Issue: ' + issue.NAME.toUpperCase(),
+                    title: 'Issue: ' + issue.name,
+                    field: 'Issue: ' + issue.name.toUpperCase(),
                     type: 'numeric',
                 });
             }
@@ -294,18 +295,18 @@ export default function IssueMatrix({ scenario_stakeHolders, scenario }) {
     }
 
     function onStakeHolderIssueChange() {
-        let sums = { NAME: '', DESCRIPTION: 'Running Issue Sums' };
+        let sums = { NAME: '', DESCRIPTION: 'Total Issue Sums' };
         for (let j = 0; j < stakeHolders.current.length; j++) {
             let stakeHolder = stakeHolders.current[j];
-            for (let i = 0; i < stakeHolder.ISSUES.length; i++) {
-                let curIssue = stakeHolder.ISSUES[i];
+            for (let i = 0; i < stakeHolder.issues.length; i++) {
+                let curIssue = stakeHolder.issues[i];
                 if (
-                    sums['Issue: ' + curIssue.NAME.toUpperCase()] === undefined
+                    sums['Issue: ' + curIssue.name.toUpperCase()] === undefined
                 ) {
-                    sums['Issue: ' + curIssue.NAME.toUpperCase()] = 0;
+                    sums['Issue: ' + curIssue.name.toUpperCase()] = 0;
                 }
-                sums['Issue: ' + curIssue.NAME.toUpperCase()] +=
-                    rows[j]['Issue: ' + curIssue.NAME.toUpperCase()];
+                sums['Issue: ' + curIssue.name.toUpperCase()] +=
+                    rows[j]['Issue: ' + curIssue.name.toUpperCase()];
             }
         }
         setSums(sums);
@@ -314,48 +315,62 @@ export default function IssueMatrix({ scenario_stakeHolders, scenario }) {
 
     function setRowData() {
         setLoading(true);
-        let sums = { NAME: '', DESCRIPTION: 'Running Issue Sums' };
+        let sums = { NAME: '', DESCRIPTION: 'Total Issue Sums' };
         let data = stakeHolders.current.map((stakeHolder) => {
             let row = {
-                NAME: stakeHolder.NAME,
-                DESCRIPTION: stakeHolder.JOB,
+                name: stakeHolder.name,
+                description: stakeHolder.job,
             };
-            stakeHolder.ISSUES.forEach((curIssue) => {
-                row['Issue: ' + curIssue.NAME.toUpperCase()] =
-                    curIssue.COVERAGE_SCORE;
+            stakeHolder.issues.forEach((curIssue) => {
+                row['Issue: ' + curIssue.name.toUpperCase()] =
+                    curIssue.coverage_score;
                 if (
-                    sums['Issue: ' + curIssue.NAME.toUpperCase()] === undefined
+                    sums['Issue: ' + curIssue.name.toUpperCase()] === undefined
                 ) {
-                    sums['Issue: ' + curIssue.NAME.toUpperCase()] = 0;
+                    sums['Issue: ' + curIssue.name.toUpperCase()] = 0;
                 }
-                sums['Issue: ' + curIssue.NAME.toUpperCase()] +=
-                    curIssue.COVERAGE_SCORE;
+                sums['Issue: ' + curIssue.name.toUpperCase()] +=
+                    curIssue.coverage_score;
             });
             return row;
         });
+
+        let numPages = Math.ceil(data.length / 10);
+        let sumsSpliced = 0;
+        for (let i = 0; i < data.length; i++) {
+            //always puts a sum row at the ninth index of each page
+            if ((i % 10) % 9 == 0 && i !== 0) {
+                //gets last digit of i and then checks if ninth index
+                data.splice(i, 0, sums);
+                sumsSpliced++;
+            }
+        }
+        if (sumsSpliced < numPages) {
+            data.push(sums);
+        }
         setSums(sums);
         setRows(data);
         setLoading(false);
     }
 
+    function restructureRows(index) {
+        for (let i = index; i < rows.length; i++) {
+            if (rows[i]['Description'] === 'Total Issue Sums') {
+                let temp = rows[i];
+                rows[i] = rows[i] + 1;
+                rows[i + 1] = temp;
+            }
+        }
+    }
+
     function deleteStakeHolder(index) {
         setLoading(true);
-
-        var deletedStakeHolder = stakeHolders.current[index];
-        //var index;
-        /*for (let i = 0; i < stakeHolders.current.length; i++) {
-            let curStakeHolder = stakeHolders.current[i];
-            curStakeHolder.ISSUES.forEach((issue) => {
-                rows.forEach((curRow) => {
-                    if (
-                        curRow['Issue: ' + issue.NAME.toUpperCase()] == undefined
-                        ) {
-                        deletedStakeHolder = curStakeHolder;
-                        index = i;
-                    }
-                });
-            });
-        }*/
+        let whichPage = 0;
+        if (index > 9) {
+            whichPage = Math.ceil(index.length + 1 / 10);
+        }
+        var deletedStakeHolder = stakeHolders.current[index - whichPage - 1];
+        restructureRows(index);
 
         if (deletedStakeHolder !== undefined) {
             stakeHolders.current.splice(index, 1);
@@ -366,7 +381,7 @@ export default function IssueMatrix({ scenario_stakeHolders, scenario }) {
                 url:
                     baseURL +
                     '/api/stakeholders/' +
-                    deletedStakeHolder.STAKEHOLDER +
+                    deletedStakeHolder.stakeholder +
                     '/',
                 headers: {
                     'Content-Type': 'application/json',
@@ -397,21 +412,6 @@ export default function IssueMatrix({ scenario_stakeHolders, scenario }) {
         return <LoadingSpinner />;
     }
 
-    /*if (!didSetData && stakeHolders.current !== undefined && stakeHolders.current.length > 0) {
-        //if stakeholders have alreasdy been loaded, don't do it again
-        setColData()
-        setRowData()
-    }*/
-    /*if (didGetSHs && !didGetIssues) {
-        setDidGetIssues(true);
-        //getIssues();
-    }
-    if (didGetIssues && !didSetData) {
-        setDidSetData(true);
-        setColData();
-        setRowData();
-    }*/
-
     return (
         <Container component="main" className={classes.container}>
             <MaterialTable /*table*/
@@ -419,9 +419,9 @@ export default function IssueMatrix({ scenario_stakeHolders, scenario }) {
                 title={'Issue Coverage Matrix'}
                 editable={{
                     isEditHidden: (rowData) =>
-                        rowData.DESCRIPTION === 'Running Issue Sums',
+                        rowData.description === 'Total Issue Sums',
                     isDeleteHidden: (rowData) =>
-                        rowData.DESCRIPTION === 'Running Issue Sums',
+                        rowData.description === 'Total Issue Sums',
                     onRowUpdate: (newData, oldData) =>
                         new Promise((resolve, reject) => {
                             setTimeout(() => {
@@ -469,8 +469,8 @@ export default function IssueMatrix({ scenario_stakeHolders, scenario }) {
                 }}
             />
 
-            <MaterialTable /*table*/
-                icons={tableIcons} /*all the icons*/
+            {/* <MaterialTable 
+                icons={tableIcons} 
                 title={'Running Issue Sums'}
                 editable={{
                     isEditHidden: (rowData) =>
@@ -511,7 +511,7 @@ export default function IssueMatrix({ scenario_stakeHolders, scenario }) {
                         color: '#FFF',
                     },
                 }}
-            />
+            /> */}
         </Container>
     );
 }

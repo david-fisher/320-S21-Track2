@@ -68,10 +68,10 @@ export default function StakeHolderFields({ scenario }) {
     function getExistingStakeHolders() {
         setLoading(true);
 
-        var data = { SCENARIO: { scenario } };
+        var data = { scenario: { scenario } };
         var config = {
             method: 'get',
-            url: baseURL + '/api/stakeholders/?SCENARIO=' + scenario,
+            url: baseURL + '/api/stakeholders/?scenario=' + scenario,
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -102,7 +102,7 @@ export default function StakeHolderFields({ scenario }) {
 
         //handling it on the frontend
         const leftStakeHolders = stakeHolders.filter(
-            (s) => s.STAKEHOLDER !== stakeHolderID
+            (s) => s.stakeholder !== stakeHolderID
         );
         setStakeHolders(leftStakeHolders);
 
@@ -143,7 +143,14 @@ export default function StakeHolderFields({ scenario }) {
         setLoading(true);
 
         var data = JSON.stringify({
-            SCENARIO: scenario,
+            stakeholder: null,
+            version: null,
+            name: '',
+            description: '',
+            job: '',
+            introduction: '',
+            enable_multi_convo: false,
+            scenario: null,
         });
 
         var config = {
@@ -178,7 +185,7 @@ export default function StakeHolderFields({ scenario }) {
 
         var config = {
             method: 'put',
-            url: baseURL + '/multi_stake?SCENARIO=' + scenario,
+            url: baseURL + '/multi_stake?scenario=' + scenario,
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -273,14 +280,14 @@ export default function StakeHolderFields({ scenario }) {
             <form id="form">
                 {stakeHolders.map((stakeHolder) => (
                     <StakeHolder
-                        key={stakeHolder.STAKEHOLDER}
+                        key={stakeHolder.stakeholder}
                         removeStakeHolder={removeStakeHolder}
-                        id={stakeHolder.STAKEHOLDER}
-                        name={stakeHolder.NAME}
-                        job={stakeHolder.JOB}
-                        bio={stakeHolder.DESCRIPTION}
-                        mainConvo={stakeHolder.INTRODUCTION}
-                        version={stakeHolder.VERSION}
+                        id={stakeHolder.stakeholder}
+                        name={stakeHolder.name}
+                        job={stakeHolder.job}
+                        bio={stakeHolder.description}
+                        mainConvo={stakeHolder.introduction}
+                        version={stakeHolder.version}
                         stakeHolders={stakeHolders}
                         setStakeHolders={setStakeHolders}
                     />

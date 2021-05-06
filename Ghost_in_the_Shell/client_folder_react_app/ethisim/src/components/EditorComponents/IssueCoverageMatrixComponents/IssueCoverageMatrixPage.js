@@ -84,14 +84,21 @@ export default function ICMatrix({ scenario_ID }) {
     const [errorBannerMessage, setErrorBannerMessage] = useState(''); //error banner
     const [errorBannerFade, setErrorBannerFade] = useState(false);
 
-    const addStakeHolders = () => {
+    /*const addStakeHolders = (data) => {
         // if (!checkTime(setCurrentTime, currentTime)) {
         //     return;
         // }
         // setLoading(true);
 
         var data = JSON.stringify({
-            SCENARIO: scenario_ID,
+            stakeholder: null,
+            version: null,
+            name: '',
+            description: '',
+            job: '',
+            introduction: '',
+            enable_multi_convo: false,
+            scenario: null,
         });
 
         var config = {
@@ -105,10 +112,10 @@ export default function ICMatrix({ scenario_ID }) {
         axios(config)
             .then(function (response) {
                 //console.log(values)
-                response.data['NAME'] = values['NAME'];
-                response.data['DESCRIPTION'] = values['DESCRIPTION'];
-                response.data['INTRODUCTION'] = values['INTRODUCTION'];
-                response.data['JOB'] = values['JOB'];
+                response.data['name'] = values['name'];
+                response.data['description'] = values['description'];
+                response.data['introduction'] = values['introduction'];
+                response.data['job'] = values['job'];
                 saveStakeHolders(response.data);
                 // setStakeHolders([...stakeHolders, response.data]);
                 // setSuccessBannerMessage(
@@ -122,14 +129,14 @@ export default function ICMatrix({ scenario_ID }) {
                 // );
                 // setErrorBannerFade(true);
             });
-    };
+    };*/
     const saveStakeHolders = (data) => {
         //var data = [...values]
 
         var config = {
             method: 'put',
-            //url: baseURL + '/multi_stake?SCENARIO=' + scenario_ID,
-            url: baseURL + '/multi_stake?SCENARIO=' + 1,
+            //url: baseURL + '/multi_stake?scenario=' + scenario_ID,
+            url: baseURL + '/multi_stake?scenario=' + scenario_ID,
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -139,7 +146,7 @@ export default function ICMatrix({ scenario_ID }) {
         axios(config)
             .then(function (response) {
                 getExistingStakeHolders();
-                // setSuccessBannerMessage('Successfully saved the stakeholders!');
+                // setSuccessBannerMessage('Successfully add and saved the stakeholders!');
                 // setSuccessBannerFade(true);
             })
             .catch(function (error) {
@@ -157,7 +164,7 @@ export default function ICMatrix({ scenario_ID }) {
         setOpen(true);
     };
     const handleClose = () => {
-        addStakeHolders();
+        saveStakeHolders(values);
         setOpen(false);
     };
     const handleClickOpen2 = () => {
@@ -228,7 +235,7 @@ export default function ICMatrix({ scenario_ID }) {
     function getExistingStakeHolders() {
         setLoading(true); //starts loading icon
 
-        var data = { SCENARIO: { scenario_ID } };
+        var data = { scenario: { scenario_ID } };
         var config = {
             method: 'get',
             url: baseURL + '/stakeholder?scenario_id=' + scenario_ID,
@@ -253,30 +260,6 @@ export default function ICMatrix({ scenario_ID }) {
             });
     }
 
-    /* <EntryFields
-            issueEntryFieldList={
-                issueEntryFieldList !== null ? issueEntryFieldList : []
-            }
-            setIssueEntryFieldList={setIssueEntryFieldList}
-            scenarioID={scenario_ID}
-    />*/
-
-    /*return (
-        <div className={classes.issue}>
-            <Typography align="center" variant="h2">
-                Configure Ethical Issues
-            </Typography>
-            <div className={classes.spacing}>
-                <Button variant="contained" color="primary" onClick={getData}>
-                    <RefreshIcon className={classes.iconRefreshSmall} />
-                </Button>
-            </div>
-            <MaterialTable>
-                issueCoverageMatrix = {issueCoverageMatrix}
-                setIssueCoverageMatrix = {setissueCoverageMatrix}
-            </MaterialTable>
-        </div>
-    );*/
     //for info button
 
     if (isLoading) {
@@ -285,31 +268,32 @@ export default function ICMatrix({ scenario_ID }) {
 
     let issueValues = {};
     let values = {
-        STAKEHOLDER: 1,
-        NAME: '',
-        DESCRIPTION: '',
-        INTRODUCTION: '',
-        SCENARIO: scenario_ID,
-        VERSION: 1,
-        JOB: '',
+        stakeholder: 1,
+        version: 1,
+        name: '',
+        description: '',
+        job: '',
+        introduction: '',
+        enable_multi_convo: false,
+        scenario: scenario_ID,
     };
     const getName = (e) => {
-        values['NAME'] = e.target.value;
+        values['name'] = e.target.value;
     };
     const getDes = (e) => {
-        values['DESCRIPTION'] = e.target.value;
+        values['description'] = e.target.value;
     };
     const getIntro = (e) => {
-        values['INTRODUCTION'] = e.target.value;
+        values['introduction'] = e.target.value;
     };
     const getJob = (e) => {
-        values['JOB'] = e.target.value;
+        values['job'] = e.target.value;
     };
     const getIssueName = (e) => {
-        issueValues['NAME'] = e.target.value;
+        issueValues['name'] = e.target.value;
     };
     const getImportance = (e) => {
-        issueValues['IMPORTANCE_SCORE'] = e.target.value;
+        issueValues['importance_score'] = e.target.value;
     };
 
     return (

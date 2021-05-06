@@ -44,6 +44,8 @@ ToDoListDialog.propTypes = {
     openToDo: PropTypes.any.isRequired,
 };
 
+//REQUIRES GET ENDPOINT
+
 export default function ToDoListDialog(props) {
     const classes = useStyles();
     ToDoListDialog.propTypes = props.data;

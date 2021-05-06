@@ -11,7 +11,7 @@ import ToSimulator from './pages/toSimulator';
 
 export default function App() {
     return (
-        <Router>
+        <Router basename="/se">
             <Route exact path="/">
                 <Redirect to="/home" />
             </Route>

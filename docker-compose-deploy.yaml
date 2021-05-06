@@ -20,7 +20,7 @@ services:
     volumes:
       - httpd_log:/var/log/httpd
       - shibd_log:/var/log/shibd
-    command: bash -c "chmod +x /etc/shibboleth/shib_start.sh && /etc/shibboleth/shib_start.sh"
+    command: bash -c "./start.sh"
 
 networks:
   default-net:

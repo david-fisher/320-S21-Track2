@@ -88,17 +88,16 @@ export default function Consequences(props) {
     </Button> }
         </Container>
     );*/
-    <div>
+        <div>
             <Typography align="center" variant="h2">
                 Consequences
             </Typography>
             <Title />
             <Body />
-           
+
             <Button variant="contained" color="grey">
                 Save Consequence
             </Button>
-           
         </div>
-    )
+    );
 }

@@ -365,7 +365,7 @@ class logistics_page(APIView):
         #get all scenarios belonging to this professor
         # scenario_query = professors_to_scenario.objects.filter(professor = professor_id).values()
         scenario = scenarios.objects.get(scenario_id = scenario_id)
-        scenario_dict = scenariosserializer(scenario).data
+        scenario_dict = ScenariosSerializer(scenario).data
         #loop through scenarios and append required information (course, page info)
         # print(scenario_dict)
         scenarios_for_query = scenarios_for.objects.filter(scenario_id=scenario_dict['scenario_id']).values()
@@ -469,7 +469,7 @@ class dashboard_page(APIView):
         scenario = scenarios.objects.get(scenario_id = 1)
         scenario_dict = ScenariosSerializer(scenario).data
 
-        scenarios_query = scenarios_for.objects.filter(scenario_id=scenario_dict['scenario_id']).values()
+        scenario_query = scenarios_for.objects.filter(scenario_id=scenario_dict['scenario_id']).values()
 
         #get all scenarios belonging to this professor
         #scenario_query = scenarios.objects.filter(pts2 = professor_id).values()

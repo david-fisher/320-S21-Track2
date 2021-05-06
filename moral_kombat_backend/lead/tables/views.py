@@ -467,7 +467,7 @@ class dashboard_page(APIView):
         #todo check that id != None
 
         scenario = scenarios.objects.get(scenario_id = 1)
-        scenario_dict = scenariosserializer(scenario).data
+        scenario_dict = ScenariosSerializer(scenario).data
 
         scenarios_query = scenarios_for.objects.filter(scenario_id=scenario_dict['scenario_id']).values()
 

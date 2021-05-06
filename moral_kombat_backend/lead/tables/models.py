@@ -185,7 +185,7 @@ class questions(models.Model):
 class reflection_question_to_page(models.Model):
     reflection_question_id = models.ForeignKey('reflection_questions', on_delete = models.CASCADE, db_column='reflection_question_id')
     #page = models.ForeignKey(pages, on_delete = models.CASCADE, related_name = 'reflection_questions_to_page1', db_column = 'id')
-    page_id = models.ForeignKey('pages', on_delete = models.CASCADE, related_name = 'reflection_questions_to_page1', db_column='page')
+    page_id = models.ForeignKey('pages', on_delete = models.CASCADE, related_name = 'reflection_questions_to_page1', db_column='page_id')
     class Meta:
         unique_together = ('reflection_question_id', 'page_id')
         db_table = 'reflection_question_to_page'

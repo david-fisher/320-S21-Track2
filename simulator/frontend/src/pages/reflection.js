@@ -8,7 +8,7 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import { BASE_URL, STUDENT_ID, SCENARIO_ID }from "../constants/config";
-import SubmitButton from "./components/Buttons/SubmitButton"
+import SpecialButton from './components/SpecialButton';
 import TextField from '@material-ui/core/TextField';
 import axios from "axios";
 
@@ -186,8 +186,8 @@ function  Reflection(props){
          </Grid>
        </Grid> */}
        <Box pt={2}>
-                <SubmitButton title = "submit" onClick={() => handleResponse(userInput)}/>
-              </Box>
+          <SpecialButton title="submit" onClick={() => handleResponse(userInput)}/>
+        </Box>
     </Box>
     </div>
   );

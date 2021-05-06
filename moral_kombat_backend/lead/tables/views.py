@@ -465,7 +465,7 @@ class dashboard_page(APIView):
         #professor_id = self.request.query_params.get('professor')
         
         #new, changed the endpoint request
-        professor_id = request.META['uid']
+        #professor_id = request.META['uid']
         #todo check that id != None
 
 

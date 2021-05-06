@@ -35,8 +35,8 @@ export default function IssueRow({
     function updateIssueScore(val) {
         const updatedIssues = [...issues];
         let updated = updatedIssues.map((i) => {
-            if (i.ISSUE === issue_number) {
-                i.COVERAGE_SCORE = parseInt(val);
+            if (i.issue === issue_number) {
+                i.coverage_score = parseInt(val);
             }
             return i;
         });

@@ -5,6 +5,7 @@ import { Button, Container } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import PropTypes from 'prop-types';
 import GenericDeleteWarning from '../../../../DeleteWarnings/GenericDeleteWarning';
+import { baseURL } from '../../../Constants/Config';
 /*import MaterialTable from 'material-table';
 import { forwardRef } from 'react';
 import { Link } from 'react-router-dom';
@@ -13,7 +14,7 @@ import { Link } from 'react-router-dom';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import ErrorIcon from '@material-ui/icons/Error';
 import { useLocation } from 'react-router-dom';
-//import { baseURL } from '../../../Constants/Config';
+import { baseURL } from '../../../Constants/Config';
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
 import Check from '@material-ui/icons/Check';
@@ -83,8 +84,12 @@ export default function QuestionField({
     const [questionValue, setQuestionValue] = useState(question);
     const [responseValue, setResponseValue] = useState(response);
     const [summaryValue, setSummaryValue] = useState(summary);
-    //const [stakeHolders, setStakeHolders] = useState(StakeHolders);
+    const stakeHolder = useRef(null);
 
+    useEffect(() => {
+        stakeHolder.current = getStakeholderInfo();
+    }, []);
+    var axios = require('axios');
     /*const [didGetIssues, setDidGetIssues] = useState(false);
     //const [issues, setIssues] = useState([]);
     const issues = useRef(null);
@@ -155,129 +160,14 @@ export default function QuestionField({
         return ret;
     }
 
-    function getIssues() {
-        /*setLoading(true);
-        var data = JSON.stringify({});
-
-        var config = {
-            method: 'get',
-            url:
-                baseURL +
-                '/coverages?stakeholder_id=' +
-                stakeHolder.STAKEHOLDER,
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            data: data,
-        };
-        issuePromises.current.push(
-            axios(config)
-                .then(function (response) {
-                    issues.current = issues.current.concat(
-                        response.data.ISSUES
-                    );
-                    setLoading(false);
-                })
-                .catch(function (error) {
-                    setErrorBannerMessage(
-                        'Failed to get the issue(s) for this stakeholder! Please try again.'
-                    );
-                    setErrorBannerFade(true);
-                })
-        );
-        */
-    }
-
-    /*function setColData() {
-        setLoading(true);
-
-        let cols = [];
-
-        issues.current.forEach((issue) => {
-            let insertBoolean = true;
-            for (let i = 0; i < cols.length; i++) {
-                if (cols[i].title === 'Issue' + issue.NAME) {
-                    insertBoolean = false;
-                }
-            }
-            if (insertBoolean) {
-                cols.push({
-                    title: 'Issue' + issue.NAME,
-                    field: 'Issue' + issue.NAME.toUpperCase(),
-                });
-            }
-        });
-        setColumns(cols);
-        setLoading(false);
-    }*/
-
-    /*function setRowData() {
-        /*setLoading(true);
-
-        let sums = { NAME: '', DESCRIPTION: 'Running Issue Sums' };
-        let data = stakeHolders.current.map((stakeHolder) => {
-            let row = {
-                NAME: stakeHolder.NAME,
-                DESCRIPTION: stakeHolder.JOB,
-            };
-            issues.current.forEach((curIssue) => {
-                if (curIssue.STAKEHOLDER == stakeHolder.STAKEHOLDER) {
-                    row['Issue' + curIssue.NAME.toUpperCase()] =
-                        curIssue.COVERAGE_SCORE;
-                    if (
-                        sums['Issue' + curIssue.NAME.toUpperCase()] ===
-                        undefined
-                    ) {
-                        sums['Issue' + curIssue.NAME.toUpperCase()] = 0;
-                    }
-                    sums['Issue' + curIssue.NAME.toUpperCase()] +=
-                        curIssue.COVERAGE_SCORE;
-                }
-            });
-            return row;
-        });
-        data.push(sums);
-        setRows(data);
-        setLoading(false);
-    }*/
-
-    /*if (isLoading) {
-        return <LoadingSpinner />;
-    }*/
-
-    /*if (!didGetSHs) {
-        //if stakeholders have alreasdy been loaded, don't do it again
-        getExistingStakeHolders();
-        setDidGetSHs(true);
-    } /*else if(!didGetIssues){
-        fillIssues();
-        setDidGetIssues(true);
-        setColData();
-        setRowData();
-    } else{
-        
-    }
-    if (didGetSHs && !didGetIssues) {
-        getIssues();
-        setDidGetIssues(true);
-    }
-    if (didGetIssues && !didSetData) {
-        setDidSetData(true);
-
-        Promise.all(issuePromises.current).then(() => {
-            setColData();
-            setRowData();
-        });
-    } */
-
     function updateQRs(shq, shr, shs) {
         const updatedQRs = [...QRs];
         setQRs(
             updatedQRs.map((qr) => {
-                if (qr.CONVERSATION === id) {
-                    qr.QUESTION = shq;
-                    qr.RESPONSE = shr;
-                    qr.SUMMARY = shs;
+                if (qr.conversation === id) {
+                    qr.question = shq;
+                    qr.response = shr;
+                    qr.summary = shs;
                 }
                 return qr;
             })
@@ -304,36 +194,157 @@ export default function QuestionField({
         updateQRs(questionValue, responseValue, e.target.value);
     };
 
-    function createData(issue1, issue2, issue3, issue4, issue5) {
-        return { issue1, issue2, issue3, issue4, issue5 };
+    function getStakeholderInfo() {
+        setLoading(true);
+
+        var data = JSON.stringify({});
+        var config = {
+            method: 'get',
+            url: baseURL + '/stakeholder?stakeholder_id=' + StakeHolder_Id, //TODO temporary endpoint -> change later
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            data: data,
+        };
+
+        axios(config)
+            .then(function (response) {
+                setStakeHolder(response.data);
+            })
+            .catch(function (error) {
+                setErrorBannerMessage(
+                    'Failed to get Stakeholders! Please try again.'
+                );
+                setErrorBannerFade(true);
+            });
+
+        setLoading(false);
     }
 
-    const rows = [createData(0, 2, 4, 0, 1)];
-    const header = [];
+    // <TableRow key={row.name}>
+    //     <TableCell align="right">
+    //         {row.issue1}
+    //     </TableCell>
+    //     <TableCell align="right">
+    //         {row.issue2}
+    //     </TableCell>
+    //     <TableCell align="right">
+    //         {row.issue3}
+    //     </TableCell>
+    //     <TableCell align="right">
+    //         {row.issue4}
+    //     </TableCell>
+    //     <TableCell align="right">
+    //         {row.issue5}
+    //     </TableCell>
+    // </TableRow>
 
-    // function setHeader() {
-    //     setLoading(true);
-    //     let cols = [
-    //         <TableCell align="right">{"Question"}</TableCell>
-    //     ];
-    //     stakeHolders.ISSUES.forEach((issue) => {
-    //             cols.push(<TableCell align="right">{'Issue: ' + issue.NAME.toUpperCase()}</TableCell>)
-    //     });
-    //     setLoading(false);
-    //     return cols
-    // }
+    const onChange = (e, row) => {
+        // //TODO CHANGE TO MATCH
+        // if (!previous[row[issue]]) {
+        //     setPrevious((state) => ({ ...state, [row[issue]]: row }));
+        // }
+        // const value = e.target.value;
+        // const name = e.target.name;
+        // const { id } = row[issue];
+        // const newRows = rows.map((row) => {
+        //     if (row[issue] === id) {
+        //         return { ...row, [name]: value };
+        //     }
+        //     return row;
+        // });
+        // setRows(newRows);
+    };
 
-    // function setRows(){
-    //     setLoading(true);
-    //     let rows = []
+    const onRevert = (id) => {
+        // //TODO CHANGE TO MATCH
+        // const newRows = rows.map((row) => {
+        //     if (row[issue] === id) {
+        //         return previous[id] ? previous[id] : row;
+        //     }
+        //     return row;
+        // });
+        // setRows(newRows);
+        // setPrevious((state) => {
+        //     delete state[id];
+        //     return state;
+        // });
+        // onToggleEditMode(id);
+    };
 
-    //     stakeHolders.ISSUES.forEach((issue) => {
-    //             cols.push(<TableCell align="right">{'Issue: ' + issue.NAME.toUpperCase()}</TableCell>)
-    //     });
-    //     setLoading(false);
-    //     return cols
+    // const CustomTableCell = ({ row, issue, onChange }) => {
+    //     const classes = useStyles();
+    //     const { isEditMode } = row;
+    //     return (
+    //       <TableCell align="right">
+    //         {isEditMode ? (
+    //           <Input
+    //             value={row[issue]}
+    //             name={issue}
+    //             onChange={e => onChange(e, row)}
+    //           />
+    //         ) : (
+    //           row[issue]
+    //         )}
+    //       </TableCell>
+    //     );
+    //   };
 
-    // }
+    getStakeHolderInfo();
+
+    function setHeader() {
+        setLoading(true);
+        // let cols = [
+        //     <TableCell align="right">{"Question"}</TableCell>
+        // ];
+        // stakeHolder.ISSUES.forEach((issue) => {
+        //         cols.push(<TableCell align="right">{'Issue: ' + issue.NAME.toUpperCase()}</TableCell>)
+        // });
+        setLoading(false);
+        return cols;
+    }
+
+    function setRows() {
+        setLoading(true);
+        let rows = [];
+
+        // let question = stakeHolder.CONVERSATIONS[id](convo)
+        // let issues = []
+        // let allIssues = question.ISSUES;
+        // allIssues.forEach((issue) => {
+        //     let id = issue.ISSUE
+        //     issues.push(<CustomTableCell align="right">{...{allIssues, id, onChange}}</CustomTableCell>)
+        // })
+        // rows.push(<TableRow key={row.name}>{issues}</TableRow>)
+        // rows.unshift(<TableCell align="right">
+        //     {rows[1].isEditMode ? (
+        //       <>
+        //         <IconButton
+        //           aria-label="done"
+        //           onClick={() => onToggleEditMode(row[ISSUE])}
+        //         >
+        //           <DoneIcon />
+        //         </IconButton>
+        //         <IconButton
+        //           aria-label="revert"
+        //           onClick={() => onRevert(row[ISSUE])}
+        //         >
+        //           <RevertIcon />
+        //         </IconButton>
+        //       </>
+        //     ) : (
+        //       <IconButton
+        //         aria-label="delete"
+        //         onClick={() => onToggleEditMode(row[ISSUE])}
+        //       >
+        //         <EditIcon />
+        //       </IconButton>
+        //     )}
+        //   </TableCell>)
+
+        setLoading(false);
+        return rows;
+    }
 
     const classes = useStyles();
 
@@ -387,29 +398,9 @@ export default function QuestionField({
                             aria-label="a dense table"
                         >
                             <TableHead>
-                                <TableRow>{header}</TableRow>
+                                <TableRow>{setHeader()}</TableRow>
                             </TableHead>
-                            <TableBody>
-                                {rows.map((row) => (
-                                    <TableRow key={row.name}>
-                                        <TableCell align="right">
-                                            {row.issue1}
-                                        </TableCell>
-                                        <TableCell align="right">
-                                            {row.issue2}
-                                        </TableCell>
-                                        <TableCell align="right">
-                                            {row.issue3}
-                                        </TableCell>
-                                        <TableCell align="right">
-                                            {row.issue4}
-                                        </TableCell>
-                                        <TableCell align="right">
-                                            {row.issue5}
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
-                            </TableBody>
+                            <TableBody>{setRows()}</TableBody>
                         </Table>
                     </TableContainer>
                 </Box>

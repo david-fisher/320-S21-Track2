@@ -355,6 +355,7 @@ export default function Editor(props) {
                     xCoord: currPageInfo.X_COORDINATE,
                     yCoord: currPageInfo.Y_COORDINATE,
                     created: false,
+                    completed: currPageInfo.COMPLETED,
                 };
                 c = <Introduction {...p}></Introduction>;
             } else if (currPageInfo.PAGE_TYPE === 'G') {
@@ -373,6 +374,7 @@ export default function Editor(props) {
                     xCoord: currPageInfo.X_COORDINATE,
                     yCoord: currPageInfo.Y_COORDINATE,
                     created: false,
+                    completed: currPageInfo.COMPLETED,
                 };
                 c = <Generic {...p}></Generic>;
             } else if (currPageInfo.PAGE_TYPE === 'A') {
@@ -402,6 +404,7 @@ export default function Editor(props) {
                     xCoord: currPageInfo.X_COORDINATE,
                     yCoord: currPageInfo.Y_COORDINATE,
                     created: false,
+                    completed: currPageInfo.COMPLETED,
                 };
                 c = <Action {...p}></Action>;
             } else if (currPageInfo.PAGE_TYPE === 'R') {
@@ -420,6 +423,7 @@ export default function Editor(props) {
                     xCoord: currPageInfo.X_COORDINATE,
                     yCoord: currPageInfo.Y_COORDINATE,
                     created: false,
+                    completed: currPageInfo.COMPLETED,
                 };
                 c = <Reflection {...p}></Reflection>;
             }

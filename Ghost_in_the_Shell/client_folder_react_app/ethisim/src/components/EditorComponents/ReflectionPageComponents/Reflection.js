@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Body from '../GeneralPageComponents/Body';
 import Title from '../GeneralPageComponents/Title';
-import { Typography, Container, Button, Grid } from '@material-ui/core';
+import { Typography, Container, Button, Grid, Checkbox, FormControlLabel } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import QuestionFields from './QuestionComponent/questions';
 import PropTypes from 'prop-types';
@@ -28,6 +28,7 @@ Reflection.propTypes = {
     xCoord: PropTypes.any,
     yCoord: PropTypes.any,
     reflection_questions: PropTypes.any,
+    completed: PropTypes.any,
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -59,6 +60,7 @@ export default function Reflection(props) {
         reflection_questions,
         xCoord,
         yCoord,
+        completed,
     } = props;
 
     const classes = useStyles();
@@ -96,6 +98,7 @@ export default function Reflection(props) {
     const [errorBody, setErrorBody] = useState(false);
     const [errorQuestions, setErrorQuestions] = useState(false);
     const [errorQuestionsMessage, setErrorQuestionsMessage] = useState('');
+    const [isCompleted, setCompleted] = useState(completed);
 
     let postReqBody = {
         PAGE: pageID,
@@ -108,6 +111,12 @@ export default function Reflection(props) {
         REFLECTION_QUESTIONS: questionsForReqBody,
         X_COORDINATE: xCoord,
         Y_COORDINATE: yCoord,
+        COMPLETED: isCompleted,
+    };
+
+    //for completed checkbox
+    const handleOnChangeCompleted = (event) => {
+        setCompleted(event.target.checked);
     };
 
     function handlePost(setPostValues, postReqBody, s_id, first_time) {
@@ -308,6 +317,17 @@ export default function Reflection(props) {
             >
                 Save
             </Button>
+            <FormControlLabel
+                        control={
+                            <Checkbox
+                                checked={isCompleted}
+                                onChange={handleOnChangeCompleted}
+                                color="primary"
+                            />
+                        }
+                        label="Mark Page as Completed"
+                        labelPlacement="start"
+                    />
         </Container>
     );
 }

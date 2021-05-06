@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Body from '../GeneralPageComponents/Body';
 import Title from '../GeneralPageComponents/Title';
-import { Typography, Container, Button, Grid } from '@material-ui/core';
+import { Typography, Container, Button, Grid, Checkbox, FormControlLabel } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import universalPost from '../../../universalHTTPRequests/post.js';
@@ -40,6 +40,7 @@ Generic.propTypes = {
     bodies: PropTypes.any,
     xCoord: PropTypes.any,
     yCoord: PropTypes.any,
+    completed: PropTypes.any
 };
 
 export default function Generic(props) {
@@ -56,6 +57,7 @@ export default function Generic(props) {
         bodies,
         xCoord,
         yCoord,
+        completed,
     } = props;
 
     // eslint-disable-next-line
@@ -80,6 +82,7 @@ export default function Generic(props) {
     const [errorTitle, setErrorTitle] = useState(false);
     const [errorTitleText, setErrorTitleText] = useState(false);
     const [errorBody, setErrorBody] = useState(false);
+    const [isCompleted, setCompleted] = useState(completed);
 
     var postReqBody = {
         PAGE_TYPE: page_type,
@@ -90,7 +93,13 @@ export default function Generic(props) {
         BODIES: bodiesText,
         X_COORDINATE: xCoord,
         Y_COORDINATE: yCoord,
+        COMPLETED: isCompleted,
     };
+
+    const handleOnChangeCompleted = (event) => {
+        setCompleted(event.target.checked);
+    };
+
 
     function handlePost(setPostValues, postReqBody, s_id, first_time) {
         const endpoint = '/page?page_id=' + pageID;
@@ -237,6 +246,17 @@ export default function Generic(props) {
             >
                 Save
             </Button>
+            <FormControlLabel
+                        control={
+                            <Checkbox
+                                checked={isCompleted}
+                                onChange={handleOnChangeCompleted}
+                                color="primary"
+                            />
+                        }
+                        label="Mark Page as Completed"
+                        labelPlacement="start"
+                    />
         </Container>
     );
 }

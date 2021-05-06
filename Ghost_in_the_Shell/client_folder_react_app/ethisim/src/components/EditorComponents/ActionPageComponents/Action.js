@@ -5,6 +5,8 @@ import {
     Typography,
     Container,
     Grid,
+    Checkbox,
+    FormControlLabel
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Body from '../GeneralPageComponents/Body';
@@ -36,6 +38,7 @@ Action.propTypes = {
     choice2: PropTypes.any,
     r1: PropTypes.any,
     r2: PropTypes.any,
+    completed: PropTypes.any
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -84,6 +87,7 @@ export default function Action(props) {
         choice2,
         xCoord,
         yCoord,
+        completed
     } = props;
 
     //for info button
@@ -117,6 +121,12 @@ export default function Action(props) {
     const [errorOption1Text, setErrorOption1Text] = useState(false);
     const [errorOption2, setErrorOption2] = useState(false);
     const [errorOption2Text, setErrorOption2Text] = useState(false);
+    const [isCompleted, setCompleted] = useState(completed);
+
+    //for completed checkbox
+    const handleOnChangeCompleted = (event) => {
+        setCompleted(event.target.checked);
+    };
 
     var postReqBody = {
         PAGE: pageID,
@@ -375,6 +385,17 @@ export default function Action(props) {
                     >
                         Save
                     </Button>
+                    <FormControlLabel
+                        control={
+                            <Checkbox
+                                checked={isCompleted}
+                                onChange={handleOnChangeCompleted}
+                                color="primary"
+                            />
+                        }
+                        label="Mark Page as Completed"
+                        labelPlacement="start"
+                    />
                 </form>
             </div>
         </Container>

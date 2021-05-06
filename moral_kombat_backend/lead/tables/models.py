@@ -260,9 +260,9 @@ class scenarios(models.Model):
 
 
 class scenarios_for(models.Model):
-    scenario_id = models.ForeignKey('scenarios', to_field = 'scenario_id', on_delete = models.CASCADE)
+    scenario_id = models.ForeignKey('scenarios', on_delete = models.CASCADE, db_column='scenario_id')
     version = models.IntegerField()
-    course = models.ForeignKey('courses', to_field='course', on_delete = models.CASCADE)
+    course = models.ForeignKey('courses', on_delete = models.CASCADE, db_column='course')
     id = models.AutoField(primary_key = True)
 
     class Meta:

@@ -202,7 +202,7 @@ class DashBoard(views.APIView):
 
                 for scenario in scenario_data_list:
                     try:
-                        stuTime = StudentTimes.objects.get(student_id = student_id, scenario = scenario['id'])
+                        stuTime = StudentTimes.objects.get(student = student_id, scenario = scenario['scenario_id'])
                         result = stuTime.end_time != None
                     except:
                         result = False

@@ -4,13 +4,12 @@ import {
   Typography,
   Box,
   Grid,
-  Button,
   makeStyles,
 } from "@material-ui/core";
 import { BASE_URL, STUDENT_ID, SCENARIO_ID }from "../constants/config";
-import SubmitButton from "./components/Buttons/SubmitButton"
 import TextField from '@material-ui/core/TextField';
 import axios from "axios";
+import SpecialButton from './components/SpecialButton';
 
 
 const TextTypography = withStyles({
@@ -186,8 +185,8 @@ function  Reflection(props){
          </Grid>
        </Grid> */}
        <Box pt={2}>
-                <SubmitButton title = "submit" onClick={() => handleResponse(userInput)}/>
-              </Box>
+          <SpecialButton title = "submit" onClick={() => handleResponse(userInput)}/>
+        </Box>
     </Box>
     </div>
   );

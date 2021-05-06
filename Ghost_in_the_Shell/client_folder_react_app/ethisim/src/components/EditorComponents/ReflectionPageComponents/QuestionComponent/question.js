@@ -29,11 +29,11 @@ export default function QuestionField({
         let listOfQuestions2 = [...listOfQuestions];
         for (let i = 0; i < listOfQuestions2.length; i++) {
             if (listOfQuestions2[i].id === id) {
-                listOfQuestions2[i].REFLECTION_QUESTION = event.target.value;
+                listOfQuestions2[i].reflection_question = event.target.value;
             }
         }
         setListOfQuestions(listOfQuestions2);
-        let reqBody = listOfQuestions2.map((obj) => obj.REFLECTION_QUESTION);
+        let reqBody = listOfQuestions2.map((obj) => obj.reflection_question);
         setReqBodyNew(reqBody);
     };
 

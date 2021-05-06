@@ -24,7 +24,7 @@ develop them further into longer discussions for class.
 2. Clone the GitHub Repository
 3. After cloning repo, navigate to simulator/frontend: `cd ./simulator/frontend`
 4. Install all dependencies using `npm install`
-5. To run simulator, use `npm start`. This should open a tab in your browser and direct you to `http://localhost:3000`. If not, open a browser tab and got to that url. NOTE: We suggest putting data into database and running it at the same time as the simulator frontend. This will allow the simulator to actual load in data. See `How to get the Back-end Running` for details
+5. To run simulator, use `npm start`. This should open a tab in your browser and direct you to `http://localhost:3000`. If not, open a browser tab and go to that url. NOTE: We suggest putting data into database and running it at the same time as the simulator frontend. This will allow the simulator to actually load in data. See `How to get the Back-end Running` for details
 
 ## Setting up Shibboleth:
 Follow instructions in the [Shibboleth Install Guide](shib_install.md)

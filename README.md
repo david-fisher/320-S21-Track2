@@ -5,6 +5,28 @@ Ethisim is a website that allows you to easily create and assign ethics
 simulations. Run them for a participation grade, or
 develop them further into longer discussions for class.
 
+## Guide to Docker & Ethisim:
+### Building:
+* From the remote server, navigate to the Ethisim directory and run 'docker-compose build'
+### Running:
+* From the remote server, navigate to the Ethisim directory and run 'docker-compose up --detach'
+### Stopping:
+* From the remote server, navigate to the Ethisim directory and run 'docker-compose down'
+
+## Continuous Integration & Deployment:
+* Each push to the GitHub repository will trigger a GitHub Action that tests whether or not the application can be built. 
+* Pushes to the `main` and `build-and-deploy` branches will trigger a GitHub Action that builds the static application and deploys it to the server.
+* If neither frontend's source code was changed, it will not test or rebuild the frontend.
+
+## Cloning the Ethisim Application:
+1. Download a copy of the project from the server
+2. Fill out the env-template and save as '.env'
+3. Add ssl certs (/eti/pki/tls/certs/) to ./ssl/certs
+4. Add ssl private keys (/eti/pki/tls/private/) to ./ssl/private
+5. Add shibboleth config files to ./shib_conf
+6. Follow the above instructions for building and running the Docker containers
+
+
 ## How to get the Editor Front-end Running:
 1. Download node.js version 12.18.4 and [npm](https://www.npmjs.com/get-npm)
 2. Clone the GitHub repository

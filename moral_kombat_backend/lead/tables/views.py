@@ -40,8 +40,15 @@ class ReturnIdentifierView(APIView):
         #     #     return Response({"id":"editor"})
         #     # else:
         #     return Response({"id":"student"})
-        return(Response({"id": request.META['uid']}))
+        #return(Response({"id": request.META['uid']}))
 
+        if(len(professor.objects.filter(professors = request.META['uid']).values() != 0)):
+            #data = "You are prof " + request.META['uid']
+
+            return(Response({"id": "You are prof "}))
+        else:
+            #data = "You are student " + request.META['uid']
+            return(Response({"id": "You are student "}))
         # if (credentials.get("title") == "lecturer"):
         #     return Response({"id":"professor"})
         # else:
@@ -465,7 +472,7 @@ class dashboard_page(APIView):
         #professor_id = self.request.query_params.get('professor')
         
         #new, changed the endpoint request
-        professor_id = request.META['uid']
+        #professor_id = request.META['uid']
         #todo check that id != None
 
 

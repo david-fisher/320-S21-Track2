@@ -84,7 +84,7 @@ class StakeholdersSerializer(serializers.ModelSerializer):
 class ConversationsSerializer(serializers.ModelSerializer):
     class Meta:
         model = conversations
-        fields = ('stakeholder', 'points', 'conversation', 'question', 'question_summary', 'response')
+        fields = ('stakeholder', 'conversation', 'question', 'question_summary', 'response')
 
 #updated 05/04/21 -- didnt do anything fields = all
 class Courses_to_ScenarioSerializer(serializers.ModelSerializer):

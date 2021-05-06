@@ -24,7 +24,7 @@ router.register('api/responses_to_conversations', Responses_to_ConversationsView
 router.register('api/stakeholders', StakeholdersViewSet, 'STAKEHOLDERS') #
 router.register('api/conversations', ConversationsViewSet, 'CONVERSATIONS') #
 router.register('api/reflectionstaken', ReflectionsTakenViewSet, 'REFLECTIONSTAKEN') #
-router.register('api/courses', CoursesViewSet, 'COURSES') #
+router.register('api/courses', CoursesViewSet, 'Courses') #
 router.register('api/responses', ResponsesViewSet, 'RESPONSES') #
 router.register('api/scenarios_for', Scenarios_forViewSet, 'SCENARIOS_FOR') #
 router.register('api/generic_page', generic_pageViewSet, 'GENERIC_PAGE') #

@@ -1,0 +1,58 @@
+# This workflow will do a clean install of node dependencies, build the source code
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: Deploy
+
+concurrency: deployment
+
+on:
+  push:
+    paths:
+        - '**'
+        - '!Ghost_in_the_Shell/**'
+        - '!simulator/**'
+    branches: [ main, build-and-deploy, MergeSchemaFix1 ]
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    
+    steps:
+      - uses: actions/checkout@v2
+      - name: Downloading artifacts
+        uses: actions/download-artifact@v2  
+      - name: Bundling server
+        run: |
+          mkdir ethisim;
+          mkdir ./ethisim/ssl
+          mkdir ./ethisim/ssl/certs
+          mkdir ./ethisim/ssl/private
+          mkdir ./ethisim/shib_config
+          cp -r ./apache ./ethisim/;
+          cp -r ./env-template ./ethisim/;
+          cp ./start.sh ./ethisim/;
+          cp docker-compose-deploy.yaml ./ethisim/docker-compose.yaml;
+          cp requirements.txt ./ethisim/requirements.txt;
+          cp Dockerfile ./ethisim/Dockerfile;
+          mkdir ./ethisim/apache/build ./ethisim/apache/build/se ./ethisim/apache/build/simulator;
+          cp ./apache/.htaccess ./ethisim/apache/build/se;
+          cp ./apache/.htaccess ./ethisim/apache/build/simulator;
+          if [ -e ./moral_kombat_backend ]; then cp -r ./moral_kombat_backend ./ethisim/; fi;
+          if [ -e ./segfault ]; then cp -r ./segfault ./ethisim/; fi; 
+          zip -r ethisim.zip ./ethisim/;
+          cp ethisim.zip ./ethisim/;
+      - name: Stopping current docker container, remove any docker containers
+        working-directory: /ethisim/
+        run: |
+            if [[ $(docker ps -q) ]]; then docker stop $(docker ps -q); fi
+            if [[ $(docker ps -aq) ]]; then docker rm $(docker ps -aq); fi
+      - name: Remove exisitng apache files
+        run: |
+          if [ -e /ethisim/moral_kombat_backend ]; then echo "removing moral_kombat_backend"; rm -rf /ethisim/moral_kombat_backend; fi;
+          if [ -e /ethisim/segfault ]; then echo "removing segfault"; rm -rf /ethisim/segfault; fi;
+      - name: Copy artifact to server
+        run: |
+          if [ -e /ethisim/ ]; then echo "copying to /ethisim"; cp -r ./ethisim/* /ethisim/; fi
+      - name: Starting new server
+        working-directory: /ethisim/
+        run: docker-compose up --build -d --remove-orphans

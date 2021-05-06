@@ -16,6 +16,12 @@ from corsheaders.defaults import default_headers
 # Copy database info from envrionment variables
 # used by docker containers to set database info 
 try:  
+    # DB_USER="qelfnxes"
+    # DB_NAME="qelfnxes"
+    # DB_HOST="queenie.db.elephantsql.com"
+    # DB_PASS="MV7YEGQjB5A9FijyB-IcUZ1wP9xSvxp-"
+    # DB_PORT=5432
+
    DB_USER = environ["DB_USER"]
    DB_NAME = environ["DB_NAME"]
    DB_HOST = environ["DB_HOST"]
@@ -39,7 +45,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = environ["DJ_SK"]
+SECRET_KEY = "@!6b5hzk8m7y+gdyeq$$8&@g!c%0m+8hhaquat0=ml80biwz)kg"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -84,8 +90,8 @@ MIDDLEWARE = [
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_ALLOW_ALL = False # If this is used then `CORS_ORIGIN_WHITELIST` will not have any effect
 CORS_ORIGIN_WHITELIST = [
-    'http://localhost:3000',
-    f'http://{ORIGIN_HOST}:{ORIGIN_PORT}'
+    'https://localhost:3000',
+    f'https://{ORIGIN_HOST}:{ORIGIN_PORT}'
 ] # If this is used, then not need to use `CORS_ORIGIN_ALLOW_ALL = True`
 CORS_ORIGIN_REGEX_WHITELIST = [
     r"^http(s|)://[^/]*umass\.edu" # should allow any umass domain in the cors origin
@@ -119,12 +125,34 @@ DATABASES = {
     'default': {
         # 'ENGINE': 'django.db.backends.sqlite3',
         # 'NAME': BASE_DIR / 'db.sqlite3',
+
+        #  'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        #  'NAME': 'hkjdggmf',
+        #  'USER': 'hkjdggmf',
+        #  'PASSWORD': 'Siw8DtLM7Zg5FaP6lQbj9vyvuQ9C2ghB',
+        #  'HOST': 'queenie.db.elephantsql.com',
+        #  'PORT': '5432',
+
+        # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        # 'NAME': 'qelfnxes',
+        # 'USER': 'qelfnxes',
+        # 'PASSWORD': 'MV7YEGQjB5A9FijyB-IcUZ1wP9xSvxp-',
+        # 'HOST': 'queenie.db.elephantsql.com',
+        # 'PORT': '5432',
+
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': DB_NAME,
-        'USER': DB_USER,
-        'PASSWORD': DB_PASS,
-        'HOST': DB_HOST,
-        'PORT': DB_PORT,
+        'NAME': 'zoomba',
+        'USER': 'backendboys',
+        'PASSWORD': 'youwishyouwerezoomba',
+        'HOST': 'ethisim-db.cs.umass.edu',
+        'PORT': '5432'
+
+        # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        # 'NAME': DB_NAME,
+        # 'USER': DB_USER,
+        # 'PASSWORD': DB_PASS,
+        # 'HOST': DB_HOST,
+        # 'PORT': DB_PORT,
     }
 }
 

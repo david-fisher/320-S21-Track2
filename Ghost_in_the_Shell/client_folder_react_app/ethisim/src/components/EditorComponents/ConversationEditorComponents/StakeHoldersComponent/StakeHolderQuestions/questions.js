@@ -13,9 +13,10 @@ import { baseURL } from './../../../../../Constants/Config';
 QuestionFields.propTypes = {
     qrs: PropTypes.any,
     stakeholder_id: PropTypes.number,
+    stakeVersion: PropTypes.number,
 };
 
-export default function QuestionFields({ qrs, stakeholder_id }) {
+export default function QuestionFields({ qrs, stakeholder_id, stakeVersion }) {
     //used to track if we are waiting on a HTTP GET/POST/PUT request
     //not needed for DELETE
     const [isLoading, setLoading] = useState(false);
@@ -81,7 +82,10 @@ export default function QuestionFields({ qrs, stakeholder_id }) {
         }
         setLoading(true);
 
-        var data = JSON.stringify({ STAKEHOLDER: stakeholder_id });
+        var data = JSON.stringify({
+            STAKEHOLDER: stakeholder_id,
+            STAKEHOLDER_VERSION: stakeVersion,
+        }); // TODO change version to something else
 
         var config = {
             method: 'post',
@@ -240,6 +244,7 @@ export default function QuestionFields({ qrs, stakeholder_id }) {
                         summary={data.SUMMARY}
                         QRs={QRs}
                         setQRs={setQRs}
+                        StakeHolder_Id={stakeholder_id}
                     />
                 ))}
             </form>

@@ -74,7 +74,17 @@ TEMPLATES = [
     },
 ]
 
-CORS_ORIGIN_ALLOW_ALL = True
+# don't change the ordering of these parameters, idk why but they seem to only work in this orientation
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_ALLOW_ALL = True # If this is used then `CORS_ORIGIN_WHITELIST` will not have any effect
+CORS_ORIGIN_WHITELIST = [
+    'https://localhost:3000',
+    f'https://{ORIGIN_HOST}:{ORIGIN_PORT}'
+] # If this is used, then not need to use `CORS_ORIGIN_ALLOW_ALL = True`
+CORS_ORIGIN_REGEX_WHITELIST = [
+    r"^http(s|)://[^/]*umass\.edu" # should allow any umass domain in the cors origin
+]
+
 WSGI_APPLICATION = 'segfault.wsgi.application'
 
 

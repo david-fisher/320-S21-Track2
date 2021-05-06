@@ -86,35 +86,35 @@ note: The file `database_setup.sql` can currently be found in the `erd-implement
 
 Since django is not compatible with composite keys, we made an ID column which is the primary key, and every column that was a part of the original composite key now is unique.
 
-Everything in the DB is functional. Frontend was unable to complete their work.
+Everything in the DB is functional. No backlogs; nothing left to complete on our end as of now.
 
 # Table purposes
 
-students: links to demographics, student_times, responses and students_to_courses and stores the information of the student (spire id is primary key)
-demographics: links to students and stores information regarding student demographics
+students: links to demographics, student_times, responses and students_to_courses and stores the information of the student (spire id is primary key).
+demographics: links to students and stores information regarding student demographics.
 Professors: Any non-student staff member is stored here, has a professor column (spire id) and name columns.
 Scenarios: links a scenario to issues, stakeholders, professors, pages, courses, responses, and student_times. Documents all relevant information about the version of a scenario.
-courses: links to professors_to_courses, students_to_course, scenarios_for and responses and stores information regarding a course
-Professors_to_courses: Links professors/staff to a course that they teach
+courses: links to professors_to_courses, students_to_course, scenarios_for and responses and stores information regarding a course.
+Professors_to_courses: Links professors/staff to a course that they teach.
 Professors_to_scenario: links professors to scenarios. Documents what professor(s) have access to certain scenarios and what permissions they have.
-students_to_course: links students to courses
-Student_times: links students to courses and scenarios. Documents date/time a scenario was taken
+students_to_course: links students to courses.
+Student_times: links students to courses and scenarios. Documents date/time a scenario was taken.
 Pages: links responses, scenarios, action_page, generic_page, reflection_questions, and stakeholder_to_page. Documents all relevant information of every frontend page of a scenario. 
-Pages_to_scenario: links pages to scenarios
+Pages_to_scenario: links pages to scenarios.
 Responses: Stores a student’s response to a page. Documents all information regarding the student’s responses/decisions in a page.
-Stakeholders: links scenarios, stakeholder_to_page, conversations, response_to_conversations. Documents relevant information about a stakeholder
-Questions: stores all relevant information about a question asked by a stakeholder
-stakeholders_to_questions: links questions to stakeholders
-Reflections_taken: links a reflection to a response
-Issues: links scenarios to coverage. Documents issue name and stores importance scores associated with a specific scenario
-Coverage: Links stakeholder to an issue with a coverage score. Links to stakeholder
+Stakeholders: links scenarios, stakeholder_to_page, conversations, response_to_conversations. Documents relevant information about a stakeholder.
+Questions: stores all relevant information about a question asked by a stakeholder.
+stakeholders_to_questions: links questions to stakeholders.
+Reflections_taken: links a reflection to a response.
+Issues: links scenarios to coverage. Documents issue name and stores importance scores associated with a specific scenario.
+Coverage: Links stakeholder to an issue with a coverage score. Links to stakeholder.
 conversations: links to stakeholders and documents what conversations stakeholders have. Stores a question and answer between a student and a stakeholder. 
-Responses_to_conversations: Links a response to a conversation
-reflection_questions: links to pages and has questions to reflect
-reflection_questions_to_page: links questions to reflect to a page
-Stakeholder_to_page: links stakeholder to a page
-Generic_page: page that has text to display
-Action_page: Page where the user gets to select a choice
-Response_to_action_page: links a response to an action page
+Responses_to_conversations: Links a response to a conversation.
+reflection_questions: links to pages and has questions to reflect.
+reflection_questions_to_page: links questions to reflect to a page.
+Stakeholder_to_page: links stakeholder to a page.
+Generic_page: page that has text to display.
+Action_page: Page where the user gets to select a choice.
+Response_to_action_page: links a response to an action page.
 Scenarios_for: links scenarios and courses. Documents what course a scenario is for.
 Courses_to_scenario:  Links courses (and therefore course staff) to a scenario with a certain permission level (0=read vs 1=read and write)

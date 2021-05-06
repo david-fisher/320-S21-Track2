@@ -216,7 +216,7 @@ export default function Logistics({ scenario_ID }) {
     };
 
     const handleOnChangeNumConvo = (event) => {
-        NewScenario.NUM_CONVERSATION = event.target.value;
+        NewScenario.num_conversation = event.target.value;
         setNumConvos(event.target.value);
         setEdit(NewScenario);
     };
@@ -225,46 +225,46 @@ export default function Logistics({ scenario_ID }) {
         let sel = [];
 
         for (let i = 0; i < response.length; i++) {
-            for (let j = 0; j < NewScenario.COURSES.length; j++) {
-                if (response[i].NAME === NewScenario.COURSES[j].NAME) {
+            for (let j = 0; j < NewScenario.courses.length; j++) {
+                if (response[i].NAME === NewScenario.courses[j].name) {
                     sel.push(response[i]);
                 }
             }
         }
 
-        NewScenario.COURSES = sel;
+        NewScenario.courses = sel;
         setCurrentCourses(sel);
         setEdit(NewScenario);
     };
 
     const [NewScenario, setEdit] = useState({
-        SCENARIO: 0,
-        VERSION: 0,
-        NAME: '',
-        PUBLIC: false,
-        NUM_CONVERSATION: 0,
-        IS_FINISHED: false,
-        DATE_CREATED: ' ',
-        SCENARIO_ID: 0,
-        COURSES: [],
+        scenario: 0,
+        version: 0,
+        name: '',
+        public: false,
+        num_conversation: 0,
+        is_finished: false,
+        date_created: ' ',
+        scenario_id: 0,
+        courses: [],
     });
 
     let getData = () => {
         function onSuccess(response) {
-            NewScenario.SCENARIO = response.data.SCENARIO;
-            NewScenario.VERSION = response.data.VERSION;
-            NewScenario.NAME = response.data.NAME;
-            NewScenario.PUBLIC = response.data.PUBLIC;
-            NewScenario.NUM_CONVERSATION = response.data.NUM_CONVERSATION;
-            NewScenario.IS_FINISHED = response.data.IS_FINISHED;
-            NewScenario.DATE_CREATED = response.data.DATA_CREATED;
-            NewScenario.COURSES = response.data.COURSES;
-            NewScenario.SCENARIO_ID = response.data.SCENARIO_ID;
+            NewScenario.scenario = response.data.scenario;
+            NewScenario.version = response.data.version;
+            NewScenario.name = response.data.name;
+            NewScenario.public = response.data.public;
+            NewScenario.num_conversation = response.data.num_conversation;
+            NewScenario.is_finished = response.data.is_finished;
+            NewScenario.date_created = response.data.data_created;
+            NewScenario.courses = response.data.courses;
+            NewScenario.scenario_id = response.data.scenario_id;
 
-            setScenarioName(response.data.NAME);
-            setIsFinished(response.data.IS_FINISHED);
-            setIsPublic(response.data.PUBLIC);
-            setNumConvos(response.data.NUM_CONVERSATION);
+            setScenarioName(response.data.name);
+            setIsFinished(response.data.is_finished);
+            setIsPublic(response.data.public);
+            setNumConvos(response.data.num_conversation);
             setEdit(NewScenario);
             getCourses();
         }
@@ -347,11 +347,11 @@ export default function Logistics({ scenario_ID }) {
 
         let validInput = true;
 
-        if (!NewScenario.NAME || !NewScenario.NAME.trim()) {
+        if (!NewScenario.name || !NewScenario.name.trim()) {
             setErrorName(true);
             setErrorNameText('Scenario name cannot be empty');
             validInput = false;
-        } else if (NewScenario.NAME.length >= 1000) {
+        } else if (NewScenario.name.length >= 1000) {
             setErrorName(true);
             setErrorNameText(
                 'Scenario name must have less than 1000 characters'
@@ -362,8 +362,8 @@ export default function Logistics({ scenario_ID }) {
         }
 
         if (
-            isNaN(NewScenario.NUM_CONVERSATION) ||
-            NewScenario.NUM_CONVERSATION === ''
+            isNaN(NewScenario.num_conversation) ||
+            NewScenario.num_conversation === ''
         ) {
             setErrorNumConvos(true);
             setErrorNumConvosText(
@@ -374,7 +374,7 @@ export default function Logistics({ scenario_ID }) {
             setErrorNumConvos(false);
         }
 
-        if (NewScenario.COURSES.length === 0) {
+        if (NewScenario.courses.length === 0) {
             setErrorCourses(true);
             validInput = false;
         } else {
@@ -398,7 +398,7 @@ export default function Logistics({ scenario_ID }) {
     };
 
     const handleOnChange = (event) => {
-        NewScenario.NAME = event.target.value;
+        NewScenario.name = event.target.value;
         setScenarioName(event.target.value);
         setEdit(NewScenario);
     };
@@ -407,9 +407,9 @@ export default function Logistics({ scenario_ID }) {
         //set new scenario courses to selected classes
         let sel = [];
         selectedClasses.map((element) =>
-            sel.push({ COURSE: element.COURSE, NAME: element.NAME })
+            sel.push({ course: element.course, name: element.name })
         );
-        NewScenario.COURSES = sel;
+        NewScenario.courses = sel;
         setCurrentCourses(sel);
         setEdit(NewScenario);
     };

@@ -39,21 +39,21 @@ export default function IssueEntryFieldList({
     function setNewIssueID() {
         let newID = Math.floor(Math.random() * 10000000);
         let collision =
-            issueEntryFieldList.data.filter((data) => data.ISSUE === newID)
+            issueEntryFieldList.data.filter((data) => data.issue === newID)
                 .length !== 0;
         while (collision) {
             newID = Math.floor(Math.random() * 10000000);
             const checkNewID = newID;
             collision =
                 issueEntryFieldList.data.filter(
-                    (data) => data.ISSUE === checkNewID
+                    (data) => data.issue === checkNewID
                 ).length !== 0;
         }
         return newID;
     }
 
     const [entryCur, setEntryCur] = useState({
-        ISSUE: setNewIssueID(),
+        issue: setNewIssueID(),
         isNewIssue: true,
     });
 
@@ -63,7 +63,7 @@ export default function IssueEntryFieldList({
         issueEntryFieldList.data = issueEntryFieldList.data.concat(newEntry);
         setIssueEntryFieldList(issueEntryFieldList);
         setEntryCur({
-            ISSUE: setNewIssueID(),
+            issue: setNewIssueID(),
             isNewIssue: true,
         });
     };
@@ -113,12 +113,12 @@ export default function IssueEntryFieldList({
             <form id="form">
                 {issueEntryFieldList.data.map((entry) => (
                     <EntryField
-                        key={entry.ISSUE}
-                        id={entry.ISSUE}
+                        key={entry.issue}
+                        id={entry.issue}
                         scenarioID={scenarioID}
                         isNewIssue={entry.isNewIssue}
-                        issue={entry.NAME}
-                        score={entry.IMPORTANCE_SCORE}
+                        issue={entry.name}
+                        score={entry.importance_score}
                         setIssueEntryFieldList={setIssueEntryFieldList}
                         issueEntryFieldList={issueEntryFieldList}
                         stakeHolders={scenario_stakeHolders}

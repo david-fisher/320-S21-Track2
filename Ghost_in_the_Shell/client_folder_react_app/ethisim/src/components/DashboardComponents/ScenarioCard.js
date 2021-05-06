@@ -244,7 +244,7 @@ export default function ScenarioCard({
                             {courses.map((data) => (
                                 <form
                                     style={{ marginBottom: 20 }}
-                                    key={data.COURSE}
+                                    key={data.course}
                                 >
                                     <Button
                                         className={classes.buttonText}
@@ -256,7 +256,7 @@ export default function ScenarioCard({
                                             variant="subtitle1"
                                             noWrap={true}
                                         >
-                                            {data.NAME}
+                                            {data.name}
                                         </Typography>
                                     </Button>
                                 </form>

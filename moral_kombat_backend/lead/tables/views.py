@@ -678,7 +678,7 @@ class pages_page(APIView):
         # get all fields from this page_id if ti doesn't exist return error 404
         try:
             page = pages.objects.get(page = page_id)
-        except pages.doesnotexist:
+        except pages.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
         
         # print(page)
@@ -844,7 +844,7 @@ class pages_page(APIView):
         # get all fields from this page_id if it doesn't exist return error 404
         try:
             page = pages.objects.get(page = page_id)
-        except pages.doesnotexist:
+        except pages.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
         # please don't modify the scenario
@@ -988,7 +988,7 @@ class pages_page(APIView):
         # check if the page exists.
         try: 
             page = pages.objects.get(page=page_id)
-        except pages.doesnotexist:
+        except pages.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
         
@@ -1066,7 +1066,7 @@ class coverages_page(APIView):
         try: 
             coverage_list = coverage.objects.filter(stakeholder=stakeholder_id).values()
             # print("coverage list:", coverage_list)
-        except coverage.doesnotexist:
+        except coverage.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
         issue_list = []
@@ -1356,7 +1356,7 @@ class stakeholders_page(APIView):
             }
         ]
         '''
-        data = jsonparser().parse(request)
+        data = JSONParser().parse(request)
 
         if type(data) == list:
             response = []

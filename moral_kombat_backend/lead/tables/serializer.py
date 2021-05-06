@@ -12,7 +12,7 @@ class CourseSerializer(serializers.ModelSerializer):
 
 class StudentSerializer(serializers.ModelSerializer):
     enrolled_class = serializers.PrimaryKeyRelatedField(
-        many=True, source='courses', read_only=True)
+        many=True, source='Courses', read_only=True)
 
     class Meta:
         model = Students
@@ -21,7 +21,7 @@ class StudentSerializer(serializers.ModelSerializer):
 
 class ProfessorSerializer(serializers.ModelSerializer):
     teaching_class = serializers.PrimaryKeyRelatedField(
-        many=True, source='courses', read_only=True)
+        many=True, source='Courses', read_only=True)
 
     class Meta:
         model = Professors

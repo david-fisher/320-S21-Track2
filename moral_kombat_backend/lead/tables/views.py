@@ -365,7 +365,7 @@ class logistics_page(APIView):
         #get all scenarios belonging to this professor
         # scenario_query = professors_to_scenario.objects.filter(professor = professor_id).values()
         scenario = scenarios.objects.get(scenario_id = scenario_id)
-        scenario_dict = scenariosserializer(scenario).data
+        scenario_dict = ScenariosSerializer(scenario).data
         #loop through scenarios and append required information (course, page info)
         # print(scenario_dict)
         scenarios_for_query = scenarios_for.objects.filter(scenario_id=scenario_dict['scenario_id']).values()
@@ -462,17 +462,24 @@ class dashboard_page(APIView):
         #professor_id = self.request.query_params.get('professor')
         
         #new, changed the endpoint request
-        professor_id = request.META['uid']
+        #professor_id = request.META['uid']
+        professor_id = "DFisher"
         #todo check that id != None
+
+        fetched_scenarios = scenarios.objects.get(scenario_id = 1)
+        scenario_dict = ScenariosSerializer(fetched_scenarios).data
+
+        scenario_query = scenarios_for.objects.filter(scenario_id=scenario_dict['scenario_id']).values()
+
         #get all scenarios belonging to this professor
-        scenario_query = scenarios.objects.filter(pts2 = professor_id).values()
+        #scenario_query = scenarios.objects.filter(pts2 = professor_id).values()
         if(len(scenario_query) == 0):
             return Response({"error": "you are not associated with any scenarios"})
         #loop through scenarios and append required information (course, page info)
         logistics = []
         print(scenario_query)
-        for scenario in scenario_query:
-            scenarios_for_query = scenarios_for.objects.filter(scenario_id = scenario['scenario']).values()
+        for scenario in fetched_scenarios:
+            scenarios_for_query = scenarios_for.objects.filter(scenario_id = scenario['scenario_id']).values()
             course_id_array = []
             for x in scenarios_for_query:
                 course_id_array.append(x['course'])

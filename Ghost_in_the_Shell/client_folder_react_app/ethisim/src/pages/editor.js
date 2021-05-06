@@ -169,7 +169,7 @@ export default function Editor(props) {
     console.log(scenarioIDFromURL);
 
     const scenario_ID = props.location.data
-        ? props.location.data.SCENARIO_ID
+        ? props.location.data.scenario_id
         : scenarioIDFromURL;
 
     console.log(scenario_ID);
@@ -243,14 +243,14 @@ export default function Editor(props) {
             let p = null;
             let logistics_and_pages = resp.data;
             p = {
-                scenario_ID: logistics_and_pages.SCENARIO_ID,
-                version_ID: logistics_and_pages.VERSION,
-                title: logistics_and_pages.NAME,
-                is_finished: logistics_and_pages.IS_FINISHED,
-                public_scenario: logistics_and_pages.PUBLIC,
-                num_convos: logistics_and_pages.NUM_CONVERSATION,
-                professors: [logistics_and_pages.PROFESSOR],
-                courses: logistics_and_pages.COURSES,
+                scenario_ID: logistics_and_pages.scenario_id,
+                version_ID: logistics_and_pages.version,
+                title: logistics_and_pages.name,
+                is_finished: logistics_and_pages.is_finished,
+                public_scenario: logistics_and_pages.public,
+                num_convos: logistics_and_pages.num_conversation,
+                professors: [logistics_and_pages.professor],
+                courses: logistics_and_pages.courses,
             };
 
             initialComponents[0].component = <Logistics {...p}></Logistics>;

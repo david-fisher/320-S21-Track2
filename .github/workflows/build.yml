@@ -64,8 +64,7 @@ jobs:
           path: ./simulator/frontend/build/
   deploy:
     runs-on: self-hosted
-    needs: build-ed
-    needs: build-sim
+    needs: [build-ed, build-sim]
     
     steps:
       - uses: actions/checkout@v2

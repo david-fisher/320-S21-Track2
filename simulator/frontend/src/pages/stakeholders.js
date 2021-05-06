@@ -210,13 +210,13 @@ function Stakeholders(props) {
                         isMultipart: isMultipart
                       }));
                       setStakeholdersDisabled(prev => {
-                        let newStakeholdersDisabled = {...prev};
-                        if (numStakeholderTalkedTo + 1 > context.state.convLimit) {
-                          for (const id in newStakeholdersDisabled) {
-                            newStakeholdersDisabled[id] = true;
+                        let newStakeholdersDisabled = {};
+                        if (numStakeholderTalkedTo + 1 >= context.state.convLimit) {
+                          for (let i=0; i<stakeholders.length; ++i) {
+                            newStakeholdersDisabled[stakeholders[i].id] = true;
                           }
-                        } else {
-                          console.log(id);
+                        }else {
+                          newStakeholdersDisabled = {...prev};
                           newStakeholdersDisabled[id] = true;
                         }
                         return newStakeholdersDisabled;

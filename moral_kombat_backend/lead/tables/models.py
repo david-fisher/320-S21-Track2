@@ -172,7 +172,7 @@ class questions(models.Model):
     points = models.IntegerField()
     question_text = models.TextField(blank=True)
     question_summary = models.TextField(blank=True)
-    id = models.AutoField(primary_key = true)
+    id = models.AutoField(primary_key = True)
 
     class Meta:
         unique_together = ('question', 'version')
@@ -192,7 +192,7 @@ class reflection_questions(models.Model):
     reflection_question_id = models.IntegerField()
     reflection_question = models.TextField()
     version = models.IntegerField()
-    id = models.AutoField(primary_key = true)
+    id = models.AutoField(primary_key = True)
 
     class Meta:
         unique_together = ('reflection_question_id', 'version')
@@ -233,7 +233,7 @@ class response_to_action_page(models.Model):
 
 class responses_to_conversations(models.Model):
     response_id = models.ForeignKey('responses', to_field = 'response_id', on_delete = models.CASCADE)
-    stakeholder = models.ForeignKey('stakeholders', to_field = 'response_id', on_delete = models.CASCADE, db_column='stakeholder')
+    stakeholder = models.ForeignKey('stakeholders', to_field = 'id', on_delete = models.CASCADE, db_column='stakeholder')
     stakeholder_version = models.IntegerField()
     score = models.DecimalField(max_digits=5, decimal_places=2)
     conversation = models.ForeignKey(conversations, on_delete = models.CASCADE, to_field='conversation')
@@ -264,7 +264,7 @@ class scenarios_for(models.Model):
     course = models.ForeignKey('courses', to_field='course', on_delete = models.CASCADE)
 
     class Meta:
-        unique_together = ('scenario', 'course')
+        unique_together = ('scenario_id', 'course')
         db_table = 'scenarios_for'
 
 
@@ -286,7 +286,7 @@ class stakeholders(models.Model):
     job = models.TextField()
     introduction = models.TextField()
     enable_multi_convo = models.BooleanField()
-    id = models.AutoField(primary_key = true)
+    id = models.AutoField(primary_key = True)
 
     class Meta:
         unique_together = ('stakeholder', 'version')

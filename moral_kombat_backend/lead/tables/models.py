@@ -183,7 +183,7 @@ class questions(models.Model):
 #pretty broken
 # changed by judge may 6 idk
 class reflection_question_to_page(models.Model):
-    reflection_question_id = models.ForeignKey('reflection_questions', on_delete = models.CASCADE, db_column='reflection_question_id')
+    reflection_question_id = models.ForeignKey('reflection_questions', on_delete = models.CASCADE, db_column='reflection_question')
     #page = models.ForeignKey(pages, on_delete = models.CASCADE, related_name = 'reflection_questions_to_page1', db_column = 'id')
     page_id = models.ForeignKey('pages', on_delete = models.CASCADE, related_name = 'reflection_questions_to_page1', db_column='page')
     class Meta:
@@ -273,8 +273,8 @@ class scenarios_for(models.Model):
 
 
 class stakeholder_to_page(models.Model):
-    page = models.ForeignKey('pages', to_field = 'id', on_delete = models.CASCADE)
-    stakeholder = models.ForeignKey('stakeholders', to_field = 'id', on_delete = models.CASCADE)
+    page = models.ForeignKey('pages', on_delete = models.CASCADE, db_column='page')
+    stakeholder = models.ForeignKey('stakeholders', on_delete = models.CASCADE, db_column='stakeholder')
 
     class Meta:
         unique_together = ('page', 'stakeholder')
@@ -298,8 +298,8 @@ class stakeholders(models.Model):
 
 
 class stakeholders_to_questions(models.Model):
-    stakeholder = models.ForeignKey('stakeholders', to_field ='id', on_delete = models.CASCADE)
-    question = models.ForeignKey('questions', to_field ='id', on_delete = models.CASCADE)
+    stakeholder = models.ForeignKey('stakeholders', on_delete = models.CASCADE, db_column='stakeholder')
+    question = models.ForeignKey('questions', on_delete = models.CASCADE, 'question')
 
     class Meta:
         unique_together = ('stakeholder', 'question')

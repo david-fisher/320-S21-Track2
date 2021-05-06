@@ -54,7 +54,7 @@ class PagesSerializer(serializers.ModelSerializer):
     class Meta:
         model = pages
         fields = ('page', 'page_type', 'page_title', 'body', 'scenario',
-                  'version', 'next_id', 'x_coordinate', 'y_coordinate', 'complete', 'id')
+                  'version', 'next_id', 'x_coordinate', 'y_coordinate', 'completed', 'id')
 
 #updated 05/04/21
 class Stakeholder_to_pageSerializer(serializers.ModelSerializer):

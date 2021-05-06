@@ -6,7 +6,7 @@ from django.core.validators import MinValueValidator
 class action_page(models.Model):
     action_page_id = models.IntegerField()
     id = models.IntegerField(primary_key = True)
-    page = models.ForeignKey('pages', to_field='id', on_delete = models.CASCADE, related_name='action_page1')
+    page = models.ForeignKey('pages', on_delete = models.CASCADE, related_name='action_page1', db_column='page')
     version = models.IntegerField()
     choice = models.TextField()
     result_page = models.IntegerField()
@@ -18,7 +18,7 @@ class action_page(models.Model):
 
 class conversations(models.Model):
     conversation = models.AutoField(primary_key=True)
-    stakeholder = models.ForeignKey('stakeholders', to_field = 'id', on_delete = models.CASCADE, related_name='conversations1')
+    stakeholder = models.ForeignKey('stakeholders', on_delete = models.CASCADE, related_name='conversations1', db_column='stakeholder')
     question = models.TextField()
     response = models.TextField()
     question_summary = models.TextField()

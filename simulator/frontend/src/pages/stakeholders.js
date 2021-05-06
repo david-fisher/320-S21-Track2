@@ -59,10 +59,12 @@ function Stakeholders(props) {
   const [modalOpenToggles, setModalOpenToggles] = React.useState({});
   const [gatheredInfo, setGatheredInfo] = useContext(GatheredInfoContext);
   const [showStakeholders, setShowStakeholders] = React.useState(true);
+  const [numStakeholderTalkedTo, setNumStakeholderTalkedTo] = React.useState(0)
   const [currentStakeholder, setCurrentStakeholder] = React.useState({});
-  const [numStakeholderTalkedTo, setNumStakeholderTalkedTo] = React.useState(0);
+  const [stakeholders_had, setStakeholders_had] = React.useState([]);
   const createdCardStyles = cardStyles();
   const stakeholdersGrid = getStakeholdersGrid(stakeholders);
+  const [limit, setLimit] = React.useState(0);
 
 
   /** 
@@ -144,19 +146,52 @@ function Stakeholders(props) {
    * ones for the current scenario. NEEDS TO BE CHANGED when endpoint works.
    */
   useEffect(() => {
-    fetch(BASE_URL + `/stakeholders/`)
+    fetch(`${BASE_URL}/get_stakeholders/?scenario_id=${props.match.params.sid}`)
     .then(response => response.json())
     .then(data => {
 
-      let results = data.results.slice();
+      let results = data.slice();
 
-      setStakeholders(results.filter((holder) => {
-        return holder.scenario.toString() === props.match.params.sid;
-      }));
+      setStakeholders(results);
 
     })
   }, [scenarios]);
  
+  useEffect(() => {
+    fetch(`${BASE_URL}/get_scenario/?scenario_id=${props.match.params.sid}`)
+    .then(response => response.json())
+    .then(data => {
+      let newLimit = data.num_conversation
+      setLimit(newLimit)
+    })
+  }, []);
+
+  useEffect(() => {
+    fetch(`${BASE_URL}/stakeholders_had/?scenario_id=${props.match.params.sid}&student_id=${STUDENT_ID}`)
+    .then(response => response.json())
+    .then(data => {
+      console.log("limit: " + limit)
+      console.log("nstt: " + numStakeholderTalkedTo)
+      console.log(stakeholders)
+      setNumStakeholderTalkedTo(data.length)
+      let newDisabled = {}
+      if (numStakeholderTalkedTo < limit) {
+        data.forEach(ele => {
+          newDisabled[ele] = true
+        });
+      }
+      else {
+        stakeholders.forEach(ele => {
+          newDisabled[ele.id] = true
+        });
+      }
+      setStakeholdersDisabled(newDisabled)
+    })
+    .catch(err => {
+      console.log(err)
+    })
+  }, [limit, stakeholders])
+
 
   function getStakeholderCards(id, name, isMultipart, designation, description, styles) {
     const PAGE_ID_OF_PAGE_BEFORE_CONVERSATIONS = 'gatheredInformation';
@@ -202,7 +237,7 @@ function Stakeholders(props) {
           <DialogContent>
             <DialogContentText color = "#000000">{description}</DialogContentText>
               <ConvLimitConsumer>
-                {(context) => (
+              {(context) => (
                   <Button variant="contained" onClick={() => {
                       setCurrentStakeholder(prev => ({
                         name: name,
@@ -211,7 +246,7 @@ function Stakeholders(props) {
                       }));
                       setStakeholdersDisabled(prev => {
                         let newStakeholdersDisabled = {};
-                        if (numStakeholderTalkedTo + 1 >= context.state.convLimit) {
+                        if (numStakeholderTalkedTo + 1 >= limit) {
                           for (let i=0; i<stakeholders.length; ++i) {
                             newStakeholdersDisabled[stakeholders[i].id] = true;
                           }
@@ -286,7 +321,7 @@ function Stakeholders(props) {
               <ConvLimitConsumer>
                 {(context) => (
                   <TextTypography>
-                    You've spoken to <b>{numStakeholderTalkedTo} out of {context.state.convLimit}</b> stakeholders
+                    You've spoken to <b>{numStakeholderTalkedTo} out of {limit}</b> stakeholders
                   </TextTypography>
                 )}
               </ConvLimitConsumer>
@@ -300,49 +335,10 @@ function Stakeholders(props) {
         </div>
       }
       {!showStakeholders &&
-        <Conversation stakeholder={currentStakeholder} showStakeholders={showStakeholders} setShowStakeholders={setShowStakeholders} />
+        <Conversation page_id={props.id} match={props.match} stakeholder={currentStakeholder} showStakeholders={showStakeholders} setShowStakeholders={setShowStakeholders} />
       }
     </div>
   );
-
-  // return (
-  //   <>
-  //     {showStakeholders &&
-  //       <div>
-  //       <Grid container direction="row" justify="center" alignItems="center">
-  //         <Box mt={5}>
-  //           <TextTypography variant="h4" align="center" gutterBottom>
-  //             Stakeholders
-  //           </TextTypography>
-  //         </Box>
-  //       </Grid>
-  //       <Grid container direction="row" justify="space-between">
-  //         <Grid item style={{ marginRight: "0rem", marginTop: "-3rem" }}>
-  //           <BackButton title="Gathered Information" onClick={goToGatheredInformation}></BackButton>
-  //         </Grid>
-  //         <Grid item style={{ marginRight: "0rem", marginTop: "-3rem" }}>
-  //         <NextButton title="Middle Reflection" onClick={goToMiddleReflection}></NextButton>
-  //         </Grid>
-  //       </Grid>
-  //       <Grid container spacing={2}>
-          // <Grid item lg={12} md={12} sm={12}>
-          //   <Box m="1rem" align={'center'}>
-          //     <TextTypography>
-          //       You've spoken to <b>{numStakeholderTalkedTo} out of {conversationLimit}</b> stakeholders</TextTypography>
-          //   </Box>
-          //   <TextTypography variant="body1" align="center">
-          //     {introText}
-          //   </TextTypography>
-          // </Grid>
-          // {stakeholdersGrid}
-  //       </Grid>
-  //     </div>
-  //     }
-  //     {!showStakeholders &&
-  //       <Conversation stakeholder={currentStakeholder} showStakeholders={showStakeholders} setShowStakeholders={setShowStakeholders}/>
-  //     }
-  //   </>
-  // );
 }
 
 export default Stakeholders;

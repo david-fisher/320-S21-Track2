@@ -1,12 +1,9 @@
-import React,{useEffect} from "react";
-import { makeStyles, withStyles, Typography, Box, Button, Grid } from "@material-ui/core";
+import React from "react";
+import { withStyles, Typography, Box, Grid } from "@material-ui/core";
 import Checkbox from "./components/checkbox";
-import { BASE_URL, STUDENT_ID, SCENARIO_ID } from "../constants/config";
-import axios from 'axios';
-import { ScenariosContext } from "../Nav";
+//import { BASE_URL, STUDENT_ID, SCENARIO_ID } from "../constants/config";
+//import { ScenariosContext } from "../Nav";
 import HTMLRenderer from "./components/htmlRenderer";
-import BackButton from "./components/Buttons/BackButton"
-import SubmitButton from "./components/Buttons/SubmitButton"
 
 // const useStyles = makeStyles((theme) => ({
 //   root: {
@@ -20,6 +17,7 @@ const TextTypography = withStyles({
     color: "#373a3c"
   }
 })(Typography);
+
 // visited, completed, pageNumber, type, nextPageNumber, title, content, match, activePage, changePage
 //function Action({ pages, setPages, activePage, setActivePage, content_url, nextPageID, prevPageID, title }) {
 function Action(props) {
@@ -36,12 +34,13 @@ function Action(props) {
   //   }
   // }
 
-  let prevPageTitle = "";
-  const [actionQuestion, setActionQuestion] = React.useState('');
-  const [questionID, setQuestionID] = React.useState('');
-  const [scenarios, setScenarios] = React.useContext(ScenariosContext);
+  // let prevPageTitle = "";
+  // const [actionQuestion, setActionQuestion] = React.useState('');
+  // const [questionID, setQuestionID] = React.useState('');
+  // const [scenarios, setScenarios] = React.useContext(ScenariosContext);
 
-  const [actionChoices, setActionChoices] = React.useState([]);
+  // const [actionChoices, setActionChoices] = React.useState([]);
+
   // useEffect (() => {
   //   fetch(BASE_URL + '/action_page/')
   //   .then(res => res.json())
@@ -126,8 +125,8 @@ function Action(props) {
       {/*       
       <Grid container direction="row" justify="space-between">
         <Grid item style={{ marginRight: "0rem", marginTop: "-3rem" }}>
-          <BackButton title={prevPageTitle} onClick={() => goToPage(prevPageID)}>
-          </BackButton>
+          <SpecialButton type="back" title={prevPageTitle} onClick={() => goToPage(prevPageID)}>
+          </SpecialButton>
         </Grid>
         <Grid item style={{ marginRight: "0rem", marginTop: "-3rem" }}>
       addtional comment was on this line  <Button variant="contained" disableElevation color="primary" onClick={() => goToPage(nextPageID)} >Next</Button>
@@ -141,26 +140,11 @@ function Action(props) {
           <HTMLRenderer html={props.content}/>
         </Grid>
         <Grid item lg={12}>
-          <Checkbox activePage={props.activePage} pageNumber={props.pageNumber} changePage={props.changePage} pageId={props.id}/> 
+        <Checkbox pageNumber={props.pageNumber} changePage={props.changePage} pageId={props.id} match={props.match}/> 
         </Grid>
       </Grid>
     </div>
-  //    <div>
-  //    <Box mt={5}>
-  //      <Grid container direction="row" justify="center" alignItems="center">
-  //        <TextTypography variant="h4" align="center" gutterBottom>
-  //          {props.title}
-  //        </TextTypography>
-  //      </Grid>
-  //    </Box>
-  //    <Grid container spacing={2}>
-  //      <Grid item lg={12}>
-  //        <Box p={2} >
-  //          {props.content}
-  //        </Box>
-  //        </Grid>
-  //    </Grid>
-  //  </div>
+
   );
 }
 

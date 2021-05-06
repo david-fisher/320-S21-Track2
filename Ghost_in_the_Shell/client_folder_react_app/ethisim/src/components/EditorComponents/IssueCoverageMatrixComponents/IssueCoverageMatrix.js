@@ -217,20 +217,20 @@ export default function IssueMatrix({ scenario_stakeHolders, scenario }) {
             let curStakeHolder = stakeHolders.current[i];
             let curRow = rows[i];
 
-            curStakeHolder.ISSUES.forEach((issue) => {
+            curStakeHolder.issues.forEach((issue) => {
                 if (
-                    curRow['Issue: ' + issue.NAME.toUpperCase()] !==
-                        issue.COVERAGE_SCORE &&
+                    curRow['Issue: ' + issue.name.toUpperCase()] !==
+                        issue.coverage_score &&
                     curRow['Decription'] !== 'Total Running Sums'
                 ) {
-                    issue.COVERAGE_SCORE =
-                        curRow['Issue: ' + issue.NAME.toUpperCase()];
+                    issue.coverage_score =
+                        curRow['Issue: ' + issue.name.toUpperCase()];
                     changedStakeHolder = curStakeHolder;
                 }
                 issues.push({
-                    COVERAGE_SCORE: issue.COVERAGE_SCORE,
-                    ISSUE: issue.ISSUE,
-                    STAKEHOLDER: issue.STAKEHOLDER,
+                    COVERAGE_SCORE: issue.coverage_score,
+                    ISSUE: issue.issue,
+                    STAKEHOLDER: issue.stakeholder,
                 });
             });
         }
@@ -243,7 +243,7 @@ export default function IssueMatrix({ scenario_stakeHolders, scenario }) {
                 url:
                     baseURL +
                     '/multi_coverage?STAKEHOLDER=' +
-                    changedStakeHolder.STAKEHOLDER,
+                    changedStakeHolder.stakeholder,
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -275,17 +275,17 @@ export default function IssueMatrix({ scenario_stakeHolders, scenario }) {
             { title: 'Name', field: 'NAME' },
             { title: 'Description', field: 'DESCRIPTION' },
         ];
-        stakeHolders.current[0].ISSUES.forEach((issue) => {
+        stakeHolders.current[0].issues.forEach((issue) => {
             let insertBoolean = true;
             for (let i = 0; i < cols.length; i++) {
-                if (cols[i].title === 'Issue: ' + issue.NAME) {
+                if (cols[i].title === 'Issue: ' + issue.name) {
                     insertBoolean = false;
                 }
             }
             if (insertBoolean) {
                 cols.push({
-                    title: 'Issue: ' + issue.NAME,
-                    field: 'Issue: ' + issue.NAME.toUpperCase(),
+                    title: 'Issue: ' + issue.name,
+                    field: 'Issue: ' + issue.name.toUpperCase(),
                     type: 'numeric',
                 });
             }
@@ -298,15 +298,15 @@ export default function IssueMatrix({ scenario_stakeHolders, scenario }) {
         let sums = { NAME: '', DESCRIPTION: 'Total Issue Sums' };
         for (let j = 0; j < stakeHolders.current.length; j++) {
             let stakeHolder = stakeHolders.current[j];
-            for (let i = 0; i < stakeHolder.ISSUES.length; i++) {
-                let curIssue = stakeHolder.ISSUES[i];
+            for (let i = 0; i < stakeHolder.issues.length; i++) {
+                let curIssue = stakeHolder.issues[i];
                 if (
-                    sums['Issue: ' + curIssue.NAME.toUpperCase()] === undefined
+                    sums['Issue: ' + curIssue.name.toUpperCase()] === undefined
                 ) {
-                    sums['Issue: ' + curIssue.NAME.toUpperCase()] = 0;
+                    sums['Issue: ' + curIssue.name.toUpperCase()] = 0;
                 }
-                sums['Issue: ' + curIssue.NAME.toUpperCase()] +=
-                    rows[j]['Issue: ' + curIssue.NAME.toUpperCase()];
+                sums['Issue: ' + curIssue.name.toUpperCase()] +=
+                    rows[j]['Issue: ' + curIssue.name.toUpperCase()];
             }
         }
         setSums(sums);
@@ -318,19 +318,19 @@ export default function IssueMatrix({ scenario_stakeHolders, scenario }) {
         let sums = { NAME: '', DESCRIPTION: 'Total Issue Sums' };
         let data = stakeHolders.current.map((stakeHolder) => {
             let row = {
-                NAME: stakeHolder.NAME,
-                DESCRIPTION: stakeHolder.JOB,
+                name: stakeHolder.name,
+                description: stakeHolder.job,
             };
-            stakeHolder.ISSUES.forEach((curIssue) => {
-                row['Issue: ' + curIssue.NAME.toUpperCase()] =
-                    curIssue.COVERAGE_SCORE;
+            stakeHolder.issues.forEach((curIssue) => {
+                row['Issue: ' + curIssue.name.toUpperCase()] =
+                    curIssue.coverage_score;
                 if (
-                    sums['Issue: ' + curIssue.NAME.toUpperCase()] === undefined
+                    sums['Issue: ' + curIssue.name.toUpperCase()] === undefined
                 ) {
-                    sums['Issue: ' + curIssue.NAME.toUpperCase()] = 0;
+                    sums['Issue: ' + curIssue.name.toUpperCase()] = 0;
                 }
-                sums['Issue: ' + curIssue.NAME.toUpperCase()] +=
-                    curIssue.COVERAGE_SCORE;
+                sums['Issue: ' + curIssue.name.toUpperCase()] +=
+                    curIssue.coverage_score;
             });
             return row;
         });
@@ -381,7 +381,7 @@ export default function IssueMatrix({ scenario_stakeHolders, scenario }) {
                 url:
                     baseURL +
                     '/api/stakeholders/' +
-                    deletedStakeHolder.STAKEHOLDER +
+                    deletedStakeHolder.stakeholder +
                     '/',
                 headers: {
                     'Content-Type': 'application/json',
@@ -419,9 +419,9 @@ export default function IssueMatrix({ scenario_stakeHolders, scenario }) {
                 title={'Issue Coverage Matrix'}
                 editable={{
                     isEditHidden: (rowData) =>
-                        rowData.DESCRIPTION === 'Running Issue Sums',
+                        rowData.description === 'Running Issue Sums',
                     isDeleteHidden: (rowData) =>
-                        rowData.DESCRIPTION === 'Running Issue Sums',
+                        rowData.description === 'Running Issue Sums',
                     onRowUpdate: (newData, oldData) =>
                         new Promise((resolve, reject) => {
                             setTimeout(() => {

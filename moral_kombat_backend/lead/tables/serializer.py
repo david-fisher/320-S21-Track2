@@ -14,7 +14,8 @@ class StakeholdersToQuestionsSerializer(serializers.ModelSerializer):
 class DemographicsSerializer(serializers.ModelSerializer):
     class Meta:
         model = demographics
-        fields = ('student', 'age', 'grade', 'gender', 'race', 'major')
+        # fields = '__all__'
+        fields = ('student', 'age', 'gender', 'race', 'major')
 
 #updated 05/04/21
 class StudentSerializer(serializers.ModelSerializer):
@@ -39,7 +40,7 @@ class StudentTimesSerializer(serializers.ModelSerializer):
 class ProfessorSerializer(serializers.ModelSerializer):
     class Meta:
         model = professors
-        fields = ('professors', 'fname', 'lname')
+        fields = ('professor', 'fname', 'lname')
 
 #updated 05/04/21
 class ScenariosSerializer(serializers.ModelSerializer):
@@ -53,7 +54,7 @@ class PagesSerializer(serializers.ModelSerializer):
     class Meta:
         model = pages
         fields = ('page', 'page_type', 'page_title', 'body', 'scenario',
-                  'version', 'next_id', 'x_coordinate', 'y_coordinate', 'complete', 'id')
+                  'version', 'next_id', 'x_coordinate', 'y_coordinate', 'completed', 'id')
 
 #updated 05/04/21
 class Stakeholder_to_pageSerializer(serializers.ModelSerializer):
@@ -83,7 +84,7 @@ class StakeholdersSerializer(serializers.ModelSerializer):
 class ConversationsSerializer(serializers.ModelSerializer):
     class Meta:
         model = conversations
-        fields = ('stakeholder', 'points', 'conversation', 'question', 'question_summary', 'response')
+        fields = ('stakeholder', 'conversation', 'question', 'question_summary', 'response')
 
 #updated 05/04/21 -- didnt do anything fields = all
 class Courses_to_ScenarioSerializer(serializers.ModelSerializer):
@@ -217,7 +218,7 @@ class Pages_stakeholderSerializer(serializers.ModelSerializer):
 class coverageSerializer(serializers.ModelSerializer):
     class Meta:
         model = coverage
-        fields = ('stakeholder', 'id', 'issue', 'coverage_score')
+        fields = '__all__'
 
 
 # class Actions_takenSerializer(serializers.ModelSerializer):

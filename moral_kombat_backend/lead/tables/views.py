@@ -20,12 +20,12 @@ from rest_framework import mixins
 
 def getcredentials(request):
     credentials = {
-        "uid": request.meta['uid'],
-        "name": request.meta['displayname'],
-        "affiliation": request.meta['edupersonprimaryaffiliation'],
-        "email": request.meta['mail'],
-        #"title": request.meta['title'],
-        "intid": request.meta['fcidnumber']
+        "uid": request.META['uid'],
+        "name": request.META['displayname'],
+        "affiliation": request.META['edupersonprimaryaffiliation'],
+        "email": request.META['mail'],
+        #"title": request.META['title'],
+        "intid": request.META['fcidnumber']
     }
     credentials.update({"intid": credentials.get("intid").split("@")[0]})
     return credentials
@@ -33,14 +33,22 @@ def getcredentials(request):
 
 class ReturnIdentifierView(APIView):
     def get(self, request, *args, **kwargs):
-        if ('title' in request.meta):
-            return Response({"id":"professor"})
-        else:
-            # if(len(scenarios.objects.filter(professors_to_scenario = request.meta['displayname']).values()) != 0):
-            #     return Response({"id":"editor"})
-            # else:
-            return Response({"id":"student"})
+        # if ('title' in request.META):
+        #     return Response({"id":"professor"})
+        # else:
+        #     # if(len(scenarios.objects.filter(professors_to_scenario = request.META['displayname']).values()) != 0):
+        #     #     return Response({"id":"editor"})
+        #     # else:
+        #     return Response({"id":"student"})
+        #return(Response({"id": request.META['uid']}))
 
+        if(len(professors.objects.filter(professor = request.META['uid']).values() != 0)):
+            #data = "You are prof " + request.META['uid']
+
+            return(Response({"id": "You are prof "}))
+        else:
+            #data = "You are student " + request.META['uid']
+            return(Response({"id": "You are student "}))
         # if (credentials.get("title") == "lecturer"):
         #     return Response({"id":"professor"})
         # else:
@@ -129,7 +137,7 @@ class multi_coverage(APIView):
         if stakeholder == None:
             return Response({'status': 'details'}, status=status.HTTP_404_NOT_FOUND)
         for updated_coverage in request.data:
-            extant_coverage = coverage.objects.get(stakeholder = stakeholder, issue = updated_coverage['issue_id'])
+            extant_coverage = coverage.objects.get(stakeholder = stakeholder, issue = updated_coverage['issue'])
             serializer = coverageSerializer(extant_coverage, data=updated_coverage)
             if serializer.is_valid():
                 serializer.save()
@@ -148,11 +156,14 @@ class CoverageViewSet(viewsets.ModelViewSet):
     
 
 class DemographicsViewSet(viewsets.ModelViewSet):
-    queryset = demographics.objects.all()
+    # print(demographics.objects.all())
+    serializer_class = DemographicsSerializer
+    queryset = demographics.objects.only('student', 'age', 'gender', 'race', 'major')
+    # print(queryset)
     permission_classes = [
         permissions.AllowAny
     ]
-    serializer_class = DemographicsSerializer
+    
 
 class StudentsViewSet(viewsets.ModelViewSet):
     queryset = students.objects.all()
@@ -222,9 +233,6 @@ class professors_to_scenarioViewSet(viewsets.ModelViewSet):
 
 class PagesViewSet(viewsets.ModelViewSet):
     queryset = pages.objects.all()
-    permissions_classes = [
-        permissions.AllowAny
-    ]
     serializer_class = PagesSerializer
 
 # stakeholder_page viewset
@@ -329,12 +337,14 @@ class generic_pageViewSet(viewsets.ModelViewSet):
 # changed - chirag - 04/15/2021
 class IssuesViewSet(viewsets.ModelViewSet):
     queryset = issues.objects.all()
-    permission_classes = [
-        permissions.AllowAny
-    ]
     serializer_class = IssuesSerializer
-    filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['scenario_id', "name"]
+    # queryset = issues.objects.all()
+    # permission_classes = [
+    #     permissions.AllowAny
+    # ]
+    # serializer_class = IssuesSerializer
+    # filter_backends = [DjangoFilterBackend]
+    # filterset_fields = ['scenario_id', "name"]
 
 
 class Action_pageViewSet(viewsets.ModelViewSet):
@@ -365,7 +375,7 @@ class logistics_page(APIView):
         #get all scenarios belonging to this professor
         # scenario_query = professors_to_scenario.objects.filter(professor = professor_id).values()
         scenario = scenarios.objects.get(scenario_id = scenario_id)
-        scenario_dict = scenariosserializer(scenario).data
+        scenario_dict = ScenariosSerializer(scenario).data
         #loop through scenarios and append required information (course, page info)
         # print(scenario_dict)
         scenarios_for_query = scenarios_for.objects.filter(scenario_id=scenario_dict['scenario_id']).values()
@@ -405,8 +415,8 @@ class logistics_page(APIView):
         "scenario": 1,
         "version": 0,
         "name": "pizza is good!",
-        "is_finished": false,
-        "public": false,
+        "is_finished": False,
+        "public": False,
         "num_conversation": 5,
         "professor": 12345678,
         "courses": 
@@ -462,17 +472,24 @@ class dashboard_page(APIView):
         #professor_id = self.request.query_params.get('professor')
         
         #new, changed the endpoint request
-        professor_id = request.META['uid']
+        #professor_id = request.META['uid']
         #todo check that id != None
+
+
+        #scenario_query = scenarios_for.objects.filter(scenario_id=scenario_dict['scenario_id']).values()
+
         #get all scenarios belonging to this professor
-        scenario_query = scenarios.objects.filter(pts2 = professor_id).values()
-        if(len(scenario_query) == 0):
-            return Response({"error": "you are not associated with any scenarios"})
+        #scenario_query = professors_to_scenario.objects.filter(professor = professor_id).values()
+
+
+        scenario_query = scenarios.objects.values()
+        # if(len(scenario_query) == 0):
+        #     return Response({"error": "you are not associated with any scenarios"})
         #loop through scenarios and append required information (course, page info)
         logistics = []
-        print(scenario_query)
+        #print(scenario_query)
         for scenario in scenario_query:
-            scenarios_for_query = scenarios_for.objects.filter(scenario_id = scenario['scenario']).values()
+            scenarios_for_query = scenarios_for.objects.filter(scenario_id = scenario['scenario_id']).values()
             course_id_array = []
             for x in scenarios_for_query:
                 course_id_array.append(x['course'])
@@ -492,8 +509,8 @@ class dashboard_page(APIView):
 
         {
         "name": "best test",
-        "is_finished": false,
-        "public": false,
+        "is_finished": False,
+        "public": False,
         "num_conversation": 5,
         "professor": 12345678,
         "courses":[
@@ -588,7 +605,7 @@ class multi_issue(APIView):
         for updated_issue in request.data:
             extant_issue = issues.objects.get(scenario_id = scenario, issue = updated_issue['issue'])
             serializer = IssuesSerializer(extant_issue, data=updated_issue)
-            if not serializer.is_valid(): 
+            if not serializer.is_valid():
                 return Response(serializer.errors)
             try:
                 serializer.save()
@@ -1149,7 +1166,7 @@ class stakeholders_page(APIView):
             stakeholder_id = stkholder['stakeholder']
 
             queryset = conversations.objects.filter(stakeholder=stakeholder_id)
-            conlist = ConversationsSerializer(queryset, many=true).data
+            conlist = ConversationsSerializer(queryset, many=True).data
             stkholder['conversations'] = conlist
 
             try: 
@@ -1254,7 +1271,7 @@ class stakeholders_page(APIView):
                 scenarios.objects.get(scenario_id = scenario_id)
                 queryset = stakeholders.objects.filter(
                     scenario=scenario_id)
-                data = list(StakeholdersSerializer(queryset, many=true).data)
+                data = list(StakeholdersSerializer(queryset, many=True).data)
                 data = self.add_detail(data)
                 return Response(data, status=status.HTTP_200_OK)
 
@@ -1269,7 +1286,7 @@ class stakeholders_page(APIView):
             try:
                 queryset = stakeholders.objects.filter(
                     stakeholder=stakeholder_id)
-                data = list(StakeholdersSerializer(queryset, many=true).data)
+                data = list(StakeholdersSerializer(queryset, many=True).data)
                 data = self.add_detail(data)
                 return Response(data, status=status.HTTP_200_OK)
 
@@ -1278,7 +1295,7 @@ class stakeholders_page(APIView):
                 return Response(message, status=status.HTTP_404_NOT_FOUND)
 
         queryset = stakeholders.objects.all()
-        data = StakeholdersSerializer(queryset, many=true).data
+        data = StakeholdersSerializer(queryset, many=True).data
         return Response(data, status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
@@ -1291,7 +1308,7 @@ class stakeholders_page(APIView):
             scenarioid = serializer.data['scenario']
             stkholderversion = serializer.data['version']
             queryset = issues.objects.filter(scenario_id=scenarioid)
-            data = issuesserializer(queryset, many=true).data
+            data = issuesserializer(queryset, many=True).data
             for item in data:
                 itemdict = {}
                 itemdict['stakeholder'] = stkholderid

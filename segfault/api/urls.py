@@ -56,5 +56,9 @@ urlpatterns = [
     path('conversations_had/', views.response_to_conversations.as_view()), #for "response_to_conversations" endpoint
     path('reflection_response/', views.reflection.as_view()),
     path('stakeholder_conv/', views.stakeholder_conv.as_view()),
-    path('action_response/', views.response_to_action_page.as_view()) #for "response_to_action_page" get and put endpoints
+    path('action_response/', views.response_to_action_page.as_view()), #for "response_to_action_page" get and put endpoints
+    path('start_scenario/', views.start_scenario.as_view()), #to mark scenario as started and get time stamp info from student
+    path('current_page/', views.current_page.as_view()), #put and get current page (gotten as a student_times object)
+    path('student_finished/', views.student_finish_scenario.as_view()), #get if finished put when finished
+    path('stakeholders_had/', views.stakeholders_had.as_view())
 ]

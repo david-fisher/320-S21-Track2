@@ -1,18 +1,16 @@
-import React,{useEffect} from "react";
+import React, { useEffect } from "react";
 import { makeStyles } from '@material-ui/core/styles';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
-import {Box, Button} from "@material-ui/core";
+import { Box } from "@material-ui/core";
 import SpecialButton from "./SpecialButton"
 
-import { BASE_URL, STUDENT_ID, SCENARIO_ID } from "../../constants/config";
-import axios from 'axios';
+import { BASE_URL, STUDENT_ID } from "../../constants/config";
 import { ScenariosContext } from "../../Nav";
 import { PageContext } from '../simulator_window';
-import { TrainOutlined, TrainRounded } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -26,22 +24,22 @@ const useStyles = makeStyles((theme) => ({
 export default function ErrorRadios(props) 
 {
   let nextPageTitle = "";
-  let content_url = '/pages';
   const classes = useStyles();
   const [value, setValue] = React.useState('');
   const [error, setError] = React.useState(false);
   const [helperText, setHelperText] = React.useState('Choose carefully');
   const [scenarios, setScenarios] = React.useContext(ScenariosContext);
   const [choices, setChoices] = React.useState([]);
+  const [choiceMade, setChoiceMade] = React.useState(undefined)
 
   useEffect (() => {
     fetch(`${BASE_URL}/get_page_info/?page_id=${props.pageId}`)
     .then(res => res.json())
     .then(actionData => {
       let actionChoices = []
-      
       actionData.body.forEach(element => {
         let choice = {
+          a_id: element.action_page_id,
           text: element.choice,
           result_page: element.result_page
         }
@@ -51,28 +49,42 @@ export default function ErrorRadios(props)
     })
   }, [])
 
+  useEffect (() => {
+    //student id is the string "student" in the students api
+    fetch(`${BASE_URL}/action_response/?student_id=${STUDENT_ID}&page_id=${props.pageNumber}&scenario_id=${props.match.params.sid}`)
+    .then(res => res.json())
+    .then(pageData => {
+      console.log(pageData)
+      setChoiceMade(pageData.choice)
+    })
+    .catch(err => {
+      console.log(err)
+    })
+  }, [])
+
+
   const handleRadioChange = (event) => {
     setValue(event.target.value);
     setHelperText(' ');
     setError(false);
   };
 
-  const handleSubmit = (event) => {
-    console.log("CLICKED")
-    console.log(event);
-    event.preventDefault();
-    if (value !== '') {
-      setHelperText('Good Answer!');
-      setError(true);
-      const resultPage = choices.filter(choice => choice.text === value)[0].result_page;
-      event.update(props.activePage, resultPage);
-      props.changePage(resultPage);
-    } else {
-      console.log("FAIL TO GO TO NEXT PAGE")
-      setHelperText('Please select an option.');
-      setError(true);
-    }
-  };
+  // const handleSubmit = (event) => {
+  //   console.log("CLICKED")
+  //   console.log(event);
+  //   event.preventDefault();
+  //   if (value !== '') {
+  //     setHelperText('Good Answer!');
+  //     setError(true);
+  //     const resultPage = choices.filter(choice => choice.text === value)[0].result_page;
+  //     event.update(props.activePage, resultPage);
+  //     props.changePage(resultPage);
+  //   } else {
+  //     console.log("FAIL TO GO TO NEXT PAGE")
+  //     setHelperText('Please select an option.');
+  //     setError(true);
+  //   }
+  // };
 
 
 
@@ -133,26 +145,55 @@ export default function ErrorRadios(props)
           if (value !== '') {
             setHelperText('Good Answer!');
             setError(true);
-            const resultPage = choices.filter(choice => choice.text === value)[0].result_page;
-            context.update(resultPage);
-            props.changePage(resultPage);
+            const selected = choices.filter(choice => choice.text === value)[0];
+            console.log(selected)
+            //student id is the string "student" in the students api
+            fetch(BASE_URL + `/action_response/?action_page_id=${selected.a_id}&student_id=${STUDENT_ID}&scenario_id=${props.match.params.sid}&course_id=1`, {
+              method: 'PUT',
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                action_page: selected.a_id,
+                reponse: value
+              })
+            })
+            .then(res => res.json())
+            .then(data => {
+              console.log('Success:', data);
+            })
+            .catch((err) => {
+              console.error("Error: ", err)
+            })
+            context.update(selected.result_page);
+            props.changePage(selected.result_page);
           } else {
             console.log("FAIL TO GO TO NEXT PAGE")
             setHelperText('Please select an option.');
             setError(true);
           }
+          
         }}>
           <FormControl component="fieldset" error={error} className={classes.formControl}>
             <RadioGroup aria-label="quiz" name="quiz" value={value} onChange={handleRadioChange}>
               {choices.map((choice, index) => (
-                  <FormControlLabel value={choice.text} key={index} control={<Radio />} label={choice.text} />
+                   (choiceMade === undefined) ?
+                    <FormControlLabel value={choice.text} key={index} control={<Radio />} label={choice.text} />
+                    :
+                    <FormControlLabel value={choice.text} checked={choice.text === choiceMade} disabled={true} key={index} control={<Radio />} label={choice.text} />
+                  
                 ))
               }
             </RadioGroup>
-            <FormHelperText>{helperText}</FormHelperText>
-            <Box width={100}>
-              <SpecialButton type="save" title={nextPageTitle}></SpecialButton>
-            </Box>
+            {choiceMade===undefined &&
+            <div>
+              <FormHelperText>{helperText}</FormHelperText>
+              <Box width={100}>
+                <SpecialButton type="save" title={nextPageTitle}></SpecialButton>
+              </Box>
+            </div>
+            } 
           </FormControl>
         </form>
       )}

@@ -132,20 +132,13 @@ DATABASES = {
         #  'PASSWORD': 'Siw8DtLM7Zg5FaP6lQbj9vyvuQ9C2ghB',
         #  'HOST': 'queenie.db.elephantsql.com',
         #  'PORT': '5432',
-
-        # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        # 'NAME': 'qelfnxes',
-        # 'USER': 'qelfnxes',
-        # 'PASSWORD': 'MV7YEGQjB5A9FijyB-IcUZ1wP9xSvxp-',
-        # 'HOST': 'queenie.db.elephantsql.com',
-        # 'PORT': '5432',
-
+        
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'zoomba',
-        'USER': 'backendboys',
-        'PASSWORD': 'youwishyouwerezoomba',
-        'HOST': 'ethisim-db.cs.umass.edu',
-        'PORT': '5432'
+        'NAME': DB_NAME,
+        'USER': DB_USER,
+        'PASSWORD': DB_PASS,
+        'HOST': DB_HOST,
+        'PORT': DB_PORT
 
         # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
         # 'NAME': DB_NAME,

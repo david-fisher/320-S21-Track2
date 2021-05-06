@@ -462,7 +462,8 @@ class dashboard_page(APIView):
         #professor_id = self.request.query_params.get('professor')
         
         #new, changed the endpoint request
-        professor_id = request.META['uid']
+        #professor_id = request.META['uid']
+        professor_id = "DFisher"
         #todo check that id != None
         #get all scenarios belonging to this professor
         scenario_query = scenarios.objects.filter(pts2 = professor_id).values()

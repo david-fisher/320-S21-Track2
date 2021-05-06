@@ -603,66 +603,66 @@ class flowchart(APIView):
     #get all page objects given a scenario id
     def get(self, request, *args, **kwargs):
         SCENARIO_id = self.request.query_params.get('scenario')
-        print(SCENARIO_id)
+        print(SCENARIO_ID)
         pages_query = PAGES.objects.filter(SCENARIO=SCENARIO_id).values()
         print(pages_query)
         for page in pages_query:
-            if page['PAGE_TYPE'] == 'A':
-                page['ACTION'] = ACTION_PAGE.objects.filter(PAGE=page['PAGE']).values()
+            if page['page_type'] == 'A':
+                page['action'] = ACTION_PAGE.objects.filter(PAGE=page['page']).values()
 
 
         return Response(pages_query)
 
     #update the next_page field of all page objects
     def put(self, request, *args, **kwargs):
-        SCENARIO_id = self.request.query_params.get('scenario')
-        if SCENARIO_id == None:
+        scenario_id = self.request.query_params.get('scenario')
+        if scenario_id == None:
             return Response({'status': 'details'}, status=status.HTTP_404_NOT_FOUND)
   
         for updated_page in request.data:
             #save updated choices within action pages  
-            if updated_page['PAGE_TYPE'] == 'A':
+            if updated_page['page_type'] == 'A':
                 print('action page')
                 print(update)
-                for updated_choice in updated_page['ACTION']:
+                for updated_choice in updated_page['action']:
                     print(updated_choice)
-                    extant_choice = ACTION_PAGE.objects.get(ID=updated_choice['id']) 
+                    extant_choice = action_page.objects.get(id=updated_choice['id']) 
                     action_serializer = Action_pageSerializer(extant_choice, updated_choice)
                     if not action_serializer.is_valid():
                         print("error with PUTing choices")
                         return Response(action_serializer.errors)
                     action_serializer.save()
             #save the page itself    
-            extant_page = PAGES.objects.get(SCENARIO = SCENARIO_id, PAGE = updated_page['PAGE'])
+            extant_page = pages.objects.get(scenario = scenario_id, page = updated_page['page'])
             serializer = PagesSerializer(extant_page, data=updated_page)
             if not serializer.is_valid():
                 print("error with PUTing pages")
                 return Response(serializer.errors)
             serializer.save()
         #return query with newly saved pages     
-        pages_query = PAGES.objects.filter(SCENARIO=SCENARIO_id).values()
+        pages_query = pages.objects.filter(scenario=scenario_id).values()
         for page in pages_query:
-            if page['PAGE_TYPE'] == 'A':
-                page['ACTION'] = ACTION_PAGE.objects.filter(PAGE=page['PAGE']).values()
+            if page['page_type'] == 'A':
+                page['action'] = action_page.objects.filter(page=page['page']).values()
         return Response(pages_query)
 
 
 
 #Pages viewset
 class Page_reflectionViewSet(generics.CreateAPIView):
-    model = PAGES
+    model = pages
     serializer_class = Pages_reflectionSerializer
 
 class Page_actionViewSet(generics.CreateAPIView):
-    model = PAGES
+    model = pages
     serializer_class = Pages_actionSerializer   
 
 class Page_genericViewSet(generics.CreateAPIView):
-    model = PAGES
+    model = pages
     serializer_class = Pages_genericSerializer
 
 class Page_StakeholderViewSet(generics.CreateAPIView):
-    model = PAGES
+    model = pages
     serializer_class = Pages_stakeholderSerializer
     
 

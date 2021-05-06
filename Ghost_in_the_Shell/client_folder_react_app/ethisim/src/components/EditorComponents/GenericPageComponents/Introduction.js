@@ -88,14 +88,14 @@ export default function Introduction(props) {
     const [errorBody, setErrorBody] = useState(false);
 
     var postReqBody = {
-        PAGE_TYPE: page_type,
-        PAGE_TITLE: title,
-        PAGE_BODY: bodyText,
-        SCENARIO: scenario_ID,
-        NEXT_PAGE: next_page_id,
-        BODIES: bodiesText,
-        X_COORDINATE: xCoord,
-        Y_COORDINATE: yCoord,
+        page_type: page_type,
+        page_title: title,
+        page_body: bodyText,
+        scenario: scenario_ID,
+        next_page: next_page_id,
+        bodies: bodiesText,
+        x_coordinate: xCoord,
+        y_coordinate: yCoord,
     };
 
     function handlePost(setPostValues, postReqBody, s_id, first_time) {
@@ -105,15 +105,15 @@ export default function Introduction(props) {
             const deleteEndPoint = '/page?page_id=' + pageID;
             let newScenarioComponents = [...scenarioComponents];
             let component = newScenarioComponents.find((x) => x.id === pageID);
-            component.id = resp.data.PAGE;
+            component.id = resp.data.page;
             component.title = title;
-            setPageID(resp.data.PAGE);
-            setCurrentPageID(resp.data.PAGE);
+            setPageID(resp.data.page);
+            setCurrentPageID(resp.data.page);
             setScenarioComponents(newScenarioComponents);
             setSuccessBannerFade(true);
             setSuccessBannerMessage('Successfully saved page!');
             universalDelete(setDeleteValues, deleteEndPoint, null, null, {
-                PAGE: pageID,
+                page: pageID,
             });
         }
 

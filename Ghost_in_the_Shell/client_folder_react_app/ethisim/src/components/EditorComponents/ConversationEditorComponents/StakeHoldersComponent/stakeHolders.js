@@ -68,7 +68,7 @@ export default function StakeHolderFields({ scenario }) {
     function getExistingStakeHolders() {
         setLoading(true);
 
-        var data = { SCENARIO: { scenario } };
+        var data = { scenario: { scenario } };
         var config = {
             method: 'get',
             url: baseURL + '/api/stakeholders/?SCENARIO=' + scenario,
@@ -102,7 +102,7 @@ export default function StakeHolderFields({ scenario }) {
 
         //handling it on the frontend
         const leftStakeHolders = stakeHolders.filter(
-            (s) => s.STAKEHOLDER !== stakeHolderID
+            (s) => s.stakeholder !== stakeHolderID
         );
         setStakeHolders(leftStakeHolders);
 
@@ -143,7 +143,7 @@ export default function StakeHolderFields({ scenario }) {
         setLoading(true);
 
         var data = JSON.stringify({
-            SCENARIO: scenario,
+            scenario: scenario,
         });
 
         var config = {
@@ -273,15 +273,15 @@ export default function StakeHolderFields({ scenario }) {
             <form id="form">
                 {stakeHolders.map((stakeHolder) => (
                     <StakeHolder
-                        key={stakeHolder.STAKEHOLDER}
+                        key={stakeHolder.stakeholder}
                         removeStakeHolder={removeStakeHolder}
-                        id={stakeHolder.STAKEHOLDER}
-                        name={stakeHolder.NAME}
-                        job={stakeHolder.JOB}
-                        bio={stakeHolder.DESCRIPTION}
-                        mainConvo={stakeHolder.INTRODUCTION}
-                        version={stakeHolder.VERSION}
-                        stakeHolders={stakeHolders}
+                        id={stakeHolder.stakeholder}
+                        name={stakeHolder.name}
+                        job={stakeHolder.job}
+                        bio={stakeHolder.description}
+                        mainConvo={stakeHolder.introduction}
+                        version={stakeHolder.version}
+                        stakeHolders={stakeholders}
                         setStakeHolders={setStakeHolders}
                     />
                 ))}

@@ -119,7 +119,7 @@ class pages(models.Model):
     scenario = models.ForeignKey('scenarios', on_delete = models.CASCADE, related_name='pages1', db_column='scenario')
     version = models.IntegerField(default=1, editable=True)
     body = models.TextField(blank=True, null=True)
-    next_id = models.ForeignKey('self', on_delete = models.CASCADE, related_name='pages2', null=True)
+    next_id = models.ForeignKey('self', on_delete = models.CASCADE, related_name='pages2', null=True, db_column='page')
     x_coordinate = models.IntegerField()
     y_coordinate = models.IntegerField()
     completed = models.BooleanField(default= False)

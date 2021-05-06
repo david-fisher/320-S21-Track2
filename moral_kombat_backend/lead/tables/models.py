@@ -299,7 +299,7 @@ class stakeholders(models.Model):
 
 class stakeholders_to_questions(models.Model):
     stakeholder = models.ForeignKey('stakeholders', on_delete = models.CASCADE, db_column='stakeholder')
-    question = models.ForeignKey('questions', on_delete = models.CASCADE, 'question')
+    question = models.ForeignKey('questions', on_delete = models.CASCADE, db_column='question')
 
     class Meta:
         unique_together = ('stakeholder', 'question')

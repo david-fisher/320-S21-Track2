@@ -228,9 +228,9 @@ export default function IssueMatrix({ scenario_stakeHolders, scenario }) {
                     changedStakeHolder = curStakeHolder;
                 }
                 issues.push({
-                    COVERAGE_SCORE: issue.coverage_score,
-                    ISSUE: issue.issue,
-                    STAKEHOLDER: issue.stakeholder,
+                    coverage_score: issue.coverage_score,
+                    issue: issue.issue,
+                    stakeholder: issue.stakeholder,
                 });
             });
         }

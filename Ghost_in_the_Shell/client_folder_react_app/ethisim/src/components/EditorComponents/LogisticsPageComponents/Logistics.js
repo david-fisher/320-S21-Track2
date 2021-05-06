@@ -207,12 +207,12 @@ export default function Logistics({ scenario_ID }) {
 
     const handleOnChangePublic = (event) => {
         setIsPublic(event.target.checked);
-        setEdit({ ...NewScenario, PUBLIC: event.target.checked });
+        setEdit({ ...NewScenario, public: event.target.checked });
     };
 
     const handleOnChangeFinish = (event) => {
         setIsFinished(event.target.checked);
-        setEdit({ ...NewScenario, IS_FINISHED: event.target.checked });
+        setEdit({ ...NewScenario, is_finished: event.target.checked });
     };
 
     const handleOnChangeNumConvo = (event) => {
@@ -226,7 +226,7 @@ export default function Logistics({ scenario_ID }) {
 
         for (let i = 0; i < response.length; i++) {
             for (let j = 0; j < NewScenario.courses.length; j++) {
-                if (response[i].NAME === NewScenario.courses[j].name) {
+                if (response[i].name === NewScenario.courses[j].name) {
                     sel.push(response[i]);
                 }
             }

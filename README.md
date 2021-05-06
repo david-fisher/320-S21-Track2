@@ -13,18 +13,24 @@ develop them further into longer discussions for class.
 5. Follow respective instructions to install [Prettier](https://prettier.io/docs/en/install.html), [Eslint](https://www.npmjs.com/package/eslint), and [Husky](https://www.npmjs.com/package/husky) 
 6. Use `npm start` to run the development build at localhost:3000
 
-## How to get the Back-end Running:
+## How to get the Editor Back-end Running:
 1. Install [python3](https://www.python.org/downloads/) and follow the setup instructions
 2. Clone the GitHub repository
-3. In the terminal, navigate to backend directory and install the Django packages using `pip install -r requirements.txt`
-4. Navigate to the lead directory and run `python manage.py runserver`
+3. In the terminal, navigate to `/moral_kombat_backend/` and install the Django packages using `pip install -r requirements.txt`
+4. Navigate to `/moral_kombat_backend/lead/` and run `python manage.py runserver`
 
 ## How to get the Simulator Front-end Running:
 1. Download [node.js](https://nodejs.org/en/download/)
 2. Clone the GitHub Repository
 3. After cloning repo, navigate to simulator/frontend: `cd ./simulator/frontend`
 4. Install all dependencies using `npm install`
-5. To run simulator, use `npm start`. This should open a tab in your browser and direct you to `http://localhost:3000`. If not, open a browser tab and go to that url. NOTE: We suggest putting data into database and running it at the same time as the simulator frontend. This will allow the simulator to actually load in data. See `How to get the Back-end Running` for details
+5. To run simulator, use `npm start`. This should open a tab in your browser and direct you to `http://localhost:3000`. If not, open a browser tab and go to that url. NOTE: We suggest putting data into the database and running it at the same time as the simulator frontend. This will allow the simulator to actually load in data.
+
+## How to get the Simulator Back-end Running:
+1. Install [python3](https://www.python.org/downloads/) and follow the setup instructions
+2. Clone the GitHub repository
+3. In the terminal, navigate to `/segfault/` and install the Django packages using `pip install -r requirements.txt`
+4. Run `python manage.py runserver`
 
 ## Setting up Shibboleth:
 Follow instructions in the [Shibboleth Install Guide](shib_install.md)

@@ -328,13 +328,15 @@ class generic_pageViewSet(viewsets.ModelViewSet):
 
 # changed - chirag - 04/15/2021
 class IssuesViewSet(viewsets.ModelViewSet):
-    queryset = issues.objects.all()
-    permission_classes = [
-        permissions.AllowAny
-    ]
-    serializer_class = IssuesSerializer
-    filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['scenario_id', "name"]
+    queryset = Issues.objects.all()
+    serializer_class = IssueSerializer
+    # queryset = issues.objects.all()
+    # permission_classes = [
+    #     permissions.AllowAny
+    # ]
+    # serializer_class = IssuesSerializer
+    # filter_backends = [DjangoFilterBackend]
+    # filterset_fields = ['scenario_id', "name"]
 
 
 class Action_pageViewSet(viewsets.ModelViewSet):

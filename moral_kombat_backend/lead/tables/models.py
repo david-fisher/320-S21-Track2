@@ -105,7 +105,7 @@ class issues(models.Model):
 
 
 class pages(models.Model):
-    page = models.IntegerField(unique = True)
+    page = models.IntegerField()
     page_choices = (
         ('I', 'INTRO'),
         ('F', 'FEEDBACK'),
@@ -119,8 +119,7 @@ class pages(models.Model):
     scenario = models.ForeignKey('scenarios', on_delete = models.CASCADE, related_name='pages1', db_column='scenario')
     version = models.IntegerField(default=1, editable=True)
     body = models.TextField(blank=True, null=True)
-    id = models.AutoField(primary_key = True)
-    next_id = models.ForeignKey('pages', on_delete = models.CASCADE, related_name='pages2', db_column='page')
+    next_id = models.ForeignKey('self', on_delete = models.CASCADE, related_name='pages2', null=True)
     x_coordinate = models.IntegerField()
     y_coordinate = models.IntegerField()
     completed = models.BooleanField(default= False)

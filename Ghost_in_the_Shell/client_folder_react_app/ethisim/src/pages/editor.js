@@ -175,7 +175,7 @@ export default function Editor(props) {
     console.log(scenario_ID);
 
     //TODO when version control is implemented
-    const tempVersionID = 1;
+    const tempversionid = 1;
 
     const [getValues, setGetValues] = useState({
         data: null,

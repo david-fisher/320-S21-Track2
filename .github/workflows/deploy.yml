@@ -8,46 +8,14 @@ concurrency: deployment
 on:
   push:
     paths:
-      - 'Ghost_in_the_Shell/*'
-      - 'simulator/*'
+        - '**'
+        - '!Ghost_in_the_Shell/**'
+        - '!simulator/**'
     branches: [ main, build-and-deploy ]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    env:
-      CI: false
-    strategy:
-      matrix:
-        node-version: [15.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
-    steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
-        with:
-          node-version: ${{ matrix.node-version }}
-      - name: Build Editor
-        working-directory: ./Ghost_in_the_Shell/client_folder_react_app/ethisim/
-        run: yarn install && PUBLIC_URL=/se yarn run build
-      - name: Upload Editor artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: editor-frontend
-          path: ./Ghost_in_the_Shell/client_folder_react_app/ethisim/build/
-      - name: Build Simulator
-        working-directory: ./simulator/frontend/
-        run: yarn install && PUBLIC_URL=/simulator yarn run build
-      - name: Upload Simulator artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: sim-frontend
-          path: ./simulator/frontend/build/
-
   deploy:
     runs-on: self-hosted
-    needs: build
     
     steps:
       - uses: actions/checkout@v2
@@ -67,23 +35,12 @@ jobs:
           cp requirements.txt ./ethisim/requirements.txt;
           cp Dockerfile ./ethisim/Dockerfile;
           mkdir ./ethisim/apache/build ./ethisim/apache/build/se ./ethisim/apache/build/simulator;
-          cp -r ./editor-frontend/* ./ethisim/apache/build/se;
-          cp -r ./sim-frontend/* ./ethisim/apache/build/simulator;
           cp ./apache/.htaccess ./ethisim/apache/build/se;
           cp ./apache/.htaccess ./ethisim/apache/build/simulator;
           if [ -e ./moral_kombat_backend ]; then cp -r ./moral_kombat_backend ./ethisim/; fi;
           if [ -e ./segfault ]; then cp -r ./segfault ./ethisim/; fi; 
           zip -r ethisim.zip ./ethisim/;
           cp ethisim.zip ./ethisim/;
-      - name: Upload zip as prerelease
-        uses: "marvinpinto/action-automatic-releases@latest"
-        with:
-            automatic_release_tag: "latest"
-            repo_token: "${{ secrets.GITHUB_TOKEN }}"
-            prerelease: true
-            title: "Development Build"
-            files: |
-              ethisim.zip
       - name: Stopping current docker container, remove any docker containers
         working-directory: /ethisim/
         run: |
@@ -91,7 +48,6 @@ jobs:
             if [[ $(docker ps -aq) ]]; then docker rm $(docker ps -aq); fi
       - name: Remove exisitng apache files
         run: |
-          if [ -e /ethisim/apache/build ]; then echo "removing apache build"; rm -rf /ethisim/apache/build/*; fi;
           if [ -e /ethisim/moral_kombat_backend ]; then echo "removing moral_kombat_backend"; rm -rf /ethisim/moral_kombat_backend; fi;
           if [ -e /ethisim/segfault ]; then echo "removing segfault"; rm -rf /ethisim/segfault; fi;
       - name: Copy artifact to server

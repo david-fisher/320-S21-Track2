@@ -178,7 +178,7 @@ Response_to_action_page: links a response to an action page
 
 Scenarios_for: links scenarios and courses. Documents what course a scenario is for.
 
-Courses_to_scenario:  Links courses (and therefore course staff) to a scenario with a certain permission level (0=read vs 1=read and write
+Courses_to_scenario:  Links courses (and therefore course staff) to a scenario with a certain permission level (0=read vs 1=read and write)
 
 # how to connect to database from react.js
 1. run `npm install all` within the directory containing `package.json` to install all dependencies for the pg package, which is the library used to communicate between the PostgreSQL database and the react.js app, as well as all other dependencies outlined in the `package_lock.json` file

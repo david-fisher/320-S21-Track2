@@ -14,7 +14,8 @@ class StakeholdersToQuestionsSerializer(serializers.ModelSerializer):
 class DemographicsSerializer(serializers.ModelSerializer):
     class Meta:
         model = demographics
-        fields = ('student', 'age', 'grade', 'gender', 'race', 'major')
+        # fields = '__all__'
+        fields = ('student', 'age', 'gender', 'race', 'major')
 
 #updated 05/04/21
 class StudentSerializer(serializers.ModelSerializer):
@@ -39,7 +40,7 @@ class StudentTimesSerializer(serializers.ModelSerializer):
 class ProfessorSerializer(serializers.ModelSerializer):
     class Meta:
         model = professors
-        fields = ('professors', 'fname', 'lname')
+        fields = ('professor', 'fname', 'lname')
 
 #updated 05/04/21
 class ScenariosSerializer(serializers.ModelSerializer):

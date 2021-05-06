@@ -309,7 +309,7 @@ export default function FlowDiagram({ scenario_ID }) {
                     page_type: currentElement.page_type,
                     page_title: currentElement.page_title,
                     page_body: currentElement.body,
-                    scenario_id: currentElement.SCENARIO_id, //WEIRD PROP
+                    scenario_id: currentElement.scenario_id, //WEIRD PROP
                     version: currentElement.version,
                     next_page: null,
                     x_coordinate: Math.floor(currentElement.position.x),

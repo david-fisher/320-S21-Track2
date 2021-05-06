@@ -1088,7 +1088,7 @@ class coverages_page(APIView):
             # del issues_dict['id']
             # issues_dict['issue'] = issues_dict['issue_id']
             # del issues_dict['issue_id']
-            # issues_dict['stakeholder'] = issues_dict['stakeholder_id']
+            # issues_dict['stakeholder'] = issues_dict['stakeholder']
             # del issues_dict['stakeholder']
             issues_dict.update(
                 {
@@ -1172,8 +1172,8 @@ class stakeholders_page(APIView):
                 # del issues_dict['id']
                 # issues_dict['issue'] = issues_dict['issue_id']
                 # del issues_dict['issue_id']
-                # issues_dict['stakeholder'] = issues_dict['stakeholder_id']
-                # del issues_dict['stakeholder_id']
+                # issues_dict['stakeholder'] = issues_dict['stakeholder']
+                # del issues_dict['stakeholder']
                 issues_dict.update(
                     {
                         "name": issue.name
@@ -1241,8 +1241,8 @@ class stakeholders_page(APIView):
         '''
         # scenario not id
         scenario_id = self.request.query_params.get('scenario_id')
-        stakeholder_id = self.request.query_params.get('stakeholder_id')
-        # stakeholder_id = self.request.get.get('stakeholder_id')
+        stakeholder_id = self.request.query_params.get('stakeholder')
+        # stakeholder_id = self.request.get.get('stakeholder')
 
         # handle request for scenario_id
         # get all stakeholder in scenario with id = scenario_id
@@ -1312,7 +1312,7 @@ class stakeholders_page(APIView):
 
     def delete(self, request, *args, **kwargs):
 
-        stakeholder_id = self.request.query_params.get('stakeholder_id')
+        stakeholder_id = self.request.query_params.get('stakeholder')
 
         if stakeholder_id != None:
             try:

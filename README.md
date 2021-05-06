@@ -19,11 +19,18 @@ develop them further into longer discussions for class.
 3. In the terminal, navigate to backend directory and install the Django packages using `pip install -r requirements.txt`
 4. Navigate to the lead directory and run `python manage.py runserver`
 
+## How to get the Simulator Front-end Running:
+1. Download [node.js](https://nodejs.org/en/download/)
+2. Clone the GitHub Repository
+3. After cloning repo, navigate to simulator/frontend: `cd ./simulator/frontend`
+4. Install all dependencies using `npm install`
+5. To run simulator, use `npm start`. This should open a tab in your browser and direct you to `http://localhost:3000`. If not, open a browser tab and got to that url. NOTE: We suggest putting data into database and running it at the same time as the simulator frontend. This will allow the simulator to actual load in data. See `How to get the Back-end Running` for details
+
 ## Setting up Shibboleth:
 Follow instructions in the [Shibboleth Install Guide](shib_install.md)
 
 ## Database:
-[Schema Diagram](https://dbdiagram.io/d/5f8326e63a78976d7b772f0c)
+[Schema Diagram](https://github.com/david-fisher/320-S21-Track2/blob/main/ZOOMba/Zoomba_Schema.sql)
 
 ## API Endpoints and Rest Documentation:
 You can find the list of endpoints [here](https://docs.google.com/document/d/1QSiUe21Z_TgT5XZKyR0twevRM864_AswxzVdYLwqW1I/edit?usp=sharing)

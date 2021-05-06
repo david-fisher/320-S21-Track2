@@ -6,7 +6,7 @@ from django.core.validators import MinValueValidator
 class action_page(models.Model):
     action_page_id = models.IntegerField()
     id = models.IntegerField(primary_key = True)
-    page = models.ForeignKey('pages', to_field='id', on_delete = models.CASCADE, related_name='action_page1')
+    page = models.ForeignKey('pages', on_delete = models.CASCADE, related_name='action_page1', db_column='page')
     version = models.IntegerField()
     choice = models.TextField()
     result_page = models.IntegerField()
@@ -18,7 +18,7 @@ class action_page(models.Model):
 
 class conversations(models.Model):
     conversation = models.AutoField(primary_key=True)
-    stakeholder = models.ForeignKey('stakeholders', to_field = 'id', on_delete = models.CASCADE, related_name='conversations1')
+    stakeholder = models.ForeignKey('stakeholders', on_delete = models.CASCADE, related_name='conversations1', db_column='stakeholder')
     question = models.TextField()
     response = models.TextField()
     question_summary = models.TextField()
@@ -40,8 +40,8 @@ class courses(models.Model):
 
 
 class courses_to_scenario(models.Model):
-    course = models.ForeignKey('courses', to_field = 'course', on_delete = models.CASCADE, null = False)
-    scenario = models.ForeignKey('scenarios', to_field = 'scenario_id', on_delete = models.CASCADE, null=False)
+    course = models.ForeignKey('courses', on_delete = models.CASCADE, null = False, db_column='course')
+    scenario = models.ForeignKey('scenarios', on_delete = models.CASCADE, null=False, db_column='scenario_id')
     permission = models.IntegerField()
 
     class Meta:
@@ -60,7 +60,7 @@ class coverage(models.Model):
 
 
 class demographics(models.Model):
-    student = models.ForeignKey('students', to_field = 'student', on_delete = models.CASCADE, related_name = 'demographics', unique = True)
+    student = models.ForeignKey('students', on_delete = models.CASCADE, related_name = 'demographics', unique = True, db_column='student')
     age = models.SmallIntegerField()
     grade_choices = (('0', 'Other'),
                      ('1', 'Freshmen'),
@@ -86,7 +86,7 @@ class demographics(models.Model):
 
 class generic_page(models.Model):
     generic_page_id = models.IntegerField()
-    page = models.ForeignKey('pages', to_field= 'id', on_delete = models.CASCADE, related_name='generic_page1')
+    page = models.ForeignKey('pages', on_delete = models.CASCADE, related_name='generic_page1', db_column='page')
     body = models.TextField()
     version = models.IntegerField()
 
@@ -115,11 +115,11 @@ class pages(models.Model):
     )
     page_type = models.CharField(max_length=2, choices=page_choices)
     page_title = models.CharField(max_length=1000)
-    scenario = models.ForeignKey('scenarios', to_field='scenario_id', on_delete = models.CASCADE, related_name='pages1')
+    scenario = models.ForeignKey('scenarios', on_delete = models.CASCADE, related_name='pages1', db_column='scenarios_id')
     version = models.IntegerField(default=1, editable=True)
     body = models.TextField(blank=True, null=True)
     id = models.AutoField(primary_key = True)
-    next_id = models.ForeignKey('pages', to_field='id', on_delete = models.CASCADE, related_name='pages2')
+    next_id = models.ForeignKey('pages', on_delete = models.CASCADE, related_name='pages2', db_column='page')
     x_coordinate = models.IntegerField()
     y_coordinate = models.IntegerField()
     completed = models.BooleanField(default= False)

@@ -136,7 +136,7 @@ function EthisimIntro() {
     return (
         <div className={classes.ethisimIntroContainer}>
             <WhiteTextTypography variant="h3" align="center">
-                Convenient Ethics Simulations
+                Ethics Simulations for Universities
             </WhiteTextTypography>
             <WhiteTextTypography align="center" className={classes.margin}>
                 Ethisim allows you to easily create and assign ethics

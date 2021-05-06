@@ -67,7 +67,7 @@ export default function Dashboard({setScenario}) {
     // get all scenarios assigned to student with id parameter
     async function getScenarioData() {
 
-        const response = await fetch(`${BASE_URL}/scenarios/?student_id=${STUDENT_ID}`, {
+        const response = await fetch(`${BASE_URL}/dashboard/?student_id=${STUDENT_ID}`, {
             "method": "GET",
         });
         
@@ -79,7 +79,7 @@ export default function Dashboard({setScenario}) {
     // Retrieves all scenarios and creates their cards to be displayed into the dashboard
     useEffect(() => {
         getScenarioData().then(scenariosData => {
-            const scenarios = scenariosData.results.slice();
+            const scenarios = scenariosData.slice();
 
             console.log(scenarios);
             

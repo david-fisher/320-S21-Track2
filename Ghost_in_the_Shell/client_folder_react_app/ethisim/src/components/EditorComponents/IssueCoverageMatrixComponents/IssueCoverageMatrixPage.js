@@ -253,30 +253,6 @@ export default function ICMatrix({ scenario_ID }) {
             });
     }
 
-    /* <EntryFields
-            issueEntryFieldList={
-                issueEntryFieldList !== null ? issueEntryFieldList : []
-            }
-            setIssueEntryFieldList={setIssueEntryFieldList}
-            scenarioID={scenario_ID}
-    />*/
-
-    /*return (
-        <div className={classes.issue}>
-            <Typography align="center" variant="h2">
-                Configure Ethical Issues
-            </Typography>
-            <div className={classes.spacing}>
-                <Button variant="contained" color="primary" onClick={getData}>
-                    <RefreshIcon className={classes.iconRefreshSmall} />
-                </Button>
-            </div>
-            <MaterialTable>
-                issueCoverageMatrix = {issueCoverageMatrix}
-                setIssueCoverageMatrix = {setissueCoverageMatrix}
-            </MaterialTable>
-        </div>
-    );*/
     //for info button
 
     if (isLoading) {

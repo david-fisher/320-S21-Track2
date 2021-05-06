@@ -225,9 +225,6 @@ class professors_to_scenarioViewSet(viewsets.ModelViewSet):
 
 class PagesViewSet(viewsets.ModelViewSet):
     queryset = pages.objects.all()
-    permissions_classes = [
-        permissions.AllowAny
-    ]
     serializer_class = PagesSerializer
 
 # stakeholder_page viewset

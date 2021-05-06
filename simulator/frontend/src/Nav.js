@@ -1,9 +1,5 @@
 import React from "react";
 
-import Summary from "./pages/summary";
-import RadarTest from "./pages/chartTest";
-import Dashboard from "./pages/sim_dashboard";
-
 import {
   ThemeProvider,
   createMuiTheme,
@@ -16,8 +12,9 @@ import {
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 
-import { BrowserRouter as Router, Switch, Route, Link, Redirect } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import SimulationWindow from './pages/simulator_window';
+import Dashboard from "./pages/sim_dashboard";
 import { ConvLimitProvider } from './pages/context/ConvContext';
 
 const useStyles = makeStyles((theme) => ({
@@ -33,9 +30,9 @@ const useStyles = makeStyles((theme) => ({
     color: "#FFF",
   },
   link: {
+    textDecoration: "none",
     "&:hover": {
-      color: "#000000",
-      textDecoration: "none",
+      color: "#000000"
     },
   },
 }));
@@ -56,6 +53,10 @@ export const ScenariosContext = React.createContext();
 function Nav() {
   const classes = useStyles();
   const scenariosState = React.useState({});
+
+  const handleLogout = () => {
+    window.location.href = "https://ethisim2.cs.umass.edu/Shibboleth.sso/Logout?return=https://webauth.umass.edu/Logout";
+  };
 
   return (
     <div className={classes.root}>
@@ -79,7 +80,7 @@ function Nav() {
                     </Button>
                   </Link>
                 </Typography>
-                <Button color="inherit">LogOut</Button>
+                <Button color="inherit" onClick={handleLogout}>LogOut</Button>
               </Toolbar>
             </AppBar>
           {/* A <Switch> looks through its children <Route>s and
@@ -87,11 +88,9 @@ function Nav() {
             <Switch>
               <ConvLimitProvider>
                 <Route exact path="/" component={Dashboard} />
-                <Route path="/summary" component={Summary} />
                 <ScenariosContext.Provider value={scenariosState}>
                   <Route path="/simulation/:sid([0-9]+)" component={SimulationWindow} />
                 </ScenariosContext.Provider>
-                <Route path="/chartTest" exact component={RadarTest} />
               </ConvLimitProvider>
             </Switch>
           </ThemeProvider>

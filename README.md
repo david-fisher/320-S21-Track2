@@ -11,7 +11,7 @@ develop them further into longer discussions for class.
 
 This is Track III's repository containing code for both the front-end and back-end of Ethisim. This README provides instruction on how to install and setup both the front-end and back-end in order to get the software running.
 
-## How to get the Front-end Running
+## How to get the Editor Front-end Running
 1. Download node.js version 12.18.4 and npm https://www.npmjs.com/get-npm
 2. Clone the Github repository
 3. cd into the ethisim folder
@@ -118,7 +118,6 @@ https://www.postgresql.org/download/
 3. in command prompt or terminal, call `psql -U postgres -f [full filepath to database_setup.sql]`.
 note: The file `database_setup.sql` can currently be found in the `erd-implementation` branch in the `database` folder.
 
-
 # how to connect to database from react.js
 1. run `npm install all` within the directory containing `package.json` to install all dependencies for the pg package, which is the library used to communicate between the PostgreSQL database and the react.js app, as well as all other dependencies outlined in the `package_lock.json` file
 
@@ -132,14 +131,11 @@ note: The file `database_setup.sql` can currently be found in the `erd-implement
 1. Install Node.js:  
 https://nodejs.org/en/download/
 
-
-2. Go into the folder `frontend` in the command line.
+2. Go into the folder `frontend` in the command line: `cd ./simulator/frontend/`
 
 3. Run `npm install` in the command line to install all dependencies required to run the app.
 
-4. Run `npm start` in the command line to start the app.
+4. We recommend setting up the backend and filling the database with some data so you can see the data loaded into the frontend.
 
-# For testing: populating the database with dummy data
-1. in command prompt or terminal, run `psql -U [user] -f [full filepath to insert_example_data.sql]`. This file can currently be found in the `erd-implementation` branch in the `database` directory.
+4. Run `npm start` in the command line to start the app. This should open your browser and send you to `http://localhost:3000`. If not, go to your browser and go to that url. 
 
->>>>>>> origin/main

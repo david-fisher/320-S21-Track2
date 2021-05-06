@@ -34,18 +34,18 @@ export default function QuestionFields({
     const removeQuestion = (questionID) => {
         const leftQuestions = questions.filter((q) => q.id !== questionID);
         setQuestions(leftQuestions);
-        let reqBody = leftQuestions.map((obj) => obj.REFLECTION_QUESTION);
+        let reqBody = leftQuestions.map((obj) => obj.reflection_question);
         setReqBodyNew(reqBody);
     };
 
     const addQuestion = (e) => {
         e.preventDefault();
-        let newQuestions = questions.map((data) => data.REFLECTION_QUESTION);
+        let newQuestions = questions.map((data) => data.reflection_question);
         newQuestions = [...newQuestions, ''];
         setReqBodyNew(newQuestions);
         let newQuestionsList = questions.concat({
             id: setNewIssueID(),
-            REFLECTION_QUESTION: '',
+            reflection_question: '',
         });
         setQuestions(newQuestionsList);
     };
@@ -67,7 +67,7 @@ export default function QuestionFields({
                         key={data.id}
                         id={data.id}
                         removeQuestion={removeQuestion}
-                        question={data.REFLECTION_QUESTION}
+                        question={data.reflection_question}
                         listOfQuestions={questions}
                         setListOfQuestions={setQuestions}
                         setReqBodyNew={setReqBodyNew}

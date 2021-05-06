@@ -1,11 +1,6 @@
-import React, { useEffect, useState, useRef } from "react";
-import { withStyles,Typography, Box, Grid, Button} from "@material-ui/core";
-import Radar from "./chart/chart"
-import ScrollableTabsButtonAuto from "./components/feedback_tabs";
-import NextButton from "./components/Buttons/NextButton"
-import BackButton from "./components/Buttons/BackButton"
-import { BASE_URL, STUDENT_ID } from '../constants/config';
-//import { useFetch } from "react-async"
+import React from "react";
+import { withStyles,Typography, Box, Grid } from "@material-ui/core";
+import Radar from "./chart/chart";
 
 const TextTypography = withStyles({
   root: {
@@ -48,10 +43,10 @@ function Feedback(props) {
       </Grid>
       {/* <Grid container direction="row" justify="space-between">
         <Grid item style={{ marginRight: "0rem", marginTop: "-3rem" }}>
-          <BackButton title="Summary" onClick={goToSummary}></BackButton>
+          <SpecialButton type="back" title="Summary" onClick={goToSummary}></SpecialButton>
         </Grid>
         <Grid item style={{ marginRight: "0rem", marginTop: "-3rem" }}>
-          <NextButton title="Final Reflection" onClick={goToFinalReflection}></NextButton>
+          <SpecialButton type="next" title="Final Reflection" onClick={goToFinalReflection}></SpecialButton>
         </Grid>
       </Grid> */}
       <Grid container spacing={2}>

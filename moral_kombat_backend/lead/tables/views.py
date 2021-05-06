@@ -466,8 +466,8 @@ class dashboard_page(APIView):
         professor_id = "DFisher"
         #todo check that id != None
 
-        scenario = scenarios.objects.get(scenario_id = 1)
-        scenario_dict = ScenariosSerializer(scenario).data
+        scenarios = scenarios.objects.get(scenario_id = 1)
+        scenario_dict = ScenariosSerializer(scenarios).data
 
         scenario_query = scenarios_for.objects.filter(scenario_id=scenario_dict['scenario_id']).values()
 
@@ -478,8 +478,8 @@ class dashboard_page(APIView):
         #loop through scenarios and append required information (course, page info)
         logistics = []
         print(scenario_query)
-        for scenario in scenario_query:
-            scenarios_for_query = scenarios_for.objects.filter(scenario_id = scenario['scenario']).values()
+        for scenario in scenarios:
+            scenarios_for_query = scenarios_for.objects.filter(scenario_id = scenario['scenario_id']).values()
             course_id_array = []
             for x in scenarios_for_query:
                 course_id_array.append(x['course'])

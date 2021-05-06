@@ -78,7 +78,7 @@ export default function HomepageNavBar() {
                 <Toolbar>
                     <img
                         src={WhiteLogo}
-                        alt="EthismLogo"
+                        alt="EthisimLogo"
                         className={classes.logo}
                     />
                     <Typography className={classes.title} variant="h5">

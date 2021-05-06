@@ -35,12 +35,6 @@ function Page(props) {
 
     };
 
-    const { state, setState } = React.useState({
-        visited: props.visited,
-        completed: props.completed,
-        pageNumber: props.pageNumber,
-    });
-
     return (pageTypes[props.type]);
 }
 

@@ -59,13 +59,14 @@ const useStyles = makeStyles((theme) => ({
         fontSize: '30px',
     },
     border: {
-        borderStyle: 'none none solid none',
+        //borderStyle: 'none none solid none',
+        marginTop: theme.spacing(2),
         marginBottom: theme.spacing(2),
     },
 }));
 
 //TODO when Shibboleth gets implemented
-const endpointGet = '/dashboard?professor_id=1';
+const endpointGet = '/dashboard';
 const endpointGetCourses = '/api/courses/';
 const endpointPost = '/dashboard';
 const endpointDelete = '/api/scenarios/';
@@ -160,12 +161,12 @@ export default function Dashboard() {
         error: null,
     });
     const [NewScenario, setNewScenario] = useState({
-        NAME: ' ',
-        IS_FINISHED: false,
-        PUBLIC: false,
-        NUM_CONVERSATIONS: 0,
-        PROFESSOR: 1,
-        COURSES: [],
+        name: ' ',
+        is_finished: false,
+        public: false,
+        num_conversations: 0,
+        professor: 1,
+        courses: [],
     });
 
     //For Banners
@@ -188,7 +189,7 @@ export default function Dashboard() {
     //For create new scenario dialogue box
     const handleClickOpen = () => {
         setOpen(true);
-        NewScenario.PUBLIC = false;
+        NewScenario.public = false;
         setNewScenario(NewScenario);
         getCourses();
     };
@@ -214,11 +215,11 @@ export default function Dashboard() {
 
         let validInput = true;
 
-        if (!NewScenario.NAME || !NewScenario.NAME.trim()) {
+        if (!NewScenario.name || !NewScenario.name.trim()) {
             setErrorName(true);
             setErrorNameText('Scenario name cannot be empty');
             validInput = false;
-        } else if (NewScenario.NAME.length >= 1000) {
+        } else if (NewScenario.name.length >= 1000) {
             setErrorName(true);
             setErrorNameText(
                 'Scenario name must have less than 1000 characters'
@@ -228,7 +229,7 @@ export default function Dashboard() {
             setErrorName(false);
         }
 
-        if (NewScenario.COURSES.length === 0) {
+        if (NewScenario.courses.length === 0) {
             setErrorCourses(true);
             validInput = false;
         } else {
@@ -237,12 +238,13 @@ export default function Dashboard() {
 
         if (validInput) {
             setNewScenario({
-                NAME: ' ',
-                IS_FINISHED: false,
-                PUBLIC: false,
-                NUM_CONVERSATIONS: 0,
-                PROFESSOR: 1,
-                COURSES: [],
+                scenario: 0,
+                version: 0,
+                name: ' ',
+                is_finished: false,
+                public: false,
+                num_conversations: 0,
+                scenario_id: 0,
             });
             //Smooth loading animation, loading animation will not reset during POST and GET Request
             setFetchScenariosResponse({
@@ -264,12 +266,13 @@ export default function Dashboard() {
     //X button on dialog for creating new scenario
     const handleClose = () => {
         setNewScenario({
-            NAME: ' ',
-            IS_FINISHED: false,
-            PUBLIC: false,
-            NUM_CONVERSATIONS: 0,
-            PROFESSOR: 1,
-            COURSES: [],
+            scenario: 0,
+            version: 0,
+            name: ' ',
+            is_finished: false,
+            public: false,
+            num_conversations: 0,
+            scenario_id: 0,
         });
         setErrorName(false);
         setErrorCourses(false);
@@ -279,12 +282,12 @@ export default function Dashboard() {
 
     //For new Scenario Post
     const handleOnChangeName = (event) => {
-        NewScenario.NAME = event.target.value;
+        NewScenario.name = event.target.value;
         setNewScenario(NewScenario);
     };
 
     const handleOnChangePublic = (info) => {
-        NewScenario.PUBLIC = !NewScenario.PUBLIC;
+        NewScenario.public = !NewScenario.public;
         setNewScenario(NewScenario);
     };
 
@@ -292,8 +295,8 @@ export default function Dashboard() {
     const updateSelectedClasses = (selectedClasses) => {
         //set new scenario courses to selected classes
         let sel = [];
-        selectedClasses.map((element) => sel.push({ COURSE: element.COURSE }));
-        NewScenario.COURSES = sel;
+        selectedClasses.map((element) => sel.push({ course: element.course }));
+        NewScenario.courses = sel;
         setNewScenario(NewScenario);
     };
 
@@ -306,7 +309,7 @@ export default function Dashboard() {
                 let newData = [];
                 finishedScenarios &&
                     finishedScenarios.filter(
-                        (entry) => entry.SCENARIO !== scenarioID
+                        (entry) => entry.scenario !== scenarioID
                     );
                 setFinishedScenarios(newData);
                 setShouldFetch(shouldFetch + 1);
@@ -317,7 +320,7 @@ export default function Dashboard() {
                 let newData = [];
                 unfinishedScenarios &&
                     unfinishedScenarios.filter(
-                        (entry) => entry.SCENARIO !== scenarioID
+                        (entry) => entry.scenario !== scenarioID
                     );
                 setUnfinishedScenarios(newData);
                 setShouldFetch(shouldFetch + 1);
@@ -357,32 +360,34 @@ export default function Dashboard() {
     let getData = () => {
         function onSuccess(response) {
             let finishedScenarios = response.data.filter(
-                (data) => data.IS_FINISHED
+                (data) => data.is_finished
             );
             let unfinishedScenarios = response.data.filter(
-                (data) => !data.IS_FINISHED
+                (data) => !data.is_finished
             );
             finishedScenarios = finishedScenarios.map((data) => (
                 <ScenarioCard
-                    key={data.SCENARIO}
+                    key={data.scenario_id}
                     data={data}
-                    scenarioID={data.SCENARIO}
-                    scenarioName={data.NAME}
-                    dateCreated={data.DATE_CREATED}
-                    isFinished={data.IS_FINISHED}
-                    courses={data.COURSES}
+                    scenario={data.scenario}
+                    scenarioID={data.scenario_id}
+                    scenarioName={data.name}
+                    dateCreated={data.date_created}
+                    isFinished={data.is_finished}
+                    courses={data.courses}
                     onDelete={deleteScenario}
                 />
             ));
             unfinishedScenarios = unfinishedScenarios.map((data) => (
                 <ScenarioCard
-                    key={data.SCENARIO}
+                    key={data.scenario_id}
                     data={data}
-                    scenarioID={data.SCENARIO}
-                    scenarioName={data.NAME}
-                    dateCreated={data.DATE_CREATED}
-                    finished={data.IS_FINISHED}
-                    courses={data.COURSES}
+                    scenario={data.scenario}
+                    scenarioID={data.scenario_id}
+                    scenarioName={data.name}
+                    dateCreated={data.date_created}
+                    finished={data.is_finished}
+                    courses={data.courses}
                     onDelete={deleteScenario}
                 />
             ));
@@ -475,7 +480,9 @@ export default function Dashboard() {
                     errorMessage={errorBannerMessage}
                 />
                 <div className={classes.border}>
-                    <Typography variant="h3">Unfinished Scenarios</Typography>
+                    <Typography variant="h3">
+                        Scenarios In Development
+                    </Typography>
                 </div>
                 <Grid
                     container
@@ -488,7 +495,7 @@ export default function Dashboard() {
                     <AddNewScenarioCard onClick={handleClickOpen} />
                 </Grid>
                 <div className={classes.border}>
-                    <Typography variant="h3">Finished Scenarios</Typography>
+                    <Typography variant="h3">Published Scenarios</Typography>
                 </div>
                 <Grid
                     container
@@ -567,7 +574,7 @@ export default function Dashboard() {
                                         color="primary"
                                     />
                                 }
-                                label="Public"
+                                label="Make Public"
                                 labelPlacement="start"
                             />
                         </form>

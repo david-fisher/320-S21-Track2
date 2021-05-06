@@ -13,9 +13,10 @@ import { baseURL } from './../../../../../Constants/Config';
 QuestionFields.propTypes = {
     qrs: PropTypes.any,
     stakeholder_id: PropTypes.number,
+    stakeVersion: PropTypes.number,
 };
 
-export default function QuestionFields({ qrs, stakeholder_id }) {
+export default function QuestionFields({ qrs, stakeholder_id, stakeVersion }) {
     //used to track if we are waiting on a HTTP GET/POST/PUT request
     //not needed for DELETE
     const [isLoading, setLoading] = useState(false);
@@ -81,7 +82,10 @@ export default function QuestionFields({ qrs, stakeholder_id }) {
         }
         setLoading(true);
 
-        var data = JSON.stringify({ STAKEHOLDER: stakeholder_id });
+        var data = JSON.stringify({
+            stakeholder: stakeholder_id,
+            stakeholder_version: stakeVersion,
+        }); // TODO change version to something else
 
         var config = {
             method: 'post',
@@ -115,7 +119,7 @@ export default function QuestionFields({ qrs, stakeholder_id }) {
         }
         setLoading(true);
 
-        const leftQuestions = QRs.filter((q) => q.CONVERSATION !== questionID);
+        const leftQuestions = QRs.filter((q) => q.conversation !== questionID);
         setQRs(leftQuestions);
 
         var data = JSON.stringify({});
@@ -232,14 +236,15 @@ export default function QuestionFields({ qrs, stakeholder_id }) {
             <form id="form" style={{ marginTop: -30 }}>
                 {QRs.map((data) => (
                     <QuestionField
-                        key={data.STAKEHOLDER}
-                        id={data.CONVERSATION}
+                        key={data.stakeholder}
+                        id={data.conversation}
                         removeQuestion={removeQuestion}
-                        question={data.QUESTION}
-                        response={data.RESPONSE}
-                        summary={data.SUMMARY}
+                        question={data.question}
+                        response={data.response}
+                        summary={data.summary}
                         QRs={QRs}
                         setQRs={setQRs}
+                        StakeHolder_Id={stakeholder_id}
                     />
                 ))}
             </form>

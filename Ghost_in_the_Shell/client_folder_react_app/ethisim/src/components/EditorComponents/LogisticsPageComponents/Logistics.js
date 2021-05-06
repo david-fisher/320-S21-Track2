@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
             margin: theme.spacing(1),
             marginBottom: theme.spacing(1),
             width: '100%',
-            textTransform: 'unset',
+            //textTransform: 'unset',
         },
     },
     authorButtons: {
@@ -87,10 +87,11 @@ Logistics.propTypes = {
 
 export default function Logistics({ scenario_ID }) {
     //Need scenario id
-    const endpointGetLogistics = '/logistics?scenario_id=';
+    const endpointGetLogistics = '/logistics?scenario=';
     const endpointGetCourses = '/api/courses/';
     const endPointPut = '/logistics';
-
+    console.log('Logistics');
+    console.log(scenario_ID);
     const classes = useStyles();
     //temporary until backend implements id's
     const [fetchCourseResponse, setFetchCourseResponse] = useState({
@@ -206,16 +207,16 @@ export default function Logistics({ scenario_ID }) {
 
     const handleOnChangePublic = (event) => {
         setIsPublic(event.target.checked);
-        setEdit({ ...NewScenario, PUBLIC: event.target.checked });
+        setEdit({ ...NewScenario, public: event.target.checked });
     };
 
     const handleOnChangeFinish = (event) => {
         setIsFinished(event.target.checked);
-        setEdit({ ...NewScenario, IS_FINISHED: event.target.checked });
+        setEdit({ ...NewScenario, is_finished: event.target.checked });
     };
 
     const handleOnChangeNumConvo = (event) => {
-        NewScenario.NUM_CONVERSATION = event.target.value;
+        NewScenario.num_conversation = event.target.value;
         setNumConvos(event.target.value);
         setEdit(NewScenario);
     };
@@ -224,45 +225,46 @@ export default function Logistics({ scenario_ID }) {
         let sel = [];
 
         for (let i = 0; i < response.length; i++) {
-            for (let j = 0; j < NewScenario.COURSES.length; j++) {
-                if (response[i].NAME === NewScenario.COURSES[j].NAME) {
+            for (let j = 0; j < NewScenario.courses.length; j++) {
+                if (response[i].name === NewScenario.courses[j].name) {
                     sel.push(response[i]);
                 }
             }
         }
 
-        NewScenario.COURSES = sel;
+        NewScenario.courses = sel;
         setCurrentCourses(sel);
         setEdit(NewScenario);
     };
 
     const [NewScenario, setEdit] = useState({
-        SCENARIO: 0,
-        VERSION: 0,
-        NAME: '',
-        PUBLIC: false,
-        NUM_CONVERSATION: 0,
-        PROFESSOR: 0,
-        IS_FINISHED: false,
-        DATE_CREATED: ' ',
-        COURSES: [],
+        scenario: 0,
+        version: 0,
+        name: '',
+        public: false,
+        num_conversation: 0,
+        is_finished: false,
+        date_created: ' ',
+        scenario_id: 0,
+        courses: [],
     });
 
     let getData = () => {
         function onSuccess(response) {
-            NewScenario.SCENARIO = response.data.SCENARIO;
-            NewScenario.VERSION = response.data.VERSION;
-            NewScenario.NAME = response.data.NAME;
-            NewScenario.PUBLIC = response.data.PUBLIC;
-            NewScenario.NUM_CONVERSATION = response.data.NUM_CONVERSATION;
-            NewScenario.PROFESSOR = response.data.PROFESSOR;
-            NewScenario.IS_FINISHED = response.data.IS_FINISHED;
-            NewScenario.DATE_CREATED = response.data.DATA_CREATED;
-            NewScenario.COURSES = response.data.COURSES;
-            setScenarioName(response.data.NAME);
-            setIsFinished(response.data.IS_FINISHED);
-            setIsPublic(response.data.PUBLIC);
-            setNumConvos(response.data.NUM_CONVERSATION);
+            NewScenario.scenario = response.data.scenario;
+            NewScenario.version = response.data.version;
+            NewScenario.name = response.data.name;
+            NewScenario.public = response.data.public;
+            NewScenario.num_conversation = response.data.num_conversation;
+            NewScenario.is_finished = response.data.is_finished;
+            NewScenario.date_created = response.data.data_created;
+            NewScenario.courses = response.data.courses;
+            NewScenario.scenario_id = response.data.scenario_id;
+
+            setScenarioName(response.data.name);
+            setIsFinished(response.data.is_finished);
+            setIsPublic(response.data.public);
+            setNumConvos(response.data.num_conversation);
             setEdit(NewScenario);
             getCourses();
         }
@@ -345,11 +347,11 @@ export default function Logistics({ scenario_ID }) {
 
         let validInput = true;
 
-        if (!NewScenario.NAME || !NewScenario.NAME.trim()) {
+        if (!NewScenario.name || !NewScenario.name.trim()) {
             setErrorName(true);
             setErrorNameText('Scenario name cannot be empty');
             validInput = false;
-        } else if (NewScenario.NAME.length >= 1000) {
+        } else if (NewScenario.name.length >= 1000) {
             setErrorName(true);
             setErrorNameText(
                 'Scenario name must have less than 1000 characters'
@@ -360,8 +362,8 @@ export default function Logistics({ scenario_ID }) {
         }
 
         if (
-            isNaN(NewScenario.NUM_CONVERSATION) ||
-            NewScenario.NUM_CONVERSATION === ''
+            isNaN(NewScenario.num_conversation) ||
+            NewScenario.num_conversation === ''
         ) {
             setErrorNumConvos(true);
             setErrorNumConvosText(
@@ -372,7 +374,7 @@ export default function Logistics({ scenario_ID }) {
             setErrorNumConvos(false);
         }
 
-        if (NewScenario.COURSES.length === 0) {
+        if (NewScenario.courses.length === 0) {
             setErrorCourses(true);
             validInput = false;
         } else {
@@ -382,7 +384,7 @@ export default function Logistics({ scenario_ID }) {
         if (validInput) {
             put(
                 setResponseSave,
-                endPointPut,
+                endPointPut + '?scenario=' + id,
                 onFailureLogistic,
                 onSuccessLogistic,
                 NewScenario
@@ -396,7 +398,7 @@ export default function Logistics({ scenario_ID }) {
     };
 
     const handleOnChange = (event) => {
-        NewScenario.NAME = event.target.value;
+        NewScenario.name = event.target.value;
         setScenarioName(event.target.value);
         setEdit(NewScenario);
     };
@@ -405,9 +407,9 @@ export default function Logistics({ scenario_ID }) {
         //set new scenario courses to selected classes
         let sel = [];
         selectedClasses.map((element) =>
-            sel.push({ COURSE: element.COURSE, NAME: element.NAME })
+            sel.push({ course: element.course, name: element.name })
         );
-        NewScenario.COURSES = sel;
+        NewScenario.courses = sel;
         setCurrentCourses(sel);
         setEdit(NewScenario);
     };
@@ -490,13 +492,13 @@ export default function Logistics({ scenario_ID }) {
                         <HelpIcon />
                     </Button>
                     <GenericInfoButton
-                        description={`If it's your first time using Ethism, you'll see in the top left an icon of three horizontal lines.
-                    This is the menu and is accessable from all pages.
-                    The page you're on is the Logistics page handles some organizational pieces of your ethical scenario. 
-                    Here, you can edit the name of your scenario, the courses associated with this scenario, etc.
-                    By default the max number of selected conversations in zero. However, you may enter the maximum number of stakeholders you would like to permit students to speak with.
-                    This will be explained more in depth later. The Public checkbox allows your scenario to be viewed publicly by all that have access to Ethism. The
-                    Is Finished checkbox puts your scenario in the Finished section, ready for student distribution.`}
+                        description={`If it's your first time using Ethism, you'll see in the top left of the screen an icon of three horizontal lines. 
+                        This is the menu and is accessible from all pages.
+                        The page you're on is the Logistics page and handles some organizational pieces of your ethical scenario.
+                         Here, you can edit the name of your scenario, the courses associated with this scenario, and max number of selected conversations. 
+                         By default the max number of selected conversations is zero. However, you may enter the maximum number of stakeholders you would like to permit students to speak with. This will be explained more in depth on the Conversation Editor page.
+                          Clicking the “Public” box allows your scenario to be viewed publicly by others. Clicking the “Is Finished” box puts your scenario in the Finished section of the Dashboard, 
+                        ready for student distribution. Don’t forget to click “Save” before leaving the page.`}
                         open={open}
                         setOpen={setOpen}
                     />
@@ -506,7 +508,7 @@ export default function Logistics({ scenario_ID }) {
                     noValidate
                     autoComplete="off"
                 >
-                    Simulation Title
+                    Scenario Title
                     {errorName ? (
                         <TextField
                             error
@@ -540,7 +542,7 @@ export default function Logistics({ scenario_ID }) {
                             At least one course must be selected
                         </Typography>
                     ) : null}
-                    Max Number Of Selected Conversations
+                    Maximum Number of Conversations Allowed
                     {errorNumConvos ? (
                         <TextField
                             error
@@ -568,7 +570,7 @@ export default function Logistics({ scenario_ID }) {
                                 color="primary"
                             />
                         }
-                        label="Public"
+                        label="Make Public"
                         labelPlacement="start"
                     />
 
@@ -580,17 +582,10 @@ export default function Logistics({ scenario_ID }) {
                                 color="primary"
                             />
                         }
-                        label="Is Finished"
+                        label="Publish"
                         labelPlacement="start"
                     />
                 </form>
-                <div className={classes.subdiv}>
-                    <form
-                        className={classes.buttons}
-                        noValidate
-                        autoComplete="off"
-                    ></form>
-                </div>
 
                 <div className={classes.subdiv}>
                     <form

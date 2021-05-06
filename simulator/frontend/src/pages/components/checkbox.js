@@ -1,18 +1,16 @@
-import React,{useEffect} from "react";
+import React, { useEffect } from "react";
 import { makeStyles } from '@material-ui/core/styles';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
-import {Box, Button} from "@material-ui/core";
+import { Box } from "@material-ui/core";
 import SpecialButton from "./SpecialButton"
 
-import { BASE_URL, STUDENT_ID, SCENARIO_ID } from "../../constants/config";
-import axios from 'axios';
+import { BASE_URL, STUDENT_ID } from "../../constants/config";
 import { ScenariosContext } from "../../Nav";
 import { PageContext } from '../simulator_window';
-import { TrainOutlined, TrainRounded } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -26,7 +24,6 @@ const useStyles = makeStyles((theme) => ({
 export default function ErrorRadios(props) 
 {
   let nextPageTitle = "";
-  let content_url = '/pages';
   const classes = useStyles();
   const [value, setValue] = React.useState('');
   const [error, setError] = React.useState(false);

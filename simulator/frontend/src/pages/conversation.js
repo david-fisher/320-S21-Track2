@@ -34,7 +34,6 @@ function Conversation(props) {
     props.setShowStakeholders(true);
   }
 
-  const [monologue, setMonologue] = useState('');
   const [ dialogue, setDialogue ] = useState({});
   const [ isLoading, setIsLoading ] = useState(true);
   const [scenarios, setScenarios] = useContext(ScenariosContext);

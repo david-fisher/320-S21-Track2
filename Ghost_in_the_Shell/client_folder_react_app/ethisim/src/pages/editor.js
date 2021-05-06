@@ -16,6 +16,8 @@ import ConversationEditor from '../components/EditorComponents/ConversationEdito
 import Reflection from '../components/EditorComponents/ReflectionPageComponents/Reflection';
 import Action from '../components/EditorComponents/ActionPageComponents/Action';
 import Introduction from '../components/EditorComponents/GenericPageComponents/Introduction';
+import ICMatrix from '../components/EditorComponents/IssueCoverageMatrixComponents/IssueCoverageMatrixPage';
+import Consequences from '../components/EditorComponents/ConsequencePageComponents/Consequences';
 import FlowDiagram from '../components/EditorComponents/FlowDiagramComponents/FlowDiagram';
 import AddNewSimulationScenarioPageDialog from '../components//EditorComponents/AddNewSimulationScenarioPageDialog';
 import NavSideBarList from '../components/ConfigurationSideBarComponents/NavSideBarList';
@@ -162,13 +164,18 @@ export default function Editor(props) {
     const [openToDo, setOpenToDo] = useState(false);
 
     const location = useLocation();
+    console.log(location);
     const scenarioIDFromURL = location.pathname.split('/').pop();
+    console.log(scenarioIDFromURL);
+
     const scenario_ID = props.location.data
-        ? props.location.data.SCENARIO
+        ? props.location.data.scenario_id
         : scenarioIDFromURL;
 
+    console.log(scenario_ID);
+
     //TODO when version control is implemented
-    const tempVersionID = 1;
+    const tempversionid = 1;
 
     const [getValues, setGetValues] = useState({
         data: null,
@@ -213,23 +220,37 @@ export default function Editor(props) {
                 title: 'Conversation Editor',
                 component: <ConversationEditor />,
             },
-            { id: -4, title: 'Flow Diagram', component: <FlowDiagram /> },
+            {
+                id: -4,
+                title: 'Issue Coverage Matrix',
+                component: <ICMatrix />,
+            },
+            {
+                id: -5,
+                title: 'Flow Diagram',
+                component: <FlowDiagram />,
+            },
+            {
+                id: -6,
+                title: 'Consequences',
+                component: <Consequences />,
+            },
         ];
 
-        const endpoint = '/logistics?scenario_id=' + scenario_ID;
+        const endpoint = '/logistics?scenario=' + scenario_ID;
 
         function onSuccess(resp) {
             let p = null;
             let logistics_and_pages = resp.data;
             p = {
-                scenario_ID: logistics_and_pages.SCENARIO,
-                version_ID: logistics_and_pages.VERSION,
-                title: logistics_and_pages.NAME,
-                is_finished: logistics_and_pages.IS_FINISHED,
-                public_scenario: logistics_and_pages.PUBLIC,
-                num_convos: logistics_and_pages.NUM_CONVERSATION,
-                professors: [logistics_and_pages.PROFESSOR],
-                courses: logistics_and_pages.COURSES,
+                scenario_ID: logistics_and_pages.scenario_id,
+                version_ID: logistics_and_pages.version,
+                title: logistics_and_pages.name,
+                is_finished: logistics_and_pages.is_finished,
+                public_scenario: logistics_and_pages.public,
+                num_convos: logistics_and_pages.num_conversation,
+                professors: [logistics_and_pages.professor],
+                courses: logistics_and_pages.courses,
             };
 
             initialComponents[0].component = <Logistics {...p}></Logistics>;
@@ -242,28 +263,34 @@ export default function Editor(props) {
                 ></ConversationEditor>
             );
             initialComponents[3].component = (
+                <ICMatrix scenario_ID={p.scenario_ID}></ICMatrix>
+            );
+            initialComponents[4].component = (
                 <FlowDiagram scenario_ID={p.scenario_ID}></FlowDiagram>
             );
+            initialComponents[5].component = (
+                <Consequences scenario_ID={p.scenario_ID}></Consequences>
+            );
 
-            let pages = logistics_and_pages.PAGES;
+            let pages = logistics_and_pages.pages;
 
             for (let i = 0; i < pages.length; i++) {
                 //Already have component in initial components
-                if (pages[i].PAGE_TYPE === 'S') {
+                if (pages[i].page_type === 'S') {
                     continue;
                 }
                 //Intro page is first page on sidebar
-                if (pages[i].PAGE_TYPE === 'I') {
-                    initialComponents.splice(4, 0, {
-                        id: pages[i].PAGE,
-                        title: pages[i].PAGE_TITLE,
+                if (pages[i].page_type === 'I') {
+                    initialComponents.splice(6, 0, {
+                        id: pages[i].page,
+                        title: pages[i].page_title,
                         isIntroPage: true,
                         component: null,
                     });
                 } else {
                     initialComponents.push({
-                        id: pages[i].PAGE,
-                        title: pages[i].PAGE_TITLE,
+                        id: pages[i].page,
+                        title: pages[i].page_title,
                         component: null,
                     });
                 }
@@ -287,7 +314,7 @@ export default function Editor(props) {
         }
 
         universalFetch(setGetValues, endpoint, onFailure, onSuccess, {
-            SCENARIO: scenario_ID,
+            scenario: scenario_ID,
         });
     };
 
@@ -305,7 +332,7 @@ export default function Editor(props) {
         }
 
         universalDelete(setDeleteValues, endpoint, onFailure, onSuccess, {
-            PAGE: d_id,
+            page: d_id,
         });
     }
 
@@ -317,86 +344,90 @@ export default function Editor(props) {
             let c = null;
 
             let currPageInfo = resp.data;
-            if (currPageInfo.PAGE_TYPE === 'I') {
+            if (currPageInfo.page_type === 'I') {
                 p = {
                     scenarioComponents: scenarioComponentsArray,
                     setScenarioComponents: setScenarioComponents,
                     setCurrentPageID: setCurrentPageID,
-                    page_id: currPageInfo.PAGE,
-                    page_type: currPageInfo.PAGE_TYPE,
-                    page_title: currPageInfo.PAGE_TITLE,
-                    scenario_ID: currPageInfo.SCENARIO,
-                    version_ID: tempVersionID,
-                    next_page_id: currPageInfo.NEXT_PAGE,
-                    body: currPageInfo.PAGE_BODY,
-                    bodies: currPageInfo.BODIES,
-                    xCoord: currPageInfo.X_COORDINATE,
-                    yCoord: currPageInfo.Y_COORDINATE,
+                    page_id: currPageInfo.page,
+                    page_type: currPageInfo.page_type,
+                    page_title: currPageInfo.page_title,
+                    scenario_ID: currPageInfo.scenario,
+                    version_ID: tempversionid,
+                    next_page: currPageInfo.next_page,
+                    next_page_version: 0,
+                    body: currPageInfo.page_body,
+                    bodies: currPageInfo.bodies,
+                    xCoord: currPageInfo.x_coordinate,
+                    yCoord: currPageInfo.y_coordinate,
                     created: false,
                 };
                 c = <Introduction {...p}></Introduction>;
-            } else if (currPageInfo.PAGE_TYPE === 'G') {
+            } else if (currPageInfo.page_type === 'G') {
                 p = {
                     scenarioComponents: scenarioComponentsArray,
                     setScenarioComponents: setScenarioComponents,
                     setCurrentPageID: setCurrentPageID,
-                    page_id: currPageInfo.PAGE,
-                    page_type: currPageInfo.PAGE_TYPE,
-                    page_title: currPageInfo.PAGE_TITLE,
-                    scenario_ID: currPageInfo.SCENARIO,
-                    version_ID: tempVersionID,
-                    next_page_id: currPageInfo.NEXT_PAGE,
-                    body: currPageInfo.PAGE_BODY,
-                    bodies: currPageInfo.BODIES,
-                    xCoord: currPageInfo.X_COORDINATE,
-                    yCoord: currPageInfo.Y_COORDINATE,
+                    page_id: currPageInfo.page,
+                    page_type: currPageInfo.page_type,
+                    page_title: currPageInfo.page_title,
+                    scenario_ID: currPageInfo.scenario,
+                    version_ID: tempversionid,
+                    next_page: currPageInfo.next_page,
+                    next_page_version: 0,
+                    body: currPageInfo.page_body,
+                    bodies: currPageInfo.bodies,
+                    xCoord: currPageInfo.x_coordinate,
+                    yCoord: currPageInfo.y_coordinate,
                     created: false,
                 };
                 c = <Generic {...p}></Generic>;
-            } else if (currPageInfo.PAGE_TYPE === 'A') {
+            } else if (currPageInfo.page_type === 'A') {
                 p = {
                     scenarioComponents: scenarioComponentsArray,
                     setScenarioComponents: setScenarioComponents,
                     setCurrentPageID: setCurrentPageID,
-                    page_id: currPageInfo.PAGE,
-                    page_type: currPageInfo.PAGE_TYPE,
-                    page_title: currPageInfo.PAGE_TITLE,
-                    scenario_ID: currPageInfo.SCENARIO,
-                    next_page_id: currPageInfo.NEXT_PAGE,
-                    version_ID: tempVersionID,
-                    body: currPageInfo.PAGE_BODY,
-                    choice1: currPageInfo.CHOICES[0]
-                        ? currPageInfo.CHOICES[0].CHOICE
+                    page_id: currPageInfo.page,
+                    page_type: currPageInfo.page_type,
+                    page_title: currPageInfo.page_title,
+                    scenario_ID: currPageInfo.scenario,
+                    next_page: currPageInfo.next_page,
+                    next_page_version: 0,
+                    version_ID: tempversionid,
+                    body: currPageInfo.page_body,
+                    choice1: currPageInfo.choices[0]
+                        ? currPageInfo.choices[0].choice
                         : '',
-                    r1: currPageInfo.CHOICES[0]
-                        ? currPageInfo.CHOICES[0].RESULT_PAGE
+                    r1: currPageInfo.choices[0]
+                        ? currPageInfo.choices[0].result_page
                         : null,
-                    choice2: currPageInfo.CHOICES[1]
-                        ? currPageInfo.CHOICES[1].CHOICE
+                    choice2: currPageInfo.choices[1]
+                        ? currPageInfo.choices[1].choice
                         : '',
-                    r2: currPageInfo.CHOICES[1]
-                        ? currPageInfo.CHOICES[1].RESULT_PAGE
+                    r2: currPageInfo.choices[1]
+                        ? currPageInfo.choices[1].result_page
                         : null,
-                    xCoord: currPageInfo.X_COORDINATE,
-                    yCoord: currPageInfo.Y_COORDINATE,
+                    xCoord: currPageInfo.x_coordinate,
+                    yCoord: currPageInfo.y_coordinate,
                     created: false,
                 };
                 c = <Action {...p}></Action>;
-            } else if (currPageInfo.PAGE_TYPE === 'R') {
+            } else if (currPageInfo.page_type === 'R') {
                 p = {
                     scenarioComponents: scenarioComponentsArray,
                     setScenarioComponents: setScenarioComponents,
                     setCurrentPageID: setCurrentPageID,
-                    page_id: currPageInfo.PAGE,
-                    page_type: currPageInfo.PAGE_TYPE,
-                    page_title: currPageInfo.PAGE_TITLE,
-                    scenario_ID: currPageInfo.SCENARIO,
-                    version_ID: tempVersionID,
-                    next_page_id: currPageInfo.NEXT_PAGE,
-                    body: currPageInfo.PAGE_BODY,
-                    reflection_questions: currPageInfo.REFLECTION_QUESTIONS,
-                    xCoord: currPageInfo.X_COORDINATE,
-                    yCoord: currPageInfo.Y_COORDINATE,
+                    page_id: currPageInfo.page,
+                    page_type: currPageInfo.page_type,
+                    page_title: currPageInfo.page_title,
+                    scenario_ID: currPageInfo.scenario,
+                    version_ID: tempversionid,
+                    next_page: currPageInfo.next_page,
+                    next_page_version: 0,
+                    body: currPageInfo.page_body,
+                    reflection_questions: currPageInfo.reflection_questions,
+                    xCoord: currPageInfo.x_coordinate,
+                    yCoord: currPageInfo.y_coordinate,
                     created: false,
                 };
                 c = <Reflection {...p}></Reflection>;
@@ -404,9 +435,9 @@ export default function Editor(props) {
 
             let newScenarioComponents = [...scenarioComponentsArray];
             newScenarioComponents = newScenarioComponents.map((x) =>
-                x.id === resp.data.PAGE ? { ...x, component: c } : x
+                x.id === resp.data.page ? { ...x, component: c } : x
             );
-            setCurrentPageID(currPageInfo.PAGE);
+            setCurrentPageID(currPageInfo.page);
             setScenarioComponents(newScenarioComponents);
             setScenarioComponent(c);
             setShowComponent(true);
@@ -417,7 +448,7 @@ export default function Editor(props) {
         }
 
         universalFetch(setGetValues, endpoint, onFailure, onSuccess, {
-            PAGE: g_id,
+            page: g_id,
         });
     }
 
@@ -448,7 +479,14 @@ export default function Editor(props) {
 
     let onClick = (id, title, scenarioPages) => {
         setCurrentPageID(id);
-        if (id !== -1 && id !== -2 && id !== -3 && id !== -4) {
+        if (
+            id !== -1 &&
+            id !== -2 &&
+            id !== -3 &&
+            id !== -4 &&
+            id !== -5 &&
+            id !== -6
+        ) {
             handlePageGet(setGetValues, id, scenarioPages);
         }
         setScenarioComponent(
@@ -516,25 +554,27 @@ export default function Editor(props) {
             switch (pageType) {
                 case 'Generic':
                     postReqBody = {
-                        PAGE_TYPE: 'G',
-                        PAGE_TITLE: pageName,
-                        PAGE_BODY: pageBody,
-                        SCENARIO: scenario_ID,
-                        VERSION: tempVersionID,
-                        NEXT_PAGE: null,
-                        X_COORDINATE: 0,
-                        Y_COORDINATE: 0,
+                        page_type: 'G',
+                        page_title: pageName,
+                        page_body: pageBody,
+                        scenario: scenario_ID,
+                        version: 70, //
+                        next_page: null,
+                        //next_page_version: null,
+                        x_coordinate: 0,
+                        y_coordinate: 0,
                     };
 
                     p = {
                         setScenarioComponents: setScenarioComponents,
                         page_type: 'G',
                         page_title: pageName,
-                        scenario_ID: scenario_ID,
+                        scenario: scenario_ID,
                         body: pageBody,
                         bodies: [],
-                        version_ID: tempVersionID,
-                        next_page_id: null,
+                        version_ID: 70,
+                        next_page: null,
+                        //next_page_version: null,
                         created: true,
                         xCoord: 0,
                         yCoord: 0,
@@ -542,22 +582,24 @@ export default function Editor(props) {
                     break;
                 case 'Reflection':
                     postReqBody = {
-                        PAGE_TYPE: 'R',
-                        PAGE_TITLE: pageName,
-                        PAGE_BODY: pageBody,
-                        SCENARIO: scenario_ID,
-                        VERSION: tempVersionID,
-                        NEXT_PAGE: null,
-                        X_COORDINATE: 0,
-                        Y_COORDINATE: 0,
+                        page_type: 'R',
+                        page_title: pageName,
+                        page_body: pageBody,
+                        scenario: scenario_ID,
+                        version: 80,
+                        next_page: null,
+                        //next_page_version: null,
+                        x_coordinate: 0,
+                        y_coordinate: 0,
                     };
                     p = {
                         setScenarioComponents: setScenarioComponents,
                         page_type: 'R',
                         page_title: pageName,
                         scenario_ID: scenario_ID,
-                        version_ID: tempVersionID,
-                        next_page_id: null,
+                        version_ID: 80,
+                        next_page: null,
+                        //next_page_version: null,
                         body: pageBody,
                         reflection_questions: [],
                         created: true,
@@ -567,22 +609,24 @@ export default function Editor(props) {
                     break;
                 case 'Action':
                     postReqBody = {
-                        PAGE_TYPE: 'A',
-                        PAGE_TITLE: pageName,
-                        PAGE_BODY: pageBody,
-                        SCENARIO: scenario_ID,
-                        VERSION: tempVersionID,
-                        NEXT_PAGE: null,
-                        X_COORDINATE: 0,
-                        Y_COORDINATE: 0,
+                        page_type: 'A',
+                        page_title: pageName,
+                        page_body: pageBody,
+                        scenario: scenario_ID,
+                        version: 90,
+                        next_page: null,
+                        //next_page_version: null,
+                        x_coordinate: 0,
+                        y_coordinate: 0,
                     };
                     p = {
                         setScenarioComponents: setScenarioComponents,
                         page_type: 'A',
                         page_title: pageName,
                         scenario_ID: scenario_ID,
-                        version_ID: tempVersionID,
-                        next_page_id: null,
+                        version_ID: 90,
+                        next_page: null,
+                        //next_page_version: null,
                         body: pageBody,
                         choice1: '',
                         r1: null,

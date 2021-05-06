@@ -466,7 +466,7 @@ class dashboard_page(APIView):
         professor_id = "DFisher"
         #todo check that id != None
         #get all scenarios belonging to this professor
-        scenario_query = scenarios.objects.filter(pts2 = professor_id).values()
+        scenario_query = scenarios.objects.filter(pts1 = professor_id).values()
         if(len(scenario_query) == 0):
             return Response({"error": "you are not associated with any scenarios"})
         #loop through scenarios and append required information (course, page info)

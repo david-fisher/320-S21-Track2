@@ -13,32 +13,7 @@ on:
     branches: [ main, build-and-deploy ]
 
 jobs:
-  build-sim:
-    runs-on: ubuntu-latest
-    env:
-      CI: false
-    strategy:
-      matrix:
-        node-version: [15.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
-    steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
-        with:
-          node-version: ${{ matrix.node-version }}
-      - name: Build Simulator
-        working-directory: ./simulator/frontend/
-        run: yarn install && PUBLIC_URL=/simulator yarn run build
-        
-      - name: Upload Editor artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: editor-frontend
-          path: ./Ghost_in_the_Shell/client_folder_react_app/ethisim/build/
-          
-  build-ed:
+  build:
     runs-on: ubuntu-latest
     env:
       CI: false
@@ -56,12 +31,20 @@ jobs:
       - name: Build Editor
         working-directory: ./Ghost_in_the_Shell/client_folder_react_app/ethisim/
         run: yarn install && PUBLIC_URL=/se yarn run build
-
+      - name: Upload Editor artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: editor-frontend
+          path: ./Ghost_in_the_Shell/client_folder_react_app/ethisim/build/
+      - name: Build Simulator
+        working-directory: ./simulator/frontend/
+        run: yarn install && PUBLIC_URL=/simulator yarn run build
       - name: Upload Simulator artifact
         uses: actions/upload-artifact@v2
         with:
           name: sim-frontend
           path: ./simulator/frontend/build/
+
   deploy:
     runs-on: self-hosted
     needs: build

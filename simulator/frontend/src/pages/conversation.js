@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   withStyles,
   Typography,
@@ -9,6 +9,7 @@ import {
 } from "@material-ui/core";
 import { BASE_URL } from "../constants/config";
 import { ScenariosContext } from "../Nav";
+import MultipartConvo from './multipart_conversation';
 
 const TextTypography = withStyles({
   root: {
@@ -27,47 +28,55 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Conversation({ showStakeholders, setShowStakeholders, stakeholder }) {
-  console.log(stakeholder);
+function Conversation(props) {
+
   function goToStakeholders() {
-    setShowStakeholders(true);
+    props.setShowStakeholders(true);
   }
 
-  const [monologue, setMonologue] = React.useState('');
-  const [scenarios, setScenarios] = React.useContext(ScenariosContext);
+  const [ dialogue, setDialogue ] = useState({});
+  const [ isLoading, setIsLoading ] = useState(true);
+  const [scenarios, setScenarios] = useContext(ScenariosContext);
 
   const getConversationData = async () => {
 
-    const response = await fetch(`${BASE_URL}/stakeholder_conv/?stakeholder_id=${stakeholder.id}`);
+    const response = await fetch(`${BASE_URL}/stakeholder_conv/?stakeholder_id=${props.stakeholder.id}`);
 
     if(!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    return await response.json();
+    const data = await response.json();
+    return data;
   };
 
   const setConversation = (conversation) => {
 
-    if(!stakeholder.isMultipart) {
-      setMonologue(conversation.reduce((text, convPart) => {
-        return text + convPart.response;
-      }, ''));
-    } else {
-      // TODO: Implement multipart conversations
-    }
+    let data = conversation.map((convo) => {
+      return {
+        conversation: convo.conversation,
+        question: convo.question,
+        response: convo.response
+      };
+    });
+
+    setDialogue(data);
 
   };
 
   useEffect(() => {
+
     getConversationData().then(conversationData => {
-      console.log(conversationData)
-      setMonologue(conversationData[0].response);
+
+      setConversation(conversationData);
+      setIsLoading(false)
+
     })
     .catch(err => {
       alert(err);
-    })
-  }, [scenarios])
+    });
+
+  }, [scenarios]);
 
   const classes = useStyles();
 
@@ -76,7 +85,7 @@ function Conversation({ showStakeholders, setShowStakeholders, stakeholder }) {
       <Box mt={5}>
         <Grid container direction="row" justify="center" alignItems="center">
           <TextTypography variant="h4" align="center" gutterBottom>
-            {stakeholder.name}
+            {props.stakeholder.name}
           </TextTypography>
         </Grid>
       </Box>
@@ -86,7 +95,7 @@ function Conversation({ showStakeholders, setShowStakeholders, stakeholder }) {
           disableElevation
           color="primary"
           onClick={goToStakeholders}
-        >
+          >
           Return
             </Button>
       </Grid>
@@ -103,10 +112,10 @@ function Conversation({ showStakeholders, setShowStakeholders, stakeholder }) {
       </Grid>
       <Grid container spacing={2}>
         <Grid item lg={12}>
-          <Box p={2} className={classes.textBox}>
-            <Typography>
-              {monologue}
-            </Typography>
+          <Box p={10} className={classes.textBox}>
+              {!isLoading ?
+              <MultipartConvo dialogue={dialogue} page_id={props.page_id} match={props.match} stakeholder={props.stakeholder}/> 
+              : <Typography>One second while things are loading...</Typography> }
           </Box>
         </Grid>
       </Grid>

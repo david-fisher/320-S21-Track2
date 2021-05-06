@@ -39,9 +39,9 @@ export default function Tags(props) {
                 id="checkboxes-tags-demo"
                 options={props.courses}
                 disableCloseOnSelect
-                getOptionLabel={(option) => option.NAME}
+                getOptionLabel={(option) => option.name}
                 getOptionSelected={(option, value) => {
-                    return option.COURSE === value.COURSE;
+                    return option.course === value.course;
                 }}
                 onChange={onTagsChange}
                 value={props.current}
@@ -54,7 +54,7 @@ export default function Tags(props) {
                                 style={{ marginRight: 8 }}
                                 checked={selected}
                             />
-                            {option.NAME}
+                            {option.name}
                         </React.Fragment>
                     );
                 }}

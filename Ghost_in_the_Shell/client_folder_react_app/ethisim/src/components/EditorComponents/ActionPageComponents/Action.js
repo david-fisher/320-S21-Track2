@@ -119,18 +119,18 @@ export default function Action(props) {
     const [errorOption2Text, setErrorOption2Text] = useState(false);
 
     var postReqBody = {
-        PAGE: pageID,
-        PAGE_TYPE: page_type,
-        PAGE_TITLE: title,
-        PAGE_BODY: bodyText,
-        SCENARIO: scenario_ID,
-        NEXT_PAGE: next_page_id,
-        CHOICES: [
-            { CHOICE: option1, RESULT_PAGE: null },
-            { CHOICE: option2, RESULT_PAGE: null },
+        page: pageID,
+        page_type: page_type,
+        page_title: title,
+        page_body: bodyText,
+        scenario: scenario_ID,
+        next_page: next_page_id,
+        choices: [
+            { choice: option1, result_page: null },
+            { choice: option2, result_page: null },
         ],
-        X_COORDINATE: xCoord,
-        Y_COORDINATE: yCoord,
+        x_coordinate: xCoord,
+        y_coordinate: yCoord,
     };
 
     function handlePost(setPostValues, postReqBody, s_id, first_time) {
@@ -140,15 +140,15 @@ export default function Action(props) {
             const deleteEndPoint = '/page?page_id=' + pageID;
             let newScenarioComponents = [...scenarioComponents];
             let component = newScenarioComponents.find((x) => x.id === pageID);
-            component.id = resp.data.PAGE;
+            component.id = resp.data.page;
             component.title = title;
-            setPageID(resp.data.PAGE);
-            setCurrentPageID(resp.data.PAGE);
+            setPageID(resp.data.page);
+            setCurrentPageID(resp.data.page);
             setScenarioComponents(newScenarioComponents);
             setSuccessBannerFade(true);
             setSuccessBannerMessage('Successfully saved page!');
             universalDelete(setDeleteValues, deleteEndPoint, null, null, {
-                PAGE: pageID,
+                page: pageID,
             });
         }
 

@@ -42,7 +42,7 @@ class ReturnIdentifierView(APIView):
         #     return Response({"id":"student"})
         #return(Response({"id": request.META['uid']}))
 
-        if(len(professors.objects.filter(professor = request.META['uid']).values() != 0)):
+        if(len(professors.objects.filter(professor = request.META['uid']).values()) != 0):
             #data = "You are prof " + request.META['uid']
 
             return(Response({"id": "You are prof "}))

@@ -8,64 +8,64 @@ from .models import *
 class StakeholdersToQuestionsSerializer(serializers.ModelSerializer):
     class Meta:
         model = stakeholders_to_questions
-        fields = ('STAKEHOLDER', 'QUESTION', 'ID')
+        fields = ('stakeholder', 'question', 'id')
 
 #updated 05/04/21
 class DemographicsSerializer(serializers.ModelSerializer):
     class Meta:
         model = demographics
-        fields = ('STUDENT', 'AGE', 'GRADE', 'GENDER', 'RACE', 'MAJOR')
+        fields = ('student', 'age', 'grade', 'gender', 'race', 'major')
 
 #updated 05/04/21
 class StudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = students
-        fields = ('STUDENT', 'FNAME', 'LNAME')
+        fields = ('student', 'fname', 'lname')
 
 #updated 05/04/21
 class QuestionsSerializer(serializers.ModelSerializer):
     class Meta:
         model = questions
-        fields = ('QUESTION', 'VERSION', 'POINTS', 'QUESTION_TEXT', 'QUESTION_SUMMARY', 'ID')
+        fields = ('question', 'version', 'points', 'question_text', 'question_summary', 'id')
 
 #updated 05/04/21
 class StudentTimesSerializer(serializers.ModelSerializer):
     class Meta:
         model = student_times
-        fields = ('STUDENT', 'SCENARIO_ID', 'COURSE',
-                  'DATE_TAKEN', 'PAGE', 'END_TIME', 'START_TIME', 'ID')
+        fields = ('student', 'scenario_id', 'course',
+                  'date_taken', 'page', 'end_time', 'start_time', 'id')
 
 #updated 05/04/21
 class ProfessorSerializer(serializers.ModelSerializer):
     class Meta:
         model = professors
-        fields = ('PROFESSOR', 'FNAME', 'LNAME')
+        fields = ('professors', 'fname', 'lname')
 
 #updated 05/04/21
 class ScenariosSerializer(serializers.ModelSerializer):
     class Meta:
         model = scenarios
-        fields = ('SCENARIO', 'VERSION', 'NAME', 'IS_FINISHED',
-                  'PUBLIC', 'NUM_CONVERSATION', 'DATE_CREATED', 'SCENARIO_ID')
+        fields = ('scenario', 'version', 'name', 'is_finished',
+                  'public', 'num_conversation', 'date_created', 'scenario_id')
 
 #updated 05/04/21
 class PagesSerializer(serializers.ModelSerializer):
     class Meta:
         model = pages
-        fields = ('PAGE', 'PAGE_TYPE', 'PAGE_TITLE', 'BODY', 'SCENARIO',
-                  'VERSION', 'NEXT_ID', 'X_COORDINATE', 'Y_COORDINATE', 'COMPLETED', 'ID')
+        fields = ('page', 'page_type', 'page_title', 'body', 'scenario',
+                  'version', 'next_id', 'x_coordinate', 'y_coordinate', 'complete', 'id')
 
 #updated 05/04/21
 class Stakeholder_to_pageSerializer(serializers.ModelSerializer):
     class Meta:
         model = stakeholders_to_page
-        fields = ('PAGE', 'STAKEHOLDER', 'ID')
+        fields = ('page', 'stakeholder', 'id')
 
 #updated 05/04/21
 class Reflection_questionsSerializer(serializers.ModelSerializer):
     class Meta:
         model = reflection_questions
-        fields = ('REFLECTION_QUESTION', 'REFLECTION_QUESTION_ID', 'ID', 'VERSION')
+        fields = ('reflection_question', 'reflection_question_id', 'id', 'version')
 
 #updated 05/04/21 -- didnt do anything fields = all
 class Reflection_questions_to_pageSerializer(serializers.ModelSerializer):
@@ -83,7 +83,7 @@ class StakeholdersSerializer(serializers.ModelSerializer):
 class ConversationsSerializer(serializers.ModelSerializer):
     class Meta:
         model = conversations
-        fields = ('STAKEHOLDER', 'POINTS', 'CONVERSATION', 'QUESTION', 'QUESTION_SUMMARY', 'RESPONSE')
+        fields = ('stakeholder', 'points', 'conversation', 'question', 'question_summary', 'response')
 
 #updated 05/04/21 -- didnt do anything fields = all
 class Courses_to_ScenarioSerializer(serializers.ModelSerializer):
@@ -95,7 +95,7 @@ class Courses_to_ScenarioSerializer(serializers.ModelSerializer):
 class ReflectionsTakenSerializer(serializers.ModelSerializer):
     class Meta:
         model = reflections_taken
-        fields = ('REFLECTIONS', 'RESPONSE_ID')
+        fields = ('reflections', 'response_id')
 
 
 # class ConversationsHadSerializer(serializers.ModelSerializer):
@@ -107,26 +107,26 @@ class ReflectionsTakenSerializer(serializers.ModelSerializer):
 class StudentsToCourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = students_to_course
-        fields = ('STUDENT', 'COURSE', 'ID')
+        fields = ('student', 'course', 'id')
 
 #updated 05/04/21
 class CoursesSerializer(serializers.ModelSerializer):
     class Meta:
         model = courses
-        fields = ('COURSE', 'NAME')
+        fields = ('course', 'name')
 
 #updated 05/04/21
 class ResponsesSerializer(serializers.ModelSerializer):
     class Meta:
         model = responses
-        fields = ('RESPONSE', 'STUDENT', 'SCENARIO', 'PAGE', 
-            'COURSE', 'DATE_TAKEN', 'CHOICE', 'VERSION', 'RESPONSE_ID')
+        fields = ('response', 'student', 'scenario', 'page', 
+            'course', 'date_taken', 'choice', 'version', 'response_id')
 
 #updated 05/04/21
 class PagesToScenarioSerializer(serializers.ModelSerializer):
     class Meta:
         model = pages_to_scenario
-        fields = ('PAGE_ID', 'SCENARIO_ID', 'ID')
+        fields = ('page_id', 'scenario_id', 'id')
 
 
 #class allScenariosSerializer(serializers.ModelSerializer):
@@ -138,31 +138,31 @@ class PagesToScenarioSerializer(serializers.ModelSerializer):
 class Scenarios_forSerializer(serializers.ModelSerializer):
     class Meta:
         model = scenarios_for
-        fields = ('SCENARIO_ID', 'COURSE', 'VERSION', 'ID')
+        fields = ('scenario_id', 'course', 'version', 'id')
 
 #updated 05/04/21
 class Generic_pageSerializer(serializers.ModelSerializer):
     class Meta:
         model = generic_page
-        fields = ('GENERIC_PAGE_ID', 'PAGE', 'BODY', 'ID', 'VERSION')
+        fields = ('generic_page_id', 'page', 'body', 'id', 'version')
 
 #updated 05/04/21
 class Professors_to_coursesSerializer(serializers.ModelSerializer):
     class Meta:
         model = professors_to_courses
-        fields = ('PROFESSOR', 'COURSE', 'ID')
+        fields = ('professor', 'course', 'id')
 
 #updated 05/04/21
 class Professors_to_scenarioSerializer(serializers.ModelSerializer):
     class Meta:
         model = professors_to_scenario
-        fields = ('PROFESSOR', 'SCENARIO', 'PERMISSION', 'ID')
+        fields = ('professor', 'scenario', 'permission', 'id')
 
 #updated 05/04/21
 class Responses_to_ConversationsSerializer(serializers.ModelSerializer):
     class Meta:
         model = responses_to_conversations
-        fields = ('RESPONSE_ID', 'STAKEHOLDER', 'STAKEHOLDER_VERSION', 'SCORE', 'CONVERSATION', 'ID')
+        fields = ('response_id', 'stakeholder', 'stakeholder_version', 'score', 'conversation', 'id')
 
 #updated 05/04/21 -- didnt do anything since fields= all
 class IssuesSerializer(serializers.ModelSerializer):
@@ -217,7 +217,7 @@ class Response_to_action_pageSerializer(serializers.ModelSerializer):
 class coverageSerializer(serializers.ModelSerializer):
     class Meta:
         model = coverage
-        fields = ('STAKEHOLDER', 'ID', 'ISSUE', 'COVERAGE_SCORE')
+        fields = ('stakeholder', 'id', 'issue', 'coverage_score')
 
 
 # class Actions_takenSerializer(serializers.ModelSerializer):

@@ -95,10 +95,11 @@ class generic_page(models.Model):
         db_table = 'generic_page'
 
 class issues(models.Model):
+    issue = models.AutoField(primary_key=True)
     scenario_id = models.ForeignKey('scenarios', on_delete = models.CASCADE, related_name = 'issues1', default = None, db_column='scenario_id')
-    issue = models.IntegerField(default = None, primary_key = True, editable = False)
     name = models.CharField(max_length = 1000)
     importance_score = models.IntegerField(validators = [MinValueValidator(0.0)])
+    
     class Meta:
         db_table = 'issues'
 

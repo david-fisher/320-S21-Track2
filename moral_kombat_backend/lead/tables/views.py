@@ -137,7 +137,7 @@ class multi_coverage(APIView):
         if stakeholder == None:
             return Response({'status': 'details'}, status=status.HTTP_404_NOT_FOUND)
         for updated_coverage in request.data:
-            extant_coverage = coverage.objects.get(stakeholder = stakeholder, issue = updated_coverage['issue_id'])
+            extant_coverage = coverage.objects.get(stakeholder = stakeholder, issue = updated_coverage['issue'])
             serializer = coverageSerializer(extant_coverage, data=updated_coverage)
             if serializer.is_valid():
                 serializer.save()

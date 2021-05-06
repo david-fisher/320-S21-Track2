@@ -208,7 +208,7 @@ export default function QuestionField({
 
         axios(config)
             .then(function (response) {
-                setStakeHolder(response.data);
+                stakeHolder.current = response.data;
             })
             .catch(function (error) {
                 setErrorBannerMessage(
@@ -289,13 +289,12 @@ export default function QuestionField({
     //     );
     //   };
 
-    getStakeHolderInfo();
+    getStakeholderInfo();
 
     function setHeader() {
         setLoading(true);
-        // let cols = [
-        //     <TableCell align="right">{"Question"}</TableCell>
-        // ];
+        let cols = [];
+        //<TableCell align="right">{"Question"}</TableCell>
         // stakeHolder.ISSUES.forEach((issue) => {
         //         cols.push(<TableCell align="right">{'Issue: ' + issue.NAME.toUpperCase()}</TableCell>)
         // });

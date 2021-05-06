@@ -1,5 +1,25 @@
+# Welcome to the Ethisim (320-S21-Track2) Repo!
 
-# 320-S21-Track2
+## Guide to Docker & Ethisim:
+### Building:
+* From the remote server, navigate to the Ethisim directory and run 'docker-compose build'
+### Running:
+* From the remote server, navigate to the Ethisim directory and run 'docker-compose up --detach'
+### Stopping:
+* From the remote server, navigate to the Ethisim directory and run 'docker-compose down'
+
+## Continuous Integration & Deployment:
+* Each push to the GitHub repository will trigger a GitHub Action that tests whether or not the application can be built. 
+* Pushes to the `main` and `build-and-deploy` branches will trigger a GitHub Action that builds the static application and deploys it to the server.
+* If neither frontend's source code was changed, it will not test or rebuild the frontend.
+
+## Cloning the Ethisim Application:
+* Download a copy of the project from the server
+* Fill out the env-template and save as '.env'
+* Add ssl certs (/eti/pki/tls/certs/) to ./ssl/certs
+* Add ssl private keys (/eti/pki/tls/private/) to ./ssl/private
+* Add shibboleth config files to ./shib_conf
+* Follow the above instructions for building and running the Docker containers
 https://github.com/david-fisher/320-S21-Track2/
 
 BELOW IS THE README FROM LAST SEMESTER'S TRACK III REPO 

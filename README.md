@@ -139,6 +139,3 @@ https://nodejs.org/en/download/
 
 4. Run `npm start` in the command line to start the app. This should open your browser and send you to `http://localhost:3000`. If not, go to your browser and go to that url. 
 
-# Tip to not drive everyone on your track insane.
-
-If a file is for configuring something on your local machine to run, like config.js or settings.py, do not commit those changes to GitHub. If you do, you will mess up everyone elses local configuration when they pull the latest changes. 

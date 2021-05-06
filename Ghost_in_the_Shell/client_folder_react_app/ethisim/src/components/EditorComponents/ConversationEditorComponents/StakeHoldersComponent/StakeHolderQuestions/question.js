@@ -5,6 +5,7 @@ import { Button, Container } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import PropTypes from 'prop-types';
 import GenericDeleteWarning from '../../../../DeleteWarnings/GenericDeleteWarning';
+import { baseURL } from '../../../Constants/Config';
 /*import MaterialTable from 'material-table';
 import { forwardRef } from 'react';
 import { Link } from 'react-router-dom';
@@ -13,7 +14,7 @@ import { Link } from 'react-router-dom';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import ErrorIcon from '@material-ui/icons/Error';
 import { useLocation } from 'react-router-dom';
-//import { baseURL } from '../../../Constants/Config';
+import { baseURL } from '../../../Constants/Config';
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
 import Check from '@material-ui/icons/Check';
@@ -88,7 +89,7 @@ export default function QuestionField({
     useEffect(() => {
         stakeHolder.current = getStakeholderInfo();
     }, []);
-
+    var axios = require('axios');
     /*const [didGetIssues, setDidGetIssues] = useState(false);
     //const [issues, setIssues] = useState([]);
     const issues = useRef(null);
@@ -193,8 +194,6 @@ export default function QuestionField({
         updateQRs(questionValue, responseValue, e.target.value);
     };
 
-    getStakeHolderInfo();
-
     function getStakeholderInfo() {
         setLoading(true);
 
@@ -210,7 +209,7 @@ export default function QuestionField({
 
         axios(config)
             .then(function (response) {
-                setStakeHolders(response.data);
+                setStakeHolder(response.data);
             })
             .catch(function (error) {
                 setErrorBannerMessage(
@@ -241,36 +240,36 @@ export default function QuestionField({
     // </TableRow>
 
     const onChange = (e, row) => {
-        //TODO CHANGE TO MATCH
-        if (!previous[row[issue]]) {
-            setPrevious((state) => ({ ...state, [row[issue]]: row }));
-        }
-        const value = e.target.value;
-        const name = e.target.name;
-        const { id } = row[issue];
-        const newRows = rows.map((row) => {
-            if (row[issue] === id) {
-                return { ...row, [name]: value };
-            }
-            return row;
-        });
-        setRows(newRows);
+        // //TODO CHANGE TO MATCH
+        // if (!previous[row[issue]]) {
+        //     setPrevious((state) => ({ ...state, [row[issue]]: row }));
+        // }
+        // const value = e.target.value;
+        // const name = e.target.name;
+        // const { id } = row[issue];
+        // const newRows = rows.map((row) => {
+        //     if (row[issue] === id) {
+        //         return { ...row, [name]: value };
+        //     }
+        //     return row;
+        // });
+        // setRows(newRows);
     };
 
     const onRevert = (id) => {
-        //TODO CHANGE TO MATCH
-        const newRows = rows.map((row) => {
-            if (row[issue] === id) {
-                return previous[id] ? previous[id] : row;
-            }
-            return row;
-        });
-        setRows(newRows);
-        setPrevious((state) => {
-            delete state[id];
-            return state;
-        });
-        onToggleEditMode(id);
+        // //TODO CHANGE TO MATCH
+        // const newRows = rows.map((row) => {
+        //     if (row[issue] === id) {
+        //         return previous[id] ? previous[id] : row;
+        //     }
+        //     return row;
+        // });
+        // setRows(newRows);
+        // setPrevious((state) => {
+        //     delete state[id];
+        //     return state;
+        // });
+        // onToggleEditMode(id);
     };
 
     // const CustomTableCell = ({ row, issue, onChange }) => {
@@ -290,6 +289,8 @@ export default function QuestionField({
     //       </TableCell>
     //     );
     //   };
+
+    getStakeHolderInfo();
 
     function setHeader() {
         setLoading(true);

@@ -560,7 +560,7 @@ export default function Editor(props) {
                         scenario: scenario_ID,
                         version: 70, //
                         next_page: null,
-                        next_page_version: null,
+                        //next_page_version: null,
                         x_coordinate: 0,
                         y_coordinate: 0,
                     };
@@ -574,7 +574,7 @@ export default function Editor(props) {
                         bodies: [],
                         version_ID: 70,
                         next_page: null,
-                        next_page_version: null,
+                        //next_page_version: null,
                         created: true,
                         xCoord: 0,
                         yCoord: 0,
@@ -588,7 +588,7 @@ export default function Editor(props) {
                         scenario: scenario_ID,
                         version: 80,
                         next_page: null,
-                        next_page_version: null,
+                        //next_page_version: null,
                         x_coordinate: 0,
                         y_coordinate: 0,
                     };
@@ -599,7 +599,7 @@ export default function Editor(props) {
                         scenario_ID: scenario_ID,
                         version_ID: 80,
                         next_page: null,
-                        next_page_version: null,
+                        //next_page_version: null,
                         body: pageBody,
                         reflection_questions: [],
                         created: true,
@@ -615,7 +615,7 @@ export default function Editor(props) {
                         scenario: scenario_ID,
                         version: 90,
                         next_page: null,
-                        next_page_version: null,
+                        //next_page_version: null,
                         x_coordinate: 0,
                         y_coordinate: 0,
                     };
@@ -626,7 +626,7 @@ export default function Editor(props) {
                         scenario_ID: scenario_ID,
                         version_ID: 90,
                         next_page: null,
-                        next_page_version: null,
+                        //next_page_version: null,
                         body: pageBody,
                         choice1: '',
                         r1: null,

@@ -117,7 +117,7 @@ class pages(models.Model):
     scenario = models.ForeignKey('scenarios', to_field='scenario_id', on_delete = models.CASCADE, related_name='pages1')
     version = models.IntegerField(default=1, editable=True)
     body = models.TextField(blank=True, null=True)
-    id = models.IntegerField(primary_key = True)
+    id = models.AutoField(primary_key = True)
     next_id = models.ForeignKey('pages', to_field='id', on_delete = models.CASCADE, related_name='pages2')
     x_coordinate = models.IntegerField()
     y_coordinate = models.IntegerField()

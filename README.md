@@ -8,6 +8,8 @@ simulations. Run them for a participation grade, or
 develop them further into longer discussions for class.
 
 ## Guide to Docker & Ethisim:
+### Installing:
+* [Install Docker](https://docs.docker.com/get-docker/) on your machine. 
 ### Building:
 * From the remote server, navigate to the Ethisim directory and run 'docker-compose build'
 ### Running:

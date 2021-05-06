@@ -136,7 +136,8 @@ export default function ICMatrix({ scenario_ID }) {
         var config = {
             method: 'put',
             //url: baseURL + '/multi_stake?scenario=' + scenario_ID,
-            url: baseURL + '/multi_stake?scenario=' + scenario_ID,
+            //url: baseURL + '/multi_stake?scenario=' + scenario_ID,
+            url: baseURL + '/stakeholder',
             headers: {
                 'Content-Type': 'application/json',
             },

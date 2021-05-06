@@ -50,8 +50,8 @@ class courses_to_scenario(models.Model):
 
 
 class coverage(models.Model):
-    stakeholder = models.ForeignKey('stakeholders', on_delete = models.CASCADE, related_name = 'coverage2', db_column="stakeholder")
-    issue = models.ForeignKey('issues', to_field = 'issue', on_delete = models.CASCADE, related_name = 'coverage1')
+    stakeholder = models.ForeignKey('stakeholders', on_delete = models.CASCADE, related_name = 'coverage2', db_column='stakeholder')
+    issue = models.ForeignKey('issues', on_delete = models.CASCADE, related_name = 'coverage1', db_column='issue')
     coverage_score = models.DecimalField(max_digits=5, decimal_places=2)
 
     class Meta:

@@ -265,7 +265,7 @@ class scenarios_for(models.Model):
     scenario_id = models.ForeignKey('scenarios', on_delete = models.CASCADE, db_column='scenario_id')
     version = models.IntegerField()
     course = models.ForeignKey('courses', on_delete = models.CASCADE, db_column='course')
-    id = models.AutoField(primary_key = True)
+    #id = models.AutoField(primary_key = True)
 
     class Meta:
         unique_together = ('scenario_id', 'course')

@@ -136,6 +136,7 @@ class Pages(models.Model):
 
 
 class PagesToScenario(models.Model):
+    id = models.AutoField(primary_key=True)
     page = models.ForeignKey(Pages, on_delete = models.CASCADE)
     scenario = models.ForeignKey('Scenarios', on_delete = models.CASCADE)
 

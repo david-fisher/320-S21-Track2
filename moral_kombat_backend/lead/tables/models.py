@@ -3,63 +3,63 @@ from django.contrib.postgres.fields import ArrayField
 from django.core.validators import MinValueValidator
 
 ######################################### new models ########################
-class ACTION_PAGE(models.Model):
-    ACTION_PAGE_ID = models.IntegerField()
-    ID = models.IntegerField(primary_key = True)
-    PAGE = models.ForeignKey('PAGES', to_field='ID', on_delete = models.CASCADE, related_name='action_page1')
-    VERSION = models.IntegerField()
-    CHOICE = models.TextField()
-    RESULT_PAGE = models.IntegerField()
+class action_page(models.Model):
+    action_page_id = models.IntegerField()
+    id = models.IntegerField(primary_key = True)
+    page = models.ForeignKey('pages', to_field='id', on_delete = models.CASCADE, related_name='action_page1')
+    version = models.IntegerField()
+    choice = models.TextField()
+    result_page = models.IntegerField()
 
     class Meta:
-        unique_together = ('ACTION_PAGE_ID', 'VERSION')
+        unique_together = ('action_page_id', 'version')
         db_table = 'action_page'
 
 
-class CONVERSATIONS(models.Model):
-    CONVERSATION = models.AutoField(primary_key=True)
-    STAKEHOLDER = models.ForeignKey('STAKEHOLDERS', to_field = 'STAKEHOLDER', on_delete = models.CASCADE, related_name='conversations1')
+class conversations(models.Model):
+    conversation = models.AutoField(primary_key=True)
+    stakeholder = models.ForeignKey('stakeholders', to_field = 'stakeholder', on_delete = models.CASCADE, related_name='conversations1')
     QUESTION = models.TextField()
     RESPONSE = models.TextField()
     class Meta:
         db_table = 'conversations'
 
 
-class COURSES(models.Model):
-    COURSE = models.AutoField(primary_key=True)
-    NAME = models.TextField()
-    STUDENTS = models.ManyToManyField(
-        'STUDENTS', related_name='COURSES', through='STUDENTS_TO_COURSE')
+class courses(models.Model):
+    course = models.AutoField(primary_key=True)
+    name = models.TextField()
+    students = models.ManyToManyField(
+        'students', related_name='courses', through='students_to_course')
     professors = models.ManyToManyField(
-        'PROFESSORS', related_name='COURSES', through='PROFESSORS_TO_COURSES')
+        'professors', related_name='courses', through='professors_to_courses')
     scenarios = models.ManyToManyField(
-        'SCENARIOS', related_name='COURSES',  through='SCENARIOS_FOR')
+        'scenarios', related_name='courses',  through='scenarios_for')
     class Meta:
         db_table = 'courses'
 
 
-class COURSES_TO_SCENARIO(models.Model):
-    COURSE = models.ForeignKey('COURSES', to_field = 'COURSE', on_delete = models.CASCADE, null = False)
-    SCENARIO = models.ForeignKey('SCENARIOS', to_field = 'SCENARIO_ID', on_delete = models.CASCADE, null=False)
-    PERMISSION = models.IntegerField()
+class courses_to_scenario(models.Model):
+    course = models.ForeignKey('courses', to_field = 'course', on_delete = models.CASCADE, null = False)
+    scenario = models.ForeignKey('scenarios', to_field = 'scenario_id', on_delete = models.CASCADE, null=False)
+    permission = models.IntegerField()
 
     class Meta:
-        unique_together = ('COURSE', 'SCENARIO')
+        unique_together = ('course', 'scenario')
         db_table = 'courses_to_scenario'
 
 
-class COVERAGE(models.Model):
-    STAKEHOLDER = models.ForeignKey('STAKEHOLDERS', to_field = 'STAKEHOLDER', on_delete = models.CASCADE, related_name = 'coverage2')
-    ISSUE = models.ForeignKey('ISSUES', to_field = 'ISSUE', on_delete = models.CASCADE, related_name = 'coverage1')
-    COVERAGE_SCORE = models.DecimalField(max_digits=5, decimal_places=2)
+class coverage(models.Model):
+    stakeholder = models.ForeignKey('stakeholders', to_field = 'stakeholder', on_delete = models.CASCADE, related_name = 'coverage2')
+    issue = models.ForeignKey('issues', to_field = 'issue', on_delete = models.CASCADE, related_name = 'coverage1')
+    coverage_score = models.DecimalField(max_digits=5, decimal_places=2)
 
     class Meta:
-        unique_together = ('STAKEHOLDER', 'ISSUE')
+        unique_together = ('stakeholder', 'issue')
         db_table = 'coverage'
 
 
-class DEMOGRAPHICS(models.Model):
-    STUDENT = models.ForeignKey('STUDENTS', to_field = 'STUDENT', on_delete = models.CASCADE, related_name = 'demographics', unique = True)
+class demographics(models.Model):
+    student = models.ForeignKey('students', to_field = 'student', on_delete = models.CASCADE, related_name = 'demographics', unique = True)
     AGE = models.SmallIntegerField()
     GRADE_CHOICES = (('0', 'Other'),
                      ('1', 'Freshmen'),

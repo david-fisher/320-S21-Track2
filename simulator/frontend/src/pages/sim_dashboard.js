@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Container, Box, Typography, Grid, Divider } from '@material-ui/core';
+import { Container, Box, Typography, Grid } from '@material-ui/core';
 import SimScenarioCard from './components/DashboardComponents/SimScenarioCard';
 import Copyright from './components/Copyright';
 import { BASE_URL, STUDENT_ID } from '../constants/config';

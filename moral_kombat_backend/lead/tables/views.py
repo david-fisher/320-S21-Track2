@@ -42,7 +42,7 @@ class ReturnIdentifierView(APIView):
         #     return Response({"id":"student"})
         #return(Response({"id": request.META['uid']}))
 
-        if(len(professor.objects.filter(professors = request.META['uid']).values() != 0)):
+        if(len(professors.objects.filter(professor = request.META['uid']).values() != 0)):
             #data = "You are prof " + request.META['uid']
 
             return(Response({"id": "You are prof "}))
@@ -137,7 +137,7 @@ class multi_coverage(APIView):
         if stakeholder == None:
             return Response({'status': 'details'}, status=status.HTTP_404_NOT_FOUND)
         for updated_coverage in request.data:
-            extant_coverage = coverage.objects.get(stakeholder = stakeholder, issue = updated_coverage['issue_id'])
+            extant_coverage = coverage.objects.get(stakeholder = stakeholder, issue = updated_coverage['issue'])
             serializer = coverageSerializer(extant_coverage, data=updated_coverage)
             if serializer.is_valid():
                 serializer.save()
@@ -415,8 +415,8 @@ class logistics_page(APIView):
         "scenario": 1,
         "version": 0,
         "name": "pizza is good!",
-        "is_finished": false,
-        "public": false,
+        "is_finished": False,
+        "public": False,
         "num_conversation": 5,
         "professor": 12345678,
         "courses": 
@@ -509,8 +509,8 @@ class dashboard_page(APIView):
 
         {
         "name": "best test",
-        "is_finished": false,
-        "public": false,
+        "is_finished": False,
+        "public": False,
         "num_conversation": 5,
         "professor": 12345678,
         "courses":[
@@ -605,7 +605,7 @@ class multi_issue(APIView):
         for updated_issue in request.data:
             extant_issue = issues.objects.get(scenario_id = scenario, issue = updated_issue['issue'])
             serializer = IssuesSerializer(extant_issue, data=updated_issue)
-            if not serializer.is_valid(): 
+            if not serializer.is_valid():
                 return Response(serializer.errors)
             try:
                 serializer.save()
@@ -1166,7 +1166,7 @@ class stakeholders_page(APIView):
             stakeholder_id = stkholder['stakeholder']
 
             queryset = conversations.objects.filter(stakeholder=stakeholder_id)
-            conlist = ConversationsSerializer(queryset, many=true).data
+            conlist = ConversationsSerializer(queryset, many=True).data
             stkholder['conversations'] = conlist
 
             try: 
@@ -1271,7 +1271,7 @@ class stakeholders_page(APIView):
                 scenarios.objects.get(scenario_id = scenario_id)
                 queryset = stakeholders.objects.filter(
                     scenario=scenario_id)
-                data = list(StakeholdersSerializer(queryset, many=true).data)
+                data = list(StakeholdersSerializer(queryset, many=True).data)
                 data = self.add_detail(data)
                 return Response(data, status=status.HTTP_200_OK)
 
@@ -1286,7 +1286,7 @@ class stakeholders_page(APIView):
             try:
                 queryset = stakeholders.objects.filter(
                     stakeholder=stakeholder_id)
-                data = list(StakeholdersSerializer(queryset, many=true).data)
+                data = list(StakeholdersSerializer(queryset, many=True).data)
                 data = self.add_detail(data)
                 return Response(data, status=status.HTTP_200_OK)
 
@@ -1295,7 +1295,7 @@ class stakeholders_page(APIView):
                 return Response(message, status=status.HTTP_404_NOT_FOUND)
 
         queryset = stakeholders.objects.all()
-        data = StakeholdersSerializer(queryset, many=true).data
+        data = StakeholdersSerializer(queryset, many=True).data
         return Response(data, status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
@@ -1308,7 +1308,7 @@ class stakeholders_page(APIView):
             scenarioid = serializer.data['scenario']
             stkholderversion = serializer.data['version']
             queryset = issues.objects.filter(scenario_id=scenarioid)
-            data = issuesserializer(queryset, many=true).data
+            data = issuesserializer(queryset, many=True).data
             for item in data:
                 itemdict = {}
                 itemdict['stakeholder'] = stkholderid

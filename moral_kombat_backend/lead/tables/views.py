@@ -346,34 +346,34 @@ class IssuesViewSet(viewsets.ModelViewSet):
     # filter_backends = [DjangoFilterBackend]
     # filterset_fields = ['scenario_id', "name"]
 
-    def create(self, request, *args, **kwargs):
+    # def create(self, request, *args, **kwargs):
         
-        serializer = IssuesSerializer(data=request.data)
+    #     serializer = IssuesSerializer(data=request.data)
 
-        if serializer.is_valid():
+    #     if serializer.is_valid():
 
-            serializer.save()
+    #         serializer.save()
 
-            scenarioID = serializer.data['scenario_id']
-            issueID = serializer.data['issue']
+    #         scenarioID = serializer.data['scenario_id']
+    #         issueID = serializer.data['issue']
 
-            stakeholders = stakeholders.objects.filter(scenario=scenarioID).values()
+    #         stakeholders = stakeholders.objects.filter(scenario=scenarioID).values()
 
-            for stakeholder in stakeholders:
-                newCoverage = {}
-                newCoverage['stakeholder'] = stakeholder['stakeholder']
-                newCoverage['issue'] = issueID
-                newCoverage['coverage_score'] = 0
+    #         for stakeholder in stakeholders:
+    #             newCoverage = {}
+    #             newCoverage['stakeholder'] = stakeholder['stakeholder']
+    #             newCoverage['issue'] = issueID
+    #             newCoverage['coverage_score'] = 0
 
-                coverageSerial = coverageSerializer(data=newCoverage)
-                if coverageSerial.is_valid():
-                    coverageSerial.save()
-                else:
-                    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    #             coverageSerial = coverageSerializer(data=newCoverage)
+    #             if coverageSerial.is_valid():
+    #                 coverageSerial.save()
+    #             else:
+    #                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+    #         return Response(serializer.data, status=status.HTTP_201_CREATED)
         
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class Action_pageViewSet(viewsets.ModelViewSet):

@@ -194,7 +194,7 @@ class scenariosviewset(viewsets.ModelViewSet):
     def delete(self, request, pk, format=none):
         snippet = self.get_object(pk)
         snippet.delete()
-        return Response(status=status.http_204_no_content)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 class singlescenarioviewset(viewsets.ModelViewSet):
     def get(self, request):
@@ -211,7 +211,7 @@ class singlescenarioviewset(viewsets.ModelViewSet):
 #     def delete(self, request, pk, format=none):
 #         snippet = self.get_object(pk)
 #         snippet.delete()
-#         return Response(status=status.http_204_no_content)
+#         return Response(status=status.HTTP_204_NO_CONTENT)
 
 class professors_to_scenarioviewset(viewsets.ModelViewSet):
     queryset = professors_to_scenario.objects.all()
@@ -733,7 +733,7 @@ class pages_page(APIView):
         
         # neither of these pages, something went wrong or missing implementation
         else:
-            return Response(status=status.http_400_bad_request)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
     
     
 #     # define post function for pages
@@ -759,12 +759,12 @@ class pages_page(APIView):
                     else:
                         page = pages.objects.get(page=page_id)
                         page.delete()
-                        return Response(nested_serializer.data, status=status.http_400_bad_request)
+                        return Response(nested_serializer.data, status=status.HTTP_400_BAD_REQUEST)
                     #nested_serializer.save()
-                return Response(pages_serializer.data, status=status.http_201_created)
+                return Response(pages_serializer.data, status=status.HTTP_201_CREATED)
             
             # if the request was badly made or could not be created
-            return Response(pages_serializer.errors, status=status.http_400_bad_request)
+            return Response(pages_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
         # if the request is an action page  
         if (page_type == 'a'):
@@ -781,12 +781,12 @@ class pages_page(APIView):
                     else:
                         page = pages.objects.get(page=page_id)
                         page.delete()
-                        return Response(nested_serializer.data, status=status.http_400_bad_request)
+                        return Response(nested_serializer.data, status=status.HTTP_400_BAD_REQUEST)
                     #nested_serializer.save()
-                return Response(pages_serializer.data, status=status.http_201_created)
+                return Response(pages_serializer.data, status=status.HTTP_201_CREATED)
             
             # if the request was badly made or could not be created
-            return Response(pages_serializer.errors, status=status.http_400_bad_request)
+            return Response(pages_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
             
         # if the request is a generic page  
         if (page_type == 'g' or page_type == 'i'):
@@ -803,12 +803,12 @@ class pages_page(APIView):
                     else:
                         page = pages.objects.get(page=page_id)
                         page.delete()
-                        return Response(nested_serializer.data, status=status.http_400_bad_request)
+                        return Response(nested_serializer.data, status=status.HTTP_400_BAD_REQUEST)
                     #nested_serializer.save()
-                return Response(pages_serializer.data, status=status.http_201_created)
+                return Response(pages_serializer.data, status=status.HTTP_201_CREATED)
             
             # if the request was badly made or could not be created
-            return Response(pages_serializer.errors, status=status.http_400_bad_request)
+            return Response(pages_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
         # if the request is a stakeholder page 
         if (page_type == 's'):
@@ -825,15 +825,15 @@ class pages_page(APIView):
                     else:
                         page = pages.objects.get(page=page_id)
                         page.delete()
-                        return Response(nested_serializer.data, status=status.http_400_bad_request)
+                        return Response(nested_serializer.data, status=status.HTTP_400_BAD_REQUEST)
                     #nested_serializer.save() #delete
-                return Response(pages_serializer.data, status=status.http_201_created)
+                return Response(pages_serializer.data, status=status.HTTP_201_CREATED)
 
             # if the request was badly made or could not be created
-            return Response(pages_serializer.data, status=status.http_400_bad_request)
+            return Response(pages_serializer.data, status=status.HTTP_400_BAD_REQUEST)
 
         else:
-            return Response(status=status.http_400_bad_request) 
+            return Response(status=status.HTTP_400_BAD_REQUEST) 
 
     # @api_view(['put'])
     def put(self, request):
@@ -872,7 +872,7 @@ class pages_page(APIView):
                             if nested_serializer.is_valid():
                                 nested_serializer.save()
                             else:
-                                return Response(nested_serializer.errors, status=status.http_400_bad_request)
+                                return Response(nested_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
                             continue
 
                         question['page'] = page_id
@@ -880,10 +880,10 @@ class pages_page(APIView):
                         if nested_serializer.is_valid():
                             nested_serializer.save()
                         else:
-                            return Response(nested_serializer.errors, status=status.http_400_bad_request)
-                    return Response(pages_serializer.data, status=status.http_200_ok)
+                            return Response(nested_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                    return Response(pages_serializer.data, status=status.HTTP_200_OK)
                 # else the request was badly made
-                return Response(pages_serializer.errors, status=status.http_400_bad_request)
+                return Response(pages_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
             
             # check page.page_type = 'action'
             if (page_type == 'a'):
@@ -902,7 +902,7 @@ class pages_page(APIView):
                             if nested_serializer.is_valid():
                                 nested_serializer.save()
                             else:
-                                return Response(nested_serializer.errors, status=status.http_400_bad_request)
+                                return Response(nested_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
                             continue
 
                         action['page'] = page_id
@@ -910,10 +910,10 @@ class pages_page(APIView):
                         if nested_serializer.is_valid():
                             nested_serializer.save()
                         else:
-                            return Response(nested_serializer.errors, status=status.http_400_bad_request)
-                    return Response(pages_serializer.data, status=status.http_200_ok)
+                            return Response(nested_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                    return Response(pages_serializer.data, status=status.HTTP_200_OK)
                 # else the request was badly made
-                return Response(pages_serializer.errors, status=status.http_400_bad_request)
+                return Response(pages_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
             
             # check page.page_type = 'generic'
             if (page_type == 'g' or page_type == 'i'):
@@ -932,7 +932,7 @@ class pages_page(APIView):
                             if nested_serializer.is_valid():
                                 nested_serializer.save()
                             else:
-                                return Response(nested_serializer.errors, status=status.http_400_bad_request)
+                                return Response(nested_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
                             continue
 
                         body['page'] = page_id
@@ -940,10 +940,10 @@ class pages_page(APIView):
                         if nested_serializer.is_valid():
                             nested_serializer.save()
                         else:
-                            return Response(nested_serializer.errors, status=status.http_400_bad_request)
-                    return Response(pages_serializer.data, status=status.http_200_ok)
+                            return Response(nested_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                    return Response(pages_serializer.data, status=status.HTTP_200_OK)
                 # else the request was badly made
-                return Response(pages_serializer.errors, status=status.http_400_bad_request)
+                return Response(pages_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
             # check page.page_type = 'stakeholders'
             if (page_type == 's'):
@@ -962,7 +962,7 @@ class pages_page(APIView):
                             if nested_serializer.is_valid():
                                 nested_serializer.save()
                             else:
-                                return Response(nested_serializer.errors, status=status.http_400_bad_request)
+                                return Response(nested_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
                             continue
 
                         stakeholder['page'] = page_id
@@ -970,13 +970,13 @@ class pages_page(APIView):
                         if nested_serializer.is_valid():
                             nested_serializer.save()
                         else:
-                            return Response(nested_serializer.errors, status=status.http_400_bad_request)
-                    return Response(pages_serializer.data, status=status.http_200_ok)
+                            return Response(nested_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                    return Response(pages_serializer.data, status=status.HTTP_200_OK)
                 # else the request was badly made
-                return Response(pages_serializer.errors, status=status.http_400_bad_request)
+                return Response(pages_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
             # not a valid type of page
             else:
-                return Response(status=status.http_400_bad_request) 
+                return Response(status=status.HTTP_400_BAD_REQUEST) 
 
 
     # @api_view(['delete'])
@@ -1006,7 +1006,7 @@ class pages_page(APIView):
                     pages_serializer.save()
                 else:
                     print("error in making next_page = null during delete!")
-                    return Response(pages_serializer.errors, status=status.http_400_bad_request)
+                    return Response(pages_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
             #also set and result_page fields pointing to the deleted page to be null as well.
             action_pages = action_page.objects.filter(result_page = page_id)
@@ -1019,7 +1019,7 @@ class pages_page(APIView):
                     action_pages_serializer.save()
                 else:
                     print("error in making next_page = null during delete!")
-                    return Response(action_pages_serializer.errors, status=status.http_400_bad_request)
+                    return Response(action_pages_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
             # finally delete the page 
 
@@ -1099,7 +1099,7 @@ class coverages_page(APIView):
             }
         )
 
-        return Response(stkholder, status=status.http_200_ok)
+        return Response(stkholder, status=status.HTTP_200_OK)
 
     def put(self, request, *args, **kwargs):
         # """
@@ -1120,9 +1120,9 @@ class coverages_page(APIView):
                     serializer.save()
                     response.append(serializer.data)
                 else:
-                    return Response(response, status=status.http_400_bad_request)
+                    return Response(response, status=status.HTTP_400_BAD_REQUEST)
 
-            return Response(response, status=status.http_200_ok)
+            return Response(response, status=status.HTTP_200_OK)
         else:
             stkholderid = data['stakeholder']
             issueid = data['issue']
@@ -1132,9 +1132,9 @@ class coverages_page(APIView):
                 updatingitem, data=data)
             if serializer.is_valid():
                 serializer.save()
-                return Response(serializer.data, status=status.http_200_ok)
+                return Response(serializer.data, status=status.HTTP_200_OK)
             else:
-                return Response(serializer.errors, status=status.http_400_bad_request)
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class stakeholders_page(APIView):
@@ -1252,7 +1252,7 @@ class stakeholders_page(APIView):
                     scenario=scenario_id)
                 data = list(stakeholdersserializer(queryset, many=true).data)
                 data = self.add_detail(data)
-                return Response(data, status=status.http_200_ok)
+                return Response(data, status=status.HTTP_200_OK)
 
             # return an error for non-existed scenario id
             except scenarios.doesnotexist:
@@ -1267,7 +1267,7 @@ class stakeholders_page(APIView):
                     stakeholder=stakeholder_id)
                 data = list(stakeholdersserializer(queryset, many=true).data)
                 data = self.add_detail(data)
-                return Response(data, status=status.http_200_ok)
+                return Response(data, status=status.HTTP_200_OK)
 
             except stakeholders.doesnotexist:
                 message = {'message': 'invalid stakeholder id'}
@@ -1275,7 +1275,7 @@ class stakeholders_page(APIView):
 
         queryset = stakeholders.objects.all()
         data = stakeholdersserializer(queryset, many=true).data
-        return Response(data, status=status.http_200_ok)
+        return Response(data, status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
     
@@ -1301,10 +1301,10 @@ class stakeholders_page(APIView):
                     itemserializer.save()
                 else:
                     return Response(itemserializer.errors,
-                                    status=status.http_400_bad_request)
-            return Response(serializer.data, status=status.http_201_created)
+                                    status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-        return Response(serializer.errors, status=status.http_400_bad_request)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, *args, **kwargs):
 
@@ -1315,11 +1315,11 @@ class stakeholders_page(APIView):
                 response = stakeholders.objects.get(
                     stakeholder =stakeholder_id)
                 response.delete()
-                return Response({'message': 'deleted'}, status=status.http_202_accepted)
+                return Response({'message': 'deleted'}, status=status.HTTP_202_ACCEPTED)
             except stakeholders.doesnotexist:
                 return Response({'message': 'not found'}, status=status.HTTP_404_NOT_FOUND)
         else:
-            return Response({'message': 'missing id'}, status=status.http_400_bad_request)
+            return Response({'message': 'missing id'}, status=status.HTTP_400_BAD_REQUEST)
 
     def put(self, request, *args, **kwargs):
         '''
@@ -1369,9 +1369,9 @@ class stakeholders_page(APIView):
                     stkholderserializer.save()
                     response.append(stkholderserializer.data)
                 else:
-                    return Response(response, status=status.http_400_bad_request)
+                    return Response(response, status=status.HTTP_400_BAD_REQUEST)
 
-            return Response(response, status=status.http_200_ok)
+            return Response(response, status=status.HTTP_200_OK)
         else:
             id = data['stakeholder']
             updatingitem = stakeholders.objects.get(stakeholder=id)
@@ -1379,9 +1379,9 @@ class stakeholders_page(APIView):
                 updatingitem, data=data)
             if stkholderserializer.is_valid():
                 stkholderserializer.save()
-                return Response(stkholderserializer.data, status=status.http_200_ok)
+                return Response(stkholderserializer.data, status=status.HTTP_200_OK)
             else:
-                return Response(stkholderserializer.errors, status=status.http_400_bad_request)
+                return Response(stkholderserializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 # class coverages_page(APIView):

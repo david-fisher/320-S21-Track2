@@ -53,24 +53,15 @@ function Conversation(props) {
 
   const setConversation = (conversation) => {
 
-    if(!props.stakeholder.isMultipart) {
+    let data = conversation.map((convo) => {
+      return {
+        conversation: convo.conversation,
+        question: convo.question,
+        response: convo.response
+      };
+    });
 
-      setMonologue(conversation.reduce((text, convPart) => {
-        return text + convPart.response;
-      }, ''));
-
-    } else {
-
-      let data = conversation.map((convo) => {
-        return {
-          conversation: convo.conversation,
-          question: convo.question,
-          response: convo.response
-        };
-      });
-
-      setDialogue(data);
-    }
+    setDialogue(data);
 
   };
 
@@ -123,9 +114,9 @@ function Conversation(props) {
       <Grid container spacing={2}>
         <Grid item lg={12}>
           <Box p={10} className={classes.textBox}>
-              {!isLoading && (props.stakeholder.isMultipart) 
-                ? <MultipartConvo dialogue={dialogue} page_id={props.page_id} match={props.match} stakeholder={props.stakeholder}/> 
-                : <Typography>{monologue}</Typography>}
+              {!isLoading ?
+              <MultipartConvo dialogue={dialogue} page_id={props.page_id} match={props.match} stakeholder={props.stakeholder}/> 
+              : <Typography>One second while things are loading...</Typography> }
           </Box>
         </Grid>
       </Grid>

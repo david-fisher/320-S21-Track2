@@ -273,8 +273,8 @@ class scenarios_for(models.Model):
 
 
 class stakeholder_to_page(models.Model):
-    page = models.ForeignKey('pages', on_delete = models.CASCADE, db_column='page')
-    stakeholder = models.ForeignKey('stakeholders', on_delete = models.CASCADE, db_column='stakeholder')
+    page = models.ForeignKey('pages', on_delete = models.CASCADE, db_column= 'id')
+    stakeholder = models.ForeignKey('stakeholders', db_column='id', on_delete = models.CASCADE)
 
     class Meta:
         unique_together = ('page', 'stakeholder')
@@ -298,8 +298,8 @@ class stakeholders(models.Model):
 
 
 class stakeholders_to_questions(models.Model):
-    stakeholder = models.ForeignKey('stakeholders', on_delete = models.CASCADE, db_column='stakeholder')
-    question = models.ForeignKey('questions', on_delete = models.CASCADE, db_column='question')
+    stakeholder = models.ForeignKey('stakeholders', db_column='stakeholder', on_delete = models.CASCADE)
+    question = models.ForeignKey('questions', db_column='question', on_delete = models.CASCADE)
 
     class Meta:
         unique_together = ('stakeholder', 'question')

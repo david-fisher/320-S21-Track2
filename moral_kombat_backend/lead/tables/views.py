@@ -382,7 +382,7 @@ class logistics_page(APIView):
         course_id_array = []
         for x in scenarios_for_query:
             # print(x)
-            course_id_array.append(x['course'])
+            course_id_array.append(x['course_id'])
 
         course_dict_array = []
         for x in course_id_array:

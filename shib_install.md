@@ -187,7 +187,7 @@ $ sudo shibd -t
 It is important that the last line of the output is:
 
 ```bash
-$ overall configuration is loadable, check console for non-fatal problems
+overall configuration is loadable, check console for non-fatal problems
 ```
 
 ### Apache Configuration Check
@@ -200,7 +200,7 @@ $ sudo apachectl configtest
 The output of this command should be:
 
 ```bash
-$ Syntax OK
+Syntax OK
 ```
 
 ### Check to see if Shibboleth is loaded on the server.

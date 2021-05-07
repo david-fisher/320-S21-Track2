@@ -66,9 +66,9 @@ You can find the list of endpoints here:
 ### How to get the Simulator Back-end Running:
 1) Be sure that python3 is installed and in the Environment Variable (Pip works better for Django than Conda)
 2) Clone the project to your machine `git clone https://github.com/david-fisher/320-S21-Track2.git`
-3) Navigate to "segfault" folder in terminal and install the dependencies by running `pipenv shell` then `pipenv install -r requirements.txt`
-4) If there have been changes made to the database, run `python manage.py makemigrations` then `python manage.py migrate` (It is harmless to run these even if there haven't been any database changes).
-5) Make sure you're connected the correct database (Done through segfault/settings.py, refer to Django documentation for more details)
+3) Navigate to the "320-S21-Track2\segfault" folder in terminal and install the dependencies (django, djangorestframework, and psycopg2) by running `pipenv shell` then `pipenv install -r requirements.txt` ("requirements.txt" has django, djangorestframework, and psycopg2. The versions of those might change in the future, so you can update this txt file with the new versions if you want)
+4) If there have been changes made to the database, run `python manage.py makemigrations` then `python manage.py migrate` (It is harmless to run these even if there haven't been any database changes)
+5) Make sure you're connected the correct database (Done through "320-S21-Track2\segfault\segfault", refer to Django documentation for more details)
 6) Run the server `python manage.py runserver` ( The default port is at localhost:8000, this can be changed through `python manage.py runserver 0.0.0.0:<port number>`) 
 7) To access the endpoints, put "/api" after the "localhost:8000" in the URL
 

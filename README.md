@@ -55,6 +55,13 @@ You can find the list of endpoints here:
 2. Clone the GitHub repository
 3. In the terminal, navigate to `/moral_kombat_backend/` and install the Django packages using `pip install -r requirements.txt`
 4. Navigate to `/moral_kombat_backend/lead/` and run `python manage.py runserver`
+ Bonus Note:  **Migrating on the Backend**
+                - Navigate to the docker desktop dashboard
+                - hover over the container named **back** until 5 circles appear on the right
+                - click the second dot that says **CLI** (Command Line Interface). This should open a terminal.
+                - Once here you can direct yourself into the lead folder
+                - Run the command:
+                    "python3 manage.py makemigrations"
 
 ### How to get the Simulator Front-end Running:
 1. Download [node.js](https://nodejs.org/en/download/)

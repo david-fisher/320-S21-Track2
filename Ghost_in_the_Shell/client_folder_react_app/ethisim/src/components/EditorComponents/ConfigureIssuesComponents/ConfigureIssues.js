@@ -81,7 +81,7 @@ export default function ConfigureIssues({ scenario_ID }) {
 
     useEffect(getData, []);
 
-    if (issueEntryFieldList.loading || issueCoverageMatrix.loading) {
+    if (issueEntryFieldList.loading) {
         return <LoadingSpinner />;
     }
 

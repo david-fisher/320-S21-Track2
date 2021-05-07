@@ -77,7 +77,7 @@ Now time to enable Shibboleth integration.
 
 Open up the settings.py in `/var/www/ethisim.cs.umass.edu/shibdjango`
 
-Add your site URL to the `ALLOWED_HOSTS = ["ethisim.cs.umass.edu"]
+Add your site URL to the `ALLOWED_HOSTS = ["ethisim.cs.umass.edu"]`
 
 Next, add a field to the `TEMPLATES` dictionary, namely,  
 ```
@@ -136,15 +136,13 @@ Now we are going to create a html template to show the shib attributes we are re
 Open `/var/www/ethisim.cs.umass.edu/templates` and crate a file called `user.html` and add the following complex code.
 
 ``` html
-<pre>
-    {{ meta }}
-</pre>
+<pre>{{ meta }}</pre>
 ```
 
 Open your apache config at `/etc/apache2/conf/apache2.conf` and append the shibboleth specific configurations. Go to ServerName and change it to your identity providers server name.
 
 ``` xml
-ServerName 'ethisim.cs.umass.edu'
+ServerName ethisim.cs.umass.edu
 ```
 
 Add to the bottom.
@@ -169,4 +167,4 @@ IF everything worked well, then you should be able to see all the shib attribute
 ![](image.png)
 
 
-If you want to implement this exactly, you can get the shibboleth2.xml config from shib_test_sp
+If you want to implement this exactly, you can get the shibboleth config that we used from [shib_test_sp](./shib_test_sp/).

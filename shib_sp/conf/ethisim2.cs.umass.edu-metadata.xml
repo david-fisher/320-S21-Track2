@@ -1,0 +1,63 @@
+<md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" entityID="https://ethisim2.cs.umass.edu/shibboleth">
+  <md:SPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+    <md:KeyDescriptor>
+      <ds:KeyInfo>
+        <ds:X509Data>
+          <ds:X509Certificate>
+MIIEMDCCApigAwIBAgIJAPdK6ROetSnPMA0GCSqGSIb3DQEBCwUAMCAxHjAcBgNV
+BAMTFWV0aGlzaW0yLmNzLnVtYXNzLmVkdTAeFw0yMTAzMzEwMTIyMTNaFw0zMTAz
+MjkwMTIyMTNaMCAxHjAcBgNVBAMTFWV0aGlzaW0yLmNzLnVtYXNzLmVkdTCCAaIw
+DQYJKoZIhvcNAQEBBQADggGPADCCAYoCggGBAMNaUu8P8d4mZhVSTACAXmqBxyJ+
+XGOIW+hKE0hInoBDtX7gZQUj68KRu1M3D32m/otyOmKC5HpUvpjpHVNeh3XJnyOt
+jApRMRBDYfW0ZEMmw9C67ezg7ynmaY3t+Z5SP8VxXef4mxYJ8tEFgGxv5Tv6N9rS
+81j/mi4DIa9IQoLXvAM3LVs2a9eVF/cXOyk4QFSCoQA0T1fyo10jU7xqrjzOO0nc
+T2ZGPwo5Cok1iyDchIQunZuVzVQyb9aBEsVRqo4VVu9wXl38mdZmpmEXr7FwZBOS
+V5/lbaGOohTKF51WmDZQRIRdbNO2xi5m41XrVhbiUMPFNbxnx5tbmKJrZq8BC0eu
+xfobSMIqVXCj92LBCwncRuZ4rcD+wzyHaHe4HQ2INdzIOVhe1Rnd9Ll1+b9EXy8i
+Vr5KAh0ST2vE7kJJXCecV2Kdgx9n1F3ROc6DDkadjQwPbz6qsga6a5jPArINywKK
+kM3f7U8a5ykTnmoXaMDa2UU69NR3I9MWrrYV3wIDAQABo20wazBKBgNVHREEQzBB
+ghVldGhpc2ltMi5jcy51bWFzcy5lZHWGKGh0dHBzOi8vZXRoaXNpbTIuY3MudW1h
+c3MuZWR1L3NoaWJib2xldGgwHQYDVR0OBBYEFIFZKPQygmfBaoOJNnoY38p6ngjL
+MA0GCSqGSIb3DQEBCwUAA4IBgQCUjSnaf1eSkCqWaKJ0DRyYsgZcUeu+DAGgIAQZ
+Vw3Lrg6wylBTsmqANwEdCjsfm+y4PfoX8ObRcLXsAr9MxspoHi7QY+i+nHu42qbC
+073X+DXTBKRYPqZC50IVmvyFbLgUk9QWH0SNTnjBus6iSUknkf1Py7Yx1bUmXpJo
+f+YzOQASZAu8kMIO/JcXTOOYiGwFo3P86yP0cZlskSXbgif/SFQpPAOsUQ6CAWPn
+3fPqZ4vArhZfn2ur7Q5E73MQ6nITxPrmaI6uSAUXca61csd6/sXGvWwcYrr3sbBk
+9dplb1j+brfmoHYAPKRlp2m2JbOSnybeF2b8LuOBOgMsqWDrB41SGM3WtNCuVCSw
+0qRqH1W5/3yPbF4R/GwX178xTnPXqFvgCFAHGw99FzX3nRdIszfQDylJfmAA1K+E
+Aw40QOkpLWLsGCarMS0k11wXabxQxVVWeiHW9Ihg5csQpJZxp+fNhfJd+7fdlA2f
+r1HXI5IeJa8FaKnjvSpb6yt3JJ0=
+          </ds:X509Certificate>
+        </ds:X509Data>
+      </ds:KeyInfo>
+    </md:KeyDescriptor>
+    <md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://ethisim2.cs.umass.edu/Shibboleth.sso/SAML2/POST" index="1"/>
+    <md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST-SimpleSign" Location="https://ethisim2.cs.umass.edu/Shibboleth.sso/SAML2/POST-SimpleSign" index="2"/>
+    <md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact" Location="https://ethisim2.cs.umass.edu/Shibboleth.sso/SAML2/Artifact" index="3"/>
+    <md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:PAOS" Location="https://ethisim2.cs.umass.edu/Shibboleth.sso/SAML2/ECP" index="4"/>
+    <md:Extensions xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui">
+    <mdui:UIInfo>
+      <mdui:DisplayName xml:lang="en">Ethisim</mdui:DisplayName>
+    </mdui:UIInfo>
+  </md:Extensions>
+</md:SPSSODescriptor>
+  <md:Organization>
+    <md:OrganizationName xml:lang="en">umass.edu</md:OrganizationName>
+    <md:OrganizationDisplayName xml:lang="en">umass.edu</md:OrganizationDisplayName>
+    <md:OrganizationURL xml:lang="en">https://ethisim2.cs.umass.edu</md:OrganizationURL>
+  </md:Organization>
+  <md:ContactPerson contactType="administrative">
+    <md:GivenName></md:GivenName>
+    <md:SurName></md:SurName>
+    <md:EmailAddress></md:EmailAddress>
+  </md:ContactPerson>
+  <md:Extensions xmlns:mdattr="urn:oasis:names:tc:SAML:metadata:attribute" xmlns:mdrpi="urn:oasis:names:tc:SAML:metadata:rpi">
+    <mdattr:EntityAttributes xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">
+    <saml:Attribute Name="http://macedir.org/entity-category" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+      <saml:AttributeValue>http://umass.edu/category/campus</saml:AttributeValue>
+    </saml:Attribute>
+    </mdattr:EntityAttributes>
+  </md:Extensions>
+</md:EntityDescriptor>
+
+

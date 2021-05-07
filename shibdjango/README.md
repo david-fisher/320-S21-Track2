@@ -49,7 +49,7 @@ Right now we have django installed, and apache installed, yet nothing is talking
 
 We must tell apache to enable all the WSGI features through the config.
 
-Open your apache config at `/etc/apache2/conf/apache2.conf and append it to the bottom.
+Open your apache config at `/etc/apache2/conf/apache2.conf` and append it to the bottom.
 
 ``` xml
 WSGIScriptAlias / /var/www/ethisim.cs.umass.edu/shibdjango/wsgi.py 
@@ -71,6 +71,7 @@ $ sudo service apache2 restart
 
 
 Great! Now you have django running on your apache server with mod-wsgi along side it.
+## Shibboleth integration
 
 Now time to enable Shibboleth integration.
 
@@ -80,12 +81,12 @@ Add your site URL to the `ALLOWED_HOSTS = ["ethisim.cs.umass.edu", .....]`
 
 Next, add a field to the `TEMPLATES` array, called 
 ```
-DIR=[BASE_DIR / `templates`]
+'DIR':[BASE_DIR / 'templates']
 ```
 Then open urls.py in the same directory, and all the way at the bottom, add a path pattern like so.
 
 ```
-path(`user/`, views.index),
+path('user/', views.index),
 ```
 
 Next, open or create a file called views.py and enter the following configuration.
@@ -132,21 +133,23 @@ Now we are going to create a html template to show the shib attributes we are re
 Open `/var/www/ethisim.cs.umass.edu/templates` and crate a file called `user.html` and add the following complex code.
 
 ``` html
-<pre>{{ meta }}</pre>
+<pre>
+    {{ meta }}
+</pre>
 ```
 
-Open your apache config at `/etc/apache2/conf/apache2.conf and append the shibboleth specific configurations. Go to ServerName and change it to your identity providers server name.
+Open your apache config at `/etc/apache2/conf/apache2.conf` and append the shibboleth specific configurations. Go to ServerName and change it to your identity providers server name.
 
 ``` xml
-ServerName 'LOCALHOST`
+ServerName 'ethisim.cs.umass.edu'
 ```
 
 Add to the bottom.
 
 ``` xml
 <Location />
-AuthType shibboleth
-Require shibboleth
+    AuthType shibboleth
+    Require shibboleth
 </Location>
 
 <Location /Shibboleth.sso>
@@ -156,7 +159,7 @@ Require shibboleth
 
 Now you're able to see the attributes!
 
-Go to `(https://localhost/Shibboleth.sso/Login?target=https://localhost/user/)`
+Go to https://ethisim.cs.umass.edu/Shibboleth.sso/Login?target=https://ethisim.cs.umass.edu/user/
 
 IF everything worked well, then you should be able to see all the shib attributes
 

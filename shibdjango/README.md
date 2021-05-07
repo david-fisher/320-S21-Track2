@@ -77,11 +77,11 @@ Now time to enable Shibboleth integration.
 
 Open up the settings.py in `/var/www/ethisim.cs.umass.edu/shibdjango`
 
-Add your site URL to the `ALLOWED_HOSTS = ["ethisim.cs.umass.edu", .....]`
+Add your site URL to the `ALLOWED_HOSTS = ["ethisim.cs.umass.edu"]
 
-Next, add a field to the `TEMPLATES` array, called 
+Next, add a field to the `TEMPLATES` dictionary, namely,  
 ```
-'DIR':[BASE_DIR / 'templates']
+'DIR': [BASE_DIR / 'templates']
 ```
 Then open urls.py in the same directory, and all the way at the bottom, add a path pattern like so.
 
@@ -93,7 +93,10 @@ Next, open or create a file called views.py and enter the following configuratio
 
 ``` python
 import json
+
 from django.shortcuts import render
+
+
 def index(request):
     keys = [
         'Shib-Application-ID',
@@ -164,3 +167,6 @@ Go to https://ethisim.cs.umass.edu/Shibboleth.sso/Login?target=https://ethisim.c
 IF everything worked well, then you should be able to see all the shib attributes
 
 ![](image.png)
+
+
+If you want to implement this exactly, you can get the shibboleth2.xml config from shib_test_sp

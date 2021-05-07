@@ -7,6 +7,7 @@ import {
     DialogActions,
     DialogTitle,
     DialogContent,
+    Grid,
 } from '@material-ui/core';
 import ReactFlow, {
     removeElements,
@@ -33,6 +34,8 @@ import ErrorIcon from '@material-ui/icons/Error';
 import SuccessBanner from '../../Banners/SuccessBanner';
 import ErrorBanner from '../../Banners/ErrorBanner';
 import PropTypes from 'prop-types';
+import HelpIcon from '@material-ui/icons/Help';
+import GenericInfoButton from '../../InfoButtons/GenericInfoButton';
 
 const useStyles = makeStyles((theme) => ({
     errorContainer: {
@@ -77,9 +80,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 //Needs scenario id
-const endpointGET = '/flowchart?scenario_id=';
+const endpointGET = '/flowchart?scenario=';
 //Needs scenario id
-const endpointPUT = '/flowchart?scenario_id=';
+const endpointPUT = '/flowchart?scenario=';
 
 FlowDiagram.propTypes = {
     scenario_ID: PropTypes.number,
@@ -104,22 +107,28 @@ export default function FlowDiagram({ scenario_ID }) {
     const [unsaved, setUnsaved] = useState(false);
     const [errorText, setErrorText] = useState('');
 
+    //for info button
+    const [open, setOpen] = React.useState(false);
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
     function positionElements(elements) {
         let introductionElement = elements.filter((componentData) => {
-            return componentData.PAGE_TYPE === 'I';
+            return componentData.page_type === 'I';
         });
         let genericElements = elements.filter((componentData) => {
-            return componentData.PAGE_TYPE === 'G';
+            return componentData.page_type === 'G';
         });
         let reflectionElements = elements.filter((componentData) => {
-            return componentData.PAGE_TYPE === 'R';
+            return componentData.page_type === 'R';
         });
         let actionElements = elements.filter((componentData) => {
-            return componentData.PAGE_TYPE === 'A';
+            return componentData.page_type === 'A';
         });
         let stakeholderConversationElement = elements.filter(
             (componentData) => {
-                return componentData.PAGE_TYPE === 'S';
+                return componentData.page_type === 'S';
             }
         );
 
@@ -160,34 +169,34 @@ export default function FlowDiagram({ scenario_ID }) {
         elements.forEach((currentElement) => {
             //TODO
             if (currentElement.type === 'actionNode') {
-                if (!currentElement.ACTION[0]) {
+                if (!currentElement.action[0]) {
                     // eslint-disable-next-line
                     throw 'Action incomplete';
                 }
                 //Only 2 action options
-                if (currentElement.ACTION[0].RESULT_PAGE) {
+                if (currentElement.action[0].result_page) {
                     elements = addEdge(
                         {
                             source: currentElement.id.toString() + '__a',
-                            target: currentElement.ACTION[0].RESULT_PAGE.toString(),
+                            target: currentElement.action[0].result_page.toString(),
                         },
                         elements
                     );
                 }
-                if (currentElement.ACTION[1].RESULT_PAGE) {
+                if (currentElement.action[1].result_page) {
                     elements = addEdge(
                         {
                             source: currentElement.id.toString() + '__b',
-                            target: currentElement.ACTION[1].RESULT_PAGE.toString(),
+                            target: currentElement.action[1].result_page.toString(),
                         },
                         elements
                     );
                 }
-            } else if (currentElement.NEXT_PAGE) {
+            } else if (currentElement.next_page) {
                 elements = addEdge(
                     {
                         source: currentElement.id.toString(),
-                        target: currentElement.NEXT_PAGE.toString(),
+                        target: currentElement.next_page.toString(),
                     },
                     elements
                 );
@@ -275,8 +284,8 @@ export default function FlowDiagram({ scenario_ID }) {
                 if (isNode(currentElement) && currentElement.position.x === 0) {
                     return array.concat({
                         ...currentElement,
-                        X_COORDINATE: 0,
-                        Y_COORDINATE: 0,
+                        x_coordinate: 0,
+                        y_coordinate: 0,
                         position: { x: 0, y: 0 },
                     });
                 }
@@ -296,28 +305,30 @@ export default function FlowDiagram({ scenario_ID }) {
         const updatedElements = elements.reduce((array, currentElement) => {
             if (isNode(currentElement)) {
                 let nodeElement = {
-                    PAGE: currentElement.PAGE,
-                    PAGE_TYPE: currentElement.PAGE_TYPE,
-                    PAGE_TITLE: currentElement.PAGE_TITLE,
-                    PAGE_BODY: currentElement.PAGE_BODY,
-                    SCENARIO: currentElement.SCENARIO_id,
-                    VERSION: currentElement.VERSION,
-                    NEXT_PAGE: null,
-                    X_COORDINATE: Math.floor(currentElement.position.x),
-                    Y_COORDINATE:
+                    page: currentElement.page,
+                    page_type: currentElement.page_type,
+                    page_title: currentElement.page_title,
+                    page_body: currentElement.body,
+                    scenario_id: currentElement.scenario_id, //WEIRD PROP
+                    version: currentElement.version,
+                    next_page: null,
+                    x_coordinate: Math.floor(currentElement.position.x),
+                    y_coordinate:
                         Math.floor(currentElement.position.x) !== 0
                             ? Math.floor(currentElement.position.y)
                             : 0,
                 };
+                console.log('node');
+                console.log(currentElement);
 
                 if (currentElement.type === 'actionNode') {
-                    nodeElement.ACTION = currentElement.ACTION.map(
+                    nodeElement.action = currentElement.action.map(
                         (actionData) => {
                             return {
                                 id: actionData.id,
-                                PAGE: actionData.PAGE_id,
-                                CHOICE: actionData.CHOICE,
-                                RESULT_PAGE: null,
+                                page: actionData.PAGE_id, //WEIRD PROP
+                                choice: actionData.choice,
+                                result_page: null,
                             };
                         }
                     );
@@ -328,22 +339,22 @@ export default function FlowDiagram({ scenario_ID }) {
                             isEdge(currElement) &&
                             currElement.source === currentElement.id + '__a'
                         ) {
-                            nodeElement.ACTION[0] = {
-                                id: currentElement.ACTION[0].id,
-                                CHOICE: currentElement.ACTION[0].CHOICE,
-                                PAGE: currentElement.id,
-                                RESULT_PAGE: Number(currElement.target),
+                            nodeElement.action[0] = {
+                                id: currentElement.action[0].id,
+                                choice: currentElement.action[0].choice,
+                                page: currentElement.id,
+                                result_page: Number(currElement.target),
                             };
                             //Second option
                         } else if (
                             isEdge(currElement) &&
                             currElement.source === currentElement.id + '__b'
                         ) {
-                            nodeElement.ACTION[1] = {
-                                id: currentElement.ACTION[1].id,
-                                CHOICE: currentElement.ACTION[1].CHOICE,
-                                PAGE: currentElement.id,
-                                RESULT_PAGE: Number(currElement.target),
+                            nodeElement.action[1] = {
+                                id: currentElement.action[1].id,
+                                choice: currentElement.action[1].choice,
+                                page: currentElement.id,
+                                result_page: Number(currElement.target),
                             };
                         }
                     });
@@ -356,7 +367,7 @@ export default function FlowDiagram({ scenario_ID }) {
                             Number(currElement.source) === currentElement.id
                         ) {
                             //Set NEXT_PAGE id to type number
-                            nodeElement.NEXT_PAGE = Number(currElement.target);
+                            nodeElement.next_page = Number(currElement.target);
                             return true;
                         }
                         return false;
@@ -366,7 +377,7 @@ export default function FlowDiagram({ scenario_ID }) {
             }
             return array;
         }, []);
-
+        console.log(updatedElements);
         put(
             setElementsPUT,
             endpointPUT + scenarioID,
@@ -422,9 +433,9 @@ export default function FlowDiagram({ scenario_ID }) {
                 if (isNode(currentElement)) {
                     return array.concat({
                         ...currentElement,
-                        NEXT_PAGE: null,
-                        X_COORDINATE: 0,
-                        Y_COORDINATE: 0,
+                        next_page: null,
+                        x_coordinate: 0,
+                        y_coordinate: 0,
                         position: { x: 0, y: 0 },
                     });
                 }
@@ -503,6 +514,21 @@ export default function FlowDiagram({ scenario_ID }) {
     return (
         <div className={classes.container}>
             <Typography variant="h3">Order Scenario Pages</Typography>
+            <Grid container justify="flex-end">
+                <Button color="primary" onClick={handleClickOpen}>
+                    <HelpIcon />
+                </Button>
+                <GenericInfoButton
+                    description={`Here, you set the order of pages that a student will go through as they complete the simulation. 
+                    In the flow diagram click and drag to move around. Double click to zoom in. Simulations start with the introduction. 
+                    To connect two pages click the black dot at the bottom of a page and drag your cursor to the top of the page you wish to connect the first page to. 
+                    A grey arrow will appear visualizing the connection. Generic pages are red, Reflection pages are purple, and Action pages are green. 
+                    Remember that Action pages will require two outgoing arrows for the two possible choices a student might make. 
+                    Use the “Reset” button to revert all changes. Click “Save” before leaving the page.`}
+                    open={open}
+                    setOpen={setOpen}
+                />
+            </Grid>
             <Button
                 variant="contained"
                 color="primary"

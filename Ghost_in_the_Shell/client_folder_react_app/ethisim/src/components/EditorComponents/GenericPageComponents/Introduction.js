@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Body from '../GeneralPageComponents/Body';
 import Title from '../GeneralPageComponents/Title';
-import { Typography, Container, Button } from '@material-ui/core';
+import { Typography, Container, Button, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import universalPost from '../../../universalHTTPRequests/post.js';
@@ -9,6 +9,8 @@ import universalDelete from '../../../universalHTTPRequests/delete.js';
 import SuccessBanner from '../../Banners/SuccessBanner';
 import ErrorBanner from '../../Banners/ErrorBanner';
 import LoadingSpinner from '../../LoadingSpinner';
+import HelpIcon from '@material-ui/icons/Help';
+import GenericInfoButton from '../../InfoButtons/GenericInfoButton';
 
 const useStyles = makeStyles((theme) => ({
     saveButton: {
@@ -56,6 +58,12 @@ export default function Introduction(props) {
         yCoord,
     } = props;
 
+    //for info button
+    const [open, setOpen] = React.useState(false);
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
     // eslint-disable-next-line
     const [postValues, setPostValues] = useState({
         data: null,
@@ -80,14 +88,14 @@ export default function Introduction(props) {
     const [errorBody, setErrorBody] = useState(false);
 
     var postReqBody = {
-        PAGE_TYPE: page_type,
-        PAGE_TITLE: title,
-        PAGE_BODY: bodyText,
-        SCENARIO: scenario_ID,
-        NEXT_PAGE: next_page_id,
-        BODIES: bodiesText,
-        X_COORDINATE: xCoord,
-        Y_COORDINATE: yCoord,
+        page_type: page_type,
+        page_title: title,
+        page_body: bodyText,
+        scenario: scenario_ID,
+        next_page: next_page_id,
+        bodies: bodiesText,
+        x_coordinate: xCoord,
+        y_coordinate: yCoord,
     };
 
     function handlePost(setPostValues, postReqBody, s_id, first_time) {
@@ -97,15 +105,15 @@ export default function Introduction(props) {
             const deleteEndPoint = '/page?page_id=' + pageID;
             let newScenarioComponents = [...scenarioComponents];
             let component = newScenarioComponents.find((x) => x.id === pageID);
-            component.id = resp.data.PAGE;
+            component.id = resp.data.page;
             component.title = title;
-            setPageID(resp.data.PAGE);
-            setCurrentPageID(resp.data.PAGE);
+            setPageID(resp.data.page);
+            setCurrentPageID(resp.data.page);
             setScenarioComponents(newScenarioComponents);
             setSuccessBannerFade(true);
             setSuccessBannerMessage('Successfully saved page!');
             universalDelete(setDeleteValues, deleteEndPoint, null, null, {
-                PAGE: pageID,
+                page: pageID,
             });
         }
 
@@ -197,6 +205,20 @@ export default function Introduction(props) {
             <Typography align="center" variant="h2">
                 Introduction Page
             </Typography>
+            <Grid container justify="flex-end">
+                <Button color="primary" onClick={handleClickOpen}>
+                    <HelpIcon />
+                </Button>
+                <GenericInfoButton
+                    description={`Give your scenario some background! 
+                    This is the first page students will see in the simulator. 
+                    Give useful information introducing the company/people involved in your ethical quandary. 
+                    Don’t forget to click “Save” before leaving this page.
+                    `}
+                    open={open}
+                    setOpen={setOpen}
+                />
+            </Grid>
             <Title
                 title={title}
                 setTitle={setTitle}

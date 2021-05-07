@@ -1,22 +1,18 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { makeStyles, withStyles, Typography, Box, Grid, Button,
-  Card, CardContent, Modal, Dialog, DialogContent, DialogContentText } from "@material-ui/core";
+  Card, CardContent, Dialog, DialogContent, DialogContentText } from "@material-ui/core";
 import { useTheme } from "@material-ui/core/styles";
-import { GatheredInfoContext } from './simulationWindow';
-import { BASE_URL, STUDENT_ID, SCENARIO_ID } from "../constants/config";
-import axios from 'axios';
+import { GatheredInfoContext } from './simulator_window';
+import { BASE_URL, STUDENT_ID } from "../constants/config";
 import Conversation from './conversation';
 import { ScenariosContext } from "../Nav";
+import { ConvLimitConsumer } from './context/ConvContext';
 
 const TextTypography = withStyles({
   root: {
     color: "#373a3c"
   }
 })(Typography);
-
-const introText = "Please select the Stakeholder you would like to interact with...";
-
-
 
 function ellipses(str, cutoff) {
   let newStr = str;
@@ -30,7 +26,7 @@ function ellipses(str, cutoff) {
   return newStr;
 }
 
-function Stakeholders({ pages, setPages, activePage, setActivePage }) {
+function Stakeholders(props) {
   const theme = useTheme();
   const [stakeholders, setStakeholders] = React.useState([])
   const [scenarios, setScenarios] = React.useContext(ScenariosContext);
@@ -56,83 +52,141 @@ function Stakeholders({ pages, setPages, activePage, setActivePage }) {
   const [modalOpenToggles, setModalOpenToggles] = React.useState({});
   const [gatheredInfo, setGatheredInfo] = useContext(GatheredInfoContext);
   const [showStakeholders, setShowStakeholders] = React.useState(true);
+  const [numStakeholderTalkedTo, setNumStakeholderTalkedTo] = React.useState(0)
   const [currentStakeholder, setCurrentStakeholder] = React.useState({});
-  const [numStakeholderTalkedTo, setNumStakeholderTalkedTo] = React.useState(0);
+  const [stakeholders_had, setStakeholders_had] = React.useState([]);
   const createdCardStyles = cardStyles();
   const stakeholdersGrid = getStakeholdersGrid(stakeholders);
+  const [limit, setLimit] = React.useState(0);
 
-  React.useEffect(() => {
-    (async () => {
-      await axios({
-        method: 'get',
-        url: BASE_URL + '/scenarios/stakeholders',
-        headers: {
-          scenarioID: scenarios.currentScenarioID,
-          studentID: STUDENT_ID
-        }
-      }).then(response => {
-        setConversationLimit(response.data.conversation_limit)
-        const holders = response.data.stakeholders;
-        setStakeholders(holders);
-        setStakeholdersDisabled(prev => {
-          return holders.reduce((obj, stakeholder) => {
-            obj[stakeholder.id] = false;
-            return obj;
-          }, {});
-        });
-        setModalOpenToggles(prev => {
-          return holders.reduce((obj, stakeholder) => {
-            obj[stakeholder.id] = false;
-            return obj;
-          }, {});
-        });
 
-        axios({
-          method: 'get',
-          url: BASE_URL + '/scenarios/stakeholders/history',
-          headers: {
-            scenarioID: scenarios.currentScenarioID,
-            studentID: STUDENT_ID
-          }
-        }).then(histResponse => {
-          const history = histResponse.data;
-          setNumStakeholderTalkedTo(history.length);
-          if (history.length >= response.data.conversation_limit) {
-            setStakeholdersDisabled(prev => {
-              return holders.reduce((obj, stakeholder) => {
-                obj[stakeholder.id] = true;
-                return obj
-              }, {});
-            });
-          } else {
-            setStakeholdersDisabled(prev => {
-              let newDisabled = {...prev};
-              holders.forEach(stakeholder => {
-                let containsID = false;
-                for (let i = 0; i < history.length; ++i){
-                  if (stakeholder.id === history[i].stakeholder_id){
-                    containsID = true;
-                  }
-                }
-                if (containsID) {
-                  newDisabled[stakeholder.id] = true;
-                }
-              });
-              return newDisabled;
-            });
-          }
-        }).catch(err => {
-          console.log(err);
-        });
-      }).catch(err => {
-        console.log(err);
-        alert(err);
-      });
-  })()
-  }, [scenarios])
+  /** 
+   * TODO: When the backend team makes this endpoint, configure it.
+  */
+  // React.useEffect(() => {
+  //   (async () => {
+  //     await axios({
+  //       method: 'get',
+  //       url: BASE_URL + '/scenarios/stakeholders',
+  //       headers: {
+  //         scenarioID: scenarios.currentScenarioID,
+  //         studentID: STUDENT_ID
+  //       }
+  //     }).then(response => {
+  //       setConversationLimit(response.data.conversation_limit)
+  //       const holders = response.data.stakeholders;
+  //       setStakeholders(holders);
+  //       setStakeholdersDisabled(prev => {
+  //         return holders.reduce((obj, stakeholder) => {
+  //           obj[stakeholder.id] = false;
+  //           return obj;
+  //         }, {});
+  //       });
+  //       setModalOpenToggles(prev => {
+  //         return holders.reduce((obj, stakeholder) => {
+  //           obj[stakeholder.id] = false;
+  //           return obj;
+  //         }, {});
+  //       });
+
+  //       axios({
+  //         method: 'get',
+  //         url: BASE_URL + '/scenarios/stakeholders/history',
+  //         headers: {
+  //           scenarioID: scenarios.currentScenarioID,
+  //           studentID: STUDENT_ID
+  //         }
+  //       }).then(histResponse => {
+  //         const history = histResponse.data;
+  //         setNumStakeholderTalkedTo(history.length);
+  //         if (history.length >= response.data.conversation_limit) {
+  //           setStakeholdersDisabled(prev => {
+  //             return holders.reduce((obj, stakeholder) => {
+  //               obj[stakeholder.id] = true;
+  //               return obj
+  //             }, {});
+  //           });
+  //         } else {
+  //           setStakeholdersDisabled(prev => {
+  //             let newDisabled = {...prev};
+  //             holders.forEach(stakeholder => {
+  //               let containsID = false;
+  //               for (let i = 0; i < history.length; ++i){
+  //                 if (stakeholder.id === history[i].stakeholder_id){
+  //                   containsID = true;
+  //                 }
+  //               }
+  //               if (containsID) {
+  //                 newDisabled[stakeholder.id] = true;
+  //               }
+  //             });
+  //             return newDisabled;
+  //           });
+  //         }
+  //       }).catch(err => {
+  //         console.log(err);
+  //       });
+  //     }).catch(err => {
+  //       console.log(err);
+  //       //alert(err);
+  //     });
+  // })()
+  // }, [scenarios])
+
+  /**
+   * Gets stakeholders to show for the page.
+   * NOTE: Every stakeholder is returned with current endpoint. The hook filters out the correct
+   * ones for the current scenario. NEEDS TO BE CHANGED when endpoint works.
+   */
+  useEffect(() => {
+    fetch(`${BASE_URL}/get_stakeholders/?scenario_id=${props.match.params.sid}`)
+    .then(response => response.json())
+    .then(data => {
+
+      let results = data.slice();
+
+      setStakeholders(results);
+
+    })
+  }, [scenarios]);
  
+  useEffect(() => {
+    fetch(`${BASE_URL}/get_scenario/?scenario_id=${props.match.params.sid}`)
+    .then(response => response.json())
+    .then(data => {
+      let newLimit = data.num_conversation
+      setLimit(newLimit)
+    })
+  }, []);
 
-  function getStakeholderCards(id, name, designation, description, styles) {
+  useEffect(() => {
+    fetch(`${BASE_URL}/stakeholders_had/?scenario_id=${props.match.params.sid}&student_id=${STUDENT_ID}`)
+    .then(response => response.json())
+    .then(data => {
+      console.log("limit: " + limit)
+      console.log("nstt: " + numStakeholderTalkedTo)
+      console.log(stakeholders)
+      setNumStakeholderTalkedTo(data.length)
+      let newDisabled = {}
+      if (numStakeholderTalkedTo < limit) {
+        data.forEach(ele => {
+          newDisabled[ele] = true
+        });
+      }
+      else {
+        stakeholders.forEach(ele => {
+          newDisabled[ele.id] = true
+        });
+      }
+      setStakeholdersDisabled(newDisabled)
+    })
+    .catch(err => {
+      console.log(err)
+    })
+  }, [limit, stakeholders])
+
+
+  function getStakeholderCards(id, name, isMultipart, designation, description, styles) {
     const PAGE_ID_OF_PAGE_BEFORE_CONVERSATIONS = 'gatheredInformation';
 
     function toggleModal(id, toggle) {
@@ -175,48 +229,54 @@ function Stakeholders({ pages, setPages, activePage, setActivePage }) {
           >
           <DialogContent>
             <DialogContentText color = "#000000">{description}</DialogContentText>
-            <Button variant="contained" onClick={() => {
-                setCurrentStakeholder(prev => ({
-                  name: name,
-                  id: id
-                }));
-                setStakeholdersDisabled(prev => {
-                  let newStakeholdersDisabled = {...prev};
-                  if (numStakeholderTalkedTo + 1 >= conversationLimit) {
-                    for (const id in newStakeholdersDisabled) {
-                      newStakeholdersDisabled[id] = true;
-                    }
-                  }else {
-                    newStakeholdersDisabled[id] = true;
-                  }
-                  return newStakeholdersDisabled;
-                });
-                setNumStakeholderTalkedTo(prev => {
-                  return (prev + 1)
-                });
-                axios({
-                  method: 'put',
-                  url: BASE_URL + '/scenarios/stakeholders',
-                  data: {
-                    scenarioID: scenarios.currentScenarioID,
-                    studentID: STUDENT_ID,
-                    stakeholderID: id
-                  }
-                }).catch(err => {
-                  console.error(err);
-                  alert(err);
-                })
-                setShowStakeholders(false);
-                toggleModal(id, false);
-                setGatheredInfo(infos => {
-                  let ind = infos.findIndex(info => info.pageId === PAGE_ID_OF_PAGE_BEFORE_CONVERSATIONS);
-                  if (ind < 0) { ind = infos.length; }
-                  let newInfos = [...infos];
-                  newInfos.splice(ind, 0,
-                    { name: name, id: `stakeholder:${id}`, pageId: 'stakeholders'});
-                  return newInfos;
-                });
-              }}>Continue</Button>
+              <ConvLimitConsumer>
+              {(context) => (
+                  <Button variant="contained" onClick={() => {
+                      setCurrentStakeholder(prev => ({
+                        name: name,
+                        id: id,
+                        isMultipart: isMultipart
+                      }));
+                      setStakeholdersDisabled(prev => {
+                        let newStakeholdersDisabled = {};
+                        if (numStakeholderTalkedTo + 1 >= limit) {
+                          for (let i=0; i<stakeholders.length; ++i) {
+                            newStakeholdersDisabled[stakeholders[i].id] = true;
+                          }
+                        }else {
+                          newStakeholdersDisabled = {...prev};
+                          newStakeholdersDisabled[id] = true;
+                        }
+                        return newStakeholdersDisabled;
+                      });
+                      setNumStakeholderTalkedTo(prev => {
+                        return (prev + 1)
+                      });
+                      // axios({
+                      //   method: 'put',
+                      //   url: BASE_URL + '/scenarios/stakeholders',
+                      //   data: {
+                      //     scenarioID: scenarios.currentScenarioID,
+                      //     studentID: STUDENT_ID,
+                      //     stakeholderID: id
+                      //   }
+                      // }).catch(err => {
+                      //   console.error(err);
+                      //   alert(err);
+                      // })
+                      setShowStakeholders(false);
+                      toggleModal(id, false);
+                      // setGatheredInfo(infos => {
+                      //   let ind = infos.findIndex(info => info.pageId === PAGE_ID_OF_PAGE_BEFORE_CONVERSATIONS);
+                      //   if (ind < 0) { ind = infos.length; }
+                      //   let newInfos = [...infos];
+                      //   newInfos.splice(ind, 0,
+                      //     { name: name, id: `stakeholder:${id}`, pageId: 'stakeholders'});
+                      //   return newInfos;
+                      // });
+                }}>Continue
+              </Button> )}
+            </ConvLimitConsumer>
           </DialogContent>
         </Dialog>
       </>
@@ -225,7 +285,7 @@ function Stakeholders({ pages, setPages, activePage, setActivePage }) {
 
   function getStakeholdersGrid(stakeholders) {
     let items = stakeholders.map(stakeholder => getStakeholderCards(
-      stakeholder.id, stakeholder.name, stakeholder.designation, stakeholder.description, createdCardStyles));
+      stakeholder.id, stakeholder.name, stakeholder.enable_multi_convo, stakeholder.designation, stakeholder.description, createdCardStyles));
     return (
       <div>
         <Grid container spacing={3} justify={'center'}>
@@ -239,64 +299,38 @@ function Stakeholders({ pages, setPages, activePage, setActivePage }) {
     )
   }
 
-  function goToGatheredInformation() {
-    if (!pages.gatheredInformation.visited) {
-      setPages(prevPages => {
-        let copy = { ...prevPages };
-        copy.gatheredInformation.visited = true;
-        return copy;
-      });
-    }
-    setActivePage(prevPage => 'gatheredInformation')
-  }
-
-  function goToMiddleReflection() {
-    if (!pages.middleReflection.visited) {
-      setPages(prevPages => {
-        let copy = { ...prevPages };
-        copy.middleReflection.visited = true;
-        return copy;
-      });
-    }
-    setActivePage(prevPage => 'middleReflection')
-  }
   return (
-    <>
+    <div id="stakeholders">
       {showStakeholders &&
-        <div>
-        <Grid container direction="row" justify="center" alignItems="center">
+        <div id="stakeholder_cards">
           <Box mt={5}>
             <TextTypography variant="h4" align="center" gutterBottom>
-              Stakeholders
+              {props.title}
             </TextTypography>
           </Box>
-        </Grid>
-        <Grid container direction="row" justify="space-between">
-          <Grid item style={{ marginRight: "0rem", marginTop: "-3rem" }}>
-            <Button variant="contained" disableElevation onClick={goToGatheredInformation}>Back</Button>
-          </Grid>
-          <Grid item style={{ marginRight: "0rem", marginTop: "-3rem" }}>
-            <Button variant="contained" disableElevation color="primary" onClick={goToMiddleReflection}>Next</Button>
-          </Grid>
-        </Grid>
-        <Grid container spacing={2}>
+          <Grid container spacing={2}>
           <Grid item lg={12} md={12} sm={12}>
             <Box m="1rem" align={'center'}>
-              <TextTypography>
-                You've spoken to <b>{numStakeholderTalkedTo} out of {conversationLimit}</b> stakeholders</TextTypography>
+              <ConvLimitConsumer>
+                {(context) => (
+                  <TextTypography>
+                    You've spoken to <b>{numStakeholderTalkedTo} out of {limit}</b> stakeholders
+                  </TextTypography>
+                )}
+              </ConvLimitConsumer>
             </Box>
             <TextTypography variant="body1" align="center">
-              {introText}
+              {props.content}
             </TextTypography>
           </Grid>
-          {stakeholdersGrid}
-        </Grid>
-      </div>
+            {stakeholdersGrid}
+          </Grid>
+        </div>
       }
       {!showStakeholders &&
-        <Conversation stakeholder={currentStakeholder} showStakeholders={showStakeholders} setShowStakeholders={setShowStakeholders}/>
+        <Conversation page_id={props.id} match={props.match} stakeholder={currentStakeholder} showStakeholders={showStakeholders} setShowStakeholders={setShowStakeholders} />
       }
-    </>
+    </div>
   );
 }
 

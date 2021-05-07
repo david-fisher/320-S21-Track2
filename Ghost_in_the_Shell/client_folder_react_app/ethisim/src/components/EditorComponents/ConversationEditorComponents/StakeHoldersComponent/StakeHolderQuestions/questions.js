@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import QuestionField from './question';
 import Button from '@material-ui/core/Button';
+import Checkbox from '@material-ui/core/Checkbox';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import './questions.css';
 import PropTypes from 'prop-types';
 import SuccessBanner from './../../../../Banners/SuccessBanner';
@@ -11,9 +13,10 @@ import { baseURL } from './../../../../../Constants/Config';
 QuestionFields.propTypes = {
     qrs: PropTypes.any,
     stakeholder_id: PropTypes.number,
+    stakeVersion: PropTypes.number,
 };
 
-export default function QuestionFields({ qrs, stakeholder_id }) {
+export default function QuestionFields({ qrs, stakeholder_id, stakeVersion }) {
     //used to track if we are waiting on a HTTP GET/POST/PUT request
     //not needed for DELETE
     const [isLoading, setLoading] = useState(false);
@@ -22,6 +25,7 @@ export default function QuestionFields({ qrs, stakeholder_id }) {
     //for success and error banners
     const [successBannerMessage, setSuccessBannerMessage] = useState('');
     const [successBannerFade, setSuccessBannerFade] = useState(false);
+    const [isMultiEnabled, setIsMultiEnabled] = useState(false);
 
     useEffect(() => {
         const timeout = setTimeout(() => {
@@ -78,7 +82,10 @@ export default function QuestionFields({ qrs, stakeholder_id }) {
         }
         setLoading(true);
 
-        var data = JSON.stringify({ STAKEHOLDER: stakeholder_id });
+        var data = JSON.stringify({
+            stakeholder: stakeholder_id,
+            stakeholder_version: stakeVersion,
+        }); // TODO change version to something else
 
         var config = {
             method: 'post',
@@ -112,7 +119,7 @@ export default function QuestionFields({ qrs, stakeholder_id }) {
         }
         setLoading(true);
 
-        const leftQuestions = QRs.filter((q) => q.CONVERSATION !== questionID);
+        const leftQuestions = QRs.filter((q) => q.conversation !== questionID);
         setQRs(leftQuestions);
 
         var data = JSON.stringify({});
@@ -140,6 +147,27 @@ export default function QuestionFields({ qrs, stakeholder_id }) {
                 setErrorBannerFade(true);
             });
 
+        setLoading(false);
+    };
+
+    const handleOnChangeMultiConvo = (e) => {
+        if (!checkTime(setCurrentTime, currentTime)) {
+            return;
+        }
+        setLoading(true);
+
+        var data = e.target.checked;
+
+        /*var config = {
+            method: 'put',
+            url: baseURL + '/multi_conv?STAKEHOLDER=' + stakeholder_id,
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            data: data,
+        };*/
+
+        setIsMultiEnabled(e.target.checked);
         setLoading(false);
     };
 
@@ -193,16 +221,30 @@ export default function QuestionFields({ qrs, stakeholder_id }) {
             >
                 Save Changes
             </Button>
-            <form id="form">
+            <FormControlLabel
+                style={{ marginLeft: -300, marginTop: 20 }}
+                control={
+                    <Checkbox
+                        checked={isMultiEnabled}
+                        onChange={handleOnChangeMultiConvo}
+                        color="primary"
+                    />
+                }
+                label="Enable multi-part conversations for this stakeholder"
+                labelPlacement="end"
+            />
+            <form id="form" style={{ marginTop: -30 }}>
                 {QRs.map((data) => (
                     <QuestionField
-                        key={data.STAKEHOLDER}
-                        id={data.CONVERSATION}
+                        key={data.stakeholder}
+                        id={data.conversation}
                         removeQuestion={removeQuestion}
-                        question={data.QUESTION}
-                        response={data.RESPONSE}
+                        question={data.question}
+                        response={data.response}
+                        summary={data.summary}
                         QRs={QRs}
                         setQRs={setQRs}
+                        StakeHolder_Id={stakeholder_id}
                     />
                 ))}
             </form>

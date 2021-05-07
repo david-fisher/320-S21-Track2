@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Button, TextField, Typography, Container } from '@material-ui/core';
+import {
+    Button,
+    TextField,
+    Typography,
+    Container,
+    Grid,
+} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Body from '../GeneralPageComponents/Body';
 import Title from '../GeneralPageComponents/Title';
@@ -9,6 +15,8 @@ import universalDelete from '../../../universalHTTPRequests/delete.js';
 import SuccessBanner from '../../Banners/SuccessBanner';
 import ErrorBanner from '../../Banners/ErrorBanner';
 import LoadingSpinner from '../../LoadingSpinner';
+import HelpIcon from '@material-ui/icons/Help';
+import GenericInfoButton from '../../InfoButtons/GenericInfoButton';
 
 Action.propTypes = {
     scenarioComponents: PropTypes.any,
@@ -78,6 +86,12 @@ export default function Action(props) {
         yCoord,
     } = props;
 
+    //for info button
+    const [open, setOpen] = React.useState(false);
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
     const [postValues, setPostValues] = useState({
         data: null,
         loading: false,
@@ -105,18 +119,18 @@ export default function Action(props) {
     const [errorOption2Text, setErrorOption2Text] = useState(false);
 
     var postReqBody = {
-        PAGE: pageID,
-        PAGE_TYPE: page_type,
-        PAGE_TITLE: title,
-        PAGE_BODY: bodyText,
-        SCENARIO: scenario_ID,
-        NEXT_PAGE: next_page_id,
-        CHOICES: [
-            { CHOICE: option1, RESULT_PAGE: null },
-            { CHOICE: option2, RESULT_PAGE: null },
+        page: pageID,
+        page_type: page_type,
+        page_title: title,
+        page_body: bodyText,
+        scenario: scenario_ID,
+        next_page: next_page_id,
+        choices: [
+            { choice: option1, result_page: null },
+            { choice: option2, result_page: null },
         ],
-        X_COORDINATE: xCoord,
-        Y_COORDINATE: yCoord,
+        x_coordinate: xCoord,
+        y_coordinate: yCoord,
     };
 
     function handlePost(setPostValues, postReqBody, s_id, first_time) {
@@ -126,15 +140,15 @@ export default function Action(props) {
             const deleteEndPoint = '/page?page_id=' + pageID;
             let newScenarioComponents = [...scenarioComponents];
             let component = newScenarioComponents.find((x) => x.id === pageID);
-            component.id = resp.data.PAGE;
+            component.id = resp.data.page;
             component.title = title;
-            setPageID(resp.data.PAGE);
-            setCurrentPageID(resp.data.PAGE);
+            setPageID(resp.data.page);
+            setCurrentPageID(resp.data.page);
             setScenarioComponents(newScenarioComponents);
             setSuccessBannerFade(true);
             setSuccessBannerMessage('Successfully saved page!');
             universalDelete(setDeleteValues, deleteEndPoint, null, null, {
-                PAGE: pageID,
+                page: pageID,
             });
         }
 
@@ -265,6 +279,20 @@ export default function Action(props) {
             <Typography align="center" variant="h2">
                 Action Component
             </Typography>
+            <Grid container justify="flex-end">
+                <Button color="primary" onClick={handleClickOpen}>
+                    <HelpIcon />
+                </Button>
+                <GenericInfoButton
+                    description={`Creation of Action pages is for giving students choice. 
+                    As you can see at the bottom of this page, two options are required. An example of the Action component being used is labeling option 1, 
+                    “Delay”, and option 2, “Go Ahead”. The student can either choose “Delay” and be sent to the Conversations page to continue speaking with stakeholders or choose “Go Ahead”, and be sent to a page further along in the scenario 
+                    (Remember, you decide page order on the Flow Diagram page). 
+                    These pages are added to your menu and can be edited and deleted at your discretion.`}
+                    open={open}
+                    setOpen={setOpen}
+                />
+            </Grid>
             <Title
                 title={title}
                 setTitle={setTitle}

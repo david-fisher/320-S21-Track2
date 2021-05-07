@@ -1,0 +1,29 @@
+# rename this file to .env
+# do not make .env public
+# place in root directory of project
+
+# change to your domain
+SERVER_NAME=
+# change to server admin address
+SERVER_ADMIN=
+# do not change
+BUILDKIT_INLINE_CACHE=1
+# do not change
+DOCKER_IP=DOCKER_HOST
+
+# change to database login info
+DB_USER=
+DB_NAME=
+DB_HOST=
+DB_PASS=
+DB_PORT=
+
+# make this the same as server name
+ORIGIN_HOST=
+
+# do not change 
+ORIGIN_PORT=443
+
+#    make a secure Django Secret Key with https://miniwebtool.com/django-secret-key-generator/
+#    you must escape any $ in the key ... change $ to $$
+DJ_SK=<django-secret-key>

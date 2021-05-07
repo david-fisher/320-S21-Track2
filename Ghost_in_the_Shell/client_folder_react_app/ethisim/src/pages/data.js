@@ -128,7 +128,7 @@ export default function Data(props) {
     const location = useLocation();
     const scenarioIDFromURL = location.pathname.split('/').pop();
     const scenario_ID = props.location.data
-        ? props.location.data.SCENARIO
+        ? props.location.data.scenario
         : scenarioIDFromURL;
 
     const title = 'Student Data';

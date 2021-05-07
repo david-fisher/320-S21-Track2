@@ -1,113 +1,77 @@
 
-# 320-S21-Track2
-https://github.com/david-fisher/320-S21-Track2/
 
-BELOW IS THE README FROM LAST SEMESTER'S TRACK III REPO 
+# [320-S21-Track2](https://github.com/david-fisher/320-S21-Track2/)
 
 
 Ethisim is a website that allows you to easily create and assign ethics
 simulations. Run them for a participation grade, or
 develop them further into longer discussions for class.
 
-This is Track III's repository containing code for both the front-end and back-end of Ethisim. This README provides instruction on how to install and setup both the front-end and back-end in order to get the software running.
+## Guide to Docker & Ethisim:
+### Installing:
+* [Install Docker](https://docs.docker.com/get-docker/) on your machine. 
+### Building:
+* From the remote server, navigate to the Ethisim directory and run 'docker-compose build'
+### Running:
+* From the remote server, navigate to the Ethisim directory and run 'docker-compose up --detach'
+### Stopping:
+* From the remote server, navigate to the Ethisim directory and run 'docker-compose down'
 
-## How to get the Front-end Running
-1. Download node.js version 12.18.4 and npm https://www.npmjs.com/get-npm
-2. Clone the Github repository
-3. cd into the ethisim folder
-4. Run npm install, This should install all dependencies if this doesn't work see section below
-5. To run the front-end, use npm start to run the development build at local host:3000
-6. You are done, but note that you will need to have the back-end running as well for the front-end to connect to the database and see current scenarios on the dashboard
+## Continuous Integration & Deployment:
+* Each push to the GitHub repository will trigger a GitHub Action that tests whether or not the application can be built. 
+* Pushes to the `main` and `build-and-deploy` branches will trigger a GitHub Action that builds the static application and deploys it to the server.
+* If neither frontend's source code was changed, it will not test or rebuild the frontend.
 
-### You can complete all of these steps by just using npm install
-#### Install Dependencies
-    - npm install react@16.13.1
-    - npm install react-device-detect@1.14.0
-    - npm install react-dom@16.13.1
-    - npm install react-flow-renderer@6.1.3
-    - npm install react-router-dom@5.2.0
-    - npm install react-scripts@3.4.4
-    - npm install @material-ui/core@4.11.0
-    - npm install @material-ui/icons@4.9.1
-    - npm install @material-ui/lab@4.0.0-alpha.56
-    - npm install @testing-library/jest-dom@5.11.4
-    - npm install @testing-library/react@11.0.4
-    - npm install @testing-library/user-event@12.1.6
-    - npm install axios@0.21.0
-    - npm install start@5.1.0
-    - npm install suneditor-react@2.14.2
+## Cloning the Ethisim Application:
+1. Download a copy of the project from the server
+2. Fill out the env-template and save as '.env'
+3. Add ssl certs (/eti/pki/tls/certs/) to ./ssl/certs
+4. Add ssl private keys (/eti/pki/tls/private/) to ./ssl/private
+5. Add shibboleth config files to ./shib_conf
+6. Follow the above instructions for building and running the Docker containers
 
-#### How to install Prettier, Eslint and Husky
-    1. Npm install --save-dev --save-exact prettier will install prettier
-    2. Make sure to install eslint before installing eslint-config-prettier which allows prettier and eslint to work together nicely
-    3. Npm install eslint --save-dev will install eslint
-    4. Run npx eslint --init to set up an configuration file
-       - Questions will appear and the directions tell you to use arrow keys to select an answer even though the arrow keys don’t work.
-       Think of the options presented to you in each question as an array starting at 0 or 1.
-       If you want for example option one out of three for the second question,
-       then type in 0 to the command line and press enter and that should select the answer that you want.
-       - Answer all the questions before moving forward, if you mess up on one of the answers, just press Ctrl^C and re-run the npx eslint --init command
-    5. You might also need to install eslint-plugin-react@latest, if so follow the directions on the command line after finishing the previous step
-    6. Make sure prettier and eslint are both installed  before we run npm install --save-dev eslint-config-prettier so prettier and eslint will work together nicely with each other
-    7. Then, add eslint-config-prettier to the "extends" array in your .eslintrc.* file. Make sure to put it last, so it gets the chance to override other configs. It might already be there.
-    { "extends": [ "some-other-config-you-use", "prettier"]}
-    8. To install Husky Make sure Prettier is installed and is in your devDependencies before you proceed and then run npx mrm lint-staged
-    9. This will install husky and lint-staged, then add a configuration to the project’s package.json that will automatically format supported files in a pre-commit hook. After this step you are done
+## Setting up Shibboleth:
+Follow instructions in the [Shibboleth Install Guide](shib_install.md)
 
+## Database:
+[Schema Diagram](https://github.com/david-fisher/320-S21-Track2/blob/main/ZOOMba/Zoomba_Schema.sql)
 
-## How to get the Back-end Running
-### On MAC
-1. Install python3
-2. sudo pip3 install pipenv (do it globally)
-3. clone https://github.com/david-fisher/320-F20-Track-III.git
-4. Navigate to moral_kombat_backend folder
-5. pipenv shell
-6. pipenv install -r requirements.txt
-7. cd lead
-8. python3 manage.py runserver
+## API Endpoints and Rest Documentation:
+You can find the list of endpoints here:
+[Editor Backend](https://docs.google.com/document/d/1QSiUe21Z_TgT5XZKyR0twevRM864_AswxzVdYLwqW1I/edit?usp=sharing),
+[Simulator Backend](https://docs.google.com/document/d/1iL5RgbVrZR_w7PUNcr92rXpdHn7GSKCuI8v04Ba1xGY/edit?usp=sharing)
 
+## Running Ethisim on your Local Machine:
+### How to get the Editor Front-end Running:
+1. Download node.js version 12.18.4 and [npm](https://www.npmjs.com/get-npm)
+2. Clone the GitHub repository
+3. In the terminal, navigate to the ethisim folder
+4. Run `npm install`. This should install all dependencies (if not, install modules manually using `npm install <module>`)
+5. Follow respective instructions to install [Prettier](https://prettier.io/docs/en/install.html), [Eslint](https://www.npmjs.com/package/eslint), and [Husky](https://www.npmjs.com/package/husky) 
+6. Use `npm start` to run the development build at localhost:3000
 
-#### How to run server on MAC:
-1. Go to moral_kombat_backend directory
-2. pipenv shell
-3. cd lead
-4. python3 manage.py runserver
+### How to get the Editor Back-end Running:
+1. Install [python3](https://www.python.org/downloads/) and follow the setup instructions
+2. Clone the GitHub repository
+3. In the terminal, navigate to `/moral_kombat_backend/` and install the Django packages using `pip install -r requirements.txt`
+4. Navigate to `/moral_kombat_backend/lead/` and run `python manage.py runserver`
 
-### On WINDOWS
-1. https://www.python.org/downloads/ (Checkmark all optional features, add Python to environment variables)
-2. clone https://github.com/david-fisher/320-F20-Track-III.git
-3. Navigate to moral_kombat_backend folder
-4. Open Terminal (IF RUN INTO ERRORS INSERT py -m before each command)
-5. pip install -r requirements.txt
-6. cd lead
-7. python manage.py runserver
-8. Might need to download https://www.enterprisedb.com/downloads/postgres-postgresql-downloads
+### How to get the Simulator Front-end Running:
+1. Download [node.js](https://nodejs.org/en/download/)
+2. Clone the GitHub Repository
+3. After cloning repo, navigate to simulator/frontend: `cd ./simulator/frontend`
+4. Install all dependencies using `npm install`
+5. To run simulator, use `npm start`. This should open a tab in your browser and direct you to `http://localhost:3000`. If not, open a browser tab and go to that url. NOTE: We suggest putting data into the database and running it at the same time as the simulator frontend. This will allow the simulator to actually load in data.
 
-#### How to run server on Windows:
-1. Go to moral_kombat_backend directory
-2. cd moral_kombat_backend
-3. cd lead
-4. py -m manage.py runserver
+### How to get the Simulator Back-end Running:
+1) Be sure that python3 is installed and in the Environment Variable (Pip works better for Django than Conda)
+2) Clone the project to your machine `git clone https://github.com/david-fisher/320-S21-Track2.git`
+3) Navigate to "segfault" folder in terminal and install the dependencies by running `pipenv shell` then `pipenv install -r requirements.txt`
+4) If there have been changes made to the database, run `python manage.py makemigrations` then `python manage.py migrate` (It is harmless to run these even if there haven't been any database changes).
+5) Make sure you're connected the correct database (Done through segfault/settings.py, refer to Django documentation for more details)
+6) Run the server `python manage.py runserver` ( The default port is at localhost:8000, this can be changed through `python manage.py runserver 0.0.0.0:<port number>`) 
+7) To access the endpoints, put "/api" after the "localhost:8000" in the URL
 
-### TEST The back-end:
-Download postman
-
-### Database:
-Used ElephantSQL (postgreSQL)
-Schema Diagram: https://dbdiagram.io/d/5f8326e63a78976d7b772f0c
-
-
-## API Endpoints and Rest Documentation
-You can find the list of endpoints here at:
-https://docs.google.com/document/d/1QSiUe21Z_TgT5XZKyR0twevRM864_AswxzVdYLwqW1I/edit?usp=sharing
-
-To see REST Documentation run both the front-end and back-end and type http://localhost:8000
-=======
-# 320-S21-Track2
-
-BELOW IS THE README FOR SIMULATOR SETUP
-
-# 320-F20-Track-II
 
 # Differential Team database: how to build
 1. Install postgreSQL:  
@@ -116,30 +80,41 @@ https://www.postgresql.org/download/
 2. Add `PostgreSQL/[version, either 12 or 13]/bin` and `PostgreSQL/[version, either 12 or 13]/lib` to PATH (on Windows) or make it an environment variable on Mac/Linux
 
 3. in command prompt or terminal, call `psql -U postgres -f [full filepath to database_setup.sql]`.
-note: The file `database_setup.sql` can currently be found in the `erd-implementation` branch in the `database` folder.
+note: The file `database_setup.sql` can currently be found in the `erd-implementation` branch in the `database` folder.**
 
+# Additional notes
 
-# how to connect to database from react.js
-1. run `npm install all` within the directory containing `package.json` to install all dependencies for the pg package, which is the library used to communicate between the PostgreSQL database and the react.js app, as well as all other dependencies outlined in the `package_lock.json` file
+Since django is not compatible with composite keys, we made an ID column which is the primary key, and every column that was a part of the original composite key now is unique.
 
-2. In `goon-universe`, the app can be run with `node app.js`.
+Everything in the DB is functional. Frontend was unable to complete their work.
 
-3. Using the functions outlined in `queries.js`, which implements the REST API enumerated in `app.js`, frontend teams can now interact with the database from their React.js app as usual.
+# Table purposes
 
-4. Worth noting: the `pg` package's use depends on certain user credentials used to access a common database (namely, the username/password for the postgresql database which you've set up using `database_setup.sql`). Since the git repository is public, it's a security risk to store these credentials in public on the clear web. Thus, we are using a .env file (locally, for now) to store these credentials. **You will not be able to access the database from the React app without a properly configured .env file!**
-
-# how to run the frontend react app
-1. Install Node.js:  
-https://nodejs.org/en/download/
-
-
-2. Go into the folder `frontend` in the command line.
-
-3. Run `npm install` in the command line to install all dependencies required to run the app.
-
-4. Run `npm start` in the command line to start the app.
-
-# For testing: populating the database with dummy data
-1. in command prompt or terminal, run `psql -U [user] -f [full filepath to insert_example_data.sql]`. This file can currently be found in the `erd-implementation` branch in the `database` directory.
-
->>>>>>> origin/main
+students: links to demographics, student_times, responses and students_to_courses and stores the information of the student (spire id is primary key)
+demographics: links to students and stores information regarding student demographics
+Professors: Any non-student staff member is stored here, has a professor column (spire id) and name columns.
+Scenarios: links a scenario to issues, stakeholders, professors, pages, courses, responses, and student_times. Documents all relevant information about the version of a scenario.
+courses: links to professors_to_courses, students_to_course, scenarios_for and responses and stores information regarding a course
+Professors_to_courses: Links professors/staff to a course that they teach
+Professors_to_scenario: links professors to scenarios. Documents what professor(s) have access to certain scenarios and what permissions they have.
+students_to_course: links students to courses
+Student_times: links students to courses and scenarios. Documents date/time a scenario was taken
+Pages: links responses, scenarios, action_page, generic_page, reflection_questions, and stakeholder_to_page. Documents all relevant information of every frontend page of a scenario. 
+Pages_to_scenario: links pages to scenarios
+Responses: Stores a student’s response to a page. Documents all information regarding the student’s responses/decisions in a page.
+Stakeholders: links scenarios, stakeholder_to_page, conversations, response_to_conversations. Documents relevant information about a stakeholder
+Questions: stores all relevant information about a question asked by a stakeholder
+stakeholders_to_questions: links questions to stakeholders
+Reflections_taken: links a reflection to a response
+Issues: links scenarios to coverage. Documents issue name and stores importance scores associated with a specific scenario
+Coverage: Links stakeholder to an issue with a coverage score. Links to stakeholder
+conversations: links to stakeholders and documents what conversations stakeholders have. Stores a question and answer between a student and a stakeholder. 
+Responses_to_conversations: Links a response to a conversation
+reflection_questions: links to pages and has questions to reflect
+reflection_questions_to_page: links questions to reflect to a page
+Stakeholder_to_page: links stakeholder to a page
+Generic_page: page that has text to display
+Action_page: Page where the user gets to select a choice
+Response_to_action_page: links a response to an action page
+Scenarios_for: links scenarios and courses. Documents what course a scenario is for.
+Courses_to_scenario:  Links courses (and therefore course staff) to a scenario with a certain permission level (0=read vs 1=read and write)

@@ -92,7 +92,7 @@ export default function Login() {
                     <Button
                         className={classes.submit}
                         component={RouterLink}
-                        to={'/dashboard'}
+                        to={'/redirect'}
                         type="submit"
                         fullWidth
                         variant="contained"

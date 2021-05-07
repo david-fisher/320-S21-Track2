@@ -14,6 +14,7 @@ import GenericInfoButton from '../../InfoButtons/GenericInfoButton';
 
 //Need scenarioID
 const endpointGET = '/api/issues/?SCENARIO=';
+const baseURL = 'http://127.0.0.1:8000';
 
 const useStyles = makeStyles((theme) => ({
     issue: {
@@ -51,6 +52,7 @@ const useStyles = makeStyles((theme) => ({
 ConfigureIssues.propTypes = {
     scenario_ID: PropTypes.number,
 };
+let values = {};
 
 export default function ConfigureIssues({ scenario_ID }) {
     const classes = useStyles();
@@ -98,104 +100,6 @@ export default function ConfigureIssues({ scenario_ID }) {
             </div>
         );
     }
-
-    /* <EntryFields
-            issueEntryFieldList={
-                issueEntryFieldList !== null ? issueEntryFieldList : []
-            }
-            setIssueEntryFieldList={setIssueEntryFieldList}
-            scenarioID={scenario_ID}
-    />*/
-
-    /*return (
-        <div className={classes.issue}>
-            <Typography align="center" variant="h2">
-                Configure Ethical Issues
-            </Typography>
-            <div className={classes.spacing}>
-                <Button variant="contained" color="primary" onClick={getData}>
-                    <RefreshIcon className={classes.iconRefreshSmall} />
-                </Button>
-            </div>
-            <MaterialTable>
-                issueCoverageMatrix = {issueCoverageMatrix}
-                setIssueCoverageMatrix = {setissueCoverageMatrix}
-            </MaterialTable>
-            <IssueMatrix /*this might need to be edited, sends scenario id to IssueCoverageMatrix
-            scenario={scenario_ID}
-            />
-        </div>
-    );*/
-
-    /*<Button
-                className={classes.button}
-                id="button"
-                onClick={handleClickOpen}
-                variant="contained"
-                color="primary"
-            >
-                {' '}
-                Add Stakeholders
-            </Button>
-//     <Dialog
-//     open={open}
-//     onClose={handleClose}
-//     aria-labelledby=""
-//     aria-describedby=""
-// >
-//     <DialogTitle id="Add stakeholder">
-//         {'Add Stakeholder'}
-//     </DialogTitle>
-//     <Grid container direction="row" justify="centre">
-//         <Grid item xs={8}>
-//             <TextField
-//                 variant="outlined"
-//                 margin="normal"
-//                 required
-//                 fullWidth
-//                 name="StakeHolder name"
-//                 label="Stakeholder name"
-//                 id="scenariopageAdder"
-//                 // onChange={(e)=>addStakeholder(e)}
-//             ></TextField>
-
-//             <TextField
-//                 variant="outlined"
-//                 margin="normal"
-//                 required
-//                 fullWidth
-//                 name="Job"
-//                 label="Job"
-//                 id="scenariopageAdder"
-//                 onChange={(e) => null}
-//             ></TextField>
-
-//             <TextField
-//                 variant="outlined"
-//                 margin="normal"
-//                 required
-//                 fullWidth
-//                 name="Description"
-//                 label="Description"
-//                 id="scenariopageAdder"
-//             ></TextField>
-//             <TextField
-//                 variant="outlined"
-//                 margin="normal"
-//                 required
-//                 fullWidth
-//                 name="Bio"
-//                 label="Bio"
-//                 id="scenariopageAdder"
-//             ></TextField>
-//         </Grid>
-//     </Grid>
-//     <DialogActions>
-//         <Button onClick={handleClose} color="primary">
-//             Done
-//         </Button>
-//     </DialogActions>
-// </Dialog>*/
 
     return (
         <div className={classes.issue}>

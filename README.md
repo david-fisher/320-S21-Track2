@@ -55,7 +55,19 @@ You can find the list of endpoints here:
 2. Clone the GitHub repository
 3. In the terminal, navigate to `/moral_kombat_backend/` and install the Django packages using `pip install -r requirements.txt`
 4. Navigate to `/moral_kombat_backend/lead/` and run `python manage.py runserver`
-
+  **Running Repository Locally**
+     - Navigate to the docker desktop dashboard
+        - Find the container with the same name as the repo, expand that
+        - Find the container named **Back** and hover over this until 5 circles appear on the right.
+        - Click the first one and this should open a browser to the [localhost](http://localhost) address of the backend
+  **Migrating on the Backend**
+        - Navigate to the docker desktop dashboard
+        - hover over the container named **back** until 5 circles appear on the right
+        - click the second dot that says **CLI** (Command Line Interface). This should open a terminal.
+        - Once here you can direct yourself into the lead folder
+        - Run the command:
+            "python3 manage.py makemigrations"
+            
 ### How to get the Simulator Front-end Running:
 1. Download [node.js](https://nodejs.org/en/download/)
 2. Clone the GitHub Repository
@@ -87,6 +99,19 @@ note: The file `database_setup.sql` can currently be found in the `erd-implement
 Since django is not compatible with composite keys, we made an ID column which is the primary key, and every column that was a part of the original composite key now is unique.
 
 Everything in the DB is functional. Frontend was unable to complete their work.
+
+# Simulator Backend Note
+### **To run the Moral Kombat Backend:**
+
+The editor backend is located in the `Moral Kombat Backend` folder. 
+The main files to take note of are the `[models.py](http://models.py)`, 
+`[serials.py](http://serials.py)` , `views.py` and the `[urls.py](http://urls.py)` .
+
+`[models.py](http://models.py)` - this file is used to represent the database schema on our backend so we can properly modify our data in the database
+`[serializer.py](http://serializer.py)` - This file is used to stitch our code in the [views.py](http://views.py) to our code in the models.py
+`[urls.py](http://urls.py)` - This file is where we store the routes that our endpoints can be accessed.
+`[views.py](http://views.py)` - This is where you store the logic behind all the views and how it all works
+
 
 # Table purposes
 
